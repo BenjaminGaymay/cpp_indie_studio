@@ -11,7 +11,7 @@ using namespace irr;
 int main()
 {
 	// start up the engine
-	IrrlichtDevice *device = createDevice(video::EDT_DIRECT3D8,
+	IrrlichtDevice *device = createDevice(video::EDT_OPENGL,
 										  core::dimension2d<u32>(640,480));
 
 	video::IVideoDriver* driver = device->getVideoDriver();
