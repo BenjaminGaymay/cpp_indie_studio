@@ -10,20 +10,6 @@ add_executable(bomberman
         srcs/main.cpp)
 
 find_path(IRRLICHT_INCLUDE_DIR irrlicht.h)
-
-#==================================
-#======INCLUSION D'IRRLICHT========
-#==================================
-#inclure le repertoire contenant les entetes de irrlicht
 include_directories(${IRRLICHT_PATH_INCLUDE})
-#inlude les bibliothèque compiles
 link_directories(${IRRLICHT_PATH_LIB})
-
-
-#liaison du programme avec la bibliothèque
-target_link_libraries(
-        bomberman
-        Irrlicht
-        Xxf86vm
-        GL
-)
+target_link_libraries(bomberman Irrlicht Xxf86vm GL)
