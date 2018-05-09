@@ -7,7 +7,7 @@ include_directories(include)
 
 add_executable(bomberman
         include/indie.hpp
-        srcs/main.cpp)
+        srcs/a.cpp)
 
 find_path(IRRLICHT_INCLUDE_DIR irrlicht.h)
 include_directories(${IRRLICHT_PATH_INCLUDE})
