@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Irrlicht.hpp"
+#include "Window.hpp"
 
 namespace Indie {
 	class Core {
@@ -16,6 +16,6 @@ namespace Indie {
 			~Core();
 			void run();
 		private:
-			Irrlicht m_core;
+			Window m_core;
 	};
 }

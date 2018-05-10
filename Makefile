@@ -177,32 +177,32 @@ srcs/Core.cpp.s:
 	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Core.cpp.s
 .PHONY : srcs/Core.cpp.s
 
-srcs/Irrlicht.o: srcs/Irrlicht.cpp.o
+srcs/Window.o: srcs/Window.cpp.o
 
-.PHONY : srcs/Irrlicht.o
+.PHONY : srcs/Window.o
 
 # target to build an object file
-srcs/Irrlicht.cpp.o:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Irrlicht.cpp.o
-.PHONY : srcs/Irrlicht.cpp.o
+srcs/Window.cpp.o:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Window.cpp.o
+.PHONY : srcs/Window.cpp.o
 
-srcs/Irrlicht.i: srcs/Irrlicht.cpp.i
+srcs/Window.i: srcs/Window.cpp.i
 
-.PHONY : srcs/Irrlicht.i
+.PHONY : srcs/Window.i
 
 # target to preprocess a source file
-srcs/Irrlicht.cpp.i:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Irrlicht.cpp.i
-.PHONY : srcs/Irrlicht.cpp.i
+srcs/Window.cpp.i:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Window.cpp.i
+.PHONY : srcs/Window.cpp.i
 
-srcs/Irrlicht.s: srcs/Irrlicht.cpp.s
+srcs/Window.s: srcs/Window.cpp.s
 
-.PHONY : srcs/Irrlicht.s
+.PHONY : srcs/Window.s
 
 # target to generate assembly for a file
-srcs/Irrlicht.cpp.s:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Irrlicht.cpp.s
-.PHONY : srcs/Irrlicht.cpp.s
+srcs/Window.cpp.s:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Window.cpp.s
+.PHONY : srcs/Window.cpp.s
 
 srcs/main.o: srcs/main.cpp.o
 
@@ -246,9 +246,9 @@ help:
 	@echo "... srcs/Core.o"
 	@echo "... srcs/Core.i"
 	@echo "... srcs/Core.s"
-	@echo "... srcs/Irrlicht.o"
-	@echo "... srcs/Irrlicht.i"
-	@echo "... srcs/Irrlicht.s"
+	@echo "... srcs/Window.o"
+	@echo "... srcs/Window.i"
+	@echo "... srcs/Window.s"
 	@echo "... srcs/main.o"
 	@echo "... srcs/main.i"
 	@echo "... srcs/main.s"

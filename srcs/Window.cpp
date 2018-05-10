@@ -5,17 +5,17 @@
 ** Core
 */
 
-#include "Irrlicht.hpp"
+#include "Window.hpp"
 
-Indie::Irrlicht::Irrlicht()
+Indie::Window::Window()
 {}
 
-Indie::Irrlicht::~Irrlicht()
+Indie::Window::~Window()
 {
 	m_device->drop();
 }
 
-void Indie::Irrlicht::initIrrlicht()
+void Indie::Window::initWindow()
 {
 	irr::core::vector3df vec;
 
@@ -28,17 +28,17 @@ void Indie::Irrlicht::initIrrlicht()
 	m_camera.initCamera(m_sceneManager, vec);
 }
 
-// std::unique_ptr<irr::IrrlichtDevice> Indie::Irrlicht::getDevice() const
+// std::unique_ptr<irr::WindowDevice> Indie::Window::getDevice() const
 // {
-// 	return std::make_unique<irr::IrrlichtDevice>(m_device);
+// 	return std::make_unique<irr::WindowDevice>(m_device);
 // }
 
-// std::unique_ptr<irr::video::IVideoDriver> Indie::Irrlicht::getDriver() const
+// std::unique_ptr<irr::video::IVideoDriver> Indie::Window::getDriver() const
 // {
 // 	return std::make_unique<irr::video::IVideoDriver>(m_driver);
 // }
 
-// std::unique_ptr<irr::scene::ISceneManager> Indie::Irrlicht::getSceneManager() const
+// std::unique_ptr<irr::scene::ISceneManager> Indie::Window::getSceneManager() const
 // {
 // 	return std::make_unique<irr::scene::ISceneManager>(m_sceneManager);
 // }

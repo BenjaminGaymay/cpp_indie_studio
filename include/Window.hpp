@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2018
 ** cpp_indie_studio
 ** File description:
-** Irrlicht
+** Window
 */
 
 #pragma once
@@ -12,11 +12,11 @@
 #include "Camera.hpp"
 
 namespace Indie {
-	class Irrlicht {
+	class Window {
 	public:
-		Irrlicht();
-		~Irrlicht();
-		void initIrrlicht();
+		Window();
+		~Window();
+		void initWindow();
 		std::unique_ptr<irr::IrrlichtDevice> getDevice() const;
 		std::unique_ptr<irr::video::IVideoDriver> getDriver() const;
 		std::unique_ptr<irr::scene::ISceneManager> getSceneManager() const;
