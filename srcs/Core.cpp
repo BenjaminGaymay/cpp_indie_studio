@@ -6,6 +6,7 @@
 */
 
 #include <vector>
+#include <iostream>
 #include "Core.hpp"
 
 Indie::Core::Core()
@@ -18,7 +19,18 @@ void Indie::Core::run()
 {
 	m_core.initWindow();
 	irr::video::SColor color(255, 130, 255, 255);
-
+	std::vector<std::string> map = {
+		"##########",
+		"#        #",
+		"#  ###   #",
+		"#        #",
+		"#        #",
+		"#     ####",
+		"#        #",
+		"# ####   #",
+		"#        #",
+		"##########"
+	};
 
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0,255.0,255.0));
 	irr::scene::IAnimatedMesh* ground;
@@ -41,14 +53,21 @@ void Indie::Core::run()
 	sphere->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	sphere->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
 
-
 	std::vector<irr::scene::IAnimatedMeshSceneNode *> cubes;
-	for (int i = 0;i < 10; i++) {
-		cubes.push_back(m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/cube.md2")));
-		cubes[i]->setMaterialTexture(0, m_core.m_driver->getTexture("assets/crate.jpg"));
-		cubes[i]->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-		cubes[i]->setPosition(irr::core::vector3df(i*10,i*10,i*10));
+	int h = 0;
+	for (int i = 0; i < map.size(); i++) {
+		for (int j = 0; j < map[i].size(); j++) {
+			if (map[i][j] == '#') {
+				cubes.push_back(m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/cube.md2")));
+				cubes[h]->setMaterialTexture(0, m_core.m_driver->getTexture("assets/crate.jpg"));
+				cubes[h]->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+				cubes[h]->setPosition(irr::core::vector3df(i*cubes[h]->getBoundingBox().getExtent().X,100,j*cubes[h]->getBoundingBox().getExtent().X));
+				h+=1;
+			}
+		}
 	}
+
+
 
 	int lastFps = -1;
 	while (m_core.m_device->run()) {
@@ -56,15 +75,16 @@ void Indie::Core::run()
 			m_core.m_driver->beginScene(true, true, color);
 			m_core.m_sceneManager->drawAll();
 			m_core.m_driver->endScene();
-		}
-		int fps = m_core.m_driver->getFPS();
-		if (lastFps != fps) {
-			irr::core::stringw str = L"Irrlicht Engine - Bomberman [";
-			str += m_core.m_driver->getName();
-			str += "] FPS:";
-			str += fps;
-			m_core.m_device->setWindowCaption(str.c_str());
-			lastFps = fps;
-		}
+			int fps = m_core.m_driver->getFPS();
+			if (lastFps != fps) {
+				irr::core::stringw str = L"Irrlicht Engine - Bomberman [";
+				str += m_core.m_driver->getName();
+				str += "] FPS:";
+				str += fps;
+				m_core.m_device->setWindowCaption(str.c_str());
+				lastFps = fps;
+			}
+		} else
+			m_core.m_device->yield();
 	}
 }
