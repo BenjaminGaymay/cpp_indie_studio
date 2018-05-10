@@ -177,6 +177,33 @@ srcs/Core.cpp.s:
 	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Core.cpp.s
 .PHONY : srcs/Core.cpp.s
 
+srcs/Map.o: srcs/Map.cpp.o
+
+.PHONY : srcs/Map.o
+
+# target to build an object file
+srcs/Map.cpp.o:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Map.cpp.o
+.PHONY : srcs/Map.cpp.o
+
+srcs/Map.i: srcs/Map.cpp.i
+
+.PHONY : srcs/Map.i
+
+# target to preprocess a source file
+srcs/Map.cpp.i:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Map.cpp.i
+.PHONY : srcs/Map.cpp.i
+
+srcs/Map.s: srcs/Map.cpp.s
+
+.PHONY : srcs/Map.s
+
+# target to generate assembly for a file
+srcs/Map.cpp.s:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Map.cpp.s
+.PHONY : srcs/Map.cpp.s
+
 srcs/Window.o: srcs/Window.cpp.o
 
 .PHONY : srcs/Window.o
@@ -246,6 +273,9 @@ help:
 	@echo "... srcs/Core.o"
 	@echo "... srcs/Core.i"
 	@echo "... srcs/Core.s"
+	@echo "... srcs/Map.o"
+	@echo "... srcs/Map.i"
+	@echo "... srcs/Map.s"
 	@echo "... srcs/Window.o"
 	@echo "... srcs/Window.i"
 	@echo "... srcs/Window.s"

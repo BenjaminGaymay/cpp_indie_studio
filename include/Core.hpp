@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Window.hpp"
+#include "Map.hpp"
 
 namespace Indie {
 	class Core {

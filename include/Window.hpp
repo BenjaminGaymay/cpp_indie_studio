@@ -17,9 +17,10 @@ namespace Indie {
 		Window();
 		~Window();
 		void initWindow();
-		std::unique_ptr<irr::IrrlichtDevice> getDevice() const;
-		std::unique_ptr<irr::video::IVideoDriver> getDriver() const;
-		std::unique_ptr<irr::scene::ISceneManager> getSceneManager() const;
+		irr::video::IVideoDriver *getDriver() const;
+		irr::scene::ISceneManager *getSceneManager() const;
+
+	public:
 		irr::IrrlichtDevice *m_device;
 		irr::video::IVideoDriver *m_driver;
 		irr::scene::ISceneManager *m_sceneManager;

@@ -28,17 +28,13 @@ void Indie::Window::initWindow()
 	m_camera.initCamera(m_sceneManager, vec);
 }
 
-// std::unique_ptr<irr::WindowDevice> Indie::Window::getDevice() const
-// {
-// 	return std::make_unique<irr::WindowDevice>(m_device);
-// }
 
-// std::unique_ptr<irr::video::IVideoDriver> Indie::Window::getDriver() const
-// {
-// 	return std::make_unique<irr::video::IVideoDriver>(m_driver);
-// }
+irr::video::IVideoDriver *Indie::Window::getDriver() const
+{
+	return m_device->getVideoDriver();
+}
 
-// std::unique_ptr<irr::scene::ISceneManager> Indie::Window::getSceneManager() const
-// {
-// 	return std::make_unique<irr::scene::ISceneManager>(m_sceneManager);
-// }
+irr::scene::ISceneManager *Indie::Window::getSceneManager() const
+{
+	return m_device->getSceneManager();
+}
