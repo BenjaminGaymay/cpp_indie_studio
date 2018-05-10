@@ -27,13 +27,14 @@ void Indie::Core::run()
 	irr::scene::IMeshSceneNode *Nroom = m_core.m_sceneManager->addMeshSceneNode(room->getMesh(0));
 	Nroom->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	m_core.m_sceneManager->getMeshManipulator()->makePlanarTextureMapping(room->getMesh(0), 0.04f);
-	Nroom->setMaterialTexture(0, m_core.m_driver->getTexture("assets/crate.jpg"));
+	Nroom->setMaterialTexture(0, m_core.m_driver->getTexture("assets/sydney.bmp"));
 
 	irr::scene::IAnimatedMeshSceneNode *sydney = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/sydney.md2"));
 	sydney->setMD2Animation(irr::scene::EMAT_STAND);
 	sydney->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	sydney->setMaterialTexture(0, m_core.m_driver->getTexture("assets/sydney.bmp"));
 	sydney->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
+	sydney->setPosition(irr::core::vector3df(20, 60, 0));
 
 	irr::scene::IAnimatedMeshSceneNode *sphere = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/earth.x"));
 	sphere->setPosition(irr::core::vector3df(20,20,20));
