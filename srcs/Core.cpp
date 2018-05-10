@@ -19,15 +19,15 @@ void Indie::Core::run()
 	m_core.initWindow();
 	irr::video::SColor color(255, 130, 255, 255);
 
-	// irr::scene::IMeshSceneNode *cube = m_core.m_sceneManager->addCubeSceneNode(10.0f, 0, -1, irr::core::vector3df(0.0f, 0.0f, 20.0f));
-	// cube->setMaterialFlag(irr::video::EMF_WIREFRAME, true);
 
-	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(1.0, 1.0, 5.0, 0.0));
-	irr::scene::IAnimatedMesh *room = m_core.m_sceneManager->getMesh("assets/room.3ds");
-	irr::scene::IMeshSceneNode *Nroom = m_core.m_sceneManager->addMeshSceneNode(room->getMesh(0));
-	Nroom->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	m_core.m_sceneManager->getMeshManipulator()->makePlanarTextureMapping(room->getMesh(0), 0.04f);
-	Nroom->setMaterialTexture(0, m_core.m_driver->getTexture("assets/sydney.bmp"));
+	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0,255.0,255.0));
+	irr::scene::IAnimatedMesh* ground;
+	irr::scene::IMeshSceneNode* ground_node;
+
+	irr::scene::IMeshSceneNode *room = m_core.m_sceneManager->addMeshSceneNode(m_core.m_sceneManager->getMesh("assets/room.3ds"));
+	room->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	m_core.m_sceneManager->getMeshManipulator()->makePlanarTextureMapping(m_core.m_sceneManager->getMesh("assets/room.3ds"), 0.04f);
+	room->setMaterialTexture(0, m_core.m_driver->getTexture("assets/sydney.bmp"));
 
 	irr::scene::IAnimatedMeshSceneNode *sydney = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/sydney.md2"));
 	sydney->setMD2Animation(irr::scene::EMAT_STAND);
@@ -49,12 +49,22 @@ void Indie::Core::run()
 		cubes[i]->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		cubes[i]->setPosition(irr::core::vector3df(i*10,i*10,i*10));
 	}
-	// irr::scene::IAnimatedMeshSceneNode *cube = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/cube.md2"));
-	// cube->setMaterialTexture(0, m_core.m_driver->getTexture("assets/crate.jpg"));
-	// cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+
+	int lastFps = -1;
 	while (m_core.m_device->run()) {
-		m_core.m_driver->beginScene(true, true, color);
-		m_core.m_sceneManager->drawAll();
-		m_core.m_driver->endScene();
+		if (m_core.m_device->isWindowActive()) {
+			m_core.m_driver->beginScene(true, true, color);
+			m_core.m_sceneManager->drawAll();
+			m_core.m_driver->endScene();
+		}
+		int fps = m_core.m_driver->getFPS();
+		if (lastFps != fps) {
+			irr::core::stringw str = L"Irrlicht Engine - Bomberman [";
+			str += m_core.m_driver->getName();
+			str += "] FPS:";
+			str += fps;
+			m_core.m_device->setWindowCaption(str.c_str());
+			lastFps = fps;
+		}
 	}
 }
