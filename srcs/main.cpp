@@ -6,42 +6,48 @@
 //
 
 #include <irrlicht/irrlicht.h>
-using namespace irr;
+#include "Core.hpp"
 
-int main()
+int main(int ac, char **av)
 {
-	// start up the engine
-	IrrlichtDevice *device = createDevice(video::EDT_OPENGL,
-										  core::dimension2d<u32>(640,480));
+	Indie::Core core;
 
-	video::IVideoDriver* driver = device->getVideoDriver();
-	scene::ISceneManager* scenemgr = device->getSceneManager();
+	core.run();
+	// irr::IrrlichtDevice *device = irr::createDevice(irr::video::EDT_OPENGL,
+	// 	irr::core::dimension2d<irr::u32>(800,600), 32, false, true, false, 0);
+	// irr::video::IVideoDriver *driver = device->getVideoDriver();
+	// irr::scene::ISceneManager *sceneManager = device->getSceneManager();
+	// Indie::Camera camera;
+	// // sceneManager->addCameraSceneNode(0, irr::core::vector3d<irr::f32>(0.0f, 0.0f, 0.0f), irr::core::vector3df(5, 0, 0));
 
-	device->setWindowCaption(L"Hello World!");
+	// device->getCursorControl()->setVisible(false);
+	// device->setWindowCaption(L"floating");
 
-	// load and show quake2 .md2 model
-	scene::ISceneNode* node = scenemgr->addAnimatedMeshSceneNode(
-			scenemgr->getMesh("quake2model.md2"));
+	// //MODELE
+	// irr::scene::IMeshSceneNode *cube = sceneManager->addCubeSceneNode(10.0f, 0, -1, irr::core::vector3df(0.0f, 0.0f, 20.0f));
+	// cube->setMaterialFlag(irr::video::EMF_WIREFRAME, true);
 
-	// if everything worked, add a texture and disable lighting
-	if (node)
-	{
-		node->setMaterialTexture(0, driver->getTexture("texture.bmp"));
-		node->setMaterialFlag(video::EMF_LIGHTING, false);
-	}
+	// irr::scene::IAnimatedMeshSceneNode *sydney = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("assets/sydney.md2"));
+	// sydney->setMD2Animation(irr::scene::EMAT_STAND);
+	// sydney->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	// sydney->setMaterialTexture(0, driver->getTexture("assets/sydney.bmp"));
+	// sydney->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
 
-	// add a first person shooter style user controlled camera
-	scenemgr->addCameraSceneNodeFPS();
+	// irr::scene::IAnimatedMeshSceneNode *sphere = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("assets/earth.x"));
+	// sphere->setPosition(irr::core::vector3df(20,20,20));
+	// sphere->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	// sphere->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
 
-	// draw everything
-	while(device->run() && driver)
-	{
-		driver->beginScene(true, true, video::SColor(255,0,0,255));
-		scenemgr->drawAll();
-		driver->endScene();
-	}
 
-	// delete device
-	device->drop();
+
+	// irr::core::vector3df pos;
+	// camera.initCamera(sceneManager, pos);
+	// irr::video::SColor color(255, 255, 255, 255);
+	// while (device->run()) {
+	// 	driver->beginScene(true, true, color);
+	// 	sceneManager->drawAll();
+	// 	driver->endScene();
+	// }
+	// device->drop();
 	return 0;
 }

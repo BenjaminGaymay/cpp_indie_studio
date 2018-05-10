@@ -123,32 +123,113 @@ bomberman/fast:
 	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/build
 .PHONY : bomberman/fast
 
-srcs/a.o: srcs/a.cpp.o
+srcs/Camera.o: srcs/Camera.cpp.o
 
-.PHONY : srcs/a.o
+.PHONY : srcs/Camera.o
 
 # target to build an object file
-srcs/a.cpp.o:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/a.cpp.o
-.PHONY : srcs/a.cpp.o
+srcs/Camera.cpp.o:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Camera.cpp.o
+.PHONY : srcs/Camera.cpp.o
 
-srcs/a.i: srcs/a.cpp.i
+srcs/Camera.i: srcs/Camera.cpp.i
 
-.PHONY : srcs/a.i
+.PHONY : srcs/Camera.i
 
 # target to preprocess a source file
-srcs/a.cpp.i:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/a.cpp.i
-.PHONY : srcs/a.cpp.i
+srcs/Camera.cpp.i:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Camera.cpp.i
+.PHONY : srcs/Camera.cpp.i
 
-srcs/a.s: srcs/a.cpp.s
+srcs/Camera.s: srcs/Camera.cpp.s
 
-.PHONY : srcs/a.s
+.PHONY : srcs/Camera.s
 
 # target to generate assembly for a file
-srcs/a.cpp.s:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/a.cpp.s
-.PHONY : srcs/a.cpp.s
+srcs/Camera.cpp.s:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Camera.cpp.s
+.PHONY : srcs/Camera.cpp.s
+
+srcs/Core.o: srcs/Core.cpp.o
+
+.PHONY : srcs/Core.o
+
+# target to build an object file
+srcs/Core.cpp.o:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Core.cpp.o
+.PHONY : srcs/Core.cpp.o
+
+srcs/Core.i: srcs/Core.cpp.i
+
+.PHONY : srcs/Core.i
+
+# target to preprocess a source file
+srcs/Core.cpp.i:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Core.cpp.i
+.PHONY : srcs/Core.cpp.i
+
+srcs/Core.s: srcs/Core.cpp.s
+
+.PHONY : srcs/Core.s
+
+# target to generate assembly for a file
+srcs/Core.cpp.s:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Core.cpp.s
+.PHONY : srcs/Core.cpp.s
+
+srcs/Irrlicht.o: srcs/Irrlicht.cpp.o
+
+.PHONY : srcs/Irrlicht.o
+
+# target to build an object file
+srcs/Irrlicht.cpp.o:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Irrlicht.cpp.o
+.PHONY : srcs/Irrlicht.cpp.o
+
+srcs/Irrlicht.i: srcs/Irrlicht.cpp.i
+
+.PHONY : srcs/Irrlicht.i
+
+# target to preprocess a source file
+srcs/Irrlicht.cpp.i:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Irrlicht.cpp.i
+.PHONY : srcs/Irrlicht.cpp.i
+
+srcs/Irrlicht.s: srcs/Irrlicht.cpp.s
+
+.PHONY : srcs/Irrlicht.s
+
+# target to generate assembly for a file
+srcs/Irrlicht.cpp.s:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Irrlicht.cpp.s
+.PHONY : srcs/Irrlicht.cpp.s
+
+srcs/main.o: srcs/main.cpp.o
+
+.PHONY : srcs/main.o
+
+# target to build an object file
+srcs/main.cpp.o:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/main.cpp.o
+.PHONY : srcs/main.cpp.o
+
+srcs/main.i: srcs/main.cpp.i
+
+.PHONY : srcs/main.i
+
+# target to preprocess a source file
+srcs/main.cpp.i:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/main.cpp.i
+.PHONY : srcs/main.cpp.i
+
+srcs/main.s: srcs/main.cpp.s
+
+.PHONY : srcs/main.s
+
+# target to generate assembly for a file
+srcs/main.cpp.s:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/main.cpp.s
+.PHONY : srcs/main.cpp.s
 
 # Help Target
 help:
@@ -159,9 +240,18 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... bomberman"
-	@echo "... srcs/a.o"
-	@echo "... srcs/a.i"
-	@echo "... srcs/a.s"
+	@echo "... srcs/Camera.o"
+	@echo "... srcs/Camera.i"
+	@echo "... srcs/Camera.s"
+	@echo "... srcs/Core.o"
+	@echo "... srcs/Core.i"
+	@echo "... srcs/Core.s"
+	@echo "... srcs/Irrlicht.o"
+	@echo "... srcs/Irrlicht.i"
+	@echo "... srcs/Irrlicht.s"
+	@echo "... srcs/main.o"
+	@echo "... srcs/main.i"
+	@echo "... srcs/main.s"
 .PHONY : help
 
 
