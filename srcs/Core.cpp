@@ -32,11 +32,16 @@ void Indie::Core::run()
 	room->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));
 
 	irr::scene::IAnimatedMeshSceneNode *sydney = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/sydney.md2"));
-	sydney->setMD2Animation(irr::scene::EMAT_STAND);
+	sydney->setMD2Animation(irr::scene::EMAT_RUN);
 	sydney->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	sydney->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));
 	sydney->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
 	sydney->setPosition(irr::core::vector3df(20, 60, 0));
+
+	irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/bomberman_1.0.9.obj"));
+	bomber->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	bomber->setPosition(irr::core::vector3df(-20, 55, 0));
+	bomber->setScale(irr::core::vector3df(7,7,7));
 
 	irr::scene::IAnimatedMeshSceneNode *sphere = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/earth.x"));
 	sphere->setPosition(irr::core::vector3df(20,20,20));
