@@ -22,6 +22,13 @@ void Indie::Core::run()
 	// irr::scene::IMeshSceneNode *cube = m_core.m_sceneManager->addCubeSceneNode(10.0f, 0, -1, irr::core::vector3df(0.0f, 0.0f, 20.0f));
 	// cube->setMaterialFlag(irr::video::EMF_WIREFRAME, true);
 
+	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(1.0, 1.0, 5.0, 0.0));
+	irr::scene::IAnimatedMesh *room = m_core.m_sceneManager->getMesh("assets/room.3ds");
+	irr::scene::IMeshSceneNode *Nroom = m_core.m_sceneManager->addMeshSceneNode(room->getMesh(0));
+	Nroom->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	m_core.m_sceneManager->getMeshManipulator()->makePlanarTextureMapping(room->getMesh(0), 0.04f);
+	Nroom->setMaterialTexture(0, m_core.m_driver->getTexture("assets/crate.jpg"));
+
 	irr::scene::IAnimatedMeshSceneNode *sydney = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/sydney.md2"));
 	sydney->setMD2Animation(irr::scene::EMAT_STAND);
 	sydney->setMaterialFlag(irr::video::EMF_LIGHTING, false);
