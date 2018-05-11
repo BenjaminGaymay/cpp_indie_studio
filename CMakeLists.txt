@@ -5,14 +5,12 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(include)
 
+file(GLOB INCLUDES include/*.hpp)
+file(GLOB SRCS srcs/*.cpp)
+
 add_executable(bomberman
-        include/indie.hpp
-        srcs/main.cpp
-        srcs/Camera.cpp
-        srcs/Core.cpp
-        srcs/Window.cpp
-        srcs/Map.cpp
-        srcs/Events.cpp)
+            ${INCLUDES}
+            ${SRCS})
 
 find_path(IRRLICHT_INCLUDE_DIR irrlicht.h)
 include_directories(${IRRLICHT_PATH_INCLUDE})
