@@ -15,8 +15,33 @@ Indie::Core::Core()
 Indie::Core::~Core()
 {}
 
+void Indie::Core::drawCaption(int &lastFps)
+{
+	int fps = m_core.m_driver->getFPS();
+
+	if (lastFps != fps) {
+		irr::core::stringw str = L"Irrlicht Engine - Bomberman [";
+		str += m_core.m_driver->getName();
+		str += "] FPS:";
+		str += fps;
+		m_core.m_device->setWindowCaption(str.c_str());
+		lastFps = fps;
+		std::cout << "FPS: " << lastFps << std::endl;
+	}
+}
+
+void Indie::Core::processEvents(const Events &event)
+{
+	if (event.isKeyDown(irr::KEY_ESCAPE))
+		m_run = false;
+	if (event.isKeyDown(irr::KEY_KEY_A))
+		std::cout << event.MouseState.Position.X << " : " << event.MouseState.Position.Y << std::endl;
+}
+
 void Indie::Core::run()
 {
+	int lastFps = -1;
+	m_run = true;
 	Events event;
 	m_core.initWindow(event);
 	Map map;
@@ -31,14 +56,14 @@ void Indie::Core::run()
 	m_core.m_sceneManager->getMeshManipulator()->makePlanarTextureMapping(m_core.m_sceneManager->getMesh("assets/models/room.3ds"), 0.04f);
 	room->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));
 
-	irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("test/rocket_ICBM.3ds"));
+	/*irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("test/rocket_ICBM.3ds"));
 	//irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/bomberman_1.0.9.obj"));
 	bomber->setMD2Animation(irr::scene::EMAT_WAVE);
 	bomber->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	bomber->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
 	bomber->setMaterialTexture(0, m_core.m_driver->getTexture("test/tip.bmp"));
 	bomber->setPosition(irr::core::vector3df(20, 100, 0));
-	bomber->setScale(irr::core::vector3df(1, 1, 1));
+	bomber->setScale(irr::core::vector3df(1, 1, 1));*/
 
 	/*irr::scene::IAnimatedMeshSceneNode *sphere = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/earth.x"));
 	sphere->setPosition(irr::core::vector3df(20,20,20));
@@ -56,32 +81,14 @@ void Indie::Core::run()
 	node->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/water/water.jpg"));
 	node->setPosition(irr::core::vector3df(15, 15, 0));
 
-
-	int lastFps = -1;
-	bool run = true;
-	float lol = 0.0;
-	while (m_core.m_device->run() && run) {
+	while (m_core.m_device->run() && m_run) {
 		if (m_core.m_device->isWindowActive()) {
-			if (event.isKeyDown(irr::KEY_ESCAPE))
-				run = false;
-			if (event.isKeyDown(irr::KEY_KEY_A))
-				std::cout << event.MouseState.Position.X << " : " << event.MouseState.Position.Y << std::endl;
+			processEvents(event);
 			m_core.m_driver->beginScene(true, true, color);
 			m_core.m_sceneManager->drawAll();
 			m_core.m_driver->endScene();
-			int fps = m_core.m_driver->getFPS();
-			if (lastFps != fps) {
-				irr::core::stringw str = L"Irrlicht Engine - Bomberman [";
-				str += m_core.m_driver->getName();
-				str += "] FPS:";
-				str += fps;
-				m_core.m_device->setWindowCaption(str.c_str());
-				lastFps = fps;
-				std::cout << "FPS: " << lastFps << std::endl;
-			}
+			drawCaption(lastFps);
 		} else
 			m_core.m_device->yield();
-		bomber->setPosition(irr::core::vector3df(20, 100, lol));
-		lol -= 0.1;
 	}
 }
