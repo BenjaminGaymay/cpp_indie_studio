@@ -16,7 +16,11 @@ namespace Indie {
 			Core();
 			~Core();
 			void run();
+			void drawCaption(int &);
+			void processEvents(const Events &);
+
 		private:
 			Window m_core;
+			bool m_run;
 	};
 }
