@@ -18,7 +18,7 @@ Indie::Window::~Window()
 void Indie::Window::initWindow(Events &evt)
 {
 	irr::core::vector3df vec;
-	irr::core::dimension2d<irr::u32> dimension(1080, 720);
+	irr::core::dimension2d<irr::u32> dimension(1280, 960);
 
 	m_device = irr::createDevice(irr::video::EDT_OPENGL,
 		dimension, 32, false, true, false, &evt);

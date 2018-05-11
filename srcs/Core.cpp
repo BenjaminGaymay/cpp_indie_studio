@@ -31,26 +31,35 @@ void Indie::Core::run()
 	m_core.m_sceneManager->getMeshManipulator()->makePlanarTextureMapping(m_core.m_sceneManager->getMesh("assets/models/room.3ds"), 0.04f);
 	room->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));
 
-	irr::scene::IAnimatedMeshSceneNode *sydney = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/sydney.md2"));
-	sydney->setMD2Animation(irr::scene::EMAT_DEATH_FALLBACK);
-	sydney->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	sydney->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));
-	sydney->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
-	sydney->setPosition(irr::core::vector3df(20, 60, 0));
-
-	irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/bomberman_1.0.9.obj"));
+	irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("test/rocket_ICBM.3ds"));
+	//irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/bomberman_1.0.9.obj"));
+	bomber->setMD2Animation(irr::scene::EMAT_WAVE);
 	bomber->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	bomber->setPosition(irr::core::vector3df(-20, 55, 0));
-	bomber->setScale(irr::core::vector3df(7,7,7));
+	bomber->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
+	bomber->setMaterialTexture(0, m_core.m_driver->getTexture("test/tip.bmp"));
+	bomber->setPosition(irr::core::vector3df(20, 100, 0));
+	bomber->setScale(irr::core::vector3df(1, 1, 1));
 
-	irr::scene::IAnimatedMeshSceneNode *sphere = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/earth.x"));
+	/*irr::scene::IAnimatedMeshSceneNode *sphere = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/earth.x"));
 	sphere->setPosition(irr::core::vector3df(20,20,20));
 	sphere->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	sphere->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
+	sphere->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);*/
+
+
+	irr::scene::IAnimatedMesh *water = m_core.m_sceneManager->addHillPlaneMesh("waterMesh",
+									  irr::core::dimension2d<irr::f32>(30, 30),
+									  irr::core::dimension2d<irr::u32>(30,30), 0, 0,
+									  irr::core::dimension2d<irr::f32>(0, 0),
+									  irr::core::dimension2d<irr::f32>(10, 10));
+	water->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	irr::scene::ISceneNode *node = m_core.m_sceneManager->addWaterSurfaceSceneNode(water->getMesh(0), 3.0f, 300.0f, 30.0f);
+	node->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/water/water.jpg"));
+	node->setPosition(irr::core::vector3df(15, 15, 0));
 
 
 	int lastFps = -1;
 	bool run = true;
+	float lol = 0.0;
 	while (m_core.m_device->run() && run) {
 		if (m_core.m_device->isWindowActive()) {
 			if (event.isKeyDown(irr::KEY_ESCAPE))
@@ -72,5 +81,7 @@ void Indie::Core::run()
 			}
 		} else
 			m_core.m_device->yield();
+		bomber->setPosition(irr::core::vector3df(20, 100, lol));
+		lol -= 0.1;
 	}
 }
