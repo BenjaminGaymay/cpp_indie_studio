@@ -45,7 +45,7 @@ void Indie::Core::run()
 	Events event;
 	m_core.initWindow(event);
 	Map map;
-	map.initMap("assets/maps/map2.txt");
+	map.initMap("assets/maps/giga_map.txt");
 	map.load(m_core.m_device);
 	irr::video::SColor color(255, 130, 255, 255);
 
