@@ -38,6 +38,28 @@ void Indie::Core::processEvents(const Events &event)
 		std::cout << event.MouseState.Position.X << " : " << event.MouseState.Position.Y << std::endl;
 }
 
+void Indie::Core::createPalmier(irr::core::vector3df position)
+{
+	irr::scene::IAnimatedMeshSceneNode *object = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/palmier/palmier.obj"));
+	object->setMD2Animation(irr::scene::EMAT_WAVE);
+	object->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
+	object->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/palmier/palmier.bmp"));
+	object->setPosition(position);
+	object->setScale(irr::core::vector3df(0.1, 0.04, 0.1));
+}
+
+void Indie::Core::buildDecor()
+{
+	createPalmier(irr::core::vector3df(200, 20, 200));
+	createPalmier(irr::core::vector3df(220, 20, 210));
+	createPalmier(irr::core::vector3df(190, 20, 230));
+
+	createPalmier(irr::core::vector3df(-180, 20, -300));
+	createPalmier(irr::core::vector3df(-220, 20, -310));
+	createPalmier(irr::core::vector3df(-190, 20, -330));
+}
+
 void Indie::Core::run()
 {
 	int lastFps = -1;
@@ -45,7 +67,7 @@ void Indie::Core::run()
 	Events event;
 	m_core.initWindow(event);
 	Map map;
-	map.initMap("assets/maps/giga_map.txt");
+	map.initMap("assets/maps/map2.txt");
 	map.load(m_core.m_device);
 	irr::video::SColor color(255, 130, 255, 255);
 
@@ -81,6 +103,7 @@ void Indie::Core::run()
 	node->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/water/water.jpg"));
 	node->setPosition(irr::core::vector3df(15, 15, 0));
 
+	buildDecor();
 	while (m_core.m_device->run() && m_run) {
 		if (m_core.m_device->isWindowActive()) {
 			processEvents(event);
