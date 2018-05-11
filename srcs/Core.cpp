@@ -17,12 +17,12 @@ Indie::Core::~Core()
 
 void Indie::Core::run()
 {
-	m_core.initWindow();
+	Events event;
+	m_core.initWindow(event);
 	Map map;
 	map.initMap("assets/maps/map2.txt");
 	map.load(m_core.m_device);
 	irr::video::SColor color(255, 130, 255, 255);
-
 
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0,255.0,255.0));
 
@@ -32,7 +32,7 @@ void Indie::Core::run()
 	room->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));
 
 	irr::scene::IAnimatedMeshSceneNode *sydney = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/sydney.md2"));
-	sydney->setMD2Animation(irr::scene::EMAT_RUN);
+	sydney->setMD2Animation(irr::scene::EMAT_DEATH_FALLBACK);
 	sydney->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	sydney->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));
 	sydney->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
@@ -53,6 +53,10 @@ void Indie::Core::run()
 	bool run = true;
 	while (m_core.m_device->run() && run) {
 		if (m_core.m_device->isWindowActive()) {
+			if (event.isKeyDown(irr::KEY_ESCAPE))
+				run = false;
+			if (event.isKeyDown(irr::KEY_KEY_A))
+				std::cout << event.MouseState.Position.X << " : " << event.MouseState.Position.Y << std::endl;
 			m_core.m_driver->beginScene(true, true, color);
 			m_core.m_sceneManager->drawAll();
 			m_core.m_driver->endScene();

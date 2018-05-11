@@ -15,12 +15,13 @@ Indie::Window::~Window()
 	m_device->drop();
 }
 
-void Indie::Window::initWindow()
+void Indie::Window::initWindow(Events &evt)
 {
 	irr::core::vector3df vec;
+	irr::core::dimension2d<irr::u32> dimension(1080, 720);
 
 	m_device = irr::createDevice(irr::video::EDT_OPENGL,
-		irr::core::dimension2d<irr::u32>(800,600), 32, false, true, false, 0);
+		dimension, 32, false, true, false, &evt);
 	m_driver = m_device->getVideoDriver();
 	m_sceneManager = m_device->getSceneManager();
 	m_device->getCursorControl()->setVisible(false);

@@ -28,5 +28,5 @@ void Indie::Camera::initCamera(irr::scene::ISceneManager *sceneManager, irr::cor
 	keyMap[4].Action = irr::EKA_JUMP_UP;
 	keyMap[4].KeyCode = irr::KEY_SPACE;
 	m_camera = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.1f, -1, keyMap, 5);
-	m_camera->setPosition(irr::core::vector3df(0, 50, 200));
+	m_camera->setPosition(irr::core::vector3df(0, 200, 20));
 }

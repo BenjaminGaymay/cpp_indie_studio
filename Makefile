@@ -177,6 +177,33 @@ srcs/Core.cpp.s:
 	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Core.cpp.s
 .PHONY : srcs/Core.cpp.s
 
+srcs/Events.o: srcs/Events.cpp.o
+
+.PHONY : srcs/Events.o
+
+# target to build an object file
+srcs/Events.cpp.o:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Events.cpp.o
+.PHONY : srcs/Events.cpp.o
+
+srcs/Events.i: srcs/Events.cpp.i
+
+.PHONY : srcs/Events.i
+
+# target to preprocess a source file
+srcs/Events.cpp.i:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Events.cpp.i
+.PHONY : srcs/Events.cpp.i
+
+srcs/Events.s: srcs/Events.cpp.s
+
+.PHONY : srcs/Events.s
+
+# target to generate assembly for a file
+srcs/Events.cpp.s:
+	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/srcs/Events.cpp.s
+.PHONY : srcs/Events.cpp.s
+
 srcs/Map.o: srcs/Map.cpp.o
 
 .PHONY : srcs/Map.o
@@ -273,6 +300,9 @@ help:
 	@echo "... srcs/Core.o"
 	@echo "... srcs/Core.i"
 	@echo "... srcs/Core.s"
+	@echo "... srcs/Events.o"
+	@echo "... srcs/Events.i"
+	@echo "... srcs/Events.s"
 	@echo "... srcs/Map.o"
 	@echo "... srcs/Map.i"
 	@echo "... srcs/Map.s"

@@ -11,7 +11,8 @@ add_executable(bomberman
         srcs/Camera.cpp
         srcs/Core.cpp
         srcs/Window.cpp
-        srcs/Map.cpp)
+        srcs/Map.cpp
+        srcs/Events.cpp)
 
 find_path(IRRLICHT_INCLUDE_DIR irrlicht.h)
 include_directories(${IRRLICHT_PATH_INCLUDE})

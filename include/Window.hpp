@@ -10,13 +10,14 @@
 #include <irrlicht/irrlicht.h>
 #include <memory>
 #include "Camera.hpp"
+#include "Events.hpp"
 
 namespace Indie {
 	class Window {
 	public:
 		Window();
 		~Window();
-		void initWindow();
+		void initWindow(Events &);
 		irr::video::IVideoDriver *getDriver() const;
 		irr::scene::ISceneManager *getSceneManager() const;
 
