@@ -17,6 +17,8 @@ namespace Indie {
 			~Core();
 			void run();
 			void drawCaption(int &);
+			void buildDecor();
+			void createPalmier(irr::core::vector3df position);
 			void processEvents(const Events &);
 
 		private:
