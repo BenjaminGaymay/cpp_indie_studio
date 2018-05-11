@@ -51,10 +51,10 @@ void Indie::Core::run()
 
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0,255.0,255.0));
 
-	irr::scene::IMeshSceneNode *room = m_core.m_sceneManager->addMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/room.3ds"));
+	/*irr::scene::IMeshSceneNode *room = m_core.m_sceneManager->addMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/room.3ds"));
 	room->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	m_core.m_sceneManager->getMeshManipulator()->makePlanarTextureMapping(m_core.m_sceneManager->getMesh("assets/models/room.3ds"), 0.04f);
-	room->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));
+	room->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));*/
 
 	/*irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("test/rocket_ICBM.3ds"));
 	//irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/bomberman_1.0.9.obj"));

@@ -19,6 +19,7 @@ namespace Indie {
 		~Map();
 		void initMap(const std::string &map);
 		void load(irr::IrrlichtDevice *device);
+		void createArena(irr::IrrlichtDevice *device);
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> getMap() const;
 
 	private:
