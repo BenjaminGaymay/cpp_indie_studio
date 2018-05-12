@@ -1,6 +1,5 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib MY_PALM.mtl
 g default
 v 32.894276 0.000000 -41.524132
 v -14.790805 0.000000 -41.524139

@@ -10,7 +10,9 @@
 #include "Core.hpp"
 
 Indie::Core::Core()
-{}
+{
+	generateTextureMap();
+}
 
 Indie::Core::~Core()
 {}
@@ -40,42 +42,37 @@ void Indie::Core::processEvents(const Events &event)
 
 void Indie::Core::run()
 {
-	int lastFps = -1;
-	m_run = true;
 	Events event;
-	m_core.initWindow(event);
 	Map map;
-	map.initMap("assets/maps/map2.txt");
-	map.load(m_core.m_device);
+	int lastFps = -1;
 	irr::video::SColor color(255, 168, 201, 255);
 
+	m_core.initWindow(event);
+	m_run = true;
+	map.initMap("assets/maps/map2.txt");
+	map.load(m_core.m_device);
+
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0,255.0,255.0));
-
-	/*irr::scene::IMeshSceneNode *room = m_core.m_sceneManager->addMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/room.3ds"));
-	room->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	m_core.m_sceneManager->getMeshManipulator()->makePlanarTextureMapping(m_core.m_sceneManager->getMesh("assets/models/room.3ds"), 0.04f);
-	room->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/sydney.bmp"));*/
-
-	/*irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("test/rocket_ICBM.3ds"));
-	//irr::scene::IAnimatedMeshSceneNode *bomber = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/bomberman_1.0.9.obj"));
-	bomber->setMD2Animation(irr::scene::EMAT_WAVE);
-	bomber->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	bomber->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
-	bomber->setMaterialTexture(0, m_core.m_driver->getTexture("test/tip.bmp"));
-	bomber->setPosition(irr::core::vector3df(20, 100, 0));
-	bomber->setScale(irr::core::vector3df(1, 1, 1));*/
-
-	/*irr::scene::IAnimatedMeshSceneNode *sphere = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/earth.x"));
-	sphere->setPosition(irr::core::vector3df(20,20,20));
-	sphere->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	sphere->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);*/
-
 	buildDecor();
+	/*irr::scene::IAnimatedMeshSceneNode *player = createTexture("assets/models/sydney.md2", "assets/models/sydney.bmp", {300, 80, 300}, {0, 0, 0}, {1, 1, 1});*/
 	while (m_core.m_device->run() && m_run) {
 		if (m_core.m_device->isWindowActive()) {
 			processEvents(event);
 			m_core.m_driver->beginScene(true, true, color);
 			m_core.m_sceneManager->drawAll();
+			/*if (player) {
+				auto position = player->getPosition();
+				if (event.isKeyDown(irr::KEY_RIGHT)) {
+					position.X += 10;
+				} else if (event.isKeyDown(irr::KEY_LEFT)) {
+					position.X -= 10;
+				} else if (event.isKeyDown(irr::KEY_DOWN)) {
+					position.Z -= 10;
+				} else if (event.isKeyDown(irr::KEY_UP)) {
+					position.Z += 10;
+				}
+				moveTexture(player, position);
+			}*/
 			m_core.m_driver->endScene();
 			drawCaption(lastFps);
 		} else

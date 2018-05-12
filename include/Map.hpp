@@ -23,9 +23,9 @@ namespace Indie {
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> getMap() const;
 
 	private:
-		std::size_t max_width;
-		std::size_t max_height;
-		std::vector<std::string> m_map;
+		std::size_t _max_width;
+		std::size_t _max_height;
+		std::vector<std::vector<int>> _map;
 		std::vector<irr::scene::IAnimatedMeshSceneNode *> m_cubes;
 	};
 }
