@@ -18,7 +18,11 @@ namespace Indie {
 			void run();
 			void drawCaption(int &);
 			void buildDecor();
+			void createWater(irr::core::vector3df position,  irr::core::vector3df rotation);
 			irr::scene::IAnimatedMeshSceneNode *createPalmier(irr::core::vector3df position, irr::core::vector3df rotation);
+			irr::scene::IAnimatedMeshSceneNode *createSun(irr::core::vector3df position, irr::core::vector3df rotation);
+			irr::scene::IAnimatedMeshSceneNode *createMoon(irr::core::vector3df position, irr::core::vector3df rotation);
+			irr::scene::IAnimatedMeshSceneNode *createTexture(const irr::io::path &mesh, const irr::io::path &texture);
 			void createIsland(irr::core::vector3df position, irr::core::vector3df rotation);
 			void processEvents(const Events &);
 

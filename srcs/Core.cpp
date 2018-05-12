@@ -47,7 +47,7 @@ void Indie::Core::run()
 	Map map;
 	map.initMap("assets/maps/map2.txt");
 	map.load(m_core.m_device);
-	irr::video::SColor color(255, 130, 255, 255);
+	irr::video::SColor color(255, 168, 201, 255);
 
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0,255.0,255.0));
 
@@ -69,17 +69,6 @@ void Indie::Core::run()
 	sphere->setPosition(irr::core::vector3df(20,20,20));
 	sphere->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	sphere->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);*/
-
-
-	irr::scene::IAnimatedMesh *water = m_core.m_sceneManager->addHillPlaneMesh("waterMesh",
-									  irr::core::dimension2d<irr::f32>(50, 50),
-									  irr::core::dimension2d<irr::u32>(50,50), 0, 0,
-									  irr::core::dimension2d<irr::f32>(0, 0),
-									  irr::core::dimension2d<irr::f32>(30, 30));
-	water->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	irr::scene::ISceneNode *node = m_core.m_sceneManager->addWaterSurfaceSceneNode(water->getMesh(0), 5.0f, 500.0f, 50.0f);
-	node->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/water/water.jpg"));
-	node->setPosition(irr::core::vector3df(15, 15, 0));
 
 	buildDecor();
 	while (m_core.m_device->run() && m_run) {
