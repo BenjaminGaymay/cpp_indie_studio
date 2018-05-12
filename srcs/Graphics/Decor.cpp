@@ -6,7 +6,7 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Core::createTexture(const textureElem
 {
 	if (!m_core.m_sceneManager)
 		return nullptr;
-	irr::scene::IAnimatedMeshSceneNode *object = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh(textures.first));
+	auto object = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh(textures.first));
 	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
 	object->setMaterialTexture(0, m_core.m_driver->getTexture(textures.second));
 	object->setPosition(position);
@@ -33,9 +33,9 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Core::createSun(irr::core::vector3df 
 	return object;
 }*/
 
-void Indie::Core::createIsland(irr::core::vector3df position, irr::core::vector3df rotation)
+irr::scene::IAnimatedMeshSceneNode *Indie::Core::createIsland(irr::core::vector3df position, irr::core::vector3df rotation)
 {
-	irr::scene::IAnimatedMeshSceneNode *object = createTexture(_texturesMap[51], position, rotation, {15, 30, 15});
+	auto object = createTexture(_texturesMap[51], position, rotation, {15, 30, 15});
 	irr::core::vector3df scale = {0.01, 0.003, 0.01};
 
 	object->addChild(createTexture(_texturesMap[50], {+2, 2, -1}, {0, 0, 0}, scale));
@@ -45,6 +45,7 @@ void Indie::Core::createIsland(irr::core::vector3df position, irr::core::vector3
 	object->addChild(createTexture(_texturesMap[50], {2, 3, -7}, {0, 60, 0}, scale));
 	object->addChild(createTexture(_texturesMap[50], {-2, 3, -9}, {0, 0, 0}, scale));
 	object->addChild(createTexture(_texturesMap[50], {5, 3, -12}, {0, 0, 0}, scale));
+	return object;
 }
 
 void Indie::Core::createWater(irr::core::vector3df position,  irr::core::vector3df rotation)

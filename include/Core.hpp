@@ -30,7 +30,7 @@ namespace Indie {
 			void createWater(irr::core::vector3df position,  irr::core::vector3df rotation);
 			irr::scene::IAnimatedMeshSceneNode *createTexture(const textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale);
 			void moveTexture(irr::scene::IAnimatedMeshSceneNode *node, const irr::core::vector3df &position);
-			void createIsland(irr::core::vector3df position, irr::core::vector3df rotation);
+			irr::scene::IAnimatedMeshSceneNode *createIsland(irr::core::vector3df position, irr::core::vector3df rotation);
 			void processEvents(const Events &);
 	};
 }
