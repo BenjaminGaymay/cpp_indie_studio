@@ -38,28 +38,6 @@ void Indie::Core::processEvents(const Events &event)
 		std::cout << event.MouseState.Position.X << " : " << event.MouseState.Position.Y << std::endl;
 }
 
-void Indie::Core::createPalmier(irr::core::vector3df position)
-{
-	irr::scene::IAnimatedMeshSceneNode *object = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh("assets/models/palmier/palmier.obj"));
-	object->setMD2Animation(irr::scene::EMAT_WAVE);
-	object->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
-	object->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/palmier/palmier.bmp"));
-	object->setPosition(position);
-	object->setScale(irr::core::vector3df(0.1, 0.04, 0.1));
-}
-
-void Indie::Core::buildDecor()
-{
-	createPalmier(irr::core::vector3df(200, 20, 200));
-	createPalmier(irr::core::vector3df(220, 20, 210));
-	createPalmier(irr::core::vector3df(190, 20, 230));
-
-	createPalmier(irr::core::vector3df(-180, 20, -300));
-	createPalmier(irr::core::vector3df(-220, 20, -310));
-	createPalmier(irr::core::vector3df(-190, 20, -330));
-}
-
 void Indie::Core::run()
 {
 	int lastFps = -1;
@@ -94,12 +72,12 @@ void Indie::Core::run()
 
 
 	irr::scene::IAnimatedMesh *water = m_core.m_sceneManager->addHillPlaneMesh("waterMesh",
-									  irr::core::dimension2d<irr::f32>(30, 30),
-									  irr::core::dimension2d<irr::u32>(30,30), 0, 0,
+									  irr::core::dimension2d<irr::f32>(50, 50),
+									  irr::core::dimension2d<irr::u32>(50,50), 0, 0,
 									  irr::core::dimension2d<irr::f32>(0, 0),
-									  irr::core::dimension2d<irr::f32>(10, 10));
+									  irr::core::dimension2d<irr::f32>(30, 30));
 	water->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	irr::scene::ISceneNode *node = m_core.m_sceneManager->addWaterSurfaceSceneNode(water->getMesh(0), 3.0f, 300.0f, 30.0f);
+	irr::scene::ISceneNode *node = m_core.m_sceneManager->addWaterSurfaceSceneNode(water->getMesh(0), 5.0f, 500.0f, 50.0f);
 	node->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/water/water.jpg"));
 	node->setPosition(irr::core::vector3df(15, 15, 0));
 

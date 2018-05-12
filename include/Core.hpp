@@ -18,7 +18,8 @@ namespace Indie {
 			void run();
 			void drawCaption(int &);
 			void buildDecor();
-			void createPalmier(irr::core::vector3df position);
+			irr::scene::IAnimatedMeshSceneNode *createPalmier(irr::core::vector3df position, irr::core::vector3df rotation);
+			void createIsland(irr::core::vector3df position, irr::core::vector3df rotation);
 			void processEvents(const Events &);
 
 		private:
