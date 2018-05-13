@@ -53,12 +53,12 @@ void Indie::Core::createWater(irr::core::vector3df position,  irr::core::vector3
 	(void) position;
 	(void) rotation;
 	irr::scene::IAnimatedMesh *water = m_core.m_sceneManager->addHillPlaneMesh(
-			"waterMesh", irr::core::dimension2d<irr::f32>(50, 50),
+			"waterMesh", irr::core::dimension2d<irr::f32>(25, 25),
 			irr::core::dimension2d<irr::u32>(50, 50), 0, 0,
 			irr::core::dimension2d<irr::f32>(0, 0),
 			irr::core::dimension2d<irr::f32>(30, 30));
-	irr::scene::ISceneNode *node = m_core.m_sceneManager->addWaterSurfaceSceneNode(water->getMesh(0), 5.0f, 500.0f, 50.0f);
-	node->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/water/water.jpg"));
+	irr::scene::ISceneNode *node = m_core.m_sceneManager->addWaterSurfaceSceneNode(water->getMesh(0), 2.0f, 800.0f, 100.0f);
+	node->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/water/water_tiny.png"));
 	node->setPosition(irr::core::vector3df(15, 15, 0));
 }
 
@@ -67,8 +67,11 @@ void Indie::Core::buildDecor()
 	createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	createIsland(irr::core::vector3df(250, -60, 250), irr::core::vector3df(0, 0, 0));
 	createIsland(irr::core::vector3df(-250, -60, -250), irr::core::vector3df(0, 55, 0));
+	createTexture(_texturesMap[52], {400, -10, 400}, {0, 0, 0}, {4, 4, 4});
 	//createMoon(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	//auto sun = createSun(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
+	//object->getMaterial(0).setTexture(0, m_core.m_driver->getTexture("lol/rope.png"););
+	//object->getMaterial(0).setTexture(0, m_core.m_driver->getTexture("lol/rope.png"););
 }
 
 void Indie::Core::generateTextureMap()
@@ -76,4 +79,6 @@ void Indie::Core::generateTextureMap()
 	_texturesMap[0] = textureElem("assets/models/cube.md2", "assets/models/2D/sand.jpg");
 	_texturesMap[50] = textureElem("assets/models/palmier/palmier.obj", "assets/models/palmier/palmier.bmp");
 	_texturesMap[51] = textureElem("assets/models/island/island.3ds", "assets/models/island/island.jpg");
+	_texturesMap[52] = textureElem("assets/models/vehicules/boat.obj", "assets/models/vehicules/boat.tga");
+
 }
