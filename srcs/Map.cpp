@@ -44,7 +44,6 @@ void Indie::Map::initMap(const std::string &fileName)
 		std::vector<int> line;
 		number = strtok(buffer, " ");
 		while (number && *number != '\n' && *number != '\0') {
-			std::cout << ">" << number << "<" << std::endl;
 			line.push_back(atoi(number));
 			number = strtok(nullptr, " ");
 		}

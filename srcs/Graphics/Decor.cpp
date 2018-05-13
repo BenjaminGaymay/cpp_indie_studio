@@ -2,10 +2,8 @@
 
 #include "Core.hpp"
 
-irr::scene::IAnimatedMeshSceneNode *Indie::Core::createTexture(const textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale)
+irr::scene::IAnimatedMeshSceneNode *Indie::Core::createTexture(textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale)
 {
-	if (!m_core.m_sceneManager)
-		return nullptr;
 	auto object = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh(textures.first));
 	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
 	object->setMaterialTexture(0, m_core.m_driver->getTexture(textures.second));
@@ -77,6 +75,7 @@ void Indie::Core::buildDecor()
 void Indie::Core::generateTextureMap()
 {
 	_texturesMap[0] = textureElem("assets/models/cube.md2", "assets/models/2D/sand.jpg");
+	_texturesMap[10] = textureElem("assets/models/sydney.md2", "assets/models/sydney.bmp");
 	_texturesMap[50] = textureElem("assets/models/palmier/palmier.obj", "assets/models/palmier/palmier.bmp");
 	_texturesMap[51] = textureElem("assets/models/island/island.3ds", "assets/models/island/island.jpg");
 	_texturesMap[52] = textureElem("assets/models/vehicules/boat.obj", "assets/models/vehicules/boat.tga");

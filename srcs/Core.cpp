@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <iostream>
+#include <Player.hpp>
 #include "Core.hpp"
 
 Indie::Core::Core()
@@ -51,28 +52,43 @@ void Indie::Core::run()
 	m_run = true;
 	map.initMap("assets/maps/map2.txt");
 	map.load(m_core.m_device);
-
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0,255.0,255.0));
+
 	buildDecor();
-	/*irr::scene::IAnimatedMeshSceneNode *player = createTexture("assets/models/sydney.md2", "assets/models/sydney.bmp", {300, 80, 300}, {0, 0, 0}, {1, 1, 1});*/
+	irr::u32 then = m_core.m_device->getTimer()->getTime();
+	Indie::Player player(createTexture(_texturesMap[10], {300, 80, 300}, {0, 0, 0}, {1, 1, 1}));
+	player.getPlayer()->setFrameLoop(0, 13);
+	player.getPlayer()->setAnimationSpeed(15);
+	// This is the movemen speed in units per second.
 	while (m_core.m_device->run() && m_run) {
 		if (m_core.m_device->isWindowActive()) {
 			processEvents(event);
 			m_core.m_driver->beginScene(true, true, color);
+			const irr::u32 now = m_core.m_device->getTimer()->getTime();
+			player.move(event, now, then);
+			/*if (event.isKeyDown(irr::KEY_KEY_Q)) {
+				if (player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
+				player.setStanding(false);
+				nodePosition.Z += MOVEMENT_SPEED * frameDeltaTime;
+			} else if(event.isKeyDown(irr::KEY_KEY_D)) {
+				if (player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
+				player.setStanding(false);
+				nodePosition.Z -= MOVEMENT_SPEED * frameDeltaTime;
+			} else if(event.isKeyDown(irr::KEY_KEY_S)) {
+				if (player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
+				player.setStanding(false);
+				nodePosition.X -= MOVEMENT_SPEED * frameDeltaTime;
+			} else if(event.isKeyDown(irr::KEY_KEY_Z)) {
+				if (player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
+				player.setStanding(false);
+				nodePosition.X += MOVEMENT_SPEED * frameDeltaTime;
+			} else {
+				if (!player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_STAND);
+				player.setStanding(true);
+			}
+			rotationWithMove(player.getPlayer(), nodePosition);
+			player.getPlayer()->setPosition(nodePosition);*/
 			m_core.m_sceneManager->drawAll();
-			/*if (player) {
-				auto position = player->getPosition();
-				if (event.isKeyDown(irr::KEY_RIGHT)) {
-					position.X += 10;
-				} else if (event.isKeyDown(irr::KEY_LEFT)) {
-					position.X -= 10;
-				} else if (event.isKeyDown(irr::KEY_DOWN)) {
-					position.Z -= 10;
-				} else if (event.isKeyDown(irr::KEY_UP)) {
-					position.Z += 10;
-				}
-				moveTexture(player, position);
-			}*/
 			m_core.m_driver->endScene();
 			drawCaption(lastFps);
 		} else
