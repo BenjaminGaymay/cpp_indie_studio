@@ -66,28 +66,6 @@ void Indie::Core::run()
 			m_core.m_driver->beginScene(true, true, color);
 			const irr::u32 now = m_core.m_device->getTimer()->getTime();
 			player.move(event, now, then);
-			/*if (event.isKeyDown(irr::KEY_KEY_Q)) {
-				if (player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
-				player.setStanding(false);
-				nodePosition.Z += MOVEMENT_SPEED * frameDeltaTime;
-			} else if(event.isKeyDown(irr::KEY_KEY_D)) {
-				if (player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
-				player.setStanding(false);
-				nodePosition.Z -= MOVEMENT_SPEED * frameDeltaTime;
-			} else if(event.isKeyDown(irr::KEY_KEY_S)) {
-				if (player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
-				player.setStanding(false);
-				nodePosition.X -= MOVEMENT_SPEED * frameDeltaTime;
-			} else if(event.isKeyDown(irr::KEY_KEY_Z)) {
-				if (player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
-				player.setStanding(false);
-				nodePosition.X += MOVEMENT_SPEED * frameDeltaTime;
-			} else {
-				if (!player.isStanding()) player.getPlayer()->setMD2Animation(irr::scene::EMAT_STAND);
-				player.setStanding(true);
-			}
-			rotationWithMove(player.getPlayer(), nodePosition);
-			player.getPlayer()->setPosition(nodePosition);*/
 			m_core.m_sceneManager->drawAll();
 			m_core.m_driver->endScene();
 			drawCaption(lastFps);
