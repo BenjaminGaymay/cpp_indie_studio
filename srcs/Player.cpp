@@ -12,7 +12,7 @@
  * @param node
  */
 Indie::Player::Player(irr::scene::IAnimatedMeshSceneNode *node)
-: _stand(true), _player(node), _speed(100.0f)
+: _stand(true), _player(node), _speed(2.0f)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -28,34 +28,41 @@ Indie::Player::~Player() = default;
  * @param now
  * @param then
  */
-void Indie::Player::move(const Events &event, const irr::u32 &now, irr::u32 &then)
+void Indie::Player::move(const Events &event)
 {
-	const irr::f32 frameDeltaTime = (irr::f32)(now - then) / 1000.f; // Time in seconds
-	then = now;
+	irr::core::vector3df lastP = _player->getPosition();
+	irr::core::vector3df lastR = _player->getRotation();
 	irr::core::vector3df nodePosition = _player->getPosition();
 
 	if (event.isKeyDown(irr::KEY_KEY_Q)) {
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);
 		setStanding(false);
-		nodePosition.Z += _speed * frameDeltaTime;
+		nodePosition.Z += _speed;
 	} else if(event.isKeyDown(irr::KEY_KEY_D)) {
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);
 		setStanding(false);
-		nodePosition.Z -= _speed * frameDeltaTime;
+		nodePosition.Z -= _speed;
 	} else if(event.isKeyDown(irr::KEY_KEY_S)) {
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);
 		setStanding(false);
-		nodePosition.X -= _speed * frameDeltaTime;
+		nodePosition.X -= _speed;
 	} else if(event.isKeyDown(irr::KEY_KEY_Z)) {
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);
 		setStanding(false);
-		nodePosition.X += _speed * frameDeltaTime;
+		nodePosition.X += _speed;
 	} else {
 		if (!isStanding()) _player->setMD2Animation(irr::scene::EMAT_STAND);
 		setStanding(true);
 	}
 	rotationWithMove(_player, nodePosition);
 	_player->setPosition(nodePosition);
+	/*if (!_player->()) {
+		_player->setPosition(lastP);
+		_player->setRotation(lastR);
+		_player->setMD2Animation(irr::scene::EMAT_STAND);
+		setStanding(true);
+		return ;
+	}*/
 }
 
 /**

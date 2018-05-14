@@ -10,6 +10,10 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Core::createTexture(textureElem &text
 	object->setPosition(position);
 	object->setRotation(rotation);
 	object->setScale(scale);
+	object->setName(textures.first);
+	for (auto &node : _nodesList)
+		setCollision(node, object);
+	_nodesList.push_back(object);
 	return object;
 }
 
@@ -43,6 +47,7 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Core::createIsland(irr::core::vector3
 	object->addChild(createTexture(_texturesMap[50], {2, 3, -7}, {0, 60, 0}, scale));
 	object->addChild(createTexture(_texturesMap[50], {-2, 3, -9}, {0, 0, 0}, scale));
 	object->addChild(createTexture(_texturesMap[50], {5, 3, -12}, {0, 0, 0}, scale));
+	object->setName("Island");
 	return object;
 }
 
@@ -58,6 +63,7 @@ void Indie::Core::createWater(irr::core::vector3df position,  irr::core::vector3
 	irr::scene::ISceneNode *node = m_core.m_sceneManager->addWaterSurfaceSceneNode(water->getMesh(0), 2.0f, 800.0f, 100.0f);
 	node->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/water/water_tiny.png"));
 	node->setPosition(irr::core::vector3df(15, 15, 0));
+	node->setName("Water");
 }
 
 void Indie::Core::buildDecor()

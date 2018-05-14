@@ -38,7 +38,8 @@ void Indie::Core::processEvents(const Events &event)
 	if (event.isKeyDown(irr::KEY_ESCAPE))
 		m_run = false;
 	if (event.isKeyDown(irr::KEY_KEY_A))
-		std::cout << event.MouseState.Position.X << " : " << event.MouseState.Position.Y << std::endl;
+		std::cout << event.MouseState.Position.X << " : "
+				  << event.MouseState.Position.Y << std::endl;
 }
 
 void Indie::Core::run()
@@ -52,20 +53,18 @@ void Indie::Core::run()
 	m_run = true;
 	map.initMap("assets/maps/map2.txt");
 	map.load(m_core.m_device);
-	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0,255.0,255.0));
+	m_core.m_sceneManager->setAmbientLight(
+			irr::video::SColorf(255.0, 255.0, 255.0));
 
 	buildDecor();
-	irr::u32 then = m_core.m_device->getTimer()->getTime();
-	Indie::Player player(createTexture(_texturesMap[10], {300, 80, 300}, {0, 0, 0}, {1, 1, 1}));
-	player.getPlayer()->setFrameLoop(0, 13);
-	player.getPlayer()->setAnimationSpeed(15);
-	// This is the movemen speed in units per second.
+	Indie::Player player(createTexture(_texturesMap[10], {300, 80, 0}, {0, 0, 0}, {0.5f, 0.5f, 0.5f}));
+	for (auto &node : map.getMap())
+		setCollision(node, player.getPlayer());
 	while (m_core.m_device->run() && m_run) {
 		if (m_core.m_device->isWindowActive()) {
 			processEvents(event);
 			m_core.m_driver->beginScene(true, true, color);
-			const irr::u32 now = m_core.m_device->getTimer()->getTime();
-			player.move(event, now, then);
+			player.move(event);
 			m_core.m_sceneManager->drawAll();
 			m_core.m_driver->endScene();
 			drawCaption(lastFps);
