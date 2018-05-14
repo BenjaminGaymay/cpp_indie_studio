@@ -8,6 +8,8 @@
 #include <vector>
 #include <iostream>
 #include <Player.hpp>
+#include <Bomb.hpp>
+#include <algorithm>
 #include "Core.hpp"
 #include "Map.hpp"
 
@@ -58,11 +60,18 @@ void Indie::Core::run()
 			irr::video::SColorf(255.0, 255.0, 255.0));
 
 	buildDecor();
-	Indie::Player player(createTexture(_texturesMap[10], {300, 80, 0}, {0, 0, 0}, {0.5f, 0.5f, 0.5f}, true));
+	Indie::Player player(createTexture(_texturesMap[10], {0, 112, 0}, {0, 0, 0}, {0.2f, 0.2f, 0.2f}, true));
+	std::vector<Indie::Bomb> bombs;
 	while (m_core.m_device->run() && m_run) {
 		if (m_core.m_device->isWindowActive()) {
 			processEvents(event);
 			m_core.m_driver->beginScene(true, true, color);
+			if (event.isKeyDown(irr::KEY_SPACE)) {
+				Indie::Bomb bomb(2, 10);
+				bomb.setTexture(createTexture(_texturesMap[2], player.getPlayer()->getPosition(), {0, 0, 0}, {100, 100, 100}, false));
+				bombs.push_back(bomb);
+			}
+			bombs.erase(std::remove_if(bombs.begin(), bombs.end(), [](Indie::Bomb &row) {return row.boom();}), bombs.end());
 			player.move(event);
 			m_core.m_sceneManager->drawAll();
 			m_core.m_driver->endScene();

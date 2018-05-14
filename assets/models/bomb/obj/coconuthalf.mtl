@@ -1,0 +1,28 @@
+# File produced by AccuTrans 3D
+
+newmtl innerskin
+  Ns 199.0
+  d 1.0
+  illum 2
+  Kd 0.498 0.498 0.498
+  Ka 0.2542 0.2542 0.2542
+  Ks 0.0847 0.0847 0.0847
+  map_Kd E:\MyBryce\objs\Food\coconuts\coconuthalf_mtl2_diffcol.bmp
+
+newmtl meat
+  Ns 199.0
+  d 1.0
+  illum 2
+  Kd 0.498 0.498 0.498
+  Ka 0.2881 0.2881 0.2881
+  Ks 0 0 0
+  map_Kd E:\MyBryce\objs\Food\coconuts\coconuthalf_mtl4_diffcol.bmp
+
+newmtl skin
+  Ns 199.0
+  d 1.0
+  illum 2
+  Kd 0.498 0.498 0.498
+  Ka 0.2542 0.2542 0.2542
+  Ks 0.0847 0.0847 0.0847
+  map_Kd E:\MyBryce\objs\Food\coconuts\coconuthalf_mtl1_diffcol.bmp
