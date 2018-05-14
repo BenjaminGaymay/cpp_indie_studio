@@ -9,8 +9,8 @@
 
 #include "Core.hpp"
 
-void Indie::Core::setCollision(irr::scene::IAnimatedMeshSceneNode *wall,
-							irr::scene::IAnimatedMeshSceneNode *target)
+void Indie::Core::setCollision(irr::scene::ISceneNode *wall,
+							irr::scene::ISceneNode *target)
 {
 	irr::scene::IMetaTriangleSelector *metaSelector = m_core.m_sceneManager->createMetaTriangleSelector();
 	irr::scene::ITriangleSelector *selector = 0;

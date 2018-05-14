@@ -9,6 +9,7 @@
 #include <iostream>
 #include <Player.hpp>
 #include "Core.hpp"
+#include "Map.hpp"
 
 Indie::Core::Core()
 {
@@ -52,14 +53,12 @@ void Indie::Core::run()
 	m_core.initWindow(event);
 	m_run = true;
 	map.initMap("assets/maps/map2.txt");
-	map.load(m_core.m_device);
+	map.load(*this);
 	m_core.m_sceneManager->setAmbientLight(
 			irr::video::SColorf(255.0, 255.0, 255.0));
 
 	buildDecor();
-	Indie::Player player(createTexture(_texturesMap[10], {300, 80, 0}, {0, 0, 0}, {0.5f, 0.5f, 0.5f}));
-	for (auto &node : map.getMap())
-		setCollision(node, player.getPlayer());
+	Indie::Player player(createTexture(_texturesMap[10], {300, 80, 0}, {0, 0, 0}, {0.5f, 0.5f, 0.5f}, true));
 	while (m_core.m_device->run() && m_run) {
 		if (m_core.m_device->isWindowActive()) {
 			processEvents(event);
@@ -71,4 +70,9 @@ void Indie::Core::run()
 		} else
 			m_core.m_device->yield();
 	}
+}
+
+const Indie::Core::textureElem &Indie::Core::getTexture(const int &nb)
+{
+	return _texturesMap[nb];
 }

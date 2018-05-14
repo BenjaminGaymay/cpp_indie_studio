@@ -17,21 +17,6 @@ Indie::Map::Map()
 Indie::Map::~Map()
 {}
 
-void Indie::Map::createArena(irr::IrrlichtDevice *device)
-{
-	irr::video::IVideoDriver *driver = device->getVideoDriver();
-	irr::scene::ISceneManager *scene = device->getSceneManager();
-	irr::f32 cubeSize;
-
-	irr::scene::IAnimatedMeshSceneNode *arena = scene->addAnimatedMeshSceneNode(
-			scene->getMesh("assets/models/cube.md2"));
-	cubeSize = arena->getBoundingBox().getExtent().X;
-	arena->setMaterialTexture(0, driver->getTexture("assets/models/2D/sand.jpg"));
-	arena->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	arena->setPosition({0, 100 - cubeSize, 0});
-	arena->setScale({21, 1, 22});
-}
-
 void Indie::Map::initMap(const std::string &fileName)
 {
 	FILE *file = fopen(fileName.c_str(), "r");
@@ -57,22 +42,16 @@ void Indie::Map::initMap(const std::string &fileName)
 	fclose(file);
 }
 
-void Indie::Map::load(irr::IrrlichtDevice *device)
+void Indie::Map::load(Indie::Core &core)
 {
-	irr::video::IVideoDriver *driver = device->getVideoDriver();
-	irr::scene::ISceneManager *scene = device->getSceneManager();
 	irr::f32 cubeSize;
 	int h = 0;
 
 	for (int i = 0; i < _map.size(); ++i)
 		for (int j = 0; j < _map[i].size(); ++j) {
 			if (_map[i][j] == 0) {
-				m_cubes.push_back(scene->addAnimatedMeshSceneNode(
-						scene->getMesh("assets/models/cube.md2")));
+				m_cubes.push_back(core.createTexture(core.getTexture(0), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false));
 				cubeSize = m_cubes[h]->getBoundingBox().getExtent().X;
-				m_cubes[h]->setMaterialTexture(0, driver->getTexture(
-						"assets/models/crate.jpg"));
-				m_cubes[h]->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 				m_cubes[h]->setPosition(irr::core::vector3df(
 						static_cast<irr::f32>((i * cubeSize) -
 											  (((_max_width - 1) *
@@ -83,7 +62,6 @@ void Indie::Map::load(irr::IrrlichtDevice *device)
 				++h;
 			}
 		}
-	createArena(device);
 }
 
 std::vector<irr::scene::IAnimatedMeshSceneNode *> Indie::Map::getMap() const

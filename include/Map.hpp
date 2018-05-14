@@ -11,6 +11,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include "Core.hpp"
 
 namespace Indie {
 	class Map {
@@ -18,8 +19,7 @@ namespace Indie {
 		Map();
 		~Map();
 		void initMap(const std::string &map);
-		void load(irr::IrrlichtDevice *device);
-		void createArena(irr::IrrlichtDevice *device);
+		void load(Indie::Core &core);
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> getMap() const;
 
 	private:
