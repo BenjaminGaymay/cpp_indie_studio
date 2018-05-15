@@ -60,7 +60,12 @@ void Indie::Map::load(Indie::Core &core)
 		}
 }
 
-std::vector<irr::scene::IAnimatedMeshSceneNode *> Indie::Map::getMap() const
+std::vector<irr::scene::IAnimatedMeshSceneNode *> &Indie::Map::getMap3d()
 {
 	return m_cubes;
+}
+
+std::vector<std::vector<int>> &Indie::Map::getMap2d()
+{
+	return _map;
 }
