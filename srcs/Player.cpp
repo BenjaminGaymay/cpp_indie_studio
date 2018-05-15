@@ -56,13 +56,6 @@ void Indie::Player::move(const Events &event)
 	}
 	rotationWithMove(_player, nodePosition);
 	_player->setPosition(nodePosition);
-	/*if (!_player->()) {
-		_player->setPosition(lastP);
-		_player->setRotation(lastR);
-		_player->setMD2Animation(irr::scene::EMAT_STAND);
-		setStanding(true);
-		return ;
-	}*/
 }
 
 /**

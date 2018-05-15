@@ -1,4 +1,5 @@
 #include <Player.hpp>
+#include <iostream>
 
 /*
 ** EPITECH PROJECT, 2018
@@ -7,6 +8,7 @@
 ** 14/05/18
 */
 
+#include <iostream>
 #include "Core.hpp"
 
 void Indie::Core::setCollision(irr::scene::ISceneNode *wall,
@@ -18,8 +20,11 @@ void Indie::Core::setCollision(irr::scene::ISceneNode *wall,
 	wall->setTriangleSelector(selector);
 	metaSelector->addTriangleSelector(selector);
 
+	const irr::core::aabbox3d<irr::f32>& box = target->getBoundingBox();
+	irr::core::vector3df radius = box.getCenter();
+
 	irr::scene::ISceneNodeAnimatorCollisionResponse *anim = m_core.m_sceneManager->createCollisionResponseAnimator(
-			metaSelector, target, (target->getBoundingBox().MaxEdge - target->getBoundingBox().MinEdge),
+			metaSelector, target, (radius),
 			irr::core::vector3df(0.0f, 0.0f, 0.0f));
 	target->addAnimator(anim);
 	anim->drop();

@@ -44,21 +44,18 @@ void Indie::Map::initMap(const std::string &fileName)
 
 void Indie::Map::load(Indie::Core &core)
 {
-	irr::f32 cubeSize;
 	int h = 0;
 
 	for (int i = 0; i < _map.size(); ++i)
 		for (int j = 0; j < _map[i].size(); ++j) {
 			if (_map[i][j] == 0) {
 				m_cubes.push_back(core.createTexture(core.getTexture(0), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false));
-				cubeSize = m_cubes[h]->getBoundingBox().getExtent().X;
+				const irr::f32 cubeSize = (m_cubes[h]->getBoundingBox().getExtent().Z) * m_cubes[h]->getScale().X;
+				std::cout << cubeSize << std::endl;
 				m_cubes[h]->setPosition(irr::core::vector3df(
-						static_cast<irr::f32>((i * cubeSize) -
-											  (((_max_width - 1) *
-												cubeSize) / 2.0)), 100,
-						static_cast<irr::f32>((j * cubeSize) -
-											  (((_max_height - 1) *
-												cubeSize) / 2.0))));
+						static_cast<irr::f32>((i * cubeSize) - (((_max_width - 1) *	cubeSize) / 2.0)),
+						100,
+						static_cast<irr::f32>((j * cubeSize) - (((_max_height - 1) * cubeSize) / 2.0))));
 				++h;
 			}
 		}
