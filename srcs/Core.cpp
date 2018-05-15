@@ -48,7 +48,7 @@ void Indie::Core::processEvents(const Events &event)
 void Indie::Core::run()
 {
 	Events event;
-	Map map3d(20.00f);
+	Map map3d(20.00f, 100);
 	int lastFps = -1;
 	irr::video::SColor color(255, 168, 201, 255);
 

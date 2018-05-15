@@ -9,8 +9,8 @@
 #include <zconf.h>
 #include "Map.hpp"
 
-Indie::Map::Map(const float &size)
-: _max_height(0), _max_width(0), _size(size)
+Indie::Map::Map(const float &size, const float &y)
+: _max_height(0), _max_width(0), _size(size), _height(y)
 {
 }
 
@@ -42,30 +42,27 @@ void Indie::Map::initMap(const std::string &fileName)
 	fclose(file);
 }
 
-void Indie::Map::load(Indie::Core &core)
+irr::scene::IAnimatedMeshSceneNode *Indie::Map::putBlock(Indie::Core &core, int id, int x, int mulY, int z)
 {
-	int h = 0, u = 0;
 	irr::f32 cubeSize;
 
+	auto block = core.createTexture(*core.getTexture(id), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);
+	cubeSize = core.resizeNode(block, _size);
+	std::cout << cubeSize << std::endl;
+	block->setPosition(irr::core::vector3df(
+			static_cast<irr::f32>((x * cubeSize) - (((_max_width - 1) *	cubeSize) / 2.0)),
+			_height + (mulY * cubeSize),
+			static_cast<irr::f32>((z * cubeSize) - (((_max_height - 1) * cubeSize) / 2.0))));
+	return block;
+}
+
+void Indie::Map::load(Indie::Core &core)
+{
 	for (int i = 0; i < _map.size(); ++i)
 		for (int j = 0; j < _map[i].size(); ++j) {
-			m_u_cubes.push_back(core.createTexture(*core.getTexture(2), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false));
-			cubeSize = core.resizeNode(m_u_cubes[u], _size);
-			std::cout << cubeSize << std::endl;
-			m_u_cubes[u++]->setPosition(irr::core::vector3df(
-					static_cast<irr::f32>((i * cubeSize) - (((_max_width - 1) *	cubeSize) / 2.0)),
-				    100 - (cubeSize),
-				    static_cast<irr::f32>((j * cubeSize) - (((_max_height - 1) * cubeSize) / 2.0))));
-			if (core.getTexture(_map[i][j])) {
-				m_cubes.push_back(core.createTexture(*core.getTexture(_map[i][j]), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false));
-				cubeSize = core.resizeNode(m_cubes[h], _size);
-				std::cout << cubeSize << std::endl;
-				m_cubes[h]->setPosition(irr::core::vector3df(
-						static_cast<irr::f32>((i * cubeSize) - (((_max_width - 1) * cubeSize) / 2.0)),
-						100,
-						static_cast<irr::f32>((j * cubeSize) - (((_max_height - 1) * cubeSize) / 2.0))));
-				++h;
-			}
+			m_u_cubes.push_back(putBlock(core, 2, i, -1, j));
+			if (core.getTexture(_map[i][j]))
+				m_cubes.push_back(putBlock(core, _map[i][j], i, 0, j));
 		}
 }
 

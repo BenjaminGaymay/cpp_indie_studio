@@ -22,7 +22,6 @@ namespace Indie {
 		void drawCaption(int &);
 		void buildDecor();
 		void createWater(irr::core::vector3df position,  irr::core::vector3df rotation);
-		void createArena();
 		irr::f32 resizeNode(irr::scene::IAnimatedMeshSceneNode *node, const float &size);
 		 irr::scene::IAnimatedMeshSceneNode *createTexture(const textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale, bool collision);
 		irr::scene::IAnimatedMeshSceneNode *createIsland(irr::core::vector3df position, irr::core::vector3df rotation);

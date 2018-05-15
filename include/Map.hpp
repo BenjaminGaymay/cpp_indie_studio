@@ -16,10 +16,11 @@
 namespace Indie {
 	class Map {
 	public:
-		Map(const float &size);
+		Map(const float &size, const float &y);
 		~Map();
 		void initMap(const std::string &map);
 		void load(Indie::Core &core);
+		irr::scene::IAnimatedMeshSceneNode *putBlock(Indie::Core &core, int id, int i, int mulY, int j);
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> &getMap3d();
 		std::vector<std::vector<int>> &getMap2d();
 
@@ -27,6 +28,7 @@ namespace Indie {
 		std::size_t _max_width;
 		std::size_t _max_height;
 		const float _size;
+		const float _height;
 		std::vector<std::vector<int>> _map;
 		std::vector<irr::scene::IAnimatedMeshSceneNode *> m_cubes;
 		std::vector<irr::scene::IAnimatedMeshSceneNode *> m_u_cubes;
