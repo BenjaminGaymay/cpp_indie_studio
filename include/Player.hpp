@@ -18,13 +18,18 @@ namespace Indie {
 		~Player();
 		void move(const Events &event);
 		irr::scene::IAnimatedMeshSceneNode *getPlayer();
+		irr::core::vector3df getPosition() { return _player->getPosition(); }
+		void setPosition(irr::core::vector3df &pos) { _player->setPosition(pos); }
 		void rotationWithMove(irr::scene::IAnimatedMeshSceneNode *node, const irr::core::vector3df &newPosition);
 		bool isStanding();
 		void setStanding(bool state);
+		void setId(int id) { _id = id; }
+		int getId() { return _id; }
 	private:
 		irr::f32 _speed;
 		irr::scene::IAnimatedMeshSceneNode *_player;
 		bool _stand;
+		int _id;
 	protected:
 	};
 }
