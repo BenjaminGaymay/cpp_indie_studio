@@ -20,7 +20,8 @@ namespace Indie {
 		~Map();
 		void initMap(const std::string &map);
 		void load(Indie::Core &core);
-		std::vector<irr::scene::IAnimatedMeshSceneNode*> getMap() const;
+		std::vector<irr::scene::IAnimatedMeshSceneNode*> &getMap3d();
+		std::vector<std::vector<int>> &getMap2d();
 
 	private:
 		std::size_t _max_width;

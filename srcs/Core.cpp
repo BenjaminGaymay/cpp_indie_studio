@@ -32,7 +32,7 @@ void Indie::Core::drawCaption(int &lastFps)
 		str += fps;
 		m_core.m_device->setWindowCaption(str.c_str());
 		lastFps = fps;
-		std::cout << "FPS: " << lastFps << std::endl;
+		//std::cout << "FPS: " << lastFps << std::endl;
 	}
 }
 
@@ -48,14 +48,15 @@ void Indie::Core::processEvents(const Events &event)
 void Indie::Core::run()
 {
 	Events event;
-	Map map;
+	Map map3d;
 	int lastFps = -1;
 	irr::video::SColor color(255, 168, 201, 255);
 
 	m_core.initWindow(event);
 	m_run = true;
-	map.initMap("assets/maps/map2.txt");
-	map.load(*this);
+	map3d.initMap("assets/maps/map2.txt");
+	map3d.load(*this);
+
 	m_core.m_sceneManager->setAmbientLight(
 			irr::video::SColorf(255.0, 255.0, 255.0));
 
