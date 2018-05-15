@@ -12,6 +12,7 @@
 #include <algorithm>
 #include "Core.hpp"
 #include "Map.hpp"
+#include "SplashScreen.hpp"
 
 Indie::Core::Core()
 {
@@ -51,13 +52,14 @@ void Indie::Core::run()
 	Map map;
 	int lastFps = -1;
 	irr::video::SColor color(255, 168, 201, 255);
-
+	SplashScreen splash;
 	m_core.initWindow(event);
 	m_run = true;
 	map.initMap("assets/maps/map2.txt");
 	map.load(*this);
 	m_core.m_sceneManager->setAmbientLight(
 			irr::video::SColorf(255.0, 255.0, 255.0));
+	splash.display(m_core.m_device);
 
 	buildDecor();
 	Indie::Player player(createTexture(_texturesMap[10], {0, 100, 0}, {0, 0, 0}, {0.25, 0.25, 0.25}, true));
