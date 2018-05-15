@@ -51,7 +51,6 @@ void Indie::Map::load(Indie::Core &core)
 			if (_map[i][j] == 0) {
 				m_cubes.push_back(core.createTexture(core.getTexture(0), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false));
 				const irr::f32 cubeSize = (m_cubes[h]->getBoundingBox().getExtent().Z) * m_cubes[h]->getScale().X;
-				std::cout << cubeSize << std::endl;
 				m_cubes[h]->setPosition(irr::core::vector3df(
 						static_cast<irr::f32>((i * cubeSize) - (((_max_width - 1) *	cubeSize) / 2.0)),
 						100,

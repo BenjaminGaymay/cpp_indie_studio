@@ -84,8 +84,8 @@ void Indie::Core::buildDecor()
 {
 	createArena();
 	createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
-	/*createIsland(irr::core::vector3df(250, -60, 250), irr::core::vector3df(0, 0, 0));
-	createIsland(irr::core::vector3df(-250, -60, -250), irr::core::vector3df(0, 55, 0));*/
+	createIsland(irr::core::vector3df(450, -60, 250), irr::core::vector3df(0, 0, 0));
+	createIsland(irr::core::vector3df(-350, -60, -350), irr::core::vector3df(0, 55, 0));
 	createTexture(_texturesMap[52], {400, -10, 400}, {0, 0, 0}, {4, 4, 4}, false);
 	//createMoon(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	//auto sun = createSun(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
