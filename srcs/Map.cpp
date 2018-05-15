@@ -9,8 +9,8 @@
 #include <zconf.h>
 #include "Map.hpp"
 
-Indie::Map::Map()
-: _max_height(0), _max_width(0)
+Indie::Map::Map(const float &size)
+: _max_height(0), _max_width(0), _size(size)
 {
 }
 
@@ -44,15 +44,24 @@ void Indie::Map::initMap(const std::string &fileName)
 
 void Indie::Map::load(Indie::Core &core)
 {
-	int h = 0;
+	int h = 0, u = 0;
+	irr::f32 cubeSize;
 
 	for (int i = 0; i < _map.size(); ++i)
 		for (int j = 0; j < _map[i].size(); ++j) {
-			if (_map[i][j] == 0) {
-				m_cubes.push_back(core.createTexture(core.getTexture(0), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false));
-				const irr::f32 cubeSize = (m_cubes[h]->getBoundingBox().getExtent().Z) * m_cubes[h]->getScale().X;
+			m_u_cubes.push_back(core.createTexture(*core.getTexture(2), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false));
+			cubeSize = core.resizeNode(m_u_cubes[u], _size);
+			std::cout << cubeSize << std::endl;
+			m_u_cubes[u++]->setPosition(irr::core::vector3df(
+					static_cast<irr::f32>((i * cubeSize) - (((_max_width - 1) *	cubeSize) / 2.0)),
+				    100 - (cubeSize),
+				    static_cast<irr::f32>((j * cubeSize) - (((_max_height - 1) * cubeSize) / 2.0))));
+			if (core.getTexture(_map[i][j])) {
+				m_cubes.push_back(core.createTexture(*core.getTexture(_map[i][j]), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false));
+				cubeSize = core.resizeNode(m_cubes[h], _size);
+				std::cout << cubeSize << std::endl;
 				m_cubes[h]->setPosition(irr::core::vector3df(
-						static_cast<irr::f32>((i * cubeSize) - (((_max_width - 1) *	cubeSize) / 2.0)),
+						static_cast<irr::f32>((i * cubeSize) - (((_max_width - 1) * cubeSize) / 2.0)),
 						100,
 						static_cast<irr::f32>((j * cubeSize) - (((_max_height - 1) * cubeSize) / 2.0))));
 				++h;

@@ -48,7 +48,7 @@ void Indie::Core::processEvents(const Events &event)
 void Indie::Core::run()
 {
 	Events event;
-	Map map3d;
+	Map map3d(20.00f);
 	int lastFps = -1;
 	irr::video::SColor color(255, 168, 201, 255);
 
@@ -61,7 +61,7 @@ void Indie::Core::run()
 			irr::video::SColorf(255.0, 255.0, 255.0));
 
 	buildDecor();
-	Indie::Player player(createTexture(_texturesMap[10], {0, 100, 0}, {0, 0, 0}, {0.25, 0.25, 0.25}, true));
+	//Indie::Player player(createTexture(_texturesMap[10], {0, 100, 0}, {0, 0, 0}, {0.25, 0.25, 0.25}, true));
 	std::vector<Indie::Bomb> bombs;
 	while (m_core.m_device->run() && m_run) {
 		if (m_core.m_device->isWindowActive()) {
@@ -78,7 +78,7 @@ void Indie::Core::run()
 				bombs.push_back(bomb);*//*
 			}
 			//bombs.erase(std::remove_if(bombs.begin(), bombs.end(), [](Indie::Bomb &row) {return row.boom();}), bombs.end());*/
-			player.move(event);
+			//		player.move(event);
 			m_core.m_sceneManager->drawAll();
 			m_core.m_driver->endScene();
 			drawCaption(lastFps);
@@ -87,7 +87,19 @@ void Indie::Core::run()
 	}
 }
 
-const Indie::Core::textureElem &Indie::Core::getTexture(const int &nb)
+irr::f32 Indie::Core::resizeNode(irr::scene::IAnimatedMeshSceneNode *node, const float &size)
 {
-	return _texturesMap[nb];
+	irr::f32 cubeSize = (node->getBoundingBox().getExtent().Z) * node->getScale().Z;
+	if (cubeSize != size)
+		node->setScale({size / cubeSize, size / cubeSize, size / cubeSize});
+	cubeSize = (node->getBoundingBox().getExtent().Z) * node->getScale().Z;
+	return cubeSize;
+}
+
+const Indie::Core::textureElem *Indie::Core::getTexture(const int &nb)
+{
+	if (_texturesMap.find(nb) != _texturesMap.end())
+		return &_texturesMap[nb];
+	return nullptr;
+
 }

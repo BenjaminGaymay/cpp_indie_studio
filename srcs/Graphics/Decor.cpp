@@ -7,6 +7,8 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Core::createTexture(const textureElem
 															   bool collision)
 {
 	auto object = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh(textures.first));
+	if (!object)
+		return nullptr;
 	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
 	if (!textures.second.empty())
 		object->setMaterialTexture(0, m_core.m_driver->getTexture(textures.second));
@@ -14,7 +16,7 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Core::createTexture(const textureElem
 	object->setRotation(rotation);
 	object->setScale(scale);
 	object->setName(textures.first);
-	object->setDebugDataVisible(irr::scene::E_DEBUG_SCENE_TYPE::EDS_BBOX);
+//	object->setDebugDataVisible(irr::scene::E_DEBUG_SCENE_TYPE::EDS_BBOX);
 	m_core.m_driver->draw3DBox(object->getBoundingBox());
 	object->updateAbsolutePosition();
 	if (collision)
@@ -22,13 +24,6 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Core::createTexture(const textureElem
 			setCollision(node, object);
 	_nodesList.push_back(object);
 	return object;
-}
-
-void Indie::Core::createArena()
-{
-	auto arena = createTexture(_texturesMap[1], {0, 0, 0}, {0, 0, 0}, {21, 1, 22}, false);
-	auto cubeSize = arena->getBoundingBox().getExtent().X;
-	arena->setPosition({0, 100 - cubeSize, 0});
 }
 
 /*irr::scene::IAnimatedMeshSceneNode *Indie::Core::createMoon(irr::core::vector3df position, irr::core::vector3df rotation)
@@ -82,7 +77,7 @@ void Indie::Core::createWater(irr::core::vector3df position,  irr::core::vector3
 
 void Indie::Core::buildDecor()
 {
-	createArena();
+//	createArena();
 	createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	createIsland(irr::core::vector3df(450, -60, 250), irr::core::vector3df(0, 0, 0));
 	createIsland(irr::core::vector3df(-350, -60, -350), irr::core::vector3df(0, 55, 0));
@@ -95,9 +90,9 @@ void Indie::Core::buildDecor()
 
 void Indie::Core::generateTextureMap()
 {
-	_texturesMap[0] = textureElem("assets/models/cube.md2", "assets/models/2D/crate.jpg");
-	_texturesMap[1] = textureElem("assets/models/cube.md2", "assets/models/2D/sand.jpg");
-	_texturesMap[2] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png");
+	_texturesMap[1] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/crate.jpg");
+	_texturesMap[2] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/sand.jpg");
+	_texturesMap[3] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png");
 	_texturesMap[10] = textureElem("assets/models/sydney.md2", "assets/models/sydney.bmp");
 	_texturesMap[50] = textureElem("assets/models/palmier/palmier.obj", "assets/models/palmier/palmier.bmp");
 	_texturesMap[51] = textureElem("assets/models/island/island.3ds", "assets/models/island/island.jpg");
