@@ -13,13 +13,8 @@
 #include "Window.hpp"
 
 namespace Indie {
-	class ObjectPlayer {
-		public:
-			ObjectPlayer(int id, irr::scene::IAnimatedMeshSceneNode *node): _id(id), _player(node) {}
-			void setPosition(irr::core::vector3df &pos) { _player->setPosition(pos); }
-			int _id;
-			irr::scene::IAnimatedMeshSceneNode *_player;
-	};
+	class Player;
+	class ObjectPlayer;
 
 	class Core {
 	public:
@@ -38,7 +33,7 @@ namespace Indie {
 		void processEvents(const Events &);
 		const textureElem &getTexture(const int &nb);
 		int waitForId();
-		void readServerInformations();
+		void readServerInformations(std::vector<std::string> &);
 		void addPlayer(int, irr::core::vector3df &);
 		void removePlayer(int, irr::core::vector3df &);
 		void movePlayer(int, irr::core::vector3df &);
@@ -49,7 +44,7 @@ namespace Indie {
 		std::vector<irr::scene::IAnimatedMeshSceneNode *> _nodesList;
 		Window m_core;
 		bool m_run;
-		std::vector<std::unique_ptr<ObjectPlayer>> _playerObjects;
+		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
 		std::vector<void (Indie::Core::*)(int, irr::core::vector3df &)> _playersFct;
 	};

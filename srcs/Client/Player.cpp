@@ -12,7 +12,13 @@
  * @param node
  */
 Indie::Player::Player(irr::scene::IAnimatedMeshSceneNode *node)
-: _stand(true), _player(node), _speed(0.5f)
+: _stand(true), _player(node), _speed(0.5f), _id(-1)
+{
+	_player->setMD2Animation(irr::scene::EMAT_STAND);
+}
+
+Indie::Player::Player(int id, irr::scene::IAnimatedMeshSceneNode *node)
+: _stand(true), _player(node), _speed(0.5f), _id(id)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -28,7 +34,7 @@ Indie::Player::~Player() = default;
  * @param now
  * @param then
  */
-void Indie::Player::move(const Events &event)
+irr::core::vector3df Indie::Player::move(const Events &event)
 {
 	irr::core::vector3df lastP = _player->getPosition();
 	irr::core::vector3df lastR = _player->getRotation();
@@ -54,8 +60,9 @@ void Indie::Player::move(const Events &event)
 		if (!isStanding()) _player->setMD2Animation(irr::scene::EMAT_STAND);
 		setStanding(true);
 	}
-	rotationWithMove(_player, nodePosition);
-	_player->setPosition(nodePosition);
+	return nodePosition;
+	// rotationWithMove(_player, nodePosition);
+	// _player->setPosition(nodePosition);
 	/*if (!_player->()) {
 		_player->setPosition(lastP);
 		_player->setRotation(lastR);
@@ -71,7 +78,7 @@ void Indie::Player::move(const Events &event)
  * @param newPosition
  */
 void Indie::Player::rotationWithMove(irr::scene::IAnimatedMeshSceneNode *node,
-								   const irr::core::vector3df &newPosition)
+					const irr::core::vector3df &newPosition)
 {
 	irr::core::vector3df position = node->getPosition();
 	irr::core::vector3df rotation = node->getRotation();

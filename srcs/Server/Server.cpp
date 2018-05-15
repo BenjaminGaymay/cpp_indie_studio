@@ -41,6 +41,9 @@ void Indie::Server::addClient()
 
 	dprintf(newClient->_fd, "%d\n", id);
 	for (auto &client : _clients) {
+		// Stocker la pos de chaque client pour pouvoir l'envoyer
+		std::cout << "Tlm sait que " << id << " a pop\n";
+		std::cout << id << "connait la pos de" << client->_id << std::endl;
 		dprintf(client->_fd, "0:0:%d:0:112:0\n", id); // PLAYER:APPEAR:x:y:z
 		dprintf(newClient->_fd, "0:0:%d:0:112:0\n", client->_id); // mettre la pos du joueur
 	}
@@ -61,10 +64,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		while (tmp) {
 			std::cout << "Client " << client->_id << " say " << tmp << std::endl;
 			for (auto &i : _clients)
-				if (i != client) {
-					std::cout << "Je dis a " << i->_id << " que je move\n";
-					dprintf(i->_fd, tmp);
-				}
+				dprintf(i->_fd, tmp);
 			tmp = strtok(NULL, "\n");
 		}
 		return 0;
