@@ -3,18 +3,15 @@ project(bomberman)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(include)
+include_directories(./include
+                    ./include/GUI)
 
-file(GLOB INCLUDES include/*.hpp)
-file(GLOB SRCS srcs/*.cpp)
-file(GLOB SRCS_G srcs/Graphics/*.cpp)
-file(GLOB SRCS_O srcs/Objects/*.cpp)
+file(GLOB_RECURSE INCLUDES "include/*.hpp")
+file(GLOB_RECURSE SRCS "srcs/*.cpp")
 
 add_executable(bomberman
         ${INCLUDES}
-        ${SRCS}
-        ${SRCS_G}
-        ${SRCS_O})
+        ${SRCS})
 
 find_path(IRRLICHT_INCLUDE_DIR irrlicht.h)
 include_directories(${IRRLICHT_PATH_INCLUDE})
