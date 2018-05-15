@@ -48,7 +48,6 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Map::putBlock(Indie::Core &core, int 
 
 	auto block = core.createTexture(*core.getTexture(id), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);
 	cubeSize = core.resizeNode(block, _size);
-	std::cout << cubeSize << std::endl;
 	block->setPosition(irr::core::vector3df(
 			static_cast<irr::f32>((x * cubeSize) - (((_max_width - 1) *	cubeSize) / 2.0)),
 			_height + (mulY * cubeSize),
@@ -74,4 +73,14 @@ std::vector<irr::scene::IAnimatedMeshSceneNode *> &Indie::Map::getMap3d()
 std::vector<std::vector<int>> &Indie::Map::getMap2d()
 {
 	return _map;
+}
+
+const float &Indie::Map::getSize() const
+{
+	return _size;
+}
+
+const float &Indie::Map::getHeight() const
+{
+	return _height;
 }

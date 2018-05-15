@@ -23,6 +23,8 @@ namespace Indie {
 		irr::scene::IAnimatedMeshSceneNode *putBlock(Indie::Core &core, int id, int i, int mulY, int j);
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> &getMap3d();
 		std::vector<std::vector<int>> &getMap2d();
+		const float &getSize() const;
+		const float &getHeight() const;
 
 	private:
 		std::size_t _max_width;

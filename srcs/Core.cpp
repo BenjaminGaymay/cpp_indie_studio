@@ -48,7 +48,7 @@ void Indie::Core::processEvents(const Events &event)
 void Indie::Core::run()
 {
 	Events event;
-	Map map3d(20.00f, 100);
+	Map map3d(20.00f, 100.00f);
 	int lastFps = -1;
 	irr::video::SColor color(255, 168, 201, 255);
 
@@ -61,7 +61,8 @@ void Indie::Core::run()
 			irr::video::SColorf(255.0, 255.0, 255.0));
 
 	buildDecor();
-	//Indie::Player player(createTexture(_texturesMap[10], {0, 100, 0}, {0, 0, 0}, {0.25, 0.25, 0.25}, true));
+	Indie::Player player(createTexture(_texturesMap[10], {0, map3d.getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true));
+	resizeNode(player.getPlayer(), map3d.getSize());
 	std::vector<Indie::Bomb> bombs;
 	while (m_core.m_device->run() && m_run) {
 		if (m_core.m_device->isWindowActive()) {
@@ -78,7 +79,7 @@ void Indie::Core::run()
 				bombs.push_back(bomb);*//*
 			}
 			//bombs.erase(std::remove_if(bombs.begin(), bombs.end(), [](Indie::Bomb &row) {return row.boom();}), bombs.end());*/
-			//		player.move(event);
+			player.move(event);
 			m_core.m_sceneManager->drawAll();
 			m_core.m_driver->endScene();
 			drawCaption(lastFps);
