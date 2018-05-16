@@ -8,7 +8,7 @@ include_directories(./include
 
 file(GLOB INCLUDES include/*.hpp)
 file(GLOB_RECURSE SRCS_C srcs/Client/*.cpp)
-file(GLOB_RECURSE SRCS_G srcs/Graphism/*.cpp)
+file(GLOB_RECURSE SRCS_G srcs/Client/Graphism/*.cpp)
 
 file(GLOB_RECURSE SRCS_SHARED srcs/Shared/*.cpp)
 
