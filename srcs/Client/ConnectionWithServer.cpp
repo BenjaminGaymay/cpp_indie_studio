@@ -26,6 +26,8 @@ void Indie::Core::addPlayer(Indie::Graphism &graphism, int id, irr::core::vector
 
 void Indie::Core::removePlayer(Indie::Graphism &graphism, int id, irr::core::vector3df &pos)
 {
+	if (id == _playerObjects[0]->getId())
+		return;
 	for (auto &p : _playerObjects) {
 		if (p->getId() == id) {
 			auto pos = std::find(_playerObjects.begin(), _playerObjects.end(), p);
@@ -49,7 +51,6 @@ void Indie::Core::movePlayer(Indie::Graphism &core, int id, irr::core::vector3df
 			return;
 		}
 }
-
 
 void Indie::Core::readServerInformations(std::vector<std::string> &servSend, Indie::Graphism &graphism)
 {
