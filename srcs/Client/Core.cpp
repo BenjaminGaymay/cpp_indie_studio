@@ -63,6 +63,9 @@ void Indie::Core::handleMenu()
 			m_state = GAME;
 			m_core.getCamera().change(m_core.getSceneManager());
 			break;
+		case GEN_MAP:
+			m_state = MAPPING;
+			break;
 		default:
 			break;
 	}
@@ -106,6 +109,9 @@ void Indie::Core::run()
     		m_core.m_sceneManager->drawAll();
     		if (m_state == MENU) {
 			handleMenu();
+		} else if (m_state == MAPPING) {
+			std::cout << "mdr" << std::endl;
+		    	exit(0);
 		} else {
 			m_core.m_device->getCursorControl()->setVisible(false);
 		}
