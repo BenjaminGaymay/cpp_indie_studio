@@ -31,16 +31,16 @@ void Indie::Menu::initSpriteMenu(std::array<SpriteMenu, 2> &sprites)
 		{0, 64, 285, 128}
 	};
 	sprites[0].m_zone = {500, 75, 784, 139};
-	sprites[0].m_return = "play";
+	sprites[0].m_return = PLAY;
 	sprites[1].m_images = {
 		{0, 128, 285, 192},
 		{0, 192, 285, 256}
 	};
 	sprites[1].m_zone = {500, 150, 784, 214};
-	sprites[1].m_return = "quit";
+	sprites[1].m_return = QUIT;
 }
 
-std::string Indie::Menu::display(const Events &event)
+Indie::MenuState Indie::Menu::display(const Events &event)
 {
 	irr::video::SColor color(255, 255, 255, 255);
 	irr::core::position2di mouse = event.MouseState.Position;
@@ -61,5 +61,5 @@ std::string Indie::Menu::display(const Events &event)
 			irr::core::position2di(sprite.m_zone.UpperLeftCorner),
 			sprite.m_images[hovered], 0, color, true);
 	}
-	return "none";
+	return NONE;
 }

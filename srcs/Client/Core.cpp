@@ -128,15 +128,20 @@ void Indie::Core::readServerInformations(std::vector<std::string> &servSend)
 
 void Indie::Core::handleMenu()
 {
-	std::string res;
+	MenuState res;
 
 	m_core.m_device->getCursorControl()->setVisible(true);
 	res = m_menu.display(m_event);
-	if (res == "quit")
-		m_run = false;
-	else if (res == "play") {
-		m_state = GAME;
-		m_core.getCamera().change(m_core.getSceneManager());
+	switch (res) {
+		case QUIT:
+			m_run = false;
+			break;
+		case PLAY:
+			m_state = GAME;
+			m_core.getCamera().change(m_core.getSceneManager());
+			break;
+		default:
+			break;
 	}
 }
 
