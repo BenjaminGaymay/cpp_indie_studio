@@ -15,16 +15,16 @@
 #include "Graphism.hpp"
 #include "ManageStrings.hpp"
 
-void Indie::Core::addPlayer(Indie::Graphism &graphism, int id, irr::core::vector3df &pos)
+void Indie::Core::addPlayer(int id, irr::core::vector3df &pos)
 {
 	std::cout << "Add player: " << id << std::endl;
-	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, graphism.createTexture(*graphism.getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true));
-	graphism.resizeNode(newPlayer->getPlayer(), _mapper->getSize());
+	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true));
+	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
 	_playerObjects.push_back(std::move(newPlayer));
 }
 
-void Indie::Core::removePlayer(Indie::Graphism &graphism, int id, irr::core::vector3df &pos)
+void Indie::Core::removePlayer(int id, irr::core::vector3df &pos)
 {
 	if (id == _playerObjects[0]->getId())
 		return;
@@ -38,7 +38,7 @@ void Indie::Core::removePlayer(Indie::Graphism &graphism, int id, irr::core::vec
 	}
 }
 
-void Indie::Core::movePlayer(Indie::Graphism &core, int id, irr::core::vector3df &pos)
+void Indie::Core::movePlayer(int id, irr::core::vector3df &pos)
 {
 	for (auto &p : _playerObjects)
 		if (p->getId() == id) {
@@ -52,7 +52,7 @@ void Indie::Core::movePlayer(Indie::Graphism &core, int id, irr::core::vector3df
 		}
 }
 
-void Indie::Core::readServerInformations(std::vector<std::string> servSend, Indie::Graphism &graphism)
+void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 {
 	std::vector<std::string> info;
 	int type;
@@ -71,14 +71,14 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend, Indi
 
 			switch (type) {
 				case Indie::PLAYER:
-					(this->*_playersFct[event])(graphism, id, pos); break;
+					(this->*_playersFct[event])(id, pos); break;
 				default:break;
 			}
 		}
 	}
 }
 
-int Indie::Core::waitForId(Indie::Graphism &graphism)
+int Indie::Core::waitForId()
 {
 	std::vector<std::string> servSend;
 	int id;
@@ -92,6 +92,6 @@ int Indie::Core::waitForId(Indie::Graphism &graphism)
 	id = std::stoi(servSend[0]);
 	std::cout << "ID: " << id << std::endl;
 	servSend.erase(servSend.begin());
-	readServerInformations(servSend, graphism);
+	readServerInformations(servSend);
 	return id;
 }
