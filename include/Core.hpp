@@ -12,6 +12,7 @@
 #include "Socket.hpp"
 #include "Window.hpp"
 #include "SplashScreen.hpp"
+#include "Menu.hpp"
 
 namespace Indie {
 	class Player;
@@ -28,7 +29,7 @@ namespace Indie {
 		void buildDecor();
 		void createWater(irr::core::vector3df position,  irr::core::vector3df rotation);
 		void createArena();
-		 irr::scene::IAnimatedMeshSceneNode *createTexture(const textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale, bool collision);
+		irr::scene::IAnimatedMeshSceneNode *createTexture(const textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale, bool collision);
 		irr::scene::IAnimatedMeshSceneNode *createIsland(irr::core::vector3df position, irr::core::vector3df rotation);
 		void setCollision(irr::scene::ISceneNode *wall, irr::scene::ISceneNode *target);
 		void processEvents(const Events &);
@@ -48,5 +49,7 @@ namespace Indie {
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
 		std::vector<void (Indie::Core::*)(int, irr::core::vector3df &)> _playersFct;
+		SplashScreen m_splash;
+		Menu m_menu;
 	};
 }

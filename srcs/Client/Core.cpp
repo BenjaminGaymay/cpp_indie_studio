@@ -133,13 +133,12 @@ void Indie::Core::run()
 	int lastFps = -1;
 	irr::video::SColor color(255, 168, 201, 255);
 	std::vector<std::string> servSend;
-	SplashScreen splash;
 	m_core.initWindow(event);
 	m_run = true;
 	map.initMap("assets/maps/map2.txt");
 	map.load(*this);
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0, 255.0, 255.0));
-	splash.display(m_core.m_device);
+	m_splash.display(m_core.m_device);
 	buildDecor();
 	std::vector<Indie::Bomb> bombs;
 
