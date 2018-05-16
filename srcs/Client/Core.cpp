@@ -125,7 +125,6 @@ void Indie::Core::readServerInformations(std::vector<std::string> &servSend, Ind
 	}
 }
 
-
 void Indie::Core::run()
 {
 	Events event;
@@ -137,9 +136,9 @@ void Indie::Core::run()
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0, 255.0, 255.0));
 	Graphism graphism(m_core);
 	graphism.buildDecor();
-	Map map(20.00f, 100.00f);
-	map.initMap("assets/maps/map2.txt");
-	map.load(graphism);
+	_mapper =  std::make_unique<Map>(20.00f, 100.00f);
+	_mapper->initMap("assets/maps/map2.txt");
+	_mapper->load(graphism);
 	m_splash.display(m_core.m_device);
 
 	_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
