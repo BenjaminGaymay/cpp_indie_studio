@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include "SplashScreen.hpp"
-#include <unistd.h>
+
 Indie::SplashScreen::SplashScreen()
 {}
 
@@ -46,7 +46,7 @@ bool Indie::SplashScreen::fadeOut()
 	return true;
 }
 
-void Indie::SplashScreen::display(irr::IrrlichtDevice *device)
+void Indie::SplashScreen::display(irr::IrrlichtDevice *device, Events &event)
 {
 	m_gui = device->getGUIEnvironment();
 	m_fader = m_gui->addInOutFader();
@@ -58,12 +58,20 @@ void Indie::SplashScreen::display(irr::IrrlichtDevice *device)
 	m_fader->isReady();
 
 	while (device->run()) {
+		if (event.isKeyDown(irr::KEY_ESCAPE) or
+			event.isKeyDown(irr::KEY_SPACE) or
+			event.isKeyDown(irr::KEY_RETURN))
+			break;
 		fadeIn();
 		if (m_clock.getElapsedTime() >= 4) {
 			m_fader->fadeOut(2000);
 			m_fader->isReady();
 			m_clock.reset();
 			while (device->run()) {
+				if (event.isKeyDown(irr::KEY_ESCAPE) or
+					event.isKeyDown(irr::KEY_SPACE) or
+					event.isKeyDown(irr::KEY_RETURN))
+					break;
 				if (!fadeOut())
 					break;
 				}

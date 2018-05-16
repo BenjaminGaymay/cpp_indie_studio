@@ -83,7 +83,7 @@ void Indie::Core::run()
 	_mapper->load(graphism);
 	m_menu.loadMenu(m_core.m_device);
 
-	m_splash.display(m_core.m_device);
+	m_splash.display(m_core.m_device, m_event);
 	_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
 	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(graphism), graphism.createTexture(*graphism.getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
 	graphism.resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
