@@ -12,7 +12,7 @@
  * @param node
  */
 Indie::Player::Player(int id, irr::scene::ISceneNode *node)
-: _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1)
+: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }

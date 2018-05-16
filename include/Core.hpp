@@ -14,6 +14,7 @@
 #include "SplashScreen.hpp"
 #include "Menu.hpp"
 #include "Graphism.hpp"
+#include "Map.hpp"
 
 namespace Indie {
 	class Player;
@@ -33,6 +34,7 @@ namespace Indie {
 		void movePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
 	private:
 		Window m_core;
+		std::unique_ptr<Map> _mapper;
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
