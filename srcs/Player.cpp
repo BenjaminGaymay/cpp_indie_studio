@@ -31,8 +31,6 @@ Indie::Player::~Player() = default;
  */
 void Indie::Player::move(const Events &event)
 {
-	irr::core::vector3df lastP = _player->getPosition();
-	irr::core::vector3df lastR = _player->getRotation();
 	irr::core::vector3df nodePosition = _player->getPosition();
 
 	if (event.isKeyDown(irr::KEY_KEY_Q)) {
