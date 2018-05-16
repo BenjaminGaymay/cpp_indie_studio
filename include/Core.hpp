@@ -20,18 +20,25 @@ namespace Indie {
 	class Player;
 	class ObjectPlayer;
 
+	enum State {
+		MENU,
+		GAME
+	};
+
 	class Core {
 	public:
 		Core();
 		~Core();
 		void run();
 		void drawCaption(int &);
-		void processEvents(const Events &);
+		void processEvents();
 		int waitForId(Indie::Graphism &graphism);
 		void readServerInformations(std::vector<std::string> &, Indie::Graphism &graphism);
 		void addPlayer(Indie::Graphism &core, int, irr::core::vector3df &);
 		void removePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
 		void movePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
+		void handleMenu();
+
 	private:
 		Window m_core;
 		std::unique_ptr<Map> _mapper;
@@ -41,5 +48,7 @@ namespace Indie {
 		std::vector<void (Indie::Core::*)(Indie::Graphism &, int, irr::core::vector3df &)> _playersFct;
 		SplashScreen m_splash;
 		Menu m_menu;
+		State m_state;
+		Events m_event;
 	};
 }

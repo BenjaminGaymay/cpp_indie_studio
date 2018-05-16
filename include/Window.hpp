@@ -20,6 +20,8 @@ namespace Indie {
 		void initWindow(Events &);
 		irr::video::IVideoDriver *getDriver() const;
 		irr::scene::ISceneManager *getSceneManager() const;
+		Camera getCamera() const;
+		irr::core::vector3df getCameraPosition() const;
 
 	public:
 		irr::IrrlichtDevice *m_device;

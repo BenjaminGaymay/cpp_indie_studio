@@ -4,6 +4,7 @@
 ** File description:
 ** 16/05/18
 */
+
 #ifndef BOMBERMAN_GRAPHISM_HPP
 #define BOMBERMAN_GRAPHISM_HPP
 

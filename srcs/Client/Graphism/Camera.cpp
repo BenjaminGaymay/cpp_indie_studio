@@ -8,25 +8,46 @@
 #include "Camera.hpp"
 
 Indie::Camera::Camera()
-{}
+{
+	m_keyMap[0].Action = irr::EKA_MOVE_FORWARD;
+	m_keyMap[0].KeyCode = irr::KEY_UP;
+	m_keyMap[1].Action = irr::EKA_MOVE_BACKWARD;
+	m_keyMap[1].KeyCode = irr::KEY_DOWN;
+	m_keyMap[2].Action = irr::EKA_STRAFE_LEFT;
+	m_keyMap[2].KeyCode = irr::KEY_LEFT;
+	m_keyMap[3].Action = irr::EKA_STRAFE_RIGHT;
+	m_keyMap[3].KeyCode = irr::KEY_RIGHT;
+	m_keyMap[4].Action = irr::EKA_JUMP_UP;
+	m_keyMap[4].KeyCode = irr::KEY_SPACE;
+
+  	m_mode = BASIC;
+}
 
 Indie::Camera::~Camera()
 {}
 
 void Indie::Camera::initCamera(irr::scene::ISceneManager *sceneManager, irr::core::vector3df &pos)
 {
-	irr::SKeyMap keyMap[5];
+	m_cameras.resize(2);
+	m_cameras[FPS] = sceneManager->addCameraSceneNodeFPS(0, 100, 0.5, -1, m_keyMap, 5);
+	m_cameras[FPS]->setPosition(pos);
+	m_cameras[BASIC] = sceneManager->addCameraSceneNode();
+	m_cameras[BASIC]->setPosition(pos);
+	m_cameras[BASIC]->setRotation(irr::core::vector3df(0, 20, 0));
+}
 
-	keyMap[0].Action = irr::EKA_MOVE_FORWARD;
-	keyMap[0].KeyCode = irr::KEY_UP;
-	keyMap[1].Action = irr::EKA_MOVE_BACKWARD;
-	keyMap[1].KeyCode = irr::KEY_DOWN;
-	keyMap[2].Action = irr::EKA_STRAFE_LEFT;
-	keyMap[2].KeyCode = irr::KEY_LEFT;
-	keyMap[3].Action = irr::EKA_STRAFE_RIGHT;
-	keyMap[3].KeyCode = irr::KEY_RIGHT;
-	keyMap[4].Action = irr::EKA_JUMP_UP;
-	keyMap[4].KeyCode = irr::KEY_SPACE;
-	m_camera = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.05, -1, keyMap, 5);
-	m_camera->setPosition(irr::core::vector3df(0, 150, 0));
+void Indie::Camera::change(irr::scene::ISceneManager *sceneManager)
+{
+	if (m_mode == BASIC) {
+		m_mode = FPS;
+		sceneManager->setActiveCamera(m_cameras[m_mode]);
+	} else {
+		m_mode = BASIC;
+		sceneManager->setActiveCamera(m_cameras[m_mode]);
+	}
+}
+
+Indie::Camera::Mode Indie::Camera::getMode() const
+{
+	return m_mode;
 }
