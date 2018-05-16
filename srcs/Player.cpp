@@ -11,8 +11,9 @@
  * @brief texture of the player
  * @param node
  */
-Indie::Player::Player(irr::scene::IAnimatedMeshSceneNode *node)
-: _stand(true), _player(node), _speed(0.5f)
+Indie::Player::Player(irr::scene::ISceneNode *node)
+: _stand(true), _player(
+		dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -106,4 +107,14 @@ bool Indie::Player::isStanding()
 void Indie::Player::setStanding(bool state)
 {
 	_stand = state;
+}
+
+void Indie::Player::setSpeed(float speed)
+{
+	_speed = speed;
+}
+
+const float &Indie::Player::getSpeed()
+{
+	return _speed;
 }

@@ -14,13 +14,15 @@
 namespace Indie {
 	class Player {
 	public:
-		explicit Player(irr::scene::IAnimatedMeshSceneNode *node);
+		explicit Player(irr::scene::ISceneNode *node);
 		~Player();
 		void move(const Events &event);
 		irr::scene::IAnimatedMeshSceneNode *getPlayer();
 		void rotationWithMove(irr::scene::IAnimatedMeshSceneNode *node, const irr::core::vector3df &newPosition);
-		bool isStanding();
+		bool isStanding(void);
 		void setStanding(bool state);
+		void setSpeed(float speed);
+		const float &getSpeed(void);
 	private:
 		irr::f32 _speed;
 		irr::scene::IAnimatedMeshSceneNode *_player;

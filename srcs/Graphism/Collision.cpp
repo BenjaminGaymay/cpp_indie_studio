@@ -9,9 +9,9 @@
 */
 
 #include <iostream>
-#include "Core.hpp"
+#include "Graphism.hpp"
 
-void Indie::Core::setCollision(irr::scene::ISceneNode *wall,
+void Indie::Graphism::setCollision(irr::scene::ISceneNode *wall,
 							irr::scene::ISceneNode *target)
 {
 	irr::scene::IMetaTriangleSelector *metaSelector = m_core.m_sceneManager->createMetaTriangleSelector();
