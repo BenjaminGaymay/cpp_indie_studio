@@ -54,6 +54,7 @@ Indie::Core::Core()
 	_playersFct.push_back(&Indie::Core::addPlayer);
 	_playersFct.push_back(&Indie::Core::removePlayer);
 	_playersFct.push_back(&Indie::Core::movePlayer);
+	m_state = MENU;
 }
 
 Indie::Core::~Core()
@@ -74,13 +75,13 @@ void Indie::Core::drawCaption(int &lastFps)
 	}
 }
 
-void Indie::Core::processEvents(const Events &event)
+void Indie::Core::processEvents()
 {
-	if (event.isKeyDown(irr::KEY_ESCAPE))
+	if (m_event.isKeyDown(irr::KEY_ESCAPE))
 		m_run = false;
-	if (event.isKeyDown(irr::KEY_KEY_A))
-		std::cout << event.MouseState.Position.X << " : "
-				  << event.MouseState.Position.Y << std::endl;
+	if (m_event.isKeyDown(irr::KEY_KEY_A))
+		std::cout << m_event.MouseState.Position.X << " : "
+				  << m_event.MouseState.Position.Y << std::endl;
 }
 
 int Indie::Core::waitForId()
@@ -125,20 +126,33 @@ void Indie::Core::readServerInformations(std::vector<std::string> &servSend)
 	}
 }
 
+void Indie::Core::handleMenu()
+{
+	std::string res;
+
+	m_core.m_device->getCursorControl()->setVisible(true);
+	res = m_menu.display(m_event);
+	if (res == "quit")
+		m_run = false;
+	else if (res == "play") {
+		m_state = GAME;
+		m_core.getCamera().change(m_core.getSceneManager());
+	}
+}
 
 void Indie::Core::run()
 {
-	Events event;
 	Map map;
 	int lastFps = -1;
 	irr::video::SColor color(255, 168, 201, 255);
 	std::vector<std::string> servSend;
-	m_core.initWindow(event);
+	m_core.initWindow(m_event);
 	m_run = true;
 	map.initMap("assets/maps/map2.txt");
 	map.load(*this);
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0, 255.0, 255.0));
 	m_splash.display(m_core.m_device);
+	m_menu.loadMenu(m_core.m_device);
 	buildDecor();
 	std::vector<Indie::Bomb> bombs;
 
@@ -146,9 +160,9 @@ void Indie::Core::run()
 	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(), createTexture(_texturesMap[10], {0, 112, 0}, {0, 0, 0}, {0.2f, 0.2f, 0.2f}, true)));
 
 	while (m_core.m_device->run() && m_run) {
-		processEvents(event);
+		processEvents();
 		m_core.m_driver->beginScene(true, true, color);
-		if (event.isKeyDown(irr::KEY_SPACE)) {
+		if (m_event.isKeyDown(irr::KEY_SPACE)) {
 			Indie::Bomb bomb(2, 10);
 			bomb.setTexture(createTexture(_texturesMap[2], _playerObjects[0]->getPlayer()->getPosition(), {0, 0, 0}, {100, 100, 100}, false));
 			bombs.push_back(bomb);
@@ -157,14 +171,19 @@ void Indie::Core::run()
 
 		servSend = _socket->readSocket();
 		readServerInformations(servSend);
-			// LE CLIENT DOIT DEMANDER AU SERVEUR DE BOUGER
+		// LE CLIENT DOIT DEMANDER AU SERVEUR DE BOUGER
 		auto prevPos = _playerObjects[0]->getPosition();
-		auto pos = _playerObjects[0]->move(event);
+		auto pos = _playerObjects[0]->move(m_event);
 		// >> un fct pour envoyer tous les events ?
 		if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
 			_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z));
 		// << un fct pour envoyer tous les events ?
 		m_core.m_sceneManager->drawAll();
+		if (m_state == MENU) {
+			handleMenu();
+		} else {
+			m_core.m_device->getCursorControl()->setVisible(false);
+		}
 		m_core.m_driver->endScene();
 		drawCaption(lastFps);
 	}

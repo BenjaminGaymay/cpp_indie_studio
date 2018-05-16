@@ -39,3 +39,13 @@ irr::scene::ISceneManager *Indie::Window::getSceneManager() const
 {
 	return m_device->getSceneManager();
 }
+
+Indie::Camera Indie::Window::getCamera() const
+{
+	return m_camera;
+}
+
+irr::core::vector3df Indie::Window::getCameraPosition() const
+{
+	return m_camera.m_cameras[m_camera.getMode()]->getPosition();
+}

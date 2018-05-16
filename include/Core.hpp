@@ -18,6 +18,11 @@ namespace Indie {
 	class Player;
 	class ObjectPlayer;
 
+	enum State {
+		MENU,
+		GAME
+	};
+
 	class Core {
 	public:
 		using textureElem = std::pair<irr::io::path, irr::io::path>;
@@ -32,13 +37,15 @@ namespace Indie {
 		irr::scene::IAnimatedMeshSceneNode *createTexture(const textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale, bool collision);
 		irr::scene::IAnimatedMeshSceneNode *createIsland(irr::core::vector3df position, irr::core::vector3df rotation);
 		void setCollision(irr::scene::ISceneNode *wall, irr::scene::ISceneNode *target);
-		void processEvents(const Events &);
+		void processEvents();
 		const textureElem &getTexture(const int &nb);
 		int waitForId();
 		void readServerInformations(std::vector<std::string> &);
 		void addPlayer(int, irr::core::vector3df &);
 		void removePlayer(int, irr::core::vector3df &);
 		void movePlayer(int, irr::core::vector3df &);
+		void handleMenu();
+
 	private:
 		void generateTextureMap();
 		/* FIRST object, SECOND texture */
@@ -51,5 +58,7 @@ namespace Indie {
 		std::vector<void (Indie::Core::*)(int, irr::core::vector3df &)> _playersFct;
 		SplashScreen m_splash;
 		Menu m_menu;
+		State m_state;
+		Events m_event;
 	};
 }
