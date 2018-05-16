@@ -50,5 +50,6 @@ namespace Indie {
 		Menu m_menu;
 		State m_state;
 		Events m_event;
+		irr::video::SColor _color;
 	};
 }

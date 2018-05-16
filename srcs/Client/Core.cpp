@@ -20,6 +20,10 @@ Indie::Core::Core()
 	_playersFct.push_back(&Indie::Core::removePlayer);
 	_playersFct.push_back(&Indie::Core::movePlayer);
 	m_state = MENU;
+	m_run = true;
+	_color = {255, 168, 201, 255};
+	m_core.initWindow(m_event);
+	m_core.m_sceneManager->setAmbientLight({255.0, 255.0, 255.0});
 }
 
 Indie::Core::~Core()
@@ -71,13 +75,8 @@ void Indie::Core::handleMenu()
 void Indie::Core::run()
 {
 	int lastFps = -1;
-	irr::video::SColor color(255, 168, 201, 255);
 	std::vector<std::string> servSend;
-	m_core.initWindow(m_event);
-	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0, 255.0, 255.0));
-	m_run = true;
 	Graphism graphism(&m_core);
-	graphism.buildDecor();
 	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, graphism);
 	m_menu.loadMenu(m_core.m_device);
 
@@ -90,7 +89,7 @@ void Indie::Core::run()
 
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
-    		m_core.m_driver->beginScene(true, true, color);
+    		m_core.m_driver->beginScene(true, true, _color);
     		servSend = _socket->readSocket();
     		readServerInformations(servSend, graphism);
 
