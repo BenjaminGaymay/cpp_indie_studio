@@ -28,7 +28,7 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	return object;
 }
 
-irr::scene::IAnimatedMeshSceneNode *Indie::Graphism::createIsland(irr::core::vector3df position, irr::core::vector3df rotation)
+irr::scene::ISceneNode *Indie::Graphism::createIsland(irr::core::vector3df position, irr::core::vector3df rotation)
 {
 	auto object = createTexture(_texturesMap[51], position, rotation, {15, 30, 15}, false);
 	irr::core::vector3df scale = {0.01, 0.003, 0.01};
@@ -41,7 +41,7 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Graphism::createIsland(irr::core::vec
 	object->addChild(createTexture(_texturesMap[50], {-2, 3, -9}, {0, 0, 0}, scale, false));
 	object->addChild(createTexture(_texturesMap[50], {5, 3, -12}, {0, 0, 0}, scale, false));
 	object->setName("Island");
-	return dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(object);
+	return dynamic_cast<irr::scene::ISceneNode *>(object);
 }
 
 void Indie::Graphism::createWater(irr::core::vector3df position,  irr::core::vector3df rotation)

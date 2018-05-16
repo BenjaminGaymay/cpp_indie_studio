@@ -1,0 +1,18 @@
+Send Map
+
+Players:
+	- Name
+	- Pos
+	- Orientation
+	- Dead/Alive
+	- Connected ?
+	- Skin
+
+
+Objects:
+	- Type
+	- Pos
+	- Taken by player
+	- Bomb:
+		- Power
+		- Special power

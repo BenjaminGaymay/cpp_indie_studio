@@ -13,6 +13,7 @@
 #include "Graphism.hpp"
 #include "Core.hpp"
 #include "Map.hpp"
+#include "SplashScreen.hpp"
 
 Indie::Core::Core()
 {}
@@ -49,14 +50,22 @@ void Indie::Core::run()
 	Events event;
 	int lastFps = -1;
 	irr::video::SColor color(255, 168, 201, 255);
-
+	SplashScreen splash;
 	m_core.initWindow(event);
 	m_run = true;
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0, 255.0, 255.0));
 	Graphism graphism(m_core);
 	Map map3d(20.00f, 100.00f);
 	map3d.initMap("assets/maps/map2.txt");
+<<<<<<< HEAD:srcs/Core.cpp
 	map3d.load(graphism);
+=======
+	map3d.load(*this);
+
+	m_core.m_sceneManager->setAmbientLight(
+			irr::video::SColorf(255.0, 255.0, 255.0));
+	splash.display(m_core.m_device);
+>>>>>>> 25120d700c75968f50da30be630732226dbd3858:srcs/Core.cpp.unused
 
 	graphism.buildDecor();
 	Indie::Player player(graphism.createTexture(*graphism.getTexture(10), {0, map3d.getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true));
