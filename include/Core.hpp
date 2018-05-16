@@ -11,6 +11,7 @@
 #include <map>
 #include "Socket.hpp"
 #include "Window.hpp"
+#include "SplashScreen.hpp"
 
 namespace Indie {
 	class Player;
