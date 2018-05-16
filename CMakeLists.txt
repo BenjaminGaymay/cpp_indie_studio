@@ -4,17 +4,19 @@ project(bomberman)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(./include
-                    ./include/GUI)
+        ./include/GUI)
 
 file(GLOB INCLUDES include/*.hpp)
 file(GLOB_RECURSE SRCS_C srcs/Client/*.cpp)
+file(GLOB_RECURSE SRCS_G srcs/Client/Graphism/*.cpp)
 
 file(GLOB_RECURSE SRCS_SHARED srcs/Shared/*.cpp)
 
 add_executable(bomberman
         ${INCLUDES}
+        ${SRCS_SHARED}
         ${SRCS_C}
-        ${SRCS_SHARED})
+        ${SRCS_G})
 
 file(GLOB INCLUDES_S include/*.hpp)
 file(GLOB_RECURSE SRCS_S srcs/Server/*.cpp)

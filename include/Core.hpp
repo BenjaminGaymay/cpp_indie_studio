@@ -13,6 +13,8 @@
 #include "Window.hpp"
 #include "SplashScreen.hpp"
 #include "Menu.hpp"
+#include "Graphism.hpp"
+#include "Map.hpp"
 
 namespace Indie {
 	class Player;
@@ -25,37 +27,25 @@ namespace Indie {
 
 	class Core {
 	public:
-		using textureElem = std::pair<irr::io::path, irr::io::path>;
 		Core();
-
 		~Core();
 		void run();
 		void drawCaption(int &);
-		void buildDecor();
-		void createWater(irr::core::vector3df position,  irr::core::vector3df rotation);
-		void createArena();
-		irr::scene::IAnimatedMeshSceneNode *createTexture(const textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale, bool collision);
-		irr::scene::IAnimatedMeshSceneNode *createIsland(irr::core::vector3df position, irr::core::vector3df rotation);
-		void setCollision(irr::scene::ISceneNode *wall, irr::scene::ISceneNode *target);
 		void processEvents();
-		const textureElem &getTexture(const int &nb);
-		int waitForId();
-		void readServerInformations(std::vector<std::string> &);
-		void addPlayer(int, irr::core::vector3df &);
-		void removePlayer(int, irr::core::vector3df &);
-		void movePlayer(int, irr::core::vector3df &);
+		int waitForId(Indie::Graphism &graphism);
+		void readServerInformations(std::vector<std::string> &, Indie::Graphism &graphism);
+		void addPlayer(Indie::Graphism &core, int, irr::core::vector3df &);
+		void removePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
+		void movePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
 		void handleMenu();
 
 	private:
-		void generateTextureMap();
-		/* FIRST object, SECOND texture */
-		std::map<int, textureElem> _texturesMap;
-		std::vector<irr::scene::IAnimatedMeshSceneNode *> _nodesList;
 		Window m_core;
+		std::unique_ptr<Map> _mapper;
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
-		std::vector<void (Indie::Core::*)(int, irr::core::vector3df &)> _playersFct;
+		std::vector<void (Indie::Core::*)(Indie::Graphism &, int, irr::core::vector3df &)> _playersFct;
 		SplashScreen m_splash;
 		Menu m_menu;
 		State m_state;

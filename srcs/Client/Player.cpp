@@ -11,14 +11,8 @@
  * @brief texture of the player
  * @param node
  */
-Indie::Player::Player(irr::scene::IAnimatedMeshSceneNode *node)
-: _stand(true), _player(node), _speed(0.5f), _id(-1)
-{
-	_player->setMD2Animation(irr::scene::EMAT_STAND);
-}
-
-Indie::Player::Player(int id, irr::scene::IAnimatedMeshSceneNode *node)
-: _stand(true), _player(node), _speed(0.5f), _id(id)
+Indie::Player::Player(int id, irr::scene::ISceneNode *node)
+: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -36,8 +30,6 @@ Indie::Player::~Player() = default;
  */
 irr::core::vector3df Indie::Player::move(const Events &event)
 {
-	irr::core::vector3df lastP = _player->getPosition();
-	irr::core::vector3df lastR = _player->getRotation();
 	irr::core::vector3df nodePosition = _player->getPosition();
 
 	if (event.isKeyDown(irr::KEY_KEY_Q)) {
@@ -61,15 +53,6 @@ irr::core::vector3df Indie::Player::move(const Events &event)
 		setStanding(true);
 	}
 	return nodePosition;
-	// rotationWithMove(_player, nodePosition);
-	// _player->setPosition(nodePosition);
-	/*if (!_player->()) {
-		_player->setPosition(lastP);
-		_player->setRotation(lastR);
-		_player->setMD2Animation(irr::scene::EMAT_STAND);
-		setStanding(true);
-		return ;
-	}*/
 }
 
 /**
@@ -77,7 +60,7 @@ irr::core::vector3df Indie::Player::move(const Events &event)
  * @param node
  * @param newPosition
  */
-void Indie::Player::rotationWithMove(irr::scene::IAnimatedMeshSceneNode *node,
+void Indie::Player::rotationWithMove(irr::scene::ISceneNode *node,
 					const irr::core::vector3df &newPosition)
 {
 	irr::core::vector3df position = node->getPosition();
@@ -120,4 +103,14 @@ bool Indie::Player::isStanding()
 void Indie::Player::setStanding(bool state)
 {
 	_stand = state;
+}
+
+void Indie::Player::setSpeed(float speed)
+{
+	_speed = speed;
+}
+
+const float &Indie::Player::getSpeed()
+{
+	return _speed;
 }
