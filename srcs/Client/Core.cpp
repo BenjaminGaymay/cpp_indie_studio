@@ -6,10 +6,12 @@
 */
 
 #include <vector>
+#include <sstream>
 #include <iostream>
 #include <Player.hpp>
 #include <Bomb.hpp>
 #include <algorithm>
+#include <iomanip>
 #include "Core.hpp"
 #include "Map.hpp"
 #include "ManageStrings.hpp"
@@ -86,16 +88,19 @@ void Indie::Core::run()
 
 
 	while (m_core.m_device->run() && m_run) {
-		processEvents();
+			processEvents();
     		m_core.m_driver->beginScene(true, true, _color);
     		readServerInformations(_socket->readSocket(), graphism);
 
     		auto prevPos = _playerObjects[0]->getPosition();
+			std::cout << "DEBUG AVANT: " << prevPos.X << "_"<<  prevPos.Y << "_" << prevPos.Z << std::endl;
     		auto pos = _playerObjects[0]->move(m_event);
 
     		// >> un fct pour envoyer tous les events ?
-    		if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
+    		if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z) {
       			_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z));
+				std::cout << "DEBUG APRES: " << pos.X << "_"<<  pos.Y << "_" << pos.Z << std::endl;
+   			}
 		    // << un fct pour envoyer tous les events ?
 
     		m_core.m_sceneManager->drawAll();
