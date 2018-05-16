@@ -63,8 +63,10 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
 			std::cout << "Client " << client->_id << " say " << tmp << std::endl;
-			for (auto &i : _clients)
+			for (auto &i : _clients) {
+				std::cout << "Client " << i->_id << " know " << tmp << std::endl;
 				dprintf(i->_fd, tmp);
+			}
 			tmp = strtok(NULL, "\n");
 		}
 		return 0;
