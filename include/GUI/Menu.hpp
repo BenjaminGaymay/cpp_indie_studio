@@ -39,7 +39,7 @@ namespace Indie {
 		~Menu();
 		void loadMenu(irr::IrrlichtDevice *);
 		MenuState display(const Events &);
-		void initSpriteMenu(std::array<SpriteMenu, 2> &);
+		void initSpriteMenu(std::array<SpriteMenu, 3> &);
 
 	private:
 		irr::scene::ISceneManager *m_sceneManager;

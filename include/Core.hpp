@@ -22,6 +22,7 @@ namespace Indie {
 
 	enum State {
 		MENU,
+		MAPPING,
 		GAME
 	};
 
