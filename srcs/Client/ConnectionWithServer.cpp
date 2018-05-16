@@ -52,7 +52,7 @@ void Indie::Core::movePlayer(Indie::Graphism &core, int id, irr::core::vector3df
 		}
 }
 
-void Indie::Core::readServerInformations(std::vector<std::string> &servSend, Indie::Graphism &graphism)
+void Indie::Core::readServerInformations(std::vector<std::string> servSend, Indie::Graphism &graphism)
 {
 	std::vector<std::string> info;
 	int type;

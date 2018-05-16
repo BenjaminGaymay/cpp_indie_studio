@@ -14,7 +14,7 @@
 #include "Map.hpp"
 #include "ManageStrings.hpp"
 
-Indie::Core::Core()
+Indie::Core::Core() : _lastFps(-1)
 {
 	_playersFct.push_back(&Indie::Core::addPlayer);
 	_playersFct.push_back(&Indie::Core::removePlayer);
@@ -29,18 +29,18 @@ Indie::Core::Core()
 Indie::Core::~Core()
 {}
 
-void Indie::Core::drawCaption(int &lastFps)
+void Indie::Core::drawCaption()
 {
 	int fps = m_core.m_driver->getFPS();
 
-	if (lastFps != fps) {
+	if (_lastFps != fps) {
 		irr::core::stringw str = L"Irrlicht Engine - Bomberman [";
 		str += m_core.m_driver->getName();
 		str += "] FPS:";
 		str += fps;
 		m_core.m_device->setWindowCaption(str.c_str());
-		lastFps = fps;
-		std::cout << "FPS: " << lastFps << std::endl;
+		_lastFps = fps;
+		std::cout << "FPS: " << _lastFps << std::endl;
 	}
 }
 
@@ -74,8 +74,6 @@ void Indie::Core::handleMenu()
 
 void Indie::Core::run()
 {
-	int lastFps = -1;
-	std::vector<std::string> servSend;
 	Graphism graphism(&m_core);
 	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, graphism);
 	m_menu.loadMenu(m_core.m_device);
@@ -90,8 +88,7 @@ void Indie::Core::run()
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
     		m_core.m_driver->beginScene(true, true, _color);
-    		servSend = _socket->readSocket();
-    		readServerInformations(servSend, graphism);
+    		readServerInformations(_socket->readSocket(), graphism);
 
     		auto prevPos = _playerObjects[0]->getPosition();
     		auto pos = _playerObjects[0]->move(m_event);
@@ -108,6 +105,6 @@ void Indie::Core::run()
 			m_core.m_device->getCursorControl()->setVisible(false);
 		}
 		m_core.m_driver->endScene();
-		drawCaption(lastFps);
+		drawCaption();
 	}
 }
