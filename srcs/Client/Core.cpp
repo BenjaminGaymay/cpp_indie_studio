@@ -76,7 +76,7 @@ void Indie::Core::run()
 	m_core.initWindow(m_event);
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0, 255.0, 255.0));
 	m_run = true;
-	Graphism graphism(m_core);
+	Graphism graphism(&m_core);
 	graphism.buildDecor();
 	_mapper = std::make_unique<Map>(20.0f,100.0f);
 	_mapper->initMap("assets/maps/map2.txt");

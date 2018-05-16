@@ -16,7 +16,7 @@ namespace Indie {
 	class Graphism {
 	public:
 		using textureElem = std::pair<irr::io::path, irr::io::path>;
-		explicit Graphism(Window &m_core);
+		explicit Graphism(Window *m_core);
 		~Graphism();
 		void buildDecor();
 		void createWater(irr::core::vector3df position,  irr::core::vector3df rotation);
@@ -30,7 +30,7 @@ namespace Indie {
 		/* FIRST object, SECOND texture */
 		std::map<int, textureElem> _texturesMap;
 		std::vector<irr::scene::ISceneNode *> _nodesList;
-		Window m_core;
+		Window *m_core;
 	};
 }
 
