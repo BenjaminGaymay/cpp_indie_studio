@@ -84,7 +84,7 @@ void Indie::Core::run()
 	graphism.buildDecor();
 	std::vector<Indie::Bomb> bombs;
 
-	m_splash.display(m_core.m_device);
+	m_splash.display(m_core.m_device, m_event);
 	_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
 	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(graphism), graphism.createTexture(*graphism.getTexture(10), {0, 112, 0}, {0, 0, 0}, {0.2f, 0.2f, 0.2f}, true)));
 

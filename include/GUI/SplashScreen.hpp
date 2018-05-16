@@ -9,13 +9,14 @@
 
 #include <irrlicht/irrlicht.h>
 #include "Clock.hpp"
+#include "Events.hpp"
 
 namespace Indie {
 	class SplashScreen {
 	public:
 		SplashScreen();
 		~SplashScreen();
-		void display(irr::IrrlichtDevice *);
+		void display(irr::IrrlichtDevice *, Events &);
 		bool fadeIn();
 		bool fadeOut();
 
