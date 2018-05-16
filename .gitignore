@@ -7,4 +7,5 @@ Makefile
 bomberman
 bomberman.cbp
 *.o
-.vscode
+.vscode/
+server
