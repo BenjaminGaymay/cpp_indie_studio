@@ -56,7 +56,7 @@ void Indie::Core::run()
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0, 255.0, 255.0));
 	Graphism graphism(m_core);
 	Map map3d(20.00f, 100.00f);
-	map3d.initMap("assets/maps/map2.txt");
+	map3d.initMap("assets/maps/map.txt");
 <<<<<<< HEAD:srcs/Core.cpp
 	map3d.load(graphism);
 =======

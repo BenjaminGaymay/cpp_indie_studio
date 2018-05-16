@@ -5,11 +5,11 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 															   const irr::core::vector3df &rotation, const irr::core::vector3df &scale,
 															   bool collision)
 {
-	auto object = m_core.m_sceneManager->addAnimatedMeshSceneNode(m_core.m_sceneManager->getMesh(textures.first));
+	auto object = m_core->m_sceneManager->addAnimatedMeshSceneNode(m_core->m_sceneManager->getMesh(textures.first));
 	object->setName(textures.first);
 	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
 	if (!textures.second.empty())
-		object->setMaterialTexture(0, m_core.m_driver->getTexture(textures.second));
+		object->setMaterialTexture(0, m_core->m_driver->getTexture(textures.second));
 	else {
 		object->setName("");
 		object->setVisible(false);
@@ -18,7 +18,7 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	object->setRotation(rotation);
 	object->setScale(scale);
 	//object->setDebugDataVisible(irr::scene::E_DEBUG_SCENE_TYPE::EDS_BBOX);
-	m_core.m_driver->draw3DBox(object->getBoundingBox());
+	m_core->m_driver->draw3DBox(object->getBoundingBox());
 	object->updateAbsolutePosition();
 	if (collision)
 		for (auto &node : _nodesList)
@@ -48,13 +48,13 @@ void Indie::Graphism::createWater(irr::core::vector3df position,  irr::core::vec
 {
 	(void) position;
 	(void) rotation;
-	irr::scene::IAnimatedMesh *water = m_core.m_sceneManager->addHillPlaneMesh(
+	irr::scene::IAnimatedMesh *water = m_core->m_sceneManager->addHillPlaneMesh(
 			"waterMesh", irr::core::dimension2d<irr::f32>(25, 25),
 			irr::core::dimension2d<irr::u32>(50, 50), 0, 0,
 			irr::core::dimension2d<irr::f32>(0, 0),
 			irr::core::dimension2d<irr::f32>(30, 30));
-	irr::scene::ISceneNode *node = m_core.m_sceneManager->addWaterSurfaceSceneNode(water->getMesh(0), 2.0f, 800.0f, 100.0f);
-	node->setMaterialTexture(0, m_core.m_driver->getTexture("assets/models/water/water_tiny.png"));
+	irr::scene::ISceneNode *node = m_core->m_sceneManager->addWaterSurfaceSceneNode(water->getMesh(0), 2.0f, 800.0f, 100.0f);
+	node->setMaterialTexture(0, m_core->m_driver->getTexture("assets/models/water/water_tiny.png"));
 	node->setPosition(irr::core::vector3df(15, 15, 0));
 	node->setName("Water");
 }

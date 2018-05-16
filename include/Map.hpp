@@ -16,7 +16,7 @@
 namespace Indie {
 	class Map {
 	public:
-		Map(const float &size, const float &y);
+		Map(const std::string &mapPath, const float &size, const float &y, Indie::Graphism &graphism);
 		~Map();
 		void initMap(const std::string &map);
 		void load(Indie::Graphism &core);

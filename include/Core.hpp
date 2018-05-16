@@ -31,16 +31,17 @@ namespace Indie {
 		Core();
 		~Core();
 		void run();
-		void drawCaption(int &);
+		void drawCaption();
 		void processEvents();
 		int waitForId(Indie::Graphism &graphism);
-		void readServerInformations(std::vector<std::string> &, Indie::Graphism &graphism);
+		void readServerInformations(std::vector<std::string>, Indie::Graphism &graphism);
 		void addPlayer(Indie::Graphism &core, int, irr::core::vector3df &);
 		void removePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
 		void movePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
 		void handleMenu();
 
 	private:
+		int _lastFps;
 		Window m_core;
 		std::unique_ptr<Map> _mapper;
 		bool m_run;
@@ -51,5 +52,6 @@ namespace Indie {
 		Menu m_menu;
 		State m_state;
 		Events m_event;
+		irr::video::SColor _color;
 	};
 }

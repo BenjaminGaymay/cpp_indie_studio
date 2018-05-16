@@ -10,10 +10,11 @@
 #include <algorithm>
 #include "Graphism.hpp"
 
-Indie::Graphism::Graphism(Indie::Window &core)
+Indie::Graphism::Graphism(Indie::Window *core)
 : m_core(core)
 {
 	generateTextureMap();
+	buildDecor();
 }
 
 Indie::Graphism::~Graphism()
