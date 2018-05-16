@@ -12,16 +12,6 @@
 #include "Core.hpp"
 
 namespace Indie {
-	class ObjectPlayer {
-		public:
-			ObjectPlayer(int id, irr::scene::ISceneNode *node): _id(id), _player(
-					dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)) {}
-			void setPosition(irr::core::vector3df &pos) { _player->setPosition(pos); }
-			irr::core::vector3df getPosition() { return _player->getPosition(); }
-			int _id;
-			irr::scene::IAnimatedMeshSceneNode *_player;
-	};
-
 	class Player {
 	public:
 		explicit Player(int id, irr::scene::ISceneNode *node);
