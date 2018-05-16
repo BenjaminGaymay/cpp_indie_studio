@@ -78,9 +78,7 @@ void Indie::Core::run()
 	m_run = true;
 	Graphism graphism(&m_core);
 	graphism.buildDecor();
-	_mapper = std::make_unique<Map>(20.0f,100.0f);
-	_mapper->initMap("assets/maps/map2.txt");
-	_mapper->load(graphism);
+	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, graphism);
 	m_menu.loadMenu(m_core.m_device);
 
 	m_splash.display(m_core.m_device, m_event);

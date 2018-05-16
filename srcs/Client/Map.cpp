@@ -9,10 +9,11 @@
 #include <Graphism.hpp>
 #include "Map.hpp"
 
-Indie::Map::Map(const float &size, const float &y) : _max_height(0),
-													 _max_width(0),
-													 _size(size), _height(y)
+Indie::Map::Map(const std::string &mapPath, const float &size, const float &y, Indie::Graphism &graphism)
+		: _max_height(0), _max_width(0), _size(size), _height(y)
 {
+	initMap(mapPath);
+	load(graphism);
 }
 
 Indie::Map::~Map()
