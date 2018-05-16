@@ -77,7 +77,7 @@ void Indie::Core::run()
 	Graphism graphism(m_core);
 	m_run = true;
 	_mapper = std::make_unique<Map>(20.0f,100.0f);
-	_mapper->initMap("/home/benoit/delivery/cpp/cpp_indie_studio/assets/maps/map2.txt");
+	_mapper->initMap("assets/maps/map2.txt");
 	_mapper->load(graphism);
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0, 255.0, 255.0));
 	m_menu.loadMenu(m_core.m_device);
