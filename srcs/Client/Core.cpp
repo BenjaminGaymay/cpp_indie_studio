@@ -74,19 +74,20 @@ void Indie::Core::run()
 	irr::video::SColor color(255, 168, 201, 255);
 	std::vector<std::string> servSend;
 	m_core.initWindow(m_event);
-	Graphism graphism(m_core);
-	m_run = true;
-	_mapper = std::make_unique<Map>(20.0f,100.0f);
-	_mapper->initMap("/home/benoit/delivery/cpp/cpp_indie_studio/assets/maps/map2.txt");
-	_mapper->load(graphism);
 	m_core.m_sceneManager->setAmbientLight(irr::video::SColorf(255.0, 255.0, 255.0));
-	m_menu.loadMenu(m_core.m_device);
+	m_run = true;
+	Graphism graphism(m_core);
 	graphism.buildDecor();
-	std::vector<Indie::Bomb> bombs;
+	_mapper = std::make_unique<Map>(20.0f,100.0f);
+	_mapper->initMap("assets/maps/map2.txt");
+	_mapper->load(graphism);
+	m_menu.loadMenu(m_core.m_device);
 
 	m_splash.display(m_core.m_device);
 	_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
-	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(graphism), graphism.createTexture(*graphism.getTexture(10), {0, 112, 0}, {0, 0, 0}, {0.2f, 0.2f, 0.2f}, true)));
+	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(graphism), graphism.createTexture(*graphism.getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
+	graphism.resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
+	_playerObjects[0]->setSpeed(1);
 
 
 	while (m_core.m_device->run() && m_run) {
