@@ -39,6 +39,7 @@ namespace Indie {
 		void removePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
 		void movePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
 		void handleMenu();
+		void create_rand_map(std::string name, size_t x, size_t y);
 
 	private:
 		int _lastFps;

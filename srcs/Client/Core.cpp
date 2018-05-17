@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <iostream>
+#include <random>
 #include <Player.hpp>
 #include <Bomb.hpp>
 #include <algorithm>
@@ -75,10 +76,74 @@ void Indie::Core::handleMenu()
 	}
 }
 
+void Indie::Core::create_rand_map(std::string name, size_t x, size_t y)
+{
+	// std::string file = "assets/maps/" + name;
+	// std::vector<std::vector<int>> map;
+
+	// std::default_random_engine generator;
+	// std::uniform_int_distribution<int> distribution(0,1);
+
+	// if (x < 10 || y < 10) {
+	// 	std::cerr << "x and y minimum values are 10" << std::endl;
+	// 	exit(0);
+	// }
+	// for (int i = 0; i < y; ++i) {
+	// 	std::vector<int> line;
+	// 	for (int j = 0; j < x; ++j) {
+	// 		line.push_back(distribution(generator));
+	// 	}
+	// 	map.push_back(line);
+	// }
+
+	// for (int i = 0; i < x; ++i) {
+	// 	map[0][i] = 1;
+	// 	map[y - 1][i] = 1;
+	// }
+
+	// for (int i = 0; i < y; ++i) {
+	// 	map[i][0] = 1;
+	// 	map[i][x - 1] = 1;
+	// }
+
+	// // TOP LEFT CORNER
+	// map[1][1] = 0;
+	// map[1][2] = 0;
+	// map[2][1] = 0;
+
+	// // TOP RIGHT CORNER
+	// map[1][x - 2] = 0;
+	// map[1][x - 3] = 0;
+	// map[2][x - 2] = 0;
+
+	// // BOT LEFT CORNER
+	// map[y - 2][1] = 0;
+	// map[y - 2][2] = 0;
+	// map[y - 3][1] = 0;
+
+	// // BOT RIGHT CORNER
+	// map[y - 2][x - 2] = 0;
+	// map[y - 2][x - 3] = 0;
+	// map[y - 3][x - 2] = 0;
+
+	// write_in_file(file, map);
+	// std::ofstream outfile (file);
+	// for (int i = 0; i < y; ++i) {
+	// 	for (int j = 0; j < x; ++j) {
+	// 		outfile << "0" << map[i][j] << " ";
+	// 		std::cout << "0" << map[i][j] << " ";
+	// 	}
+	// 	outfile << std::endl;
+	// 	std::cout << std::endl;
+	// }
+	// outfile.close();
+	// exit(0);
+}
+
 void Indie::Core::run()
 {
 	Graphism graphism(&m_core);
-	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, graphism);
+	_mapper = std::make_unique<Map>("assets/maps/mdr.txt", 20.0f, 100.0f, graphism);
 	m_menu.loadMenu(m_core.m_device);
 
 	m_splash.display(m_core.m_device, m_event);
@@ -86,7 +151,6 @@ void Indie::Core::run()
 	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(graphism), graphism.createTexture(*graphism.getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
 	graphism.resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
 	_playerObjects[0]->setSpeed(1);
-
 
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
@@ -105,8 +169,7 @@ void Indie::Core::run()
     		if (m_state == MENU) {
 			handleMenu();
 		} else if (m_state == MAPPING) {
-			std::cout << "mdr" << std::endl;
-		    	exit(0);
+			create_rand_map("mdr.txt", 50, 50);
 		} else {
 			m_core.m_device->getCursorControl()->setVisible(false);
 		}
