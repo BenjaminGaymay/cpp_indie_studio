@@ -48,6 +48,7 @@ void Indie::Core::movePlayer(Indie::Graphism &core, int id, irr::core::vector3df
 			p->setStanding(false);
 			p->rotationWithMove(p->getPlayer(), pos);
 			p->setPosition(pos);
+			//std::cout << "READ APRES: " << p->getPosition().X << "_"<<  p->getPosition().Y << "_" << p->getPosition().Z << std::endl;
 			return;
 		}
 }

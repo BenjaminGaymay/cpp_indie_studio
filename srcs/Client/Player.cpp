@@ -52,9 +52,9 @@ irr::core::vector3df Indie::Player::move(const Events &event)
 		if (!isStanding()) _player->setMD2Animation(irr::scene::EMAT_STAND);
 		setStanding(true);
 	}
-	/*rotationWithMove(_player, nodePosition);
-	_player->setPosition(nodePosition);
-	_player->updateAbsolutePosition();*/
+/*	rotationWithMove(_player, nodePosition);
+	_player->setPosition(nodePosition);*/
+
 	return nodePosition;
 }
 

@@ -18,7 +18,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device)
 	m_driver = device->getVideoDriver();
 	m_sceneManager = device->getSceneManager();
 	m_gui = device->getGUIEnvironment();
-	m_images = m_driver->getTexture("assets/models/menu/azerty.png");
+	m_images = m_driver->getTexture("assets/models/menu/menu.png");
 
 	if (!m_images)
 		throw std::runtime_error("Error: can't load menu's images.");
