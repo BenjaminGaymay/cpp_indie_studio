@@ -22,6 +22,7 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	object->updateAbsolutePosition();
 	if (collision)
 		addCollision(object);
+	_nodesList.push_back(object);
 	return object;
 }
 
@@ -62,7 +63,6 @@ void Indie::Graphism::buildDecor()
 	createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	createIsland(irr::core::vector3df(450, -60, 250), irr::core::vector3df(0, 0, 0));
 	createIsland(irr::core::vector3df(-350, -60, -350), irr::core::vector3df(0, 55, 0));
-	createTexture(_texturesMap[52], {400, -10, 400}, {0, 0, 0}, {4, 4, 4}, false);
 	//createMoon(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	//auto sun = createSun(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	//object->getMaterial(0).setTexture(0, m_core.m_driver->getTexture("lol/rope.png"););
@@ -79,5 +79,4 @@ void Indie::Graphism::generateTextureMap()
 	_texturesMap[10] = textureElem("assets/models/sydney.md2", "assets/models/sydney.bmp");
 	_texturesMap[50] = textureElem("assets/models/palmier/palmier.obj", "assets/models/palmier/palmier.bmp");
 	_texturesMap[51] = textureElem("assets/models/island/island.3ds", "assets/models/island/island.jpg");
-	_texturesMap[52] = textureElem("assets/models/vehicules/boat.obj", "assets/models/vehicules/boat.tga");
 }

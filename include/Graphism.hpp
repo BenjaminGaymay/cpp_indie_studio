@@ -32,7 +32,6 @@ namespace Indie {
 		std::map<int, textureElem> _texturesMap;
 		std::vector<irr::scene::ISceneNode *> _nodesList;
 		Window *m_core;
-		irr::scene::IMetaTriangleSelector *_metaSelector;
 	};
 }
 

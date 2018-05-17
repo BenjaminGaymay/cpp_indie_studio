@@ -103,7 +103,6 @@ void Indie::Core::run()
 				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
 				_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(), _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
 				_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
-				_playerObjects[0]->setSpeed(1);
 			}
 			prevPos = _playerObjects[0]->getPosition();
 			pos = _playerObjects[0]->move(m_event);
