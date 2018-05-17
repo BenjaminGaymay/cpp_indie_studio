@@ -26,6 +26,7 @@ Indie::Core::Core() : _lastFps(-1)
 	_color = {255, 168, 201, 255};
 	m_core.initWindow(m_event);
 	m_core.m_sceneManager->setAmbientLight({255.0, 255.0, 255.0});
+	_graphism = std::make_unique<Graphism>(&m_core);
 }
 
 Indie::Core::~Core()
@@ -79,14 +80,13 @@ void Indie::Core::handleMenu()
 
 void Indie::Core::run()
 {
-	Graphism graphism(&m_core);
-	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, graphism);
+	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, _graphism);
 	m_menu.loadMenu(m_core.m_device);
 
 	m_splash.display(m_core.m_device, m_event);
 	_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
-	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(graphism), graphism.createTexture(*graphism.getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
-	graphism.resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
+	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(), _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
+	_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
 	_playerObjects[0]->setSpeed(1);
 	irr::core::vector3df prevPos, pos;
 	while (m_core.m_device->run() && m_run) {
@@ -97,7 +97,7 @@ void Indie::Core::run()
 
 			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
 				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getPlayer()->getRotation().Y));
-			readServerInformations(_socket->readSocket(), graphism); // Must be before drawall, readServer apply position, drawAll do collision
+			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
     		m_core.m_sceneManager->drawAll(); // draw and do collision
     		if (m_state == MENU) {
 			handleMenu();
