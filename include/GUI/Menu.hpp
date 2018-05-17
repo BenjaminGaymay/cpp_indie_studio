@@ -15,13 +15,22 @@
 
 namespace Indie {
 
+	enum MenuState {
+		PLAY,
+		QUIT,
+		OPTION,
+		GEN_MAP,
+		LAUNCH_SERVER,
+		NONE
+	};
+
 	struct SpriteMenu {
 	public:
 		SpriteMenu() {};
 		~SpriteMenu() {};
 		std::vector<irr::core::recti> m_images;
 		irr::core::recti m_zone;
-		std::string  m_return;
+		MenuState  m_return;
 	};
 
 	class Menu {
@@ -29,8 +38,8 @@ namespace Indie {
 		Menu();
 		~Menu();
 		void loadMenu(irr::IrrlichtDevice *);
-		std::string display(const Events &);
-		void initSpriteMenu(std::array<SpriteMenu, 2> &);
+		MenuState display(const Events &);
+		void initSpriteMenu(std::array<SpriteMenu, 3> &);
 
 	private:
 		irr::scene::ISceneManager *m_sceneManager;
