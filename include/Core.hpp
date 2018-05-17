@@ -42,9 +42,9 @@ namespace Indie {
 
 	private:
 		int _lastFps;
+		std::unique_ptr<Graphism> _graphism;
 		Window m_core;
 		std::unique_ptr<Map> _mapper;
-		std::unique_ptr<Graphism> _graphism;
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;

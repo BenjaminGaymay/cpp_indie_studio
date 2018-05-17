@@ -8,6 +8,7 @@
 #include <vector>
 #include <sstream>
 #include <iostream>
+#include <thread>
 #include <Player.hpp>
 #include <Bomb.hpp>
 #include <algorithm>
@@ -15,6 +16,7 @@
 #include "Core.hpp"
 #include "Map.hpp"
 #include "ManageStrings.hpp"
+#include "Server.hpp"
 
 Indie::Core::Core() : _lastFps(-1)
 {
@@ -54,6 +56,8 @@ void Indie::Core::processEvents()
 	if (m_event.isKeyDown(irr::KEY_KEY_A))
 		std::cout << m_event.MouseState.Position.X << " : "
 				  << m_event.MouseState.Position.Y << std::endl;
+	if (m_event.isKeyDown(irr::KEY_KEY_L))
+		std::thread(&Indie::Server::runServer).detach();
 }
 
 void Indie::Core::handleMenu()
@@ -82,15 +86,15 @@ void Indie::Core::run()
 {
 	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, _graphism);
 	m_menu.loadMenu(m_core.m_device);
-
 	m_splash.display(m_core.m_device, m_event);
 	_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
 	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(), _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
 	_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
 	_playerObjects[0]->setSpeed(1);
 	irr::core::vector3df prevPos, pos;
+
 	while (m_core.m_device->run() && m_run) {
-			processEvents();
+		processEvents();
     		m_core.m_driver->beginScene(true, true, _color);
     		prevPos = _playerObjects[0]->getPosition();
     		pos = _playerObjects[0]->move(m_event);
@@ -106,6 +110,24 @@ void Indie::Core::run()
 		    	exit(0);
 		} else {
 			m_core.m_device->getCursorControl()->setVisible(false);
+			if (_playerObjects.empty()) {
+				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
+				_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(), _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
+				_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
+				_playerObjects[0]->setSpeed(1);
+			}
+
+			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
+    			m_core.m_sceneManager->drawAll(); // draw and do collision
+
+			prevPos = _playerObjects[0]->getPosition();
+    			pos = _playerObjects[0]->move(m_event);
+
+	    		// >> un fct pour envoyer tous les events ?
+			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
+				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getPlayer()->getRotation().Y));
+		    	// << un fct pour envoyer tous les events ?
+
 		}
 		m_core.m_driver->endScene();
 		drawCaption();

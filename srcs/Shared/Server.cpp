@@ -105,7 +105,7 @@ void Indie::Server::start()
 	}
 }
 
-int main()
+void Indie::Server::runServer()
 {
 	try {
 		auto server = Indie::Server();
@@ -113,5 +113,9 @@ int main()
 	} catch (const std::exception &e) {
 		std::cerr << e.what() << std::endl;
 	}
-	return 0;
+}
+
+bool operator==(std::unique_ptr<Indie::Client> &lhs, std::unique_ptr<Indie::Client> &rhs)
+{
+	return (lhs->_id == rhs->_id && lhs->_fd == rhs->_fd && lhs->_name == rhs->_name);
 }

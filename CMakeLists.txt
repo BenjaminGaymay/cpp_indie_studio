@@ -6,23 +6,25 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(./include
         ./include/GUI)
 
+add_definitions(
+        -Wall
+        -Wextra
+)
+
 file(GLOB INCLUDES include/*.hpp)
 file(GLOB_RECURSE SRCS_C srcs/Client/*.cpp)
-file(GLOB_RECURSE SRCS_G srcs/Client/Graphism/*.cpp)
 
 file(GLOB_RECURSE SRCS_SHARED srcs/Shared/*.cpp)
 
 add_executable(bomberman
         ${INCLUDES}
         ${SRCS_SHARED}
-        ${SRCS_C}
-        ${SRCS_G})
+        ${SRCS_C})
 
-file(GLOB INCLUDES_S include/*.hpp)
 file(GLOB_RECURSE SRCS_S srcs/Server/*.cpp)
 
 add_executable(server
-        ${INCLUDES_S}
+        ${INCLUDES}
         ${SRCS_S}
         ${SRCS_SHARED})
 
@@ -30,4 +32,4 @@ add_executable(server
 find_path(IRRLICHT_INCLUDE_DIR irrlicht.h)
 include_directories(${IRRLICHT_PATH_INCLUDE})
 link_directories(${IRRLICHT_PATH_LIB})
-target_link_libraries(bomberman Irrlicht GL)
+target_link_libraries(bomberman Irrlicht GL pthread)

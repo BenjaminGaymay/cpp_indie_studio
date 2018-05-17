@@ -9,7 +9,7 @@
 #include <Graphism.hpp>
 #include "Map.hpp"
 
-Indie::Map::Map(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Indie::Graphism> &graphism)
+Indie::Map::Map(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Graphism> &graphism)
 		: _max_height(0), _max_width(0), _size(size), _height(y)
 {
 	initMap(mapPath);
@@ -44,13 +44,13 @@ void Indie::Map::initMap(const std::string &fileName)
 	fclose(file);
 }
 
-irr::scene::ISceneNode *Indie::Map::putBlock(std::unique_ptr<Indie::Graphism> &graphism, int id, int x, int mulY, int z)
+irr::scene::ISceneNode *Indie::Map::putBlock(std::unique_ptr<Graphism> &core, int id, int x, int mulY, int z)
 {
 	irr::f32 cubeSize;
 
-	auto block = graphism->createTexture(*graphism->getTexture(id), {0, 0, 0}, {0, 0, 0},
+	auto block = core->createTexture(*core->getTexture(id), {0, 0, 0}, {0, 0, 0},
 									{1, 1, 1}, false);
-	cubeSize = graphism->resizeNode(block, _size);
+	cubeSize = core->resizeNode(block, _size);
 	block->setPosition(irr::core::vector3df(
 			static_cast<irr::f32>((x * cubeSize) - (((_max_width - 1) * cubeSize) / 2.0)),
 			_height + (mulY * cubeSize),
