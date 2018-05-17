@@ -13,9 +13,9 @@
 Indie::Graphism::Graphism(Indie::Window *core)
 : m_core(core)
 {
+	_metaSelector = m_core->m_sceneManager->createMetaTriangleSelector();
 	generateTextureMap();
 	buildDecor();
-	_metaSelector = m_core->m_sceneManager->createMetaTriangleSelector();
 }
 
 Indie::Graphism::~Graphism()
