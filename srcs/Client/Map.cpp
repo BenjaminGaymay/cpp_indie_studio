@@ -105,13 +105,21 @@ bool supequal(irr::core::vector3df one, irr::core::vector3df two)
 
 irr::scene::ISceneNode *Indie::Map::get3dBlock(const irr::core::vector3df &target)
 {
-	std::cout << "ENTRE" << std::endl;
 	for (auto &block : _3dmap) {
 		const auto &pos = block->getPosition();
 		if (infequal(pos, target) && inf(target, pos + 20)) {
 			return block;
 		}
 	}
-	std::cout << "SORTIE" << std::endl;
 	return nullptr;
+}
+
+bool Indie::Map::emptyBlock(const irr::core::vector3df &position)
+{
+	auto block = get3dBlock(position);
+	if (!block) {
+		std::cout << "Not found" << std::endl;
+		return false;
+	}
+	return (!block->isVisible());
 }

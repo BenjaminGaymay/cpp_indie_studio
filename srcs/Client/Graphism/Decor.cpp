@@ -21,12 +21,7 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	m_core->m_driver->draw3DBox(object->getBoundingBox());
 	object->updateAbsolutePosition();
 	if (collision)
-		for (auto &node : _nodesList)
-			if (*node->getName() != '\0') {
-				setCollision(node, object);
-				setCollision(object, node);
-			}
-	_nodesList.push_back(object);
+		addCollision(object);
 	return object;
 }
 

@@ -20,6 +20,7 @@ namespace Indie {
 		~Map();
 		void initMap(const std::string &map);
 		void load(std::unique_ptr<Indie::Graphism> &core);
+		bool emptyBlock(const irr::core::vector3df &position);
 		irr::scene::ISceneNode *putBlock(std::unique_ptr<Indie::Graphism> &core, int id, int i, int mulY, int j);
 		std::vector<irr::scene::ISceneNode*> &getMap3d();
 		std::vector<std::vector<int>> &getMap2d();

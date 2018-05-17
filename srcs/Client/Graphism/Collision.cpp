@@ -28,3 +28,13 @@ void Indie::Graphism::setCollision(irr::scene::ISceneNode *wall,
 	target->addAnimator(anim);
 	anim->drop();
 }
+
+void Indie::Graphism::addCollision(irr::scene::ISceneNode *object)
+{
+	for (auto &node : _nodesList)
+		if (*node->getName() != '\0') {
+			setCollision(node, object);
+			setCollision(object, node);
+		}
+	_nodesList.push_back(object);
+}
