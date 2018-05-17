@@ -22,8 +22,10 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	object->updateAbsolutePosition();
 	if (collision)
 		for (auto &node : _nodesList)
-			if (*node->getName() != '\0')
+			if (*node->getName() != '\0') {
 				setCollision(node, object);
+				setCollision(object, node);
+			}
 	_nodesList.push_back(object);
 	return object;
 }
@@ -78,6 +80,7 @@ void Indie::Graphism::generateTextureMap()
 	_texturesMap[1] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/crate.jpg");
 	_texturesMap[2] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/sand.jpg");
 	_texturesMap[3] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png");
+	_texturesMap[4] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/red.png");
 	_texturesMap[10] = textureElem("assets/models/sydney.md2", "assets/models/sydney.bmp");
 	_texturesMap[50] = textureElem("assets/models/palmier/palmier.obj", "assets/models/palmier/palmier.bmp");
 	_texturesMap[51] = textureElem("assets/models/island/island.3ds", "assets/models/island/island.jpg");

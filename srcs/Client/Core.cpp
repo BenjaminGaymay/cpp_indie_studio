@@ -89,6 +89,8 @@ void Indie::Core::run()
 	_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
 	_playerObjects[0]->setSpeed(1);
 	irr::core::vector3df prevPos, pos;
+	auto fire = _graphism->createTexture(*_graphism->getTexture(4), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true);
+	_graphism->resizeNode(fire, _mapper->getSize());
 	while (m_core.m_device->run() && m_run) {
 			processEvents();
     		m_core.m_driver->beginScene(true, true, _color);
