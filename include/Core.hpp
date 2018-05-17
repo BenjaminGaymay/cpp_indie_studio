@@ -35,9 +35,9 @@ namespace Indie {
 		void processEvents();
 		int waitForId(Indie::Graphism &graphism);
 		void readServerInformations(std::vector<std::string>, Indie::Graphism &graphism);
-		void addPlayer(Indie::Graphism &core, int, irr::core::vector3df &);
-		void removePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
-		void movePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
+		void addPlayer(Indie::Graphism &core, int, irr::core::vector3df &, const irr::f32 &);
+		void removePlayer(Indie::Graphism &core, int, irr::core::vector3df &, const irr::f32 &);
+		void movePlayer(Indie::Graphism &core, int, irr::core::vector3df &, const irr::f32 &);
 		void handleMenu();
 
 	private:
@@ -47,7 +47,7 @@ namespace Indie {
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
-		std::vector<void (Indie::Core::*)(Indie::Graphism &, int, irr::core::vector3df &)> _playersFct;
+		std::vector<void (Indie::Core::*)(Indie::Graphism &, int, irr::core::vector3df &, const irr::f32 &)> _playersFct;
 		SplashScreen m_splash;
 		Menu m_menu;
 		State m_state;

@@ -15,16 +15,17 @@
 #include "Graphism.hpp"
 #include "ManageStrings.hpp"
 
-void Indie::Core::addPlayer(Indie::Graphism &graphism, int id, irr::core::vector3df &pos)
+void Indie::Core::addPlayer(Indie::Graphism &graphism, int id, irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	std::cout << "Add player: " << id << std::endl;
 	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, graphism.createTexture(*graphism.getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true));
 	graphism.resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
+	newPlayer->getPlayer()->setRotation({0, rota, 0});
 	_playerObjects.push_back(std::move(newPlayer));
 }
 
-void Indie::Core::removePlayer(Indie::Graphism &graphism, int id, irr::core::vector3df &pos)
+void Indie::Core::removePlayer(Indie::Graphism &graphism, int id, irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	if (id == _playerObjects[0]->getId())
 		return;
@@ -38,7 +39,7 @@ void Indie::Core::removePlayer(Indie::Graphism &graphism, int id, irr::core::vec
 	}
 }
 
-void Indie::Core::movePlayer(Indie::Graphism &core, int id, irr::core::vector3df &pos)
+void Indie::Core::movePlayer(Indie::Graphism &core, int id, irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	for (auto &p : _playerObjects)
 		if (p->getId() == id) {
@@ -46,7 +47,7 @@ void Indie::Core::movePlayer(Indie::Graphism &core, int id, irr::core::vector3df
 			if (p->isStanding())
 				p->getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
 			p->setStanding(false);
-			p->rotationWithMove(p->getPlayer(), pos);
+			p->getPlayer()->setRotation({0, rota, 0});
 			p->setPosition(pos);
 			//std::cout << "READ APRES: " << p->getPosition().X << "_"<<  p->getPosition().Y << "_" << p->getPosition().Z << std::endl;
 			return;
@@ -56,9 +57,8 @@ void Indie::Core::movePlayer(Indie::Graphism &core, int id, irr::core::vector3df
 void Indie::Core::readServerInformations(std::vector<std::string> servSend, Indie::Graphism &graphism)
 {
 	std::vector<std::string> info;
-	int type;
-	int event;
-	int id;
+	int type, event, id;
+	irr::f32 rota;
 
 	for (auto &line : servSend) {
 		info = ManageStrings::splitString(line, ':');
@@ -67,12 +67,14 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend, Indi
 			type = std::stoi(info[0]);
 			event = std::stoi(info[1]);
 			id = std::stoi(info[2]);
+
 			irr::core::vector3df pos(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
+			rota = std::stof(info[6]);
 			// <<
 
 			switch (type) {
 				case Indie::PLAYER:
-					(this->*_playersFct[event])(graphism, id, pos); break;
+					(this->*_playersFct[event])(graphism, id, pos, rota); break;
 				default:break;
 			}
 		}

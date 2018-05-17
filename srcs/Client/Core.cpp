@@ -88,15 +88,15 @@ void Indie::Core::run()
 	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(graphism), graphism.createTexture(*graphism.getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
 	graphism.resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
 	_playerObjects[0]->setSpeed(1);
-
-
+	irr::core::vector3df prevPos, pos;
 	while (m_core.m_device->run() && m_run) {
 			processEvents();
     		m_core.m_driver->beginScene(true, true, _color);
-    		auto prevPos = _playerObjects[0]->getPosition();
-    		auto pos = _playerObjects[0]->move(m_event);
+    		prevPos = _playerObjects[0]->getPosition();
+    		pos = _playerObjects[0]->move(m_event);
+
 			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
-				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z));
+				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getPlayer()->getRotation().Y));
 			readServerInformations(_socket->readSocket(), graphism); // Must be before drawall, readServer apply position, drawAll do collision
     		m_core.m_sceneManager->drawAll(); // draw and do collision
     		if (m_state == MENU) {
