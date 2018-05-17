@@ -6,11 +6,13 @@
 */
 
 #include <vector>
+#include <sstream>
 #include <iostream>
 #include <thread>
 #include <Player.hpp>
 #include <Bomb.hpp>
 #include <algorithm>
+#include <iomanip>
 #include "Core.hpp"
 #include "Map.hpp"
 #include "ManageStrings.hpp"
@@ -82,16 +84,14 @@ void Indie::Core::handleMenu()
 
 void Indie::Core::run()
 {
+	irr::core::vector3df prevPos, pos;
+
 	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, _graphism);
 	m_menu.loadMenu(m_core.m_device);
-
 	m_splash.display(m_core.m_device, m_event);
-
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
     		m_core.m_driver->beginScene(true, true, _color);
-
-    		m_core.m_sceneManager->drawAll();
     		if (m_state == MENU) {
 			handleMenu();
 		} else if (m_state == MAPPING) {
@@ -106,14 +106,17 @@ void Indie::Core::run()
 				_playerObjects[0]->setSpeed(1);
 			}
 
-    			readServerInformations(_socket->readSocket());
+			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
+    			m_core.m_sceneManager->drawAll(); // draw and do collision
 
-			auto prevPos = _playerObjects[0]->getPosition();
-    			auto pos = _playerObjects[0]->move(m_event);
+			prevPos = _playerObjects[0]->getPosition();
+    			pos = _playerObjects[0]->move(m_event);
+
 	    		// >> un fct pour envoyer tous les events ?
-    			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
-      				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z));
+			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
+				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getPlayer()->getRotation().Y));
 		    	// << un fct pour envoyer tous les events ?
+
 		}
 		m_core.m_driver->endScene();
 		drawCaption();

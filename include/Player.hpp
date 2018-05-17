@@ -24,7 +24,7 @@ namespace Indie {
 		void setSpeed(float speed);
 		const float &getSpeed();
 		irr::core::vector3df getPosition() { return _player->getPosition(); }
-		void setPosition(irr::core::vector3df &pos) { _player->setPosition(pos); }
+		void setPosition(const irr::core::vector3df &pos) { _player->setPosition(pos); }
 		void setId(int id) { _id = id; }
 		int getId() { return _id; }
 	private:
