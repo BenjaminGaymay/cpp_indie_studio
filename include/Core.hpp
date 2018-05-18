@@ -15,6 +15,7 @@
 #include "Menu.hpp"
 #include "Graphism.hpp"
 #include "Map.hpp"
+#include "Options.hpp"
 
 namespace Indie {
 	class Player;
@@ -42,6 +43,7 @@ namespace Indie {
 
 	private:
 		int _lastFps;
+		Options m_opts;
 		Window m_core;
 		std::unique_ptr<Map> _mapper;
 		bool m_run;

@@ -11,13 +11,14 @@
 #include <memory>
 #include "Camera.hpp"
 #include "Events.hpp"
+#include "Options.hpp"
 
 namespace Indie {
 	class Window {
 	public:
 		Window();
 		~Window();
-		void initWindow(Events &);
+		void initWindow(Events &, const Options &);
 		irr::video::IVideoDriver *getDriver() const;
 		irr::scene::ISceneManager *getSceneManager() const;
 		Camera getCamera() const;

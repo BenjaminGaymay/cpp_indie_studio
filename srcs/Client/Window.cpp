@@ -15,13 +15,13 @@ Indie::Window::~Window()
 	m_device->drop();
 }
 
-void Indie::Window::initWindow(Events &evt)
+void Indie::Window::initWindow(Events &evt, const Options &opt)
 {
-	irr::core::vector3df vec;
-	irr::core::dimension2d<irr::u32> dimension(1280, 960);
+	irr::core::vector3df vec(50, 50, 50);
+	irr::core::dimension2d<irr::u32> dimension(opt.getWidth(), opt.getHeight());
 
 	m_device = irr::createDevice(irr::video::EDT_OPENGL,
-		dimension, 32, false, true, false, &evt);
+		dimension, 32, opt.getFullScreen(), true, false, &evt);
 	m_driver = m_device->getVideoDriver();
 	m_sceneManager = m_device->getSceneManager();
 	m_device->getCursorControl()->setVisible(false);

@@ -14,7 +14,7 @@
 #include "Map.hpp"
 #include "ManageStrings.hpp"
 
-Indie::Core::Core() : _lastFps(-1)
+Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 {
 	_playersFct.push_back(&Indie::Core::addPlayer);
 	_playersFct.push_back(&Indie::Core::removePlayer);
@@ -22,7 +22,7 @@ Indie::Core::Core() : _lastFps(-1)
 	m_state = MENU;
 	m_run = true;
 	_color = {255, 168, 201, 255};
-	m_core.initWindow(m_event);
+	m_core.initWindow(m_event, m_opts);
 	m_core.m_sceneManager->setAmbientLight({255.0, 255.0, 255.0});
 }
 
@@ -55,10 +55,10 @@ void Indie::Core::processEvents()
 
 void Indie::Core::handleMenu()
 {
-	MenuState res;
+	MenuState res = NONE;
 
 	m_core.m_device->getCursorControl()->setVisible(true);
-	res = m_menu.display(m_event);
+	res = m_menu.display();
 	switch (res) {
 		case QUIT:
 			m_run = false;
@@ -77,17 +77,23 @@ void Indie::Core::handleMenu()
 
 void Indie::Core::run()
 {
+	AppContext context;
 	Graphism graphism(&m_core);
 	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, graphism);
-	m_menu.loadMenu(m_core.m_device);
+
+	context.device = m_core.m_device;
+	context.menu = &m_menu;
+	context.options = &m_opts;
+	m_event.load(context);
 
 	m_splash.display(m_core.m_device, m_event);
+	m_menu.loadMenu(m_core.m_device, m_opts);
 	_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
 	_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(graphism), graphism.createTexture(*graphism.getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
 	graphism.resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
 	_playerObjects[0]->setSpeed(1);
-
-
+	// m_state = GAME;
+	// m_core.getCamera().change(m_core.getSceneManager());
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
     		m_core.m_driver->beginScene(true, true, _color);
