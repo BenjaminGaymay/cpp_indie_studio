@@ -29,6 +29,7 @@ Indie::Core::Core() : _lastFps(-1)
 	m_core.initWindow(m_event);
 	m_core.m_sceneManager->setAmbientLight({255.0, 255.0, 255.0});
 	_graphism = std::make_unique<Graphism>(&m_core);
+	_state = NOTCONNECTED;
 }
 
 Indie::Core::~Core()
@@ -45,7 +46,6 @@ void Indie::Core::drawCaption()
 		str += fps;
 		m_core.m_device->setWindowCaption(str.c_str());
 		_lastFps = fps;
-		std::cout << "FPS: " << _lastFps << std::endl;
 	}
 }
 
@@ -56,8 +56,27 @@ void Indie::Core::processEvents()
 	if (m_event.isKeyDown(irr::KEY_KEY_A))
 		std::cout << m_event.MouseState.Position.X << " : "
 				  << m_event.MouseState.Position.Y << std::endl;
-	if (m_event.isKeyDown(irr::KEY_KEY_L))
+	// BOUTON POUR LANCER SERVEUR / HOST SE CO AUTOMATIQUEMENT
+	if (m_event.isKeyDown(irr::KEY_KEY_L) && _state == NOTCONNECTED) {
 		std::thread(&Indie::Server::runServer).detach();
+		_state = WAITING;
+		// >> mettre un try / catch en boucle ?
+		usleep(5000);
+		_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
+		// <<
+		_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(), _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
+		_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
+	}
+	// BOUTON PRET A LANCER LA PARTIE
+	if (m_event.isKeyDown(irr::KEY_KEY_R) && _state == WAITING)
+		dprintf(_socket->getFd(), "READY\n");
+	// BOUTON CONNEXION AU SERVER
+	if (m_event.isKeyDown(irr::KEY_KEY_C)) {
+		_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
+		_state = WAITING;
+		_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(), _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
+		_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
+	}
 }
 
 void Indie::Core::handleMenu()
@@ -71,8 +90,8 @@ void Indie::Core::handleMenu()
 			m_run = false;
 			break;
 		case PLAY:
-			m_state = GAME;
-			m_core.getCamera().change(m_core.getSceneManager());
+			if (_state != PLAYING)
+				break;
 			break;
 		case GEN_MAP:
 			m_state = MAPPING;
@@ -92,6 +111,8 @@ void Indie::Core::run()
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		m_core.m_driver->beginScene(true, true, _color);
+		if (_state != NOTCONNECTED)
+			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
 		if (m_state == MENU) {
 			handleMenu();
 		} else if (m_state == MAPPING) {
@@ -99,19 +120,12 @@ void Indie::Core::run()
 			exit(0);
 		} else {
 			m_core.m_device->getCursorControl()->setVisible(false);
-			if (_playerObjects.empty()) {
-				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
-				_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(waitForId(), _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
-				_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
-			}
 			prevPos = _playerObjects[0]->getPosition();
 			pos = _playerObjects[0]->move(m_event);
 
 			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
 				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getRotation().Y));
-			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
 			m_core.m_sceneManager->drawAll(); // draw and do collision
-
 		}
 		m_core.m_driver->endScene();
 		drawCaption();

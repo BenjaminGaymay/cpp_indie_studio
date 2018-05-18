@@ -7,10 +7,8 @@
 
 #include "Server.hpp"
 
-Indie::Server::Server()
+Indie::Server::Server() : _socket(Socket(5567, INADDR_ANY, Indie::Socket::SERVER)), _hostFd(_socket.getFd()), _state(WAITING)
 {
-	_socket = Socket(5567, INADDR_ANY, Indie::Socket::SERVER);
-	_hostFd = _socket.getFd();
 	if (_hostFd == -1)
 		throw std::runtime_error("Error while creating server socket");
 }
@@ -44,8 +42,8 @@ void Indie::Server::addClient()
 		// Stocker la pos de chaque client pour pouvoir l'envoyer
 		std::cout << "Tlm sait que " << id << " a pop\n";
 		std::cout << id << "connait la pos de" << client->_id << std::endl;
-		dprintf(client->_fd, "0:0:%d:0:112:0\n", id); // PLAYER:APPEAR:x:y:z
-		dprintf(newClient->_fd, "0:0:%d:0:112:0\n", client->_id); // mettre la pos du joueur
+		dprintf(client->_fd, "0:0:%d:0:112:0:0\n", id); // PLAYER:APPEAR:x:y:z:rotation
+		dprintf(newClient->_fd, "0:0:%d:0:112:0:0\n", client->_id); // mettre la pos du joueur
 	}
 	_clients.push_back(std::move(newClient));
 	id += 1;
@@ -63,6 +61,13 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
 			std::cout << "Client " << client->_id << " say " << tmp << std::endl;
+			if (std::string(tmp).compare("READY") == 0) {
+				std::cout << "Client pret\n";
+				client->_state = PLAYING;
+			}
+			if (_state == WAITING)
+				return 0;
+			// On renvoi l'info a tlm
 			for (auto &i : _clients) {
 				std::cout << "Client " << i->_id << " know " << tmp << std::endl;
 				dprintf(i->_fd, tmp);
@@ -79,7 +84,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		_clients.erase(pos);
 	}
 	for (auto &client : _clients)
-		dprintf(client->_fd, "0:1:%d:0:0:0\n", client->_id);
+		dprintf(client->_fd, "0:1:%d:0:0:0:0\n", client->_id);
 	return 1;
 }
 
@@ -97,9 +102,26 @@ void Indie::Server::readOnFds()
 	}
 }
 
+Indie::GameState Indie::Server::checkIfStartGame()
+{
+	if (_clients.empty())
+		return WAITING;
+	for (auto &client : _clients) {
+		if (client->_state == WAITING)
+			return WAITING;
+	}
+	std::cout << "On lance la partie\n";
+	for (auto &client : _clients)
+		dprintf(client->_fd, "1:3\n"); // CODE POUR GAME START
+	return PLAYING;
+}
+
 void Indie::Server::start()
 {
+	// GERER LA DESTRUCTION DU SALON (tlm quitte / partie terminée etc..)
 	while (1) {
+		if (_state == WAITING)
+			_state = checkIfStartGame();
 		setClientsFds();
 		readOnFds();
 	}

@@ -66,16 +66,23 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 			// >> SECURISER CA
 			type = std::stoi(info[0]);
 			event = std::stoi(info[1]);
-			id = std::stoi(info[2]);
+			std::cout << type << ':' << event;
+			if (type == GAMEINFOS && event == START) {
+				_state = PLAYING;
+				m_state = GAME;
+				m_core.getCamera().change(m_core.getSceneManager());
+			}
+			else {
+				id = std::stoi(info[2]);
 
-			irr::core::vector3df pos(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
-			rota = std::stof(info[6]);
+				irr::core::vector3df pos(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
+				rota = std::stof(info[6]);
 			// <<
-
-			switch (type) {
-				case Indie::PLAYER:
-					(this->*_playersFct[event])(id, pos, rota); break;
-				default:break;
+				switch (type) {
+					case Indie::PLAYER:
+						(this->*_playersFct[event])(id, pos, rota); break;
+					default:break;
+				}
 			}
 		}
 	}

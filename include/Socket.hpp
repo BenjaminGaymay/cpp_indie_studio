@@ -21,13 +21,15 @@
 
 namespace Indie {
 	enum ObjectsType {
-		PLAYER
+		PLAYER,
+		GAMEINFOS
 	};
 
 	enum ObjectsEvents {
 		APPEAR,
 		DEAD,
-		MOVE
+		MOVE,
+		START
 	};
 
 	class Socket {

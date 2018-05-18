@@ -9,12 +9,12 @@
 
 #include <vector>
 #include <map>
-#include "Socket.hpp"
 #include "Window.hpp"
 #include "SplashScreen.hpp"
 #include "Menu.hpp"
 #include "Graphism.hpp"
 #include "Map.hpp"
+#include "Server.hpp"
 
 namespace Indie {
 	class Player;
@@ -54,5 +54,6 @@ namespace Indie {
 		State m_state;
 		Events m_event;
 		irr::video::SColor _color;
+		GameState _state;
 	};
 }
