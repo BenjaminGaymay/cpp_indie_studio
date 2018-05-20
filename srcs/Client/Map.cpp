@@ -19,6 +19,24 @@ Indie::Map::Map(const std::string &mapPath, const float &size, const float &y, s
 Indie::Map::~Map()
 {}
 
+void Indie::Map::newMap(const std::string &mapPath, const float &size,
+						const float &y,
+						std::unique_ptr<Indie::Graphism> &graphism)
+{
+ 	_max_height = 0;
+ 	_max_width = 0;
+ 	_size = size;
+ 	_height = y;
+ 	for (auto &block : _3dmap)
+ 		block->remove();
+	for (auto &block : _3dundermap)
+		block->remove();
+	_3dmap.clear();
+	_3dundermap.clear();
+	initMap(mapPath);
+	load(graphism);
+}
+
 void Indie::Map::initMap(const std::string &fileName)
 {
 	FILE *file = fopen(fileName.c_str(), "r");
