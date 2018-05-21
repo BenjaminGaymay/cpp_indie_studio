@@ -102,10 +102,12 @@ void Indie::Core::run()
 		 if (m_state == MENU) {
 			m_core.m_device->getCursorControl()->setVisible(true);
 		 	m_core.m_gui->drawAll();//handleMenu();
+			 m_core.getCamera().change(m_core.getSceneManager());
 		 } else if (m_state == MAPPING) {
 		 	std::cout << "mdr" << std::endl;
 		 	exit(0);
 		 } else {
+			m_core.getCamera().change(m_core.getSceneManager());
 			m_core.m_device->getCursorControl()->setVisible(false);
 			if (_playerObjects.empty()) {
 				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
