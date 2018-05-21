@@ -16,11 +16,12 @@
 namespace Indie {
 	class Map {
 	public:
-		Map(const std::string &mapPath, const float &size, const float &y, Indie::Graphism &graphism);
+		Map(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Graphism> &graphism);
 		~Map();
 		void initMap(const std::string &map);
-		void load(Indie::Graphism &core);
-		irr::scene::ISceneNode *putBlock(Indie::Graphism &core, int id, int i, int mulY, int j);
+		void load(std::unique_ptr<Graphism> &core);
+		irr::scene::ISceneNode *putBlock(std::unique_ptr<Graphism> &core, int id, int i, int mulY, int j);
+		bool emptyBlock(const irr::core::vector3df &position);
 		std::vector<irr::scene::ISceneNode*> &getMap3d();
 		std::vector<std::vector<int>> &getMap2d();
 		const float &getSize() const;

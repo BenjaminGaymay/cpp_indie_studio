@@ -80,17 +80,17 @@ bool Indie::Socket::isSocketWritten()
 
 	FD_ZERO(&_fdRead);
 	FD_SET(_fd, &_fdRead);
-	if (select(_fd + 1, &_fdRead, NULL, NULL, &tv) == -1)
+	if (select(_fd + 1, &_fdRead, nullptr, nullptr, &tv) == -1)
 		throw std::runtime_error("Error while reading socket");
-	return FD_ISSET(_fd, &_fdRead) ? true : false;
+	return FD_ISSET(_fd, &_fdRead);
 }
 
 std::vector<std::string> Indie::Socket::readSocket()
 {
 	static char buffer[4096];
-	char *tmp = NULL;
+	char *tmp = nullptr;
 	std::vector<std::string> socketContents;
-	int size;
+	ssize_t size;
 
 	if (!isSocketWritten())
 		return socketContents;
@@ -99,8 +99,8 @@ std::vector<std::string> Indie::Socket::readSocket()
 		buffer[size] = '\0';
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
-			socketContents.push_back(tmp);
-			tmp = strtok(NULL, "\n");
+			socketContents.emplace_back(tmp);
+			tmp = strtok(nullptr, "\n");
 		}
 		return socketContents;
 	}

@@ -69,6 +69,7 @@ bool Indie::Events::OnEvent(const irr::SEvent &event)
 						// }
 						break;
 					case GUI_ID_PLAY:
+						*Context.state = GAME;
 						break;
 					default:
 						break;

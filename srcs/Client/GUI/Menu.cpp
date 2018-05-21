@@ -120,7 +120,7 @@ void Indie::Menu::initSpriteMenu(std::vector<SpriteMenu> &sprites)
 		{0, 192, 285, 256}
 	};
 	sprites[1].m_zone = {500, 150, 784, 214};
-	sprites[2].m_return = QUIT;
+	sprites[1].m_return = QUIT;
 	sprites[2].m_images = {
 		{0, 256, 285, 323},
 		{0, 323, 285, 384}

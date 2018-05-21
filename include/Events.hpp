@@ -10,8 +10,15 @@
 #include <irrlicht/irrlicht.h>
 #include "Menu.hpp"
 #include "Options.hpp"
+// #include "Core.hpp"
 
 namespace Indie {
+
+	enum State {
+		MENU,
+		MAPPING,
+		GAME
+	};
 
 	struct SMouseState {
 		irr::core::position2di Position;
@@ -23,6 +30,7 @@ namespace Indie {
 		irr::IrrlichtDevice *device;
 		Menu *menu;
 		Options *options;
+		State *state;
 	};
 
 	class Events : public irr::IEventReceiver {

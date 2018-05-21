@@ -21,11 +21,12 @@ void Indie::Window::initWindow(Events &evt, const Options &opt)
 	irr::core::dimension2d<irr::u32> dimension(opt.getWidth(), opt.getHeight());
 
 	m_device = irr::createDevice(irr::video::EDT_OPENGL,
-		dimension, 32, opt.getFullScreen(), true, false, &evt);
+		dimension, 64, opt.getFullScreen(), true, false, &evt);
 	m_driver = m_device->getVideoDriver();
 	m_sceneManager = m_device->getSceneManager();
 	m_device->getCursorControl()->setVisible(false);
 	m_device->setWindowCaption(L"floating");
+	m_gui = m_device->getGUIEnvironment();
 	m_camera.initCamera(m_sceneManager, vec);
 }
 
@@ -43,6 +44,11 @@ irr::scene::ISceneManager *Indie::Window::getSceneManager() const
 Indie::Camera Indie::Window::getCamera() const
 {
 	return m_camera;
+}
+
+irr::gui::IGUIEnvironment *Indie::Window::getGuiEnv() const
+{
+	return m_device->getGUIEnvironment();
 }
 
 irr::core::vector3df Indie::Window::getCameraPosition() const

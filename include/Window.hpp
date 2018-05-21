@@ -21,6 +21,7 @@ namespace Indie {
 		void initWindow(Events &, const Options &);
 		irr::video::IVideoDriver *getDriver() const;
 		irr::scene::ISceneManager *getSceneManager() const;
+		irr::gui::IGUIEnvironment *getGuiEnv() const;
 		Camera getCamera() const;
 		irr::core::vector3df getCameraPosition() const;
 
@@ -28,6 +29,7 @@ namespace Indie {
 		irr::IrrlichtDevice *m_device;
 		irr::video::IVideoDriver *m_driver;
 		irr::scene::ISceneManager *m_sceneManager;
+		irr::gui::IGUIEnvironment *m_gui;
 
 	private:
 		Camera m_camera;
