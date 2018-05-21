@@ -26,7 +26,9 @@ namespace Indie {
 		GUI_ID_MAIN_MENU_ELEMENT,
 		GUI_ID_OPTION_BACK_BUTTON,
 		GUI_ID_PLAY_BACK_BUTTON,
-		GUI_ID_MAP_BACK_BUTTON
+		GUI_ID_MAP_BACK_BUTTON,
+		GUI_ID_FULLSCREEN,
+		GUI_ID_PLAY
 	};
 
 
@@ -79,5 +81,8 @@ namespace Indie {
 		irr::gui::IGUIEnvironment *m_gui;
 		irr::video::ITexture* m_images;
 		std::vector<irr::gui::IGUIButton *> m_btns;
+		Options m_opt;
+		std::size_t m_height;
+		std::size_t m_width;
 	};
 }

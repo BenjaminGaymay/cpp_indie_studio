@@ -11,8 +11,10 @@
 
 class Options {
 public:
-	Options(const std::size_t width, const std::size_t height, const bool fullscren) :
-		m_width(width), m_height(height), m_fullscren(fullscren) {};
+	Options() :
+	m_width(0), m_height(0), m_fullscreen(false) {}
+	Options(const std::size_t width, const std::size_t height, const bool fullscreen) :
+		m_width(width), m_height(height), m_fullscreen(fullscreen) {};
 	~Options() {};
 
 	std::size_t getWidth() const {
@@ -22,11 +24,23 @@ public:
 		return m_height;
 	}
 	bool getFullScreen() const {
-		return m_fullscren;
+		return m_fullscreen;
+	}
+
+	void setWidth(std::size_t width) {
+		m_width = width;
+	}
+
+	void setHeight(std::size_t height) {
+		m_height = height;
+	}
+
+	void setFullScreen(bool fullscreen) {
+		m_fullscreen = fullscreen;
 	}
 
 private:
 	std::size_t m_width;
 	std::size_t m_height;
-	bool m_fullscren;
+	bool m_fullscreen;
 };

@@ -59,6 +59,17 @@ bool Indie::Events::OnEvent(const irr::SEvent &event)
 						Context.menu->m_main->setVisible(true);
 						Context.menu->m_mapEdit->setVisible(false);
 						break;
+					case GUI_ID_FULLSCREEN:
+						// if (!Context.options->getFullScreen()) {
+						// 	Context.options->setFullScreen(true);
+						// 	irr::core::dimension2d<irr::u32> dimension(Context.options->getWidth(), Context.options->getHeight());
+						// 	Context.device->drop();
+						// 	Context.device = irr::createDevice(irr::video::EDT_OPENGL,
+						// 		dimension, 32, Context.options->getFullScreen(), true, false, this);
+						// }
+						break;
+					case GUI_ID_PLAY:
+						break;
 					default:
 						break;
 			}

@@ -8,15 +8,18 @@
 #include <memory>
 #include "Menu.hpp"
 
-Indie::Menu::Menu() :
-	m_font(), m_sceneManager(), m_driver(), m_gui(), m_images()
-{}
+Indie::Menu::Menu()
+{
+	m_height = 95;
+	m_width = 325;
+}
 
 Indie::Menu::~Menu()
 {}
 
 void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 {
+	m_opt = opt;
 	m_driver = device->getVideoDriver();
 	m_sceneManager = device->getSceneManager();
 	m_gui = device->getGUIEnvironment();
@@ -55,42 +58,52 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	for (auto &btn : m_btns) {
 		btn->setImage(m_driver->getTexture("assets/models/menu/button.png"));
 		btn->setPressedImage(m_driver->getTexture("assets/models/menu/button_hover.png"));
+		btn->setUseAlphaChannel(true);
+		btn->setDrawBorder(0);
 	}
 }
 
 void Indie::Menu::loadMainMenu()
 {
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,250,800,250 + 50), m_main, GUI_ID_PLAY_BUTTON,
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,200,x_right,200 + m_height), m_main, GUI_ID_PLAY_BUTTON,
             L"Play", L"Launches the game"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,325,800,325 + 50), m_main, GUI_ID_MAP_BUTTON,
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,310,x_right,310 + m_height), m_main, GUI_ID_MAP_BUTTON,
             L"Map Editor", L"Create your own maps"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,400,800,400 + 50), m_main, GUI_ID_OPTIONS_BUTTON,
-            L"Option", L"Host or join a server"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,475,800,475 + 50), m_main, GUI_ID_QUIT_BUTTON,
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,420,x_right,420 + m_height), m_main, GUI_ID_OPTIONS_BUTTON,
+            L"Option", L"Changes options"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,530,x_right,530 + m_height), m_main, GUI_ID_QUIT_BUTTON,
             L"Quit", L"Exits the program"));
 }
 
 void Indie::Menu::loadOptionsMenu()
 {
-	// m_btns.emplace_back(m_gui->addButton(irr::core::recti(500, 250, 800, 250 + 50), m_option, GUI_ID_MAP_BUTTON,
-		// L"TEST"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(500, 325, 800, 325 + 50), m_option, GUI_ID_OPTION_BACK_BUTTON,
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_option, GUI_ID_OPTION_BACK_BUTTON,
 		L"Back"));
+	m_gui->addCheckBox(m_opt.getFullScreen(), irr::core::recti(m_width, m_height, m_width + 250, m_height + 50), m_option, GUI_ID_FULLSCREEN, L"FullScreen");
 }
 
 void Indie::Menu::loadMapMenu()
 {
-	// m_btns.emplace_back(m_gui->addButton(irr::core::recti(500, 250, 800, 250 + 50), m_mapEdit, GUI_ID_MAP_BUTTON,
-		// L"TEST"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(500, 325, 800, 325 + 50), m_mapEdit, GUI_ID_MAP_BACK_BUTTON,
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_mapEdit, GUI_ID_MAP_BACK_BUTTON,
 		L"Back"));
 }
 
 void Indie::Menu::loadPlayMenu()
 {
-	// m_btns.emplace_back(m_gui->addButton(irr::core::recti(500, 250, 800, 250 + 50), m_play, GUI_ID_MAP_BUTTON,
-		// L"TEST"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(500, 325, 800, 325 + 50), m_play, GUI_ID_PLAY_BACK_BUTTON,
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_play, GUI_ID_PLAY, L"PLAY OMG"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_play, GUI_ID_PLAY_BACK_BUTTON,
 		L"Back"));
 }
 
