@@ -18,7 +18,7 @@
 #include "ManageStrings.hpp"
 #include "Server.hpp"
 
-Indie::Core::Core() : _lastFps(-1)
+Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 {
 	_playersFct.push_back(&Indie::Core::addPlayer);
 	_playersFct.push_back(&Indie::Core::removePlayer);
@@ -26,7 +26,7 @@ Indie::Core::Core() : _lastFps(-1)
 	m_state = MENU;
 	m_run = true;
 	_color = {255, 168, 201, 255};
-	m_core.initWindow(m_event);
+	m_core.initWindow(m_event, m_opts);
 	m_core.m_sceneManager->setAmbientLight({255.0, 255.0, 255.0});
 	_graphism = std::make_unique<Graphism>(&m_core);
 }
@@ -62,10 +62,10 @@ void Indie::Core::processEvents()
 
 void Indie::Core::handleMenu()
 {
-	MenuState res;
+	MenuState res = NONE;
 
 	m_core.m_device->getCursorControl()->setVisible(true);
-	res = m_menu.display(m_event);
+	res = m_menu.display();
 	switch (res) {
 		case QUIT:
 			m_run = false;
@@ -85,19 +85,27 @@ void Indie::Core::handleMenu()
 void Indie::Core::run()
 {
 	irr::core::vector3df prevPos, pos;
+	AppContext context;
 
+	context.options = &m_opts;
+	context.menu = &m_menu;
+	context.device = m_core.m_device;
+	context.state = &m_state;
+	m_event.load(context);
 	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, _graphism);
-	m_menu.loadMenu(m_core.m_device);
 	m_splash.display(m_core.m_device, m_event);
+	m_menu.loadMenu(m_core.m_device, m_opts);
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		m_core.m_driver->beginScene(true, true, _color);
-		if (m_state == MENU) {
-			handleMenu();
-		} else if (m_state == MAPPING) {
-			std::cout << "mdr" << std::endl;
-			exit(0);
-		} else {
+
+		 if (m_state == MENU) {
+			m_core.m_device->getCursorControl()->setVisible(true);
+		 	m_core.m_gui->drawAll();//handleMenu();
+		 } else if (m_state == MAPPING) {
+		 	std::cout << "mdr" << std::endl;
+		 	exit(0);
+		 } else {
 			m_core.m_device->getCursorControl()->setVisible(false);
 			if (_playerObjects.empty()) {
 				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
