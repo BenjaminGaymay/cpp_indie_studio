@@ -19,6 +19,7 @@ namespace Indie {
 		irr::scene::IAnimatedMeshSceneNode *getTexture();
 		bool boom();
 	private:
+		// Renommer l'enum (genre BombState)
 		enum State {
 			BOOM,
 			NONE

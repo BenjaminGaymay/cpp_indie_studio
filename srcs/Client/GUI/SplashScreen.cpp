@@ -70,8 +70,10 @@ void Indie::SplashScreen::display(irr::IrrlichtDevice *device, Events &event)
 			while (device->run()) {
 				if (event.isKeyDown(irr::KEY_ESCAPE) or
 					event.isKeyDown(irr::KEY_SPACE) or
-					event.isKeyDown(irr::KEY_RETURN))
+					event.isKeyDown(irr::KEY_RETURN)) {
+					m_fader->fadeIn(0);
 					break;
+				}
 				if (!fadeOut())
 					break;
 				}

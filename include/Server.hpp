@@ -28,6 +28,7 @@ namespace Indie {
 	};
 
 	bool operator==(std::unique_ptr<Client> &, std::unique_ptr<Client> &);
+	bool operator!=(std::unique_ptr<Client> &, std::unique_ptr<Client> &);
 
 	class Server {
 		public:

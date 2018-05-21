@@ -29,10 +29,10 @@ namespace Indie {
 		void setId(int id) { _id = id; }
 		int getId() { return _id; }
 	private:
-		irr::f32 _speed;
-		irr::scene::IAnimatedMeshSceneNode *_player;
-		bool _stand;
 		int _id;
+		bool _stand;
+		irr::scene::IAnimatedMeshSceneNode *_player;
+		irr::f32 _speed;
 	protected:
 	};
 }
