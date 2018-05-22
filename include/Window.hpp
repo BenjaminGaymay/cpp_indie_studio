@@ -22,6 +22,7 @@ namespace Indie {
 		irr::scene::ISceneManager *getSceneManager() const;
 		Camera getCamera() const;
 		irr::core::vector3df getCameraPosition() const;
+		void editMapView(Events &evt);
 
 	public:
 		irr::IrrlichtDevice *m_device;

@@ -15,6 +15,13 @@ Indie::Window::~Window()
 	m_device->drop();
 }
 
+void Indie::Window::editMapView(Events &evt)
+{
+	irr::core::vector3df vec = {0, 800, 100};
+
+	m_camera.initCamera(m_sceneManager, vec);
+}
+
 void Indie::Window::initWindow(Events &evt)
 {
 	irr::core::vector3df vec;
@@ -28,7 +35,6 @@ void Indie::Window::initWindow(Events &evt)
 	m_device->setWindowCaption(L"floating");
 	m_camera.initCamera(m_sceneManager, vec);
 }
-
 
 irr::video::IVideoDriver *Indie::Window::getDriver() const
 {
