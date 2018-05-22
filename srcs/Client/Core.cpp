@@ -31,6 +31,7 @@ Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 	_graphism = std::make_unique<Graphism>(&m_core);
 	_state = NOTCONNECTED;
 	_playerId = -1;
+	_socket = nullptr;
 }
 
 Indie::Core::~Core()
@@ -70,8 +71,12 @@ void Indie::Core::checkAppContext(AppState context)
 		std::thread(&Indie::Server::runServer).detach();
 		_state = WAITING;
 		// >> mettre un try / catch en boucle ?
-		usleep(5000);
-		_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
+		while (1) {
+			try {
+				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
+				break;
+			} catch (const std::exception &e) {}
+		}
 		_playerId = waitForId();
 		// <<
 	}
@@ -79,9 +84,13 @@ void Indie::Core::checkAppContext(AppState context)
 		dprintf(_socket->getFd(), "READY\n");
 	if (context == CONNECT && _state == NOTCONNECTED) {
 		// si socket fail (try / catch) : _state = NOTCONNECTED + on change pas de menu
-		_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
-		_state = WAITING;
-		_playerId = waitForId();
+		try {
+			_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
+			_state = WAITING;
+			_playerId = waitForId();
+		} catch (const std::exception &e) {
+			std::cerr << e.what() << std::endl;
+		}
 	}
 }
 
@@ -109,7 +118,7 @@ void Indie::Core::run()
 		processEvents();
 		m_core.m_driver->beginScene(true, true, _color);
 		checkAppContext(*(context.state));
-		if (_state != NOTCONNECTED)
+		if (_state != NOTCONNECTED && _socket)
 			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
 		if (m_state == PLAY) {
 			 m_core.getCamera().change(m_core.getSceneManager());
