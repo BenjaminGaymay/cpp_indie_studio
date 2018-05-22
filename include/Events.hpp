@@ -8,6 +8,7 @@
 #pragma once
 
 #include <irrlicht/irrlicht.h>
+#include <unordered_map>
 #include "Menu.hpp"
 #include "Options.hpp"
 // #include "Core.hpp"
@@ -33,12 +34,12 @@ namespace Indie {
 			virtual bool OnEvent(const irr::SEvent &);
 			virtual bool isKeyDown(irr::EKEY_CODE) const;
 			void load(AppContext &);
-			void setMenu(IdGui);
-			bool checkClick(const irr::SEvent &);
+			bool isButtonClicked(IdGui);
 		public:
 			SMouseState MouseState;
 			AppContext Context;
 		private:
+			std::unordered_map<IdGui, bool> ButtonClicked;
 			bool KeyIsDown[irr::KEY_KEY_CODES_COUNT];
 	};
 }

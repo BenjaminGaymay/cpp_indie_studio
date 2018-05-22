@@ -43,6 +43,7 @@ void Indie::Core::drawCaption()
 	int fps = m_core.m_driver->getFPS();
 
 	if (_lastFps != fps) {
+		std::cout << fps << std::endl;
 		irr::core::stringw str = L"Irrlicht Engine - Bomberman [";
 		str += m_core.m_driver->getName();
 		str += "] FPS:";
@@ -59,6 +60,7 @@ void Indie::Core::processEvents()
 	if (m_event.isKeyDown(irr::KEY_KEY_A))
 		std::cout << m_event.MouseState.Position.X << " : "
 				  << m_event.MouseState.Position.Y << std::endl;
+	menuEvents();
 }
 
 void Indie::Core::checkAppContext(AppState context)
@@ -310,5 +312,65 @@ void Indie::Core::run()
 		}
 		m_core.m_driver->endScene();
 		drawCaption();
+	}
+}
+
+void Indie::Core::menuEvents()
+{
+	for (std::size_t id = 0; id < BTN_COUNT; id++) {
+		if (m_event.isButtonClicked(static_cast<IdGui>(id))) {
+			switch (id) {
+				case GUI_ID_QUIT_BUTTON:
+					m_core.m_device->closeDevice();
+					break;
+				case GUI_ID_PLAY_BUTTON:
+					m_menu.m_main->setVisible(false);
+					m_menu.m_play->setVisible(true);
+					break;
+				case GUI_ID_OPTIONS_BUTTON:
+					m_menu.m_main->setVisible(false);
+					m_menu.m_option->setVisible(true);
+					break;
+				case GUI_ID_MAP_BUTTON:
+					m_menu.m_main->setVisible(false);
+					m_menu.m_mapEdit->setVisible(true);
+					break;
+				case GUI_ID_MAP_BACK_BUTTON:
+					m_menu.m_main->setVisible(true);
+					m_menu.m_mapEdit->setVisible(false);
+					break;
+				case GUI_ID_PLAY_BACK_BUTTON:
+					m_menu.m_main->setVisible(true);
+					m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_ROOM_BACK_BUTTON:
+					m_menu.m_play->setVisible(true);
+					m_menu.m_room->setVisible(false);
+					break;
+				case GUI_ID_OPTION_BACK_BUTTON:
+					m_menu.m_main->setVisible(true);
+					m_menu.m_option->setVisible(false);
+					break;
+				case GUI_ID_MAP_EDITOR_BUTTON:
+					m_state = MAPPING;
+					break;
+				case GUI_ID_READY:
+					m_state = READY;
+					m_menu.m_room->setVisible(false);
+					break;
+				case GUI_ID_PLAY_CLIENT:
+					m_state = CONNECT;
+					m_menu.m_room->setVisible(true);
+					m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_PLAY_SERVER:
+					m_state = LAUNCH_SERVER;
+					m_menu.m_room->setVisible(true);
+					m_menu.m_play->setVisible(false);
+					break;
+				default:
+					break;
+			}
+		}
 	}
 }

@@ -17,6 +17,7 @@
 #include "Server.hpp"
 #include "Options.hpp"
 #include "Events.hpp"
+#include "Macro.hpp"
 
 namespace Indie {
 	class Player;
@@ -41,6 +42,7 @@ namespace Indie {
 		void movePlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void checkAppContext(AppState);
 		void handleMenu();
+		void menuEvents();
 
 	private:
 		int _lastFps;
