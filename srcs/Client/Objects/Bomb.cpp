@@ -25,6 +25,8 @@ Indie::Bomb::~Bomb()
 
 bool Indie::Bomb::boom(Player *player, std::unique_ptr<Map> &map)
 {
+	(void)player;
+	(void)map;
 	if (!_state && std::time(nullptr) >= _timeMax) {
 		_state = true;
 		_texture->remove();

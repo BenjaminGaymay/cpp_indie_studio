@@ -65,15 +65,16 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 	for (auto &line : servSend) {
 		info = ManageStrings::splitString(line, ':');
 		if (!info.empty()) {
-			// >> SECURISER CA
+			// >> SECURISER ÇA
 			type = std::stoi(info[0]);
 			event = std::stoi(info[1]);
 			if (type == GAMEINFOS && event == START) {
 				_state = PLAYING;
 				m_state = PLAY;
+				_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, _graphism);
 				_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
 				_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
-				m_core.getCamera().change(m_core.getSceneManager());
+				m_core.getCamera().change(m_core.getSceneManager());				_graphism->buildDecor();
 			}
 			else {
 				id = std::stoi(info[2]);

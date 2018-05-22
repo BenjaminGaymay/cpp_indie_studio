@@ -20,7 +20,6 @@
 
 namespace Indie {
 	class Player;
-	class ObjectPlayer;
 
 	class Core {
 	public:
@@ -31,8 +30,8 @@ namespace Indie {
 		void processEvents();
 		void cleanMap();
 		void editMap();
-		int EditMapEvents();
-		void write_in_file(std::string file, std::vector<std::vector<int>> map);
+		int editMapEvents();
+		void writeInFile(std::string file, std::vector<std::vector<int>> map);
 		void createZeroMap(std::string name, size_t x, size_t y);
 		void create_rand_map(std::string name, size_t x, size_t y);
 		int waitForId();
