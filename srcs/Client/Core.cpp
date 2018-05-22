@@ -153,9 +153,9 @@ void Indie::Core::createZeroMap(std::string name, size_t x, size_t y)
 	std::string file = "assets/maps/" + name;
 	std::vector<std::vector<int>> map;
 
-	for (int i = 0; i < y; ++i) {
+	for (std::size_t i = 0; i < y; ++i) {
 		std::vector<int> line;
-		for (int j = 0; j < x; ++j) {
+		for (std::size_t j = 0; j < x; ++j) {
 			line.push_back(0);
 		}
 		map.push_back(line);
@@ -168,8 +168,8 @@ void Indie::Core::write_in_file(std::string file, std::vector<std::vector<int>> 
 {
 	std::ofstream outfile (file);
 
-	for (int i = 0; i < map.size(); ++i) {
-		for (int j = 0; j < map[i].size(); ++j) {
+	for (std::size_t i = 0; i < map.size(); ++i) {
+		for (std::size_t j = 0; j < map[i].size(); ++j) {
 			outfile << "0" << map[i][j] << " ";
 		}
 		outfile << std::endl;
@@ -188,10 +188,20 @@ void Indie::Core::cleanMap()
 		}
 		std::cout << std::endl;
 	}
-	while (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]) == 0)
+	int x = 0;
+	for (size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
+		for (size_t j = 0; j < _mapper->getMap2d()[i].size(); ++j)
+			if (_mapper->getMap2d()[i][j] == 1)
+				x += 1;
+		if (x > 0)
+			break;
+	}
+	if (x == 0)
+		return ;
+	while (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]))
 		_mapper->getMap2d().erase(_mapper->getMap2d().begin());
 	int i = _mapper->getMap2d().size() - 1;
-	while (std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i]) == 0) {
+	while (std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i])) {
 		_mapper->getMap2d().erase(_mapper->getMap2d().end());
 		--i;
 	}
@@ -236,6 +246,7 @@ int Indie::Core::EditMapEvents()
 		// 	std::cout << std::endl;
 		//}
 	}
+	return 0;
 }
 
 void Indie::Core::editMap()
