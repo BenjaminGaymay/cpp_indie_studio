@@ -63,14 +63,14 @@ void Indie::Core::processEvents()
 	menuEvents();
 }
 
-void Indie::Core::checkAppContext(AppState context)
+void Indie::Core::checkAppContext()
 {
 	static AppState old = AppState::NONE;
 
-	if (context == old)
+	if (m_state == old)
 		return;
-	old = context;
-	if (context == LAUNCH_SERVER && _state == NOTCONNECTED) {
+	old = m_state;
+	if (m_state == LAUNCH_SERVER && _state == NOTCONNECTED) {
 		std::thread(&Indie::Server::runServer).detach();
 		_state = WAITING;
 		while (1) {
@@ -82,9 +82,9 @@ void Indie::Core::checkAppContext(AppState context)
 		_playerId = waitForId();
 		// <<
 	}
-	if (context == READY && _state == WAITING)
+	if (m_state == READY && _state == WAITING)
 		dprintf(_socket->getFd(), "READY\n");
-	if (context == CONNECT && _state == NOTCONNECTED) {
+	if (m_state == CONNECT && _state == NOTCONNECTED) {
 		// si socket fail (try / catch) : _state = NOTCONNECTED + on change pas de menu
 		try {
 			_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
@@ -276,19 +276,13 @@ void Indie::Core::editMap()
 void Indie::Core::run()
 {
 	irr::core::vector3df prevPos, pos;
-	AppContext context;
 
-	context.options = &m_opts;
-	context.menu = &m_menu;
-	context.device = m_core.m_device;
-	context.state = &m_state;
-	m_event.load(context);
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		m_core.m_driver->beginScene(true, true, _color);
-		checkAppContext(*(context.state));
+		checkAppContext();
 		if (_state != NOTCONNECTED && _socket)
 			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
 		if (m_state == PLAY) {

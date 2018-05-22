@@ -33,11 +33,9 @@ namespace Indie {
 			Events();
 			virtual bool OnEvent(const irr::SEvent &);
 			virtual bool isKeyDown(irr::EKEY_CODE) const;
-			void load(AppContext &);
 			bool isButtonClicked(IdGui);
 		public:
 			SMouseState MouseState;
-			AppContext Context;
 		private:
 			std::unordered_map<IdGui, bool> ButtonClicked;
 			bool KeyIsDown[irr::KEY_KEY_CODES_COUNT];

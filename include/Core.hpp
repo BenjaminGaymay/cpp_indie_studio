@@ -40,7 +40,7 @@ namespace Indie {
 		void addPlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void removePlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void movePlayer(int, irr::core::vector3df &, const irr::f32 &);
-		void checkAppContext(AppState);
+		void checkAppContext();
 		void handleMenu();
 		void menuEvents();
 
