@@ -1,11 +1,10 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** SplashScreen
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// SplashScreen
+//
 
-#include <iostream>
 #include "SplashScreen.hpp"
 
 Indie::SplashScreen::SplashScreen()

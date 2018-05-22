@@ -1,9 +1,9 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Core
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Core
+//
 
 #pragma once
 
@@ -17,6 +17,7 @@
 #include "Server.hpp"
 #include "Options.hpp"
 #include "Events.hpp"
+#include "Macro.hpp"
 
 namespace Indie {
 	class Player;
@@ -33,14 +34,15 @@ namespace Indie {
 		int editMapEvents();
 		void writeInFile(std::string file, std::vector<std::vector<int>> map);
 		void createZeroMap(std::string name, size_t x, size_t y);
-		void create_rand_map(std::string name, size_t x, size_t y);
+		void createRandMap(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
 		void addPlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void removePlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void movePlayer(int, irr::core::vector3df &, const irr::f32 &);
-		void checkAppContext(AppState);
+		void checkAppContext();
 		void handleMenu();
+		void menuEvents();
 
 	private:
 		int _lastFps;

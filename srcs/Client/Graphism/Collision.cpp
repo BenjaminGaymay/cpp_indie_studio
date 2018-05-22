@@ -1,13 +1,10 @@
-/*
-** EPITECH PROJECT, 2018
-** studentm
-** File description:
-** 14/05/18
-*/
+//
+// EPITECH PROJECT, 2018
+// studentm
+// File description:
+// 14/05/18
+//
 
-#include <iostream>
-#include <iostream>
-#include "Player.hpp"
 #include "Graphism.hpp"
 
 void Indie::Graphism::setCollision(irr::scene::ISceneNode *wall,

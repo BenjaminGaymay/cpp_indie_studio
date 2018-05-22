@@ -1,32 +1,32 @@
-/*
-** EPITECH PROJECT, 2018
-** student
-** File description:
-** 13/05/18
-*/
+//
+// EPITECH PROJECT, 2018
+// student
+// File description:
+// 13/05/18
+//
 
 #include "Player.hpp"
 
-/**
- * @brief texture of the player
- * @param node
- */
+//
+// @brief texture of the player
+// @param node
+//
 Indie::Player::Player(int id, irr::scene::ISceneNode *node)
 : _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1.5f)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
 
-/**
- * @brief destroy
- */
+//
+// @brief destroy
+//
 Indie::Player::~Player() = default;
 
-/**
- * @brief set the futur position of player
- * @param event
- * @return
- */
+//
+// @brief set the futur position of player
+// @param event
+// @return
+//
 irr::core::vector3df Indie::Player::move(const Events &event)
 {
 	irr::core::vector3df nodePosition = _player->getPosition();
@@ -55,11 +55,11 @@ irr::core::vector3df Indie::Player::move(const Events &event)
 	return nodePosition;
 }
 
-/**
- * @brief change rotation of player when moving
- * @param node
- * @param newPosition
- */
+//
+// @brief change rotation of player when moving
+// @param node
+// @param newPosition
+//
 void Indie::Player::rotationWithMove(irr::scene::ISceneNode *node,
 					const irr::core::vector3df &newPosition)
 {
@@ -78,46 +78,46 @@ void Indie::Player::rotationWithMove(irr::scene::ISceneNode *node,
 	node->setRotation(rotation);
 }
 
-/**
- * @brief return player object
- * @return IAnimatedMeshSceneNode
- */
+//
+// @brief return player object
+// @return IAnimatedMeshSceneNode
+//
 irr::scene::IAnimatedMeshSceneNode *Indie::Player::getPlayer()
 {
 	return _player;
 }
 
-/**
- * @brief return if the player is doing action like running
- * @return bool
- */
+//
+// @brief return if the player is doing action like running
+// @return bool
+//
 bool Indie::Player::isStanding()
 {
 	return _stand;
 }
 
-/**
- * @brief change state
- * @param state
- */
+//
+// @brief change state
+// @param state
+//
 void Indie::Player::setStanding(bool state)
 {
 	_stand = state;
 }
 
-/**
- * @brief setSpeed of player
- * @param speed
- */
+//
+// @brief setSpeed of player
+// @param speed
+//
 void Indie::Player::setSpeed(float speed)
 {
 	_speed = speed;
 }
 
-/**
- * @brief get speed of player
- * @return
- */
+//
+// @brief get speed of player
+// @return
+//
 const float &Indie::Player::getSpeed()
 {
 	return _speed;

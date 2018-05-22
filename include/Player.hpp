@@ -1,14 +1,13 @@
-/*
-** EPITECH PROJECT, 2018
-** student
-** File description:
-** 13/05/18
-*/
+//
+// EPITECH PROJECT, 2018
+// student
+// File description:
+// 13/05/18
+//
+
 #ifndef BOMBERMAN_PLAYER_HPP
 #define BOMBERMAN_PLAYER_HPP
 
-#include <irrlicht/IAnimatedMeshSceneNode.h>
-#include <memory>
 #include "Core.hpp"
 
 namespace Indie {

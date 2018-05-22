@@ -1,12 +1,10 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Map
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Map
+//
 
-#include <cstdio>
-#include <Graphism.hpp>
 #include "Map.hpp"
 
 Indie::Map::Map(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Graphism> &graphism)
@@ -106,6 +104,7 @@ const float &Indie::Map::getHeight() const
 	return _height;
 }
 
+// >>>> DANS UN OBJET ?
 bool infequal(irr::core::vector3df one, irr::core::vector3df two)
 {
 	return  (one.X <= two.X && one.Y <= two.Y && one.Z <= two.Z);
@@ -120,6 +119,8 @@ bool supequal(irr::core::vector3df one, irr::core::vector3df two)
 {
 	return  (one.X >= two.X && one.Y >= two.Y && one.Z >= two.Z);
 }
+
+// <<<<<
 
 irr::scene::ISceneNode *Indie::Map::get3dBlock(const irr::core::vector3df &target)
 {

@@ -1,15 +1,15 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Server
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Server
+//
 
 #pragma once
 
-#include "Socket.hpp"
 #include <memory>
 #include <algorithm>
+#include "Socket.hpp"
 
 namespace Indie {
 	enum GameState {
