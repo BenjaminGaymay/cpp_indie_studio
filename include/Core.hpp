@@ -29,12 +29,19 @@ namespace Indie {
 		void run();
 		void drawCaption();
 		void processEvents();
+		void cleanMap();
+		void editMap();
+		int EditMapEvents();
+		void write_in_file(std::string file, std::vector<std::vector<int>> map);
+		void createZeroMap(std::string name, size_t x, size_t y);
+		void create_rand_map(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
 		void addPlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void removePlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void movePlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void checkAppContext(AppState);
+		void handleMenu();
 
 	private:
 		int _lastFps;
@@ -42,6 +49,7 @@ namespace Indie {
 		Options m_opts;
 		Window m_core;
 		std::unique_ptr<Map> _mapper;
+		std::unique_ptr<Map> _editing;
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
