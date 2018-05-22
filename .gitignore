@@ -9,3 +9,4 @@ bomberman.cbp
 *.o
 .vscode/
 server
+peda/

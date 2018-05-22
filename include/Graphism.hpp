@@ -20,6 +20,7 @@ namespace Indie {
 		~Graphism();
 		void buildDecor();
 		void createWater(irr::core::vector3df position,  irr::core::vector3df rotation);
+		void addCollision(irr::scene::ISceneNode *object);
 		irr::f32 resizeNode(irr::scene::ISceneNode *node, const float &size);
 		irr::scene::ISceneNode *createTexture(const textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale, bool collision);
 		irr::scene::ISceneNode *createIsland(irr::core::vector3df position, irr::core::vector3df rotation);

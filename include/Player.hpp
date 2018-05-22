@@ -24,14 +24,15 @@ namespace Indie {
 		void setSpeed(float speed);
 		const float &getSpeed();
 		irr::core::vector3df getPosition() { return _player->getPosition(); }
-		void setPosition(irr::core::vector3df &pos) { _player->setPosition(pos); }
+		irr::core::vector3df getRotation() { return _player->getRotation(); }
+		void setPosition(const irr::core::vector3df &pos) { _player->setPosition(pos); }
 		void setId(int id) { _id = id; }
 		int getId() { return _id; }
 	private:
-		irr::f32 _speed;
-		irr::scene::IAnimatedMeshSceneNode *_player;
-		bool _stand;
 		int _id;
+		bool _stand;
+		irr::scene::IAnimatedMeshSceneNode *_player;
+		irr::f32 _speed;
 	protected:
 	};
 }

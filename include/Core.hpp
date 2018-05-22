@@ -9,22 +9,18 @@
 
 #include <vector>
 #include <map>
-#include "Socket.hpp"
 #include "Window.hpp"
 #include "SplashScreen.hpp"
 #include "Menu.hpp"
 #include "Graphism.hpp"
 #include "Map.hpp"
+#include "Server.hpp"
+#include "Options.hpp"
+#include "Events.hpp"
 
 namespace Indie {
 	class Player;
 	class ObjectPlayer;
-
-	enum State {
-		MENU,
-		MAPPING,
-		GAME
-	};
 
 	class Core {
 	public:
@@ -33,32 +29,37 @@ namespace Indie {
 		void run();
 		void drawCaption();
 		void processEvents();
-		int waitForId(Indie::Graphism &graphism);
-		void readServerInformations(std::vector<std::string>, Indie::Graphism &graphism);
-		void addPlayer(Indie::Graphism &core, int, irr::core::vector3df &);
-		void removePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
-		void movePlayer(Indie::Graphism &core, int, irr::core::vector3df &);
-		void handleMenu();
-		void create_rand_map(std::string name, size_t x, size_t y);
-		void createZeroMap(std::string name, size_t x, size_t y);
-		void write_in_file(std::string file, std::vector<std::vector<int>> map);
-		void editMap(Graphism graphism);
-		int EditMapEvents();
 		void cleanMap();
+		void editMap();
+		int EditMapEvents();
+		void write_in_file(std::string file, std::vector<std::vector<int>> map);
+		void createZeroMap(std::string name, size_t x, size_t y);
+		void create_rand_map(std::string name, size_t x, size_t y);
+		int waitForId();
+		void readServerInformations(std::vector<std::string>);
+		void addPlayer(int, irr::core::vector3df &, const irr::f32 &);
+		void removePlayer(int, irr::core::vector3df &, const irr::f32 &);
+		void movePlayer(int, irr::core::vector3df &, const irr::f32 &);
+		void checkAppContext(AppState);
+		void handleMenu();
 
 	private:
 		int _lastFps;
+		std::unique_ptr<Graphism> _graphism;
+		Options m_opts;
 		Window m_core;
 		std::unique_ptr<Map> _mapper;
 		std::unique_ptr<Map> _editing;
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
-		std::vector<void (Indie::Core::*)(Indie::Graphism &, int, irr::core::vector3df &)> _playersFct;
+		std::vector<void (Indie::Core::*)(int, irr::core::vector3df &, const irr::f32 &)> _playersFct;
 		SplashScreen m_splash;
 		Menu m_menu;
-		State m_state;
+		AppState m_state;
 		Events m_event;
 		irr::video::SColor _color;
+		GameState _state;
+		int _playerId;
 	};
 }
