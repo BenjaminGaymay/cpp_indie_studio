@@ -34,7 +34,7 @@ namespace Indie {
 		int editMapEvents();
 		void writeInFile(std::string file, std::vector<std::vector<int>> map);
 		void createZeroMap(std::string name, size_t x, size_t y);
-		void create_rand_map(std::string name, size_t x, size_t y);
+		void createRandMap(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
 		void addPlayer(int, irr::core::vector3df &, const irr::f32 &);

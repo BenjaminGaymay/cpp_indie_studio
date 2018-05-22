@@ -36,6 +36,11 @@ Indie::Events::Events() :
 		KeyIsDown[i] = false;
 }
 
+void Indie::Events::forceClickButton(IdGui id)
+{
+	ButtonClicked[id] = true;
+}
+
 bool Indie::Events::isButtonClicked(IdGui id)
 {
 	bool state;

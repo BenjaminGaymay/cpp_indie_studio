@@ -84,13 +84,20 @@ void Indie::Core::checkAppContext()
 	}
 	if (m_state == READY && _state == WAITING)
 		dprintf(_socket->getFd(), "READY\n");
-	if (m_state == CONNECT && _state == NOTCONNECTED) {
-		// si socket fail (try / catch) : _state = NOTCONNECTED + on change pas de menu
+	if (context == CONNECT && _state == NOTCONNECTED) {
+		std::cout << "je passe 1\n";
 		try {
+			std::cout << "je passe 2\n";
 			_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
+			std::cout << "je passe 3\n";
 			_state = WAITING;
 			_playerId = waitForId();
 		} catch (const std::exception &e) {
+			std::cout << "je passe 4\n";
+			//m_event.forceClickButton(IdGui::GUI_ID_PLAY_BUTTON);
+			m_menu.m_room->setVisible(false);
+			m_menu.m_play->setVisible(true);
+			_state = NOTCONNECTED;
 			std::cerr << e.what() << std::endl;
 		}
 	}
@@ -103,7 +110,7 @@ std::string floatToInt(float nb)
 	return ss.str();
 }
 
-void Indie::Core::create_rand_map(std::string name, size_t x, size_t y)
+void Indie::Core::createRandMap(std::string name, size_t x, size_t y)
 {
 	std::string file = "assets/maps/" + name;
 	std::vector<std::vector<int>> map;
@@ -296,7 +303,7 @@ void Indie::Core::run()
 			m_core.m_sceneManager->drawAll(); // draw and do collision
 		} else if (m_state == MAPPING) {
 			editMap();
-			// create_rand_map("mdr.txt", 50, 50);
+			// createRandMap("mdr.txt", 50, 50);
 			// _mapper = std::make_unique<Map>("assets/maps/mdr.txt", 20.0f, 100.0f, graphism);
 			m_state = MENU;
 		} else {
