@@ -24,20 +24,30 @@ namespace Indie {
 		GUI_ID_OPTION_MENU_ELEMENT,
 		GUI_ID_MAP_EDIT_MENU_ELEMENT,
 		GUI_ID_MAIN_MENU_ELEMENT,
+		GUI_ID_ROOM_MENU_ELEMENT,
+		GUI_ID_ROOM_BACK_BUTTON,
 		GUI_ID_OPTION_BACK_BUTTON,
 		GUI_ID_PLAY_BACK_BUTTON,
 		GUI_ID_MAP_BACK_BUTTON,
 		GUI_ID_FULLSCREEN,
-		GUI_ID_PLAY
+		GUI_ID_PLAY_SERVER,
+		GUI_ID_PLAY_CLIENT,
+		GUI_ID_READY,
+		GUI_ID_MAP_EDITOR_BUTTON,
+		GUI_ID_MAP_RANDOM_BUTTON
 	};
 
 
-	enum MenuState {
-		PLAY,
+	enum AppState {
+		MENU,
 		QUIT,
 		OPTION,
 		GEN_MAP,
+		MAPPING,
 		LAUNCH_SERVER,
+		CONNECT,
+		READY,
+		PLAY,
 		NONE
 	};
 
@@ -47,7 +57,7 @@ namespace Indie {
 		~SpriteMenu() {};
 		std::vector<irr::core::recti> m_images;
 		irr::core::recti m_zone;
-		MenuState  m_return;
+		AppState  m_return;
 	};
 
 	class Menu {
@@ -55,13 +65,14 @@ namespace Indie {
 		Menu();
 		~Menu();
 		void loadMenu(irr::IrrlichtDevice *, const Options &);
-		MenuState display();
+		AppState display();
 		void initSpriteMenu(std::vector<SpriteMenu> &);
 
 		void loadMainMenu();
 		void loadOptionsMenu();
 		void loadMapMenu();
 		void loadPlayMenu();
+		void loadRoomMenu();
 
 		void setSkinTransparency(irr::s32 , irr::gui::IGUISkin *);
 
@@ -71,6 +82,7 @@ namespace Indie {
 		irr::gui::IGUIElement *m_option;
 		irr::gui::IGUIElement *m_play;
 		irr::gui::IGUIElement *m_mapEdit;
+		irr::gui::IGUIElement *m_room;
 
 		irr::gui::IGUIElement *m_server;
 

@@ -8,7 +8,7 @@
 #include <irrlicht/irrlicht.h>
 #include "Core.hpp"
 
-int main(int ac, char **av)
+int main()
 {
 	Indie::Core core;
 

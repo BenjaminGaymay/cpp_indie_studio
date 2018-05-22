@@ -24,6 +24,7 @@ namespace Indie {
 		irr::gui::IGUIEnvironment *getGuiEnv() const;
 		Camera getCamera() const;
 		irr::core::vector3df getCameraPosition() const;
+		void editMapView(Events &evt);
 
 	public:
 		irr::IrrlichtDevice *m_device;

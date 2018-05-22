@@ -18,7 +18,7 @@
 void Indie::Core::addPlayer(int id, irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	std::cout << "Add player: " << id << std::endl;
-	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true));
+	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(*_graphism->getTexture(10), pos, {0, 0, 0}, {2, 2, 2}, true));
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
 	newPlayer->getPlayer()->setRotation({0, rota, 0});
@@ -27,13 +27,15 @@ void Indie::Core::addPlayer(int id, irr::core::vector3df &pos, const irr::f32 &r
 
 void Indie::Core::removePlayer(int id, irr::core::vector3df &pos, const irr::f32 &rota)
 {
+	(void)pos;
+	(void)rota;
 	if (id == _playerObjects[0]->getId())
 		return;
 	for (auto &p : _playerObjects) {
 		if (p->getId() == id) {
-			auto pos = std::find(_playerObjects.begin(), _playerObjects.end(), p);
-			pos->reset();
-			_playerObjects.erase(pos);
+			auto pPos = std::find(_playerObjects.begin(), _playerObjects.end(), p);
+			pPos->reset();
+			_playerObjects.erase(pPos);
 			return;
 		}
 	}
@@ -66,16 +68,24 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 			// >> SECURISER CA
 			type = std::stoi(info[0]);
 			event = std::stoi(info[1]);
-			id = std::stoi(info[2]);
+			if (type == GAMEINFOS && event == START) {
+				_state = PLAYING;
+				m_state = PLAY;
+				_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
+				_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
+				m_core.getCamera().change(m_core.getSceneManager());
+			}
+			else {
+				id = std::stoi(info[2]);
 
-			irr::core::vector3df pos(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
-			rota = std::stof(info[6]);
+				irr::core::vector3df pos(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
+				rota = std::stof(info[6]);
 			// <<
-
-			switch (type) {
-				case Indie::PLAYER:
-					(this->*_playersFct[event])(id, pos, rota); break;
-				default:break;
+				switch (type) {
+					case Indie::PLAYER:
+						(this->*_playersFct[event])(id, pos, rota); break;
+					default:break;
+				}
 			}
 		}
 	}

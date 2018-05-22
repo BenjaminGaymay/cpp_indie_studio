@@ -24,7 +24,7 @@ bool Indie::Events::OnEvent(const irr::SEvent &event)
 {
 	if (event.EventType == irr::EET_GUI_EVENT) {
 		irr::s32 id = event.GUIEvent.Caller->getID();
-		irr::gui::IGUIEnvironment *env = Context.device->getGUIEnvironment();
+		//irr::gui::IGUIEnvironment *env = Context.device->getGUIEnvironment();
 
 		switch (event.GUIEvent.EventType) {
 			case irr::gui::EGET_BUTTON_CLICKED:
@@ -47,6 +47,9 @@ bool Indie::Events::OnEvent(const irr::SEvent &event)
 						Context.menu->m_mapEdit->setVisible(true);
 						Context.menu->m_main->setVisible(false);
 						break;
+					case GUI_ID_MAP_EDITOR_BUTTON:
+						*Context.state = MAPPING;
+						break;
 					case GUI_ID_OPTION_BACK_BUTTON:
 						Context.menu->m_main->setVisible(true);
 						Context.menu->m_option->setVisible(false);
@@ -59,6 +62,10 @@ bool Indie::Events::OnEvent(const irr::SEvent &event)
 						Context.menu->m_main->setVisible(true);
 						Context.menu->m_mapEdit->setVisible(false);
 						break;
+					case GUI_ID_ROOM_BACK_BUTTON:
+						Context.menu->m_play->setVisible(true);
+						Context.menu->m_room->setVisible(false);
+						break;
 					case GUI_ID_FULLSCREEN:
 						// if (!Context.options->getFullScreen()) {
 						// 	Context.options->setFullScreen(true);
@@ -68,8 +75,18 @@ bool Indie::Events::OnEvent(const irr::SEvent &event)
 						// 		dimension, 32, Context.options->getFullScreen(), true, false, this);
 						// }
 						break;
-					case GUI_ID_PLAY:
-						*Context.state = GAME;
+					case GUI_ID_PLAY_CLIENT:
+						*Context.state = CONNECT;
+						Context.menu->m_room->setVisible(true);
+						Context.menu->m_play->setVisible(false);
+						break;
+					case GUI_ID_PLAY_SERVER:
+						*Context.state = LAUNCH_SERVER;
+						Context.menu->m_room->setVisible(true);
+						Context.menu->m_play->setVisible(false);
+						break;
+					case GUI_ID_READY:
+						*Context.state = READY;
 						break;
 					default:
 						break;

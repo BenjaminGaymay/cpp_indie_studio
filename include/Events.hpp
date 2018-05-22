@@ -14,12 +14,6 @@
 
 namespace Indie {
 
-	enum State {
-		MENU,
-		MAPPING,
-		GAME
-	};
-
 	struct SMouseState {
 		irr::core::position2di Position;
 		bool LeftButtonDown;
@@ -30,7 +24,7 @@ namespace Indie {
 		irr::IrrlichtDevice *device;
 		Menu *menu;
 		Options *options;
-		State *state;
+		AppState *state;
 	};
 
 	class Events : public irr::IEventReceiver {

@@ -15,13 +15,19 @@ Indie::Window::~Window()
 	m_device->drop();
 }
 
+void Indie::Window::editMapView(Events &evt)
+{
+	irr::core::vector3df vec = {0, 800, 100};
+
+	m_camera.initCamera(m_sceneManager, vec);
+}
+
 void Indie::Window::initWindow(Events &evt, const Options &opt)
 {
 	irr::core::vector3df vec(50, 50, 50);
 	irr::core::dimension2d<irr::u32> dimension(opt.getWidth(), opt.getHeight());
 
-	m_device = irr::createDevice(irr::video::EDT_OPENGL,
-		dimension, 64, opt.getFullScreen(), true, false, &evt);
+	m_device = irr::createDevice(irr::video::EDT_OPENGL, dimension, 64, opt.getFullScreen(), true, true, &evt);
 	m_driver = m_device->getVideoDriver();
 	m_sceneManager = m_device->getSceneManager();
 	m_device->getCursorControl()->setVisible(false);
@@ -29,7 +35,6 @@ void Indie::Window::initWindow(Events &evt, const Options &opt)
 	m_gui = m_device->getGUIEnvironment();
 	m_camera.initCamera(m_sceneManager, vec);
 }
-
 
 irr::video::IVideoDriver *Indie::Window::getDriver() const
 {

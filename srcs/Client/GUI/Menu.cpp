@@ -32,9 +32,11 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_play = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_PLAY_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_option = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_OPTION_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_mapEdit = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_MAP_EDIT_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
+	m_room = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_ROOM_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 
 	m_root->addChild(m_mapEdit);
 	m_root->addChild(m_option);
+	m_root->addChild(m_room);
 	m_root->addChild(m_play);
 	m_root->addChild(m_main);
 
@@ -42,6 +44,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_mapEdit->setVisible(false);
 	m_option->setVisible(false);
 	m_play->setVisible(false);
+	m_room->setVisible(false);
 
 	if (!m_images)
 		throw std::runtime_error("Error: can't load menu's images.");
@@ -53,6 +56,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	loadMainMenu();
 	loadOptionsMenu();
 	loadMapMenu();
+	loadRoomMenu();
 	loadPlayMenu();
 
 	for (auto &btn : m_btns) {
@@ -93,7 +97,11 @@ void Indie::Menu::loadMapMenu()
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
 
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_mapEdit, GUI_ID_MAP_BACK_BUTTON,
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_mapEdit, GUI_ID_MAP_EDITOR_BUTTON,
+		L"Map Editor"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_mapEdit, GUI_ID_MAP_RANDOM_BUTTON,
+		L"Random map"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 435, x_right, 435 + m_height), m_mapEdit, GUI_ID_MAP_BACK_BUTTON,
 		L"Back"));
 }
 
@@ -102,8 +110,19 @@ void Indie::Menu::loadPlayMenu()
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
 
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_play, GUI_ID_PLAY, L"PLAY OMG"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_play, GUI_ID_PLAY_BACK_BUTTON,
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_play, GUI_ID_PLAY_SERVER, L"CREATE ROOM"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_play, GUI_ID_PLAY_CLIENT, L"JOIN ROOM"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 435, x_right, 435 + m_height), m_play, GUI_ID_PLAY_BACK_BUTTON,
+		L"Back"));
+}
+
+void Indie::Menu::loadRoomMenu()
+{
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_room, GUI_ID_READY, L"READY"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_room, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
 }
 
@@ -138,7 +157,7 @@ void Indie::Menu::setSkinTransparency(irr::s32 alpha , irr::gui::IGUISkin *skin)
 	}
 }
 
-Indie::MenuState Indie::Menu::display()
+Indie::AppState Indie::Menu::display()
 {
 	//irr::gui::IGUIFont *font = m_gui->getFont("fontlucida.png");
 	// irr::gui::IGUIStaticText *texte = m_gui->addStaticText(L"Apprendre Irrlicht les yeux fermés avec le\n"

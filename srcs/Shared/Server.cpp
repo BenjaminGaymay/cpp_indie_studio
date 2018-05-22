@@ -7,10 +7,8 @@
 
 #include "Server.hpp"
 
-Indie::Server::Server()
+Indie::Server::Server() : _socket(Socket(5567, INADDR_ANY, Indie::Socket::SERVER)), _hostFd(_socket.getFd()), _state(WAITING)
 {
-	_socket = Socket(5567, INADDR_ANY, Indie::Socket::SERVER);
-	_hostFd = _socket.getFd();
 	if (_hostFd == -1)
 		throw std::runtime_error("Error while creating server socket");
 }
@@ -40,13 +38,6 @@ void Indie::Server::addClient()
 	std::unique_ptr<Client> newClient = std::make_unique<Client>(id, accept(_hostFd, (struct sockaddr *)&client_sin, &client_sin_len), "Anonymous");
 
 	dprintf(newClient->_fd, "%d\n", id);
-	for (auto &client : _clients) {
-		// Stocker la pos de chaque client pour pouvoir l'envoyer
-		std::cout << "Tlm sait que " << id << " a pop\n";
-		std::cout << id << "connait la pos de" << client->_id << std::endl;
-		dprintf(client->_fd, "0:0:%d:0:112:0\n", id); // PLAYER:APPEAR:x:y:z
-		dprintf(newClient->_fd, "0:0:%d:0:112:0\n", client->_id); // mettre la pos du joueur
-	}
 	_clients.push_back(std::move(newClient));
 	id += 1;
 }
@@ -63,10 +54,16 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
 			std::cout << "Client " << client->_id << " say " << tmp << std::endl;
-			for (auto &i : _clients) {
-				std::cout << "Client " << i->_id << " know " << tmp << std::endl;
-				dprintf(i->_fd, tmp);
+			if (std::string(tmp).compare("READY") == 0) {
+				client->_state = PLAYING;
+				break;
 			}
+			if (_state == WAITING)
+				return 0;
+			// On renvoi l'info a tlm
+			// Verifier qu'il y a que des numéros et ':'
+			for (auto &i : _clients)
+				dprintf(i->_fd, tmp);
 			tmp = strtok(NULL, "\n");
 		}
 		return 0;
@@ -79,7 +76,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		_clients.erase(pos);
 	}
 	for (auto &client : _clients)
-		dprintf(client->_fd, "0:1:%d:0:0:0\n", client->_id);
+		dprintf(client->_fd, "0:1:%d:0:0:0:0\n", client->_id);
 	return 1;
 }
 
@@ -97,9 +94,34 @@ void Indie::Server::readOnFds()
 	}
 }
 
+Indie::GameState Indie::Server::checkIfStartGame()
+{
+	if (_clients.empty())
+		return WAITING;
+	for (auto &client : _clients) {
+		if (client->_state == WAITING)
+			return WAITING;
+	}
+	for (auto &client : _clients)
+		dprintf(client->_fd, "1:3\n"); // CODE POUR GAME START
+
+	// On donne la pos de chaque joueur
+	for (auto &client : _clients) {
+		// Stocker la pos de chaque client pour pouvoir l'envoyer
+		for (auto &pop : _clients) {
+			if (client != pop)
+				dprintf(client->_fd, "0:0:%d:0:112:0:0\n", pop->_id); // PLAYER:APPEAR:x:y:z:rotation
+		}
+	}
+	return PLAYING;
+}
+
 void Indie::Server::start()
 {
+	// GERER LA DESTRUCTION DU SALON (tlm quitte / partie terminée etc..)
 	while (1) {
+		if (_state == WAITING)
+			_state = checkIfStartGame();
 		setClientsFds();
 		readOnFds();
 	}
@@ -115,7 +137,12 @@ void Indie::Server::runServer()
 	}
 }
 
-bool operator==(std::unique_ptr<Indie::Client> &lhs, std::unique_ptr<Indie::Client> &rhs)
+bool Indie::operator!=(std::unique_ptr<Indie::Client> &lhs, std::unique_ptr<Indie::Client> &rhs)
+{
+	return !(lhs->_id == rhs->_id && lhs->_fd == rhs->_fd && lhs->_name == rhs->_name);
+}
+
+bool Indie::operator==(std::unique_ptr<Indie::Client> &lhs, std::unique_ptr<Indie::Client> &rhs)
 {
 	return (lhs->_id == rhs->_id && lhs->_fd == rhs->_fd && lhs->_name == rhs->_name);
 }

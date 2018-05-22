@@ -19,6 +19,24 @@ Indie::Map::Map(const std::string &mapPath, const float &size, const float &y, s
 Indie::Map::~Map()
 {}
 
+void Indie::Map::newMap(const std::string &mapPath, const float &size,
+						const float &y,
+						std::unique_ptr<Indie::Graphism> &graphism)
+{
+ 	_max_height = 0;
+ 	_max_width = 0;
+ 	_size = size;
+ 	_height = y;
+ 	for (auto &block : _3dmap)
+ 		block->remove();
+	for (auto &block : _3dundermap)
+		block->remove();
+	_3dmap.clear();
+	_3dundermap.clear();
+	initMap(mapPath);
+	load(graphism);
+}
+
 void Indie::Map::initMap(const std::string &fileName)
 {
 	FILE *file = fopen(fileName.c_str(), "r");
@@ -60,8 +78,8 @@ irr::scene::ISceneNode *Indie::Map::putBlock(std::unique_ptr<Graphism> &core, in
 
 void Indie::Map::load(std::unique_ptr<Indie::Graphism> &graphism)
 {
-	for (int i = 0; i < _2dmap.size(); ++i)
-		for (int j = 0; j < _2dmap[i].size(); ++j) {
+	for (unsigned i = 0; i < _2dmap.size(); ++i)
+		for (unsigned j = 0; j < _2dmap[i].size(); ++j) {
 			_3dundermap.push_back(putBlock(graphism, 2, i, -1, j));
 			if (graphism->getTexture(_2dmap[i][j]))
 				_3dmap.push_back(putBlock(graphism, _2dmap[i][j], i, 0, j));
