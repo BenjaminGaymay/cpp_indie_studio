@@ -241,9 +241,10 @@ int Indie::Core::EditMapEvents()
 		return -1;
 	}
 	if (m_event.MouseState.LeftButtonDown == true) {
+
 		m_event.MouseState.LeftButtonDown = false;
-		int x = int((m_event.MouseState.Position.X - 268) / 18.6);
-		int y = int((m_event.MouseState.Position.Y - 16) / 18.6);
+		int x = int((m_event.MouseState.Position.X - 362) / 14);
+		int y = int((m_event.MouseState.Position.Y - 12) / 14);
 		if (x >= 0 && y >= 0 && x < 50 && y < 50)
 			_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? _mapper->getMap2d()[y][x] = 0 : _mapper->getMap2d()[y][x] = 1);
 		// for (size_t i = 0; i < 50; ++i) {

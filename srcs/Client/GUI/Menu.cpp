@@ -97,7 +97,11 @@ void Indie::Menu::loadMapMenu()
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
 
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_mapEdit, GUI_ID_MAP_BACK_BUTTON,
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_mapEdit, GUI_ID_MAP_EDITOR_BUTTON,
+		L"Map Editor"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_mapEdit, GUI_ID_MAP_RANDOM_BUTTON,
+		L"Random map"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 435, x_right, 435 + m_height), m_mapEdit, GUI_ID_MAP_BACK_BUTTON,
 		L"Back"));
 }
 
