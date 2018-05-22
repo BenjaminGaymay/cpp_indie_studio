@@ -43,6 +43,7 @@ void Indie::Core::drawCaption()
 	int fps = m_core.m_driver->getFPS();
 
 	if (_lastFps != fps) {
+		std::cout << fps << std::endl;
 		irr::core::stringw str = L"Irrlicht Engine - Bomberman [";
 		str += m_core.m_driver->getName();
 		str += "] FPS:";

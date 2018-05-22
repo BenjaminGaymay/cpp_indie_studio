@@ -4,8 +4,8 @@
 ** File description:
 ** Events
 */
-#include <iostream>
 
+#include <iostream>
 #include "Events.hpp"
 
 Indie::Events::Events() :
@@ -48,10 +48,12 @@ void Indie::Events::setMenu(IdGui id)
 		case GUI_ID_SERVER_BUTTON:
 			std::cout << "launch server" << std::endl;
 			break;
+		case GUI_ID_MAP_EDITOR_BUTTON:
+			*Context.state = MAPPING;
+			break;
 		case GUI_ID_MAP_BUTTON:
 			Context.menu->m_mapEdit->setVisible(true);
 			Context.menu->m_main->setVisible(false);
-			*Context.state = MAPPING;
 			break;
 		case GUI_ID_OPTION_BACK_BUTTON:
 			Context.menu->m_main->setVisible(true);
