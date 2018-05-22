@@ -45,7 +45,7 @@ void Indie::Server::addClient()
 int Indie::Server::readClient(std::unique_ptr<Client> &client)
 {
 	char buffer[4096];
-	char *tmp = NULL;
+	char *tmp = nullptr;
 	int size;
 
 	size = read(client->_fd, buffer, 4096);
@@ -64,7 +64,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			// Verifier qu'il y a que des numéros et ':'
 			for (auto &i : _clients)
 				dprintf(i->_fd, tmp);
-			tmp = strtok(NULL, "\n");
+			tmp = strtok(nullptr, "\n");
 		}
 		return 0;
 	}
@@ -84,7 +84,7 @@ void Indie::Server::readOnFds()
 {
 	struct timeval tv = {1, 0};
 
-	if (select(maxFd() + 1, &_fdRead, NULL, NULL, &tv) == -1)
+	if (select(maxFd() + 1, &_fdRead, nullptr, nullptr, &tv) == -1)
 		throw std::runtime_error("Error while reading server socket");
 	if (FD_ISSET(_hostFd, &_fdRead))
 		addClient();

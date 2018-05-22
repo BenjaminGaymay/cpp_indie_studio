@@ -14,7 +14,7 @@
 
 namespace Indie {
 
-	enum {
+	enum IdGui {
 		GUI_ID_QUIT_BUTTON = 101,
 		GUI_ID_PLAY_BUTTON,
 		GUI_ID_OPTIONS_BUTTON,

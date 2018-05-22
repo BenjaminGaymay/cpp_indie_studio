@@ -71,7 +71,6 @@ void Indie::Core::checkAppContext(AppState context)
 	if (context == LAUNCH_SERVER && _state == NOTCONNECTED) {
 		std::thread(&Indie::Server::runServer).detach();
 		_state = WAITING;
-		// >> mettre un try / catch en boucle ?
 		while (1) {
 			try {
 				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
@@ -152,7 +151,7 @@ void Indie::Core::create_rand_map(std::string name, size_t x, size_t y)
 	map[y - 2][x - 3] = 0;
 	map[y - 3][x - 2] = 0;
 
-	write_in_file(file, map);
+	writeInFile(file, map);
 }
 
 void Indie::Core::createZeroMap(std::string name, size_t x, size_t y)
@@ -167,11 +166,11 @@ void Indie::Core::createZeroMap(std::string name, size_t x, size_t y)
 		}
 		map.push_back(line);
 	}
-	write_in_file(file, map);
+	writeInFile(file, map);
 }
 
 
-void Indie::Core::write_in_file(std::string file, std::vector<std::vector<int>> map)
+void Indie::Core::writeInFile(std::string file, std::vector<std::vector<int>> map)
 {
 	std::ofstream outfile (file);
 
@@ -232,7 +231,7 @@ void Indie::Core::cleanMap()
 	}
 }
 
-int Indie::Core::EditMapEvents()
+int Indie::Core::editMapEvents()
 {
 	if (m_event.isKeyDown(irr::KEY_ESCAPE))
 		m_run = false;
@@ -263,7 +262,7 @@ void Indie::Core::editMap()
 	_mapper = std::make_unique<Map>("assets/maps/mdr.txt", 20.0f, 100.0f, _graphism);
 	std::vector<std::vector<int>> mdr = _mapper->getMap2d();
 	while (m_core.m_device->run() && m_run) {
-		if (EditMapEvents() == -1)
+		if (editMapEvents() == -1)
 			break;
 		m_core.m_driver->beginScene(true, true, _color);
     		m_core.m_sceneManager->drawAll();
@@ -281,7 +280,6 @@ void Indie::Core::run()
 	context.device = m_core.m_device;
 	context.state = &m_state;
 	m_event.load(context);
-	_mapper = std::make_unique<Map>("assets/maps/map.txt", 20.0f, 100.0f, _graphism);
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
 	while (m_core.m_device->run() && m_run) {
@@ -291,14 +289,13 @@ void Indie::Core::run()
 		if (_state != NOTCONNECTED && _socket)
 			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
 		if (m_state == PLAY) {
-			 m_core.getCamera().change(m_core.getSceneManager());
+			m_core.getCamera().change(m_core.getSceneManager());
 			m_core.m_device->getCursorControl()->setVisible(false);
 			prevPos = _playerObjects[0]->getPosition();
 			pos = _playerObjects[0]->move(m_event);
 
 			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
-				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + floatToInt(pos.X) + ':' + floatToInt(pos.Y) + ':' + floatToInt(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getRotation().Y));
-			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
+				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getRotation().Y));
 			m_core.m_sceneManager->drawAll(); // draw and do collision
 		} else if (m_state == MAPPING) {
 			editMap();
@@ -309,8 +306,8 @@ void Indie::Core::run()
 			m_core.m_device->getCursorControl()->setVisible(true);
 		 	m_core.m_gui->drawAll();//handleMenu();
 			m_core.getCamera().change(m_core.getSceneManager());
+		}
 		m_core.m_driver->endScene();
 		drawCaption();
-		}
 	}
 }
