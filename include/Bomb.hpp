@@ -15,9 +15,10 @@ namespace Indie {
 	public:
 		Bomb(int timeMax, int lenght);
 		~Bomb();
-		void setTexture(irr::scene::IAnimatedMeshSceneNode *texture);
+		void setTexture(irr::scene::ISceneNode *texture);
 		irr::scene::IAnimatedMeshSceneNode *getTexture();
-		bool boom();
+		void fire(Player *player, std::unique_ptr<Map> &_mapper, std::unique_ptr<Graphism> &graphism);
+		bool boom(Player *player, std::unique_ptr<Map> &map);
 	private:
 		// Renommer l'enum (genre BombState)
 		enum State {

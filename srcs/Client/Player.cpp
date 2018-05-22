@@ -12,7 +12,7 @@
  * @param node
  */
 Indie::Player::Player(int id, irr::scene::ISceneNode *node)
-: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1)
+: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1.5f)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -23,10 +23,9 @@ Indie::Player::Player(int id, irr::scene::ISceneNode *node)
 Indie::Player::~Player() = default;
 
 /**
- * @brief For 2D movement, in FPS mode, key must be updated
+ * @brief set the futur position of player
  * @param event
- * @param now
- * @param then
+ * @return
  */
 irr::core::vector3df Indie::Player::move(const Events &event)
 {
@@ -106,11 +105,19 @@ void Indie::Player::setStanding(bool state)
 	_stand = state;
 }
 
+/**
+ * @brief setSpeed of player
+ * @param speed
+ */
 void Indie::Player::setSpeed(float speed)
 {
 	_speed = speed;
 }
 
+/**
+ * @brief get speed of player
+ * @return
+ */
 const float &Indie::Player::getSpeed()
 {
 	return _speed;

@@ -27,8 +27,7 @@ void Indie::Window::initWindow(Events &evt, const Options &opt)
 	irr::core::vector3df vec(50, 50, 50);
 	irr::core::dimension2d<irr::u32> dimension(opt.getWidth(), opt.getHeight());
 
-	m_device = irr::createDevice(irr::video::EDT_OPENGL,
-		dimension, 64, opt.getFullScreen(), true, false, &evt);
+	m_device = irr::createDevice(irr::video::EDT_OPENGL, dimension, 64, opt.getFullScreen(), true, true, &evt);
 	m_driver = m_device->getVideoDriver();
 	m_sceneManager = m_device->getSceneManager();
 	m_device->getCursorControl()->setVisible(false);

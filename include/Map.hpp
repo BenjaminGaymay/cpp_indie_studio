@@ -20,6 +20,7 @@ namespace Indie {
 		~Map();
 		void initMap(const std::string &map);
 		void load(std::unique_ptr<Graphism> &core);
+		void newMap(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Graphism> &graphism);
 		irr::scene::ISceneNode *putBlock(std::unique_ptr<Graphism> &core, int id, int i, int mulY, int j);
 		bool emptyBlock(const irr::core::vector3df &position);
 		std::vector<irr::scene::ISceneNode*> &getMap3d();
@@ -31,8 +32,8 @@ namespace Indie {
 	private:
 		std::size_t _max_height;
 		std::size_t _max_width;
-		const float _size;
-		const float _height;
+		float _size;
+		float _height;
 		std::vector<std::vector<int>> _2dmap;
 		std::vector<irr::scene::ISceneNode *> _3dmap;
 		std::vector<irr::scene::ISceneNode *> _3dundermap;

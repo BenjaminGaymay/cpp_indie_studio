@@ -95,6 +95,13 @@ void Indie::Core::checkAppContext(AppState context)
 	}
 }
 
+std::string floatToInt(float nb)
+{
+	std::stringstream ss;
+	ss << std::setprecision(6) << nb;
+	return ss.str();
+}
+
 void Indie::Core::create_rand_map(std::string name, size_t x, size_t y)
 {
 	std::string file = "assets/maps/" + name;
@@ -153,9 +160,9 @@ void Indie::Core::createZeroMap(std::string name, size_t x, size_t y)
 	std::string file = "assets/maps/" + name;
 	std::vector<std::vector<int>> map;
 
-	for (int i = 0; i < y; ++i) {
+	for (std::size_t i = 0; i < y; ++i) {
 		std::vector<int> line;
-		for (int j = 0; j < x; ++j) {
+		for (std::size_t j = 0; j < x; ++j) {
 			line.push_back(0);
 		}
 		map.push_back(line);
@@ -168,8 +175,8 @@ void Indie::Core::write_in_file(std::string file, std::vector<std::vector<int>> 
 {
 	std::ofstream outfile (file);
 
-	for (int i = 0; i < map.size(); ++i) {
-		for (int j = 0; j < map[i].size(); ++j) {
+	for (std::size_t i = 0; i < map.size(); ++i) {
+		for (std::size_t j = 0; j < map[i].size(); ++j) {
 			outfile << "0" << map[i][j] << " ";
 		}
 		outfile << std::endl;
@@ -188,10 +195,20 @@ void Indie::Core::cleanMap()
 		}
 		std::cout << std::endl;
 	}
-	while (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]) == 0)
+	int x = 0;
+	for (size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
+		for (size_t j = 0; j < _mapper->getMap2d()[i].size(); ++j)
+			if (_mapper->getMap2d()[i][j] == 1)
+				x += 1;
+		if (x > 0)
+			break;
+	}
+	if (x == 0)
+		return ;
+	while (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]))
 		_mapper->getMap2d().erase(_mapper->getMap2d().begin());
 	int i = _mapper->getMap2d().size() - 1;
-	while (std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i]) == 0) {
+	while (std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i])) {
 		_mapper->getMap2d().erase(_mapper->getMap2d().end());
 		--i;
 	}
@@ -224,9 +241,10 @@ int Indie::Core::EditMapEvents()
 		return -1;
 	}
 	if (m_event.MouseState.LeftButtonDown == true) {
+
 		m_event.MouseState.LeftButtonDown = false;
-		int x = int((m_event.MouseState.Position.X - 268) / 18.6);
-		int y = int((m_event.MouseState.Position.Y - 16) / 18.6);
+		int x = int((m_event.MouseState.Position.X - 362) / 14);
+		int y = int((m_event.MouseState.Position.Y - 12) / 14);
 		if (x >= 0 && y >= 0 && x < 50 && y < 50)
 			_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? _mapper->getMap2d()[y][x] = 0 : _mapper->getMap2d()[y][x] = 1);
 		// for (size_t i = 0; i < 50; ++i) {
@@ -236,6 +254,7 @@ int Indie::Core::EditMapEvents()
 		// 	std::cout << std::endl;
 		//}
 	}
+	return 0;
 }
 
 void Indie::Core::editMap()
@@ -279,7 +298,8 @@ void Indie::Core::run()
 			pos = _playerObjects[0]->move(m_event);
 
 			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
-				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getRotation().Y));
+				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + floatToInt(pos.X) + ':' + floatToInt(pos.Y) + ':' + floatToInt(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getRotation().Y));
+			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
 			m_core.m_sceneManager->drawAll(); // draw and do collision
 		} else if (m_state == MAPPING) {
 			editMap();
