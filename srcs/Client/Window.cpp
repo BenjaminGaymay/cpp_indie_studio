@@ -21,7 +21,7 @@ void Indie::Window::initWindow(Events &evt)
 	irr::core::dimension2d<irr::u32> dimension(1280, 960);
 
 	m_device = irr::createDevice(irr::video::EDT_OPENGL,
-		dimension, 64, false, true, false, &evt);
+		dimension, 64, false, true, true, &evt);
 	m_driver = m_device->getVideoDriver();
 	m_sceneManager = m_device->getSceneManager();
 	m_device->getCursorControl()->setVisible(false);

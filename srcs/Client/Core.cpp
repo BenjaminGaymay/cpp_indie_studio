@@ -82,6 +82,13 @@ void Indie::Core::handleMenu()
 	}
 }
 
+std::string floatToInt(float nb)
+{
+	std::stringstream ss;
+	ss << std::setprecision(6) << nb;
+	return ss.str();
+}
+
 void Indie::Core::run()
 {
 	irr::core::vector3df prevPos, pos;
@@ -108,10 +115,9 @@ void Indie::Core::run()
 			pos = _playerObjects[0]->move(m_event);
 
 			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
-				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getRotation().Y));
+				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + floatToInt(pos.X) + ':' + floatToInt(pos.Y) + ':' + floatToInt(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getRotation().Y));
 			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
 			m_core.m_sceneManager->drawAll(); // draw and do collision
-
 		}
 		m_core.m_driver->endScene();
 		drawCaption();
