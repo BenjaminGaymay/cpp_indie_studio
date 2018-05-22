@@ -46,6 +46,7 @@ bool Indie::Events::OnEvent(const irr::SEvent &event)
 					case GUI_ID_MAP_BUTTON:
 						Context.menu->m_mapEdit->setVisible(true);
 						Context.menu->m_main->setVisible(false);
+						*Context.state = MAPPING;
 						break;
 					case GUI_ID_OPTION_BACK_BUTTON:
 						Context.menu->m_main->setVisible(true);
