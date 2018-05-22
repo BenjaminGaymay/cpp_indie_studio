@@ -1,24 +1,18 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Multiplayer
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Multiplayer
+//
 
-#include <vector>
-#include <iostream>
 #include <Player.hpp>
-#include <Bomb.hpp>
-#include <algorithm>
-#include "Core.hpp"
-#include "Map.hpp"
-#include "Graphism.hpp"
 #include "ManageStrings.hpp"
 
 void Indie::Core::addPlayer(int id, irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	std::cout << "Add player: " << id << std::endl;
-	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(*_graphism->getTexture(10), pos, {0, 0, 0}, {2, 2, 2}, true));
+	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(
+					*_graphism->getTexture(10), pos, {0, 0, 0}, {2, 2, 2}, true));
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
 	newPlayer->getPlayer()->setRotation({0, rota, 0});
@@ -45,13 +39,11 @@ void Indie::Core::movePlayer(int id, irr::core::vector3df &pos, const irr::f32 &
 {
 	for (auto &p : _playerObjects)
 		if (p->getId() == id) {
-			std::cout << "Player: " << id << " move" << std::endl;
 			if (p->isStanding())
 				p->getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
 			p->setStanding(false);
 			p->getPlayer()->setRotation({0, rota, 0});
 			p->setPosition(pos);
-			//std::cout << "READ APRES: " << p->getPosition().X << "_"<<  p->getPosition().Y << "_" << p->getPosition().Z << std::endl;
 			return;
 		}
 }

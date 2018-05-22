@@ -1,9 +1,9 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Socket
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Socket
+//
 
 #include "Socket.hpp"
 
@@ -15,12 +15,12 @@ Indie::Socket::Socket(const int port, const std::string &addr, TypeSocket type) 
 
 	pe = getprotobyname("TCP");
 	if (! pe)
-		throw std::runtime_error("Error: getprotobyname");
+		throw std::runtime_error("Error: getprotobyname failed");
 	_fd = socket(PF_INET, SOCK_STREAM, pe->p_proto);
 	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &options, sizeof(int)) < 0)
-		throw std::runtime_error("Error: setsockopt");
+		throw std::runtime_error("Error: setsockopt failed");
 	if (_fd == -1)
-		throw std::runtime_error("Error: socket");
+		throw std::runtime_error("Error: socket failed");
 	_sIn.sin_family = AF_INET;
 	_sIn.sin_port = htons(port);
 	_sIn.sin_addr.s_addr = _inetAddr;
@@ -28,13 +28,13 @@ Indie::Socket::Socket(const int port, const std::string &addr, TypeSocket type) 
 	if (type == SERVER) {
 		if (bind(_fd, (const struct sockaddr *)&_sIn, sizeof(_sIn)) == -1) {
 			close(_fd);
-			throw std::runtime_error("Error: bind");
+			throw std::runtime_error("Error: bind failed");
 		}
 		if (listen(_fd, 42) == -1)
-			throw std::runtime_error("Error: listen");
+			throw std::runtime_error("Error: listen failed");
 	} else if (connect(_fd, (struct sockaddr *)&_sIn, sizeof(_sIn)) == -1) {
 		close(_fd);
-		throw std::runtime_error("Error: connect");
+		throw std::runtime_error("Error: connect failed");
 	}
 }
 
@@ -46,12 +46,12 @@ Indie::Socket::Socket(const int port, const in_addr_t &addr, TypeSocket type) :
 
 	pe = getprotobyname("TCP");
 	if (! pe)
-		throw std::runtime_error("Error: getprotobyname");
+		throw std::runtime_error("Error: getprotobyname failed");
 	_fd = socket(PF_INET, SOCK_STREAM, pe->p_proto);
 	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR, &options, sizeof(int)) < 0)
-		throw std::runtime_error("Error: setsockopt");
+		throw std::runtime_error("Error: setsockopt failed");
 	if (_fd == -1)
-		throw std::runtime_error("Error: socket");
+		throw std::runtime_error("Error: socket failed");
 	_sIn.sin_family = AF_INET;
 	_sIn.sin_port = htons(port);
 	_sIn.sin_addr.s_addr = _inetAddr;
@@ -59,13 +59,13 @@ Indie::Socket::Socket(const int port, const in_addr_t &addr, TypeSocket type) :
 	if (type == SERVER) {
 		if (bind(_fd, (const struct sockaddr *)&_sIn, sizeof(_sIn)) == -1) {
 			close(_fd);
-			throw std::runtime_error("Error: bind");
+			throw std::runtime_error("Error: bind failed");
 		}
 		if (listen(_fd, 42) == -1)
-			throw std::runtime_error("Error: listen");
+			throw std::runtime_error("Error: listen failed");
 	} else if (connect(_fd, (struct sockaddr *)&_sIn, sizeof(_sIn)) == -1) {
 		close(_fd);
-		throw std::runtime_error("Error: connect");
+		throw std::runtime_error("Error: connect failed");
 	}
 }
 

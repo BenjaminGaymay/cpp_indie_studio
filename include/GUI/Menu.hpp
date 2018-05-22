@@ -1,14 +1,13 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Menu
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Menu
+//
 
 #pragma once
 
 #include <irrlicht/irrlicht.h>
-#include <iostream>
 #include <vector>
 #include "Options.hpp"
 

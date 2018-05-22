@@ -1,11 +1,10 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Menu
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Menu
+//
 
-#include <memory>
 #include "Menu.hpp"
 
 Indie::Menu::Menu()
@@ -124,28 +123,6 @@ void Indie::Menu::loadRoomMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_room, GUI_ID_READY, L"READY"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_room, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
-}
-
-void Indie::Menu::initSpriteMenu(std::vector<SpriteMenu> &sprites)
-{
-	sprites[0].m_images = {
-		{0, 0, 285, 64},
-		{0, 64, 285, 128}
-	};
-	sprites[0].m_zone = {500, 75, 784, 139};
-	sprites[0].m_return = PLAY;
-	sprites[1].m_images = {
-		{0, 128, 285, 192},
-		{0, 192, 285, 256}
-	};
-	sprites[1].m_zone = {500, 150, 784, 214};
-	sprites[1].m_return = QUIT;
-	sprites[2].m_images = {
-		{0, 256, 285, 323},
-		{0, 323, 285, 384}
-	};
-	sprites[2].m_zone = {500, 225, 784, 289};
-	sprites[2].m_return = GEN_MAP;
 }
 
 void Indie::Menu::setSkinTransparency(irr::s32 alpha , irr::gui::IGUISkin *skin)

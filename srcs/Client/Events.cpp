@@ -1,11 +1,10 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Events
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Events
+//
 
-#include <iostream>
 #include "Events.hpp"
 
 Indie::Events::Events() :
@@ -34,11 +33,6 @@ Indie::Events::Events() :
 {
 	for (irr::u32 i = 0; i < irr::KEY_KEY_CODES_COUNT; ++i)
 		KeyIsDown[i] = false;
-}
-
-void Indie::Events::forceClickButton(IdGui id)
-{
-	ButtonClicked[id] = true;
 }
 
 bool Indie::Events::isButtonClicked(IdGui id)

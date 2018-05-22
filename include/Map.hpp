@@ -1,15 +1,12 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Map
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Map
+//
 
 #pragma once
 
-#include <irrlicht/irrlicht.h>
-#include <vector>
-#include <iostream>
 #include <fstream>
 #include "Graphism.hpp"
 

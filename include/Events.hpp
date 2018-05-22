@@ -1,17 +1,15 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Events
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Events
+//
 
 #pragma once
 
-#include <irrlicht/irrlicht.h>
 #include <unordered_map>
 #include "Menu.hpp"
 #include "Options.hpp"
-// #include "Core.hpp"
 
 namespace Indie {
 
@@ -34,7 +32,6 @@ namespace Indie {
 			virtual bool OnEvent(const irr::SEvent &);
 			virtual bool isKeyDown(irr::EKEY_CODE) const;
 			bool isButtonClicked(IdGui);
-			void forceClickButton(IdGui);
 		public:
 			SMouseState MouseState;
 		private:

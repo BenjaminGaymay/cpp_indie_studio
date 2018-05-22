@@ -1,11 +1,10 @@
 //
 // EPITECH PROJECT, 2018
-// dd
+// IndieStudio
 // File description:
-// dd
+// main function
 //
 
-#include <irrlicht/irrlicht.h>
 #include "Core.hpp"
 
 int main()
