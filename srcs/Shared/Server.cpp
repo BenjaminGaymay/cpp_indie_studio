@@ -42,11 +42,17 @@ void Indie::Server::addClient()
 	id += 1;
 }
 
+void Indie::Server::is_valid_move(std::unique_ptr<Indie::Client> &client, Indie::Response &response)
+{
+	if (_map[response._data._pos3d.X][response._data._pos3d.Y] != 0) // tmp condition, player must be move into flame, take bonus...
+		response._data._pos3d = client->_data._pos3d; //cancel move
+}
+
 int Indie::Server::readClient(std::unique_ptr<Client> &client)
 {
 	char buffer[4096];
-	char *tmp = NULL;
-	int size;
+	char *tmp = nullptr;
+	ssize_t size;
 
 	size = read(client->_fd, buffer, 4096);
 	if (size > 0) {
@@ -54,17 +60,25 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
 			std::cout << "Client " << client->_id << " say " << tmp << std::endl;
-			if (std::string(tmp).compare("READY") == 0) {
+			if (std::string(tmp) == "READY")
 				client->_state = PLAYING;
-				break;
-			}
 			if (_state == WAITING)
 				return 0;
-			// On renvoi l'info a tlm
-			// Verifier qu'il y a que des numéros et ':'
+
+			Response response(tmp);
+
+			//we must check if this command is a move
+			switch (response._data.type) {
+				case(messageType::PLAYER_MOVE) : is_valid_move(client, response); break;
+				case(messageType::PLAYER_LEAVE) : break;
+				case(messageType::BOMB_DROP) : break;
+				default: break;
+			}
+			client->_data = response._data;
+			std::string relay = response.unserialize();
 			for (auto &i : _clients)
-				dprintf(i->_fd, tmp);
-			tmp = strtok(NULL, "\n");
+				dprintf(i->_fd, relay.c_str());
+			tmp = strtok(nullptr, "\n");
 		}
 		return 0;
 	}
@@ -75,6 +89,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		pos->reset();
 		_clients.erase(pos);
 	}
+	// je dit à tous le monde que je suis mort
 	for (auto &client : _clients)
 		dprintf(client->_fd, "0:1:%d:0:0:0:0\n", client->_id);
 	return 1;
@@ -105,12 +120,13 @@ Indie::GameState Indie::Server::checkIfStartGame()
 	for (auto &client : _clients)
 		dprintf(client->_fd, "1:3\n"); // CODE POUR GAME START
 
+	// on envoie à tous le monde la pos de tout le monde au départ du jeu
 	// On donne la pos de chaque joueur
 	for (auto &client : _clients) {
 		// Stocker la pos de chaque client pour pouvoir l'envoyer
 		for (auto &pop : _clients) {
 			if (client != pop)
-				dprintf(client->_fd, "0:0:%d:0:112:0:0\n", pop->_id); // PLAYER:APPEAR:x:y:z:rotation
+				dprintf(client->_fd, "0:0:%d:%f:%f:%f:%f\n", pop->_id, pop->_data._pos3d.X, pop->_data._pos3d.Y, pop->_data._pos3d.Z, pop->_data._rotation); // PLAYER:APPEAR:x:y:z:rotation
 		}
 	}
 	return PLAYING;
