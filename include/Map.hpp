@@ -30,8 +30,8 @@ namespace Indie {
 		irr::scene::ISceneNode *get3dBlock(const irr::core::vector3df &pos);
 
 	private:
-		std::size_t _max_width;
 		std::size_t _max_height;
+		std::size_t _max_width;
 		float _size;
 		float _height;
 		std::vector<std::vector<int>> _2dmap;

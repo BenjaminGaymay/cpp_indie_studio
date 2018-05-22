@@ -20,6 +20,7 @@ namespace Indie {
 		void fire(Player *player, std::unique_ptr<Map> &_mapper, std::unique_ptr<Graphism> &graphism);
 		bool boom(Player *player, std::unique_ptr<Map> &map);
 	private:
+		// Renommer l'enum (genre BombState)
 		enum State {
 			BOOM,
 			NONE
