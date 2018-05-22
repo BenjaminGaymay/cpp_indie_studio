@@ -9,7 +9,7 @@
 #include "Events.hpp"
 
 Indie::Events::Events() :
-	MouseState(), Context(), ButtonClicked{
+	MouseState(), ButtonClicked{
 		{GUI_ID_QUIT_BUTTON, false},
 		{GUI_ID_PLAY_BUTTON, false},
 		{GUI_ID_OPTIONS_BUTTON, false},
@@ -46,11 +46,6 @@ bool Indie::Events::isButtonClicked(IdGui id)
 		return state;
 	}
 	return false;
-}
-
-void Indie::Events::load(AppContext &context)
-{
-	Context = context;
 }
 
 bool Indie::Events::OnEvent(const irr::SEvent &event)
