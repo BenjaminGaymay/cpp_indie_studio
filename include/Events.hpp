@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include "Menu.hpp"
 #include "Options.hpp"
+#include "Macro.hpp"
 // #include "Core.hpp"
 
 namespace Indie {
@@ -37,7 +38,7 @@ namespace Indie {
 		public:
 			SMouseState MouseState;
 		private:
-			std::unordered_map<IdGui, bool> ButtonClicked;
+			bool ButtonClicked[BTN_COUNT];
 			bool KeyIsDown[irr::KEY_KEY_CODES_COUNT];
 	};
 }
