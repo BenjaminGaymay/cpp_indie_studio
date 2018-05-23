@@ -269,6 +269,7 @@ void Indie::Core::editMap()
 			break;
 		m_core.m_driver->beginScene(true, true, _color);
     		m_core.m_sceneManager->drawAll();
+		m_core.m_gui->drawAll();
 		m_core.m_driver->endScene();
 	}
 }
@@ -347,6 +348,7 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:
 					m_state = MAPPING;
+					m_menu.m_mapEdit->setVisible(false);
 					break;
 				case GUI_ID_READY:
 					m_state = READY;

@@ -59,6 +59,8 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	loadRoomMenu();
 	loadPlayMenu();
 
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,200,800,200 + m_height), m_root, GUI_ID_PLAY_BUTTON,
+            L"Play", L"Launches the game"));
 	for (auto &btn : m_btns) {
 		btn->setImage(m_driver->getTexture("assets/models/menu/button.png"));
 		btn->setPressedImage(m_driver->getTexture("assets/models/menu/button_hover.png"));
@@ -97,6 +99,9 @@ void Indie::Menu::loadMapMenu()
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
 
+	irr::gui::IGUIEditBox *edit = m_gui->addEditBox(L"Map's name", irr::core::rect<irr::s32>(x_left,90,x_right,90 + m_height - 10), false, m_mapEdit, GUI_ID_MAP_NAME);
+	edit->setMax(10);
+	edit->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_mapEdit, GUI_ID_MAP_EDITOR_BUTTON,
 		L"Map Editor"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_mapEdit, GUI_ID_MAP_RANDOM_BUTTON,
