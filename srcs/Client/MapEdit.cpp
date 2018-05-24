@@ -152,6 +152,7 @@ int Indie::Core::editMapEvents()
 		auto y = int((m_event.MouseState.Position.Y - 12) / 14);
 		if (x >= 0 && y >= 0 && x < 50 && y < 50)
 			_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? 0 : 1);
+		_mapper->getMap2d()[0][0] = 1;
 		_mapper->clear3dMap();
 		_mapper->load(_graphism);
 	}
