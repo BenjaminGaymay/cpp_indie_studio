@@ -157,7 +157,9 @@ void Indie::Core::menuEvents()
 					m_menu.m_main->setVisible(true);
 					m_menu.m_option->setVisible(false);
 					break;
+				case GUI_ID_MAP_RANDOM_BUTTON:
 				case GUI_ID_MAP_EDITOR_BUTTON:
+					m_menu.m_mapEdit->setVisible(false);
 					m_state = MAPPING;
 					break;
 				case GUI_ID_READY:

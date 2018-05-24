@@ -176,7 +176,8 @@ void Indie::Core::editMap()
 {
 	m_core.editMapView();
 	createZeroMap("mdr.txt", 50, 50);
-	_mapper = std::make_unique<Map>("assets/maps/mdr.txt", 20.0f, 100.0f, _graphism);
+	_mapper = std::make_unique<Map>();
+	_mapper->newMap("assets/maps/mdr.txt", 20.0f, 100.0f, _graphism);
 	std::vector<std::vector<int>> mdr = _mapper->getMap2d();
 	while (m_core.m_device->run() && m_run) {
 		if (editMapEvents() == -1)
