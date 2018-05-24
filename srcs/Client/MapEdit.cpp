@@ -8,7 +8,7 @@
 #include "Core.hpp"
 #include <random>
 
-int Indie::Core::createRandMap(std::string name, size_t x, size_t y)
+int Indie::Core::createRandMap(std::string name, std::size_t x, std::size_t y)
 {
 	std::string file = "assets/maps/" + name;
 	std::vector<std::vector<int>> map;
@@ -103,19 +103,19 @@ void Indie::Core::eraseTopandBot()
 
 void Indie::Core::eraseLeftandRight()
 {
-	size_t min = _mapper->getMap2d()[0].size();
-	size_t max = 0;
+	std::size_t min = _mapper->getMap2d()[0].size();
+	std::size_t max = 0;
 
-	for (size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
+	for (std::size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
 		// calc min lenght
-		for (size_t j = 0; j < _mapper->getMap2d()[i].size(); ++j) {
+		for (std::size_t j = 0; j < _mapper->getMap2d()[i].size(); ++j) {
 			if (_mapper->getMap2d()[i][j] == 1 && min > j) {
 				min = j;
 				break;
 			}
 		}
 		// calc max lenght
-		for (size_t j = _mapper->getMap2d()[i].size() - 1; j > 0; --j) {
+		for (std::size_t j = _mapper->getMap2d()[i].size() - 1; j > 0; --j) {
 			if (_mapper->getMap2d()[i][j] == 1 && max < j) {
 				max = j + 1;
 				break;
@@ -124,7 +124,7 @@ void Indie::Core::eraseLeftandRight()
 	}
 	if (min == 50 || max == 50)
 		return ;
-	for (size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
+	for (std::size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
 		_mapper->getMap2d()[i].erase(_mapper->getMap2d()[i].begin() + max, _mapper->getMap2d()[i].end());
 		_mapper->getMap2d()[i].erase(_mapper->getMap2d()[i].begin(), _mapper->getMap2d()[i].begin() + min);
 	}
@@ -132,7 +132,6 @@ void Indie::Core::eraseLeftandRight()
 
 void Indie::Core::cleanMap()
 {
-
 	//sa affiche la map bande de gogol
 	// for (size_t i = 0; i < 50; ++i) {
 	// 	for (size_t j = 0; j < 50; ++j) {
@@ -141,14 +140,14 @@ void Indie::Core::cleanMap()
 	// 	std::cout << std::endl;
 	// }
 	int is_empty = 0;
-	for (size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
-		for (size_t j = 0; j < _mapper->getMap2d()[i].size(); ++j)
+	for (std::size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
+		for (std::size_t j = 0; j < _mapper->getMap2d()[i].size(); ++j)
 			if (_mapper->getMap2d()[i][j] == 1)
 				is_empty += 1;
 		if (is_empty > 0)
 			break;
 	}
-	if (is_empty ==  0)
+	if (is_empty == 0)
 		return ;
 	eraseTopandBot();
 	eraseLeftandRight();
@@ -164,8 +163,8 @@ int Indie::Core::editMapEvents()
 	}
 	if (m_event.MouseState.LeftButtonDown) {
 		//m_event.MouseState.LeftButtonDown = false;
-		auto x = int((m_event.MouseState.Position.X - 362) / BLOCK_SIZE);
-		auto y = int((m_event.MouseState.Position.Y - 12) / BLOCK_SIZE);
+		auto x = static_cast<int>((m_event.MouseState.Position.X - 362) / BLOCK_SIZE);
+		auto y = static_cast<int>((m_event.MouseState.Position.Y - 12) / BLOCK_SIZE);
 		if (x >= 0 && y >= 0 && x < 50 && y < 50)
 			_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? 0 : 1);
 		_mapper->clear3dMap();
