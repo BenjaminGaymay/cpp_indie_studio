@@ -146,19 +146,14 @@ int Indie::Core::editMapEvents()
 		cleanMap();
 		return -1;
 	}
-	if (m_event.MouseState.LeftButtonDown == true) {
-
-		m_event.MouseState.LeftButtonDown = false;
-		int x = int((m_event.MouseState.Position.X - 362) / 14);
-		int y = int((m_event.MouseState.Position.Y - 12) / 14);
+	if (m_event.MouseState.LeftButtonDown) {
+		//m_event.MouseState.LeftButtonDown = false;
+		auto x = int((m_event.MouseState.Position.X - 362) / 14);
+		auto y = int((m_event.MouseState.Position.Y - 12) / 14);
 		if (x >= 0 && y >= 0 && x < 50 && y < 50)
-			_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? _mapper->getMap2d()[y][x] = 0 : _mapper->getMap2d()[y][x] = 1);
-		// for (size_t i = 0; i < 50; ++i) {
-		// 	for (size_t j = 0; j < 50; ++j) {
-		// 		std::cout << _mapper->getMap2d()[i][j];
-		// 	}
-		// 	std::cout << std::endl;
-		//}
+			_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? 0 : 1);
+		_mapper->clear3dMap();
+		_mapper->load(_graphism);
 	}
 	return 0;
 }
@@ -167,7 +162,8 @@ void Indie::Core::editMap()
 {
 	m_core.editMapView(m_event);
 	createZeroMap("mdr.txt", 50, 50);
-	_mapper = std::make_unique<Map>("assets/maps/mdr.txt", 20.0f, 100.0f, _graphism);
+	_mapper = std::make_unique<Map>();
+	_mapper->newMap("assets/maps/mdr.txt", 20.0f, 100.0f, _graphism);
 	std::vector<std::vector<int>> mdr = _mapper->getMap2d();
 	while (m_core.m_device->run() && m_run) {
 		if (editMapEvents() == -1)

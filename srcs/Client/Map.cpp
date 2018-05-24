@@ -7,15 +7,27 @@
 
 #include "Map.hpp"
 
-Indie::Map::Map(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Graphism> &graphism)
-		: _max_height(0), _max_width(0), _size(size), _height(y)
-{
-	initMap(mapPath);
-	load(graphism);
-}
+Indie::Map::Map()
+		: _max_height(0), _max_width(0)
+{}
 
 Indie::Map::~Map()
 {}
+
+void Indie::Map::clear3dMap()
+{
+	for (auto &block : _3dmap)
+		block->remove();
+	for (auto &block : _3dundermap)
+		block->remove();
+	_3dmap.clear();
+	_3dundermap.clear();
+}
+
+void Indie::Map::clear2dMap()
+{
+
+}
 
 void Indie::Map::newMap(const std::string &mapPath, const float &size,
 						const float &y,
@@ -25,12 +37,8 @@ void Indie::Map::newMap(const std::string &mapPath, const float &size,
  	_max_width = 0;
  	_size = size;
  	_height = y;
- 	for (auto &block : _3dmap)
- 		block->remove();
-	for (auto &block : _3dundermap)
-		block->remove();
-	_3dmap.clear();
-	_3dundermap.clear();
+ 	clear3dMap();
+ 	clear2dMap();
 	initMap(mapPath);
 	load(graphism);
 }
