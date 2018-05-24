@@ -43,6 +43,7 @@ namespace Indie {
 		void checkAppContext();
 		void handleMenu();
 		void menuEvents();
+		void sendMapToServer(const std::string &);
 
 	private:
 		int _lastFps;

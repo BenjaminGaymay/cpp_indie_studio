@@ -69,6 +69,9 @@ void Indie::Core::checkAppContext()
 			} catch (const std::exception &e) {}
 		}
 		_playerId = waitForId();
+		// >> on gerera ca dans la room de l'host
+		sendMapToServer("assets/maps/map.txt");
+		// <<
 	}
 	if (m_state == READY && _state == WAITING)
 		dprintf(_socket->getFd(), "READY\n");

@@ -17,7 +17,8 @@
 namespace Indie {
 	enum ObjectsType {
 		PLAYER,
-		GAMEINFOS
+		GAMEINFOS,
+		MAP
 	};
 
 	enum ObjectsEvents {
