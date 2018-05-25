@@ -94,10 +94,13 @@ void Indie::Core::run()
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
+
+
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		m_core.m_driver->beginScene(true, true, _color);
 		checkAppContext();
+
 		if (_state != NOTCONNECTED && _socket)
 			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
 		if (m_state == PLAY) {
@@ -118,6 +121,13 @@ void Indie::Core::run()
 			m_core.m_device->getCursorControl()->setVisible(true);
 		 	m_core.m_gui->drawAll();//handleMenu();
 			m_core.getCamera().change(m_core.getSceneManager());
+		}
+
+		int y = m_opts.getHeight() - 50;
+
+		for (int i = static_cast<int>(_messages.size()) - 1 ; i >= 0 ; i--) {
+			m_core.m_font->draw(irr::core::stringw(_messages[i].c_str()), irr::core::rect<irr::s32>(50, y, 0, 0), irr::video::SColor(255,255,255,255));
+			y -= 20;
 		}
 		m_core.m_driver->endScene();
 		drawCaption();

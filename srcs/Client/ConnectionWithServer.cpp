@@ -48,6 +48,19 @@ void Indie::Core::movePlayer(int id, irr::core::vector3df &pos, const irr::f32 &
 		}
 }
 
+void Indie::Core::serverMessage(const std::vector<std::string> &message)
+{
+	std::string msg;
+
+	for (auto &line : message)
+		msg += line + ":";
+	msg[msg.size() - 1] = '\0';
+	_messages.push_back(msg);
+
+	if (_messages.size() > 5)
+		_messages.erase(_messages.begin(), _messages.end() - 5);
+}
+
 void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 {
 	std::vector<std::string> info;
@@ -68,6 +81,8 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 					_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
 					m_core.getCamera().change(m_core.getSceneManager());
 					_graphism->buildDecor();
+				} else if (type == GAMEINFOS && event == MESSAGE) {
+					serverMessage(info);
 				} else if (type == MAP and event == APPEAR) {
 					std::cout << "On recois la carte\n";
 					_mapper = std::make_unique<Map>(info, 20.0f, 100.0f, _graphism);

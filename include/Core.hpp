@@ -40,6 +40,7 @@ namespace Indie {
 		void addPlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void removePlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void movePlayer(int, irr::core::vector3df &, const irr::f32 &);
+		void serverMessage(const std::vector<std::string> &);
 		void checkAppContext();
 		void handleMenu();
 		void menuEvents();
@@ -62,6 +63,7 @@ namespace Indie {
 		Events m_event;
 		irr::video::SColor _color;
 		GameState _state;
+		std::vector<std::string> _messages;
 		int _playerId;
 	};
 }

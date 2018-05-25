@@ -71,8 +71,10 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			// Verifier qu'il y a que des numéros et ':'
 
 
-			for (auto &i : _clients)
+			for (auto &i : _clients) {
 				dprintf(i->_fd, tmp);
+				dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), tmp);
+			}
 			tmp = strtok(nullptr, "\n");
 		}
 		return 0;
