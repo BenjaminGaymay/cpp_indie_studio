@@ -114,8 +114,6 @@ void Indie::Core::run()
 			m_core.m_sceneManager->drawAll(); // draw and do collision
 		} else if (m_state == MAPPING) {
 			editMap();
-			// createRandMap("mdr.txt", 50, 50);
-			// _mapper = std::make_unique<Map>("assets/maps/mdr.txt", 20.0f, 100.0f, graphism);
 			m_state = MENU;
 		} else {
 			m_core.m_device->getCursorControl()->setVisible(true);
@@ -171,9 +169,12 @@ void Indie::Core::menuEvents()
 					m_menu.m_option->setVisible(false);
 					break;
 				case GUI_ID_MAP_RANDOM_BUTTON:
+					createRandMap("azerty.txt", 50, 50);
+					//m_menu.m_mapEdit->setVisible(false);
+					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:
-					m_menu.m_mapEdit->setVisible(false);
 					m_state = MAPPING;
+					m_menu.m_mapEdit->setVisible(false);
 					break;
 				case GUI_ID_READY:
 					m_state = READY;
