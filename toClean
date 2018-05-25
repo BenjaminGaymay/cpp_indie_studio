@@ -1,0 +1,10 @@
+Enlever les commentaires
+
+Bomb.cpp -> jolie foret de for <3
+ConnectionWithServer.cpp -> parsing + revoir le remove
+Core.cpp -> mdrlol
+Map.cpp -> des fct hors obj
+Server.cpp -> parsing des infos recues mais c'est trop le chantier la
+
+Bomb.hpp -> enum State a renommer
+Macro.hpp -> on a droit à define ?

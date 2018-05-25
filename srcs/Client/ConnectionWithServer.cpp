@@ -1,24 +1,18 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Multiplayer
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Multiplayer
+//
 
-#include <vector>
-#include <iostream>
 #include <Player.hpp>
-#include <Bomb.hpp>
-#include <algorithm>
-#include "Core.hpp"
-#include "Map.hpp"
-#include "Graphism.hpp"
 #include "ManageStrings.hpp"
 
 void Indie::Core::addPlayer(int id, irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	std::cout << "Add player: " << id << std::endl;
-	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(*_graphism->getTexture(10), pos, {0, 0, 0}, {2, 2, 2}, true));
+	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(
+					*_graphism->getTexture(10), pos, {0, 0, 0}, {2, 2, 2}, true));
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
 	newPlayer->getPlayer()->setRotation({0, rota, 0});
@@ -45,13 +39,11 @@ void Indie::Core::movePlayer(int id, irr::core::vector3df &pos, const irr::f32 &
 {
 	for (auto &p : _playerObjects)
 		if (p->getId() == id) {
-			std::cout << "Player: " << id << " move" << std::endl;
 			if (p->isStanding())
 				p->getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
 			p->setStanding(false);
 			p->getPlayer()->setRotation({0, rota, 0});
 			p->setPosition(pos);
-			//std::cout << "READ APRES: " << p->getPosition().X << "_"<<  p->getPosition().Y << "_" << p->getPosition().Z << std::endl;
 			return;
 		}
 }
@@ -65,26 +57,30 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 	for (auto &line : servSend) {
 		info = ManageStrings::splitString(line, ':');
 		if (!info.empty()) {
-			// >> SECURISER CA
-			type = std::stoi(info[0]);
-			event = std::stoi(info[1]);
-			if (type == GAMEINFOS && event == START) {
-				_state = PLAYING;
-				m_state = PLAY;
-				_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
-				_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
-				m_core.getCamera().change(m_core.getSceneManager());
-			}
-			else {
-				id = std::stoi(info[2]);
+			if (ManageStrings::isInteger(info[0]) and ManageStrings::isInteger(info[1])) {
+				type = std::stoi(info[0]);
+				event = std::stoi(info[1]);
+				info.erase(info.begin(), info.begin() + 2);
+				if (type == GAMEINFOS && event == START) {
+					_state = PLAYING;
+					m_state = PLAY;
+					_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
+					_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
+					m_core.getCamera().change(m_core.getSceneManager());
+					_graphism->buildDecor();
+				} else if (type == MAP and event == APPEAR) {
+					std::cout << "On recois la carte\n";
+					_mapper = std::make_unique<Map>(info, 20.0f, 100.0f, _graphism);
+				} else {
+					id = std::stoi(info[0]);
 
-				irr::core::vector3df pos(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
-				rota = std::stof(info[6]);
-			// <<
-				switch (type) {
-					case Indie::PLAYER:
-						(this->*_playersFct[event])(id, pos, rota); break;
-					default:break;
+					irr::core::vector3df pos(std::stof(info[1]), std::stof(info[2]), std::stof(info[3]));
+					rota = std::stof(info[4]);
+					switch (type) {
+						case Indie::PLAYER:
+							(this->*_playersFct[event])(id, pos, rota); break;
+						default:break;
+					}
 				}
 			}
 		}
@@ -107,4 +103,22 @@ int Indie::Core::waitForId()
 	servSend.erase(servSend.begin());
 	readServerInformations(servSend);
 	return id;
+}
+
+void Indie::Core::sendMapToServer(const std::string &path)
+{
+	std::string map;
+	FILE *file = fopen(path.c_str(), "r");
+	char *buffer = nullptr;
+	std::size_t size = 0;
+
+	if (!file)
+		throw std::runtime_error("Error: can't open map.");
+	while (getline(&buffer, &size, file) > 0) {
+		buffer[strlen(buffer) - 1] = '\0';
+		map += std::string(buffer) + ":";
+	}
+	dprintf(_socket->getFd(), "2:0:%s\n", map.c_str());
+	free(buffer);
+	fclose(file);
 }

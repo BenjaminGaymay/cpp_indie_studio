@@ -1,21 +1,20 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Menu
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Menu
+//
 
 #pragma once
 
 #include <irrlicht/irrlicht.h>
-#include <iostream>
 #include <vector>
 #include "Options.hpp"
 
 namespace Indie {
 
-	enum {
-		GUI_ID_QUIT_BUTTON = 101,
+	enum IdGui {
+		GUI_ID_QUIT_BUTTON,
 		GUI_ID_PLAY_BUTTON,
 		GUI_ID_OPTIONS_BUTTON,
 		GUI_ID_SERVER_BUTTON,
@@ -32,7 +31,9 @@ namespace Indie {
 		GUI_ID_FULLSCREEN,
 		GUI_ID_PLAY_SERVER,
 		GUI_ID_PLAY_CLIENT,
-		GUI_ID_READY
+		GUI_ID_READY,
+		GUI_ID_MAP_EDITOR_BUTTON,
+		GUI_ID_MAP_RANDOM_BUTTON
 	};
 
 

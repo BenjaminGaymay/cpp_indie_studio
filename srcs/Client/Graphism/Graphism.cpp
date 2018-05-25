@@ -1,13 +1,10 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Core
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Core
+//
 
-#include <vector>
-#include <iostream>
-#include <algorithm>
 #include "Graphism.hpp"
 
 Indie::Graphism::Graphism(Indie::Window *core)

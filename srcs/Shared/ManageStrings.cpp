@@ -39,12 +39,12 @@ std::string ManageStrings::lstrip(std::string &str)
 	return str;
 }
 
-std::vector<std::string> ManageStrings::splitString(std::string str, char separator)
+std::vector<std::string> ManageStrings::splitString(std::string &str, char separator)
 {
 	std::string tmp;
 	std::vector<std::string> splited;
 
-	for (auto c: str) {
+	for (auto &c: str) {
 		if (c != separator)
 			tmp += c;
 		else if (c == separator && !tmp.empty()) {
@@ -55,4 +55,13 @@ std::vector<std::string> ManageStrings::splitString(std::string str, char separa
 	if (!tmp.empty())
 		splited.push_back(tmp);
 	return splited;
+}
+
+bool ManageStrings::isInteger(std::string &str)
+{
+	for (auto &c : str) {
+		if (!isdigit(c))
+			return false;
+	}
+	return true;
 }

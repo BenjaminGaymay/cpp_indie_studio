@@ -1,15 +1,21 @@
-#include <iostream>
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Decor
+//
+
 #include "Graphism.hpp"
 
-/**
- * @brief create texture
- * @param textures 1: obj texture 2: material texture
- * @param position
- * @param rotation
- * @param scale 2: size
- * @param collision must me true for dynamic object (player)
- * @return
- */
+//
+// @brief create texture
+// @param textures 1: obj texture 2: material texture
+// @param position
+// @param rotation
+// @param scale 2: size
+// @param collision must me true for dynamic object (player)
+// @return
+//
 irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textures, const irr::core::vector3df &position,
 															   const irr::core::vector3df &rotation, const irr::core::vector3df &scale,
 															   bool collision)
@@ -35,12 +41,12 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	return object;
 }
 
-/**
- * @brief create one island
- * @param position
- * @param rotation
- * @return
- */
+//
+// @brief create one island
+// @param position
+// @param rotation
+// @return
+//
 irr::scene::ISceneNode *Indie::Graphism::createIsland(irr::core::vector3df position, irr::core::vector3df rotation)
 {
 	auto object = createTexture(_texturesMap[51], position, rotation, {15, 30, 15}, false);
@@ -57,11 +63,11 @@ irr::scene::ISceneNode *Indie::Graphism::createIsland(irr::core::vector3df posit
 	return object;
 }
 
-/**
- * @brief create the water under the map
- * @param position
- * @param rotation
- */
+//
+// @brief create the water under the map
+// @param position
+// @param rotation
+//
 void Indie::Graphism::createWater(irr::core::vector3df position,  irr::core::vector3df rotation)
 {
 	(void) position;
@@ -77,9 +83,9 @@ void Indie::Graphism::createWater(irr::core::vector3df position,  irr::core::vec
 	node->setName("Water");
 }
 
-/**
- * @brief build decor
- */
+//
+// @brief build decor
+//
 void Indie::Graphism::buildDecor()
 {
 //	createArena();
@@ -92,9 +98,9 @@ void Indie::Graphism::buildDecor()
 	//object->getMaterial(0).setTexture(0, m_core.m_driver->getTexture("lol/rope.png"););
 }
 
-/**
- * @brief Database of textures
- */
+//
+// @brief Database of textures
+//
 void Indie::Graphism::generateTextureMap()
 {
 	_texturesMap[0] = textureElem("assets/models/cube/Crate1.3ds", "");
