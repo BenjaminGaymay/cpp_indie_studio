@@ -151,11 +151,22 @@ bool supequal(irr::core::vector3df one, irr::core::vector3df two)
 
 // <<<<<
 
+irr::core::vector2di Indie::Map::get2dBlock(const irr::core::vector3df &target)
+{
+	for (auto &block : _3dmap) {
+		const auto &pos = block->getPosition();
+		if (infequal(pos, target) && inf(target, pos + _size)) {
+			return irr::core::vector2di(pos.X / _size, pos.Y / _size);
+		}
+	}
+	throw std::logic_error("Bha, le player n'est sur aucune case, il cheat");
+}
+
 irr::scene::ISceneNode *Indie::Map::get3dBlock(const irr::core::vector3df &target)
 {
 	for (auto &block : _3dmap) {
 		const auto &pos = block->getPosition();
-		if (infequal(pos, target) && inf(target, pos + 20)) {
+		if (infequal(pos, target) && inf(target, pos + _size)) {
 			return block;
 		}
 	}

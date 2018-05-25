@@ -106,8 +106,17 @@ void Indie::Core::run()
 			prevPos = _playerObjects[0]->getPosition();
 			pos = _playerObjects[0]->move(m_event);
 
-			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
-				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getRotation().Y));
+			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z) {
+				irr::core::vector2di pos2d = _mapper->get2dBlock(_playerObjects[0]->getPosition());
+				_socket->sendInfos(Indie::PLAYER, Indie::MOVE,
+								   std::to_string(_playerObjects[0]->getId()) + ':' +
+								   std::to_string(pos2d.X) + ':' +
+								   std::to_string(pos2d.Y) + ':' +
+								   std::to_string(pos.X) + ':' +
+								   std::to_string(pos.Y) + ':' +
+								   std::to_string(pos.Z) + ':' +
+								   std::to_string(_playerObjects[0]->getRotation().Y));
+			}
 			m_core.m_sceneManager->drawAll(); // draw and do collision
 		} else if (m_state == MAPPING) {
 			editMap();

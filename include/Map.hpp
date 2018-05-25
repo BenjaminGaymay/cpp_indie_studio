@@ -29,6 +29,7 @@ namespace Indie {
 		const float &getSize() const;
 		const float &getHeight() const;
 		irr::scene::ISceneNode *get3dBlock(const irr::core::vector3df &pos);
+		irr::core::vector2di get2dBlock(const irr::core::vector3df &pos);
 
 	private:
 		std::size_t _max_height;

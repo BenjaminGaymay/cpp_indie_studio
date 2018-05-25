@@ -5,6 +5,8 @@
 // server
 //
 
+#include <irrlicht/vector3d.h>
+#include <irrlicht/vector2d.h>
 #include "Server.hpp"
 
 Indie::Server::Server() : _socket(Socket(5567, INADDR_ANY, Indie::Socket::SERVER)), _hostFd(_socket.getFd()), _state(WAITING)
@@ -42,11 +44,21 @@ void Indie::Server::addClient()
 	id += 1;
 }
 
+irr::f32 cutF(char *str)
+{
+	return static_cast<irr::f32>(std::atof(strsep(&str, ":")));
+}
+
+int cutI(char *str)
+{
+	return std::atoi(strsep(&str, ":"));
+}
+
 int Indie::Server::readClient(std::unique_ptr<Client> &client)
 {
 	static char buffer[8192];
 	char *tmp = nullptr;
-	int size;
+	ssize_t size;
 
 	size = read(client->_fd, buffer, 8192);
 	if (size > 0) {
@@ -54,7 +66,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
 			std::cout << "Client " << client->_id << " say " << tmp << std::endl;
-			if (std::string(tmp).compare("READY") == 0) {
+			if (std::string(tmp) == "READY") {
 				client->_state = PLAYING;
 				break;
 			}
@@ -67,6 +79,13 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			// <<
 			if (_state == WAITING)
 				return 0;
+
+			auto enumPlayer = atoi(strsep(&tmp, ":"));
+			auto enumMove = atoi(strsep(&tmp, ":"));
+			auto enumId = atoi(strsep(&tmp, ":"));
+			irr::core::vector2di position2d = {cutI(tmp), cutI(tmp)};
+			irr::core::vector3df position3d = {cutF(tmp), cutF(tmp), cutF(tmp)};
+			irr::f32 rotation = cutF(tmp);
 			// On renvoi l'info a tlm
 			// Verifier qu'il y a que des numéros et ':'
 
@@ -85,7 +104,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		_clients.erase(pos);
 	}
 	for (auto &client : _clients)
-		dprintf(client->_fd, "0:1:%d:0:0:0:0\n", client->_id);
+		dprintf(client->_fd, "0:1:%d:0:0:0:0:0:0\n", client->_id);
 	return 1;
 }
 
