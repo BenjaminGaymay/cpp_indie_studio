@@ -110,8 +110,8 @@ void Indie::Core::run()
 				irr::core::vector2di pos2d = _mapper->get2dBlock(_playerObjects[0]->getPosition());
 				_socket->sendInfos(Indie::PLAYER, Indie::MOVE,
 								   std::to_string(_playerObjects[0]->getId()) + ':' +
-								   std::to_string(pos2d.X) + ':' +
-								   std::to_string(pos2d.Y) + ':' +
+								   std::to_string(pos2d.X) + ':' + // ajout seg dans connectionWithServer je c pas pk
+								   std::to_string(pos2d.Y) + ':' + // ajout ci dessus
 								   std::to_string(pos.X) + ':' +
 								   std::to_string(pos.Y) + ':' +
 								   std::to_string(pos.Z) + ':' +
