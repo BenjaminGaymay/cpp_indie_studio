@@ -49,7 +49,6 @@ bool Indie::Events::isButtonClicked(IdGui id)
 
 bool Indie::Events::OnEvent(const irr::SEvent &event)
 {
-
 	if (event.EventType == irr::EET_GUI_EVENT) {
 		if (event.GUIEvent.EventType == irr::gui::EGET_BUTTON_CLICKED) {
 			irr::s32 id = event.GUIEvent.Caller->getID();
@@ -74,8 +73,10 @@ bool Indie::Events::OnEvent(const irr::SEvent &event)
 				break;
 		}
 	}
-	if (event.EventType == irr::EET_KEY_INPUT_EVENT)
+
+	if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
 		KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
+	}
         return false;
 }
 

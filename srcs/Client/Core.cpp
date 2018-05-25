@@ -23,6 +23,7 @@ Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 	_state = NOTCONNECTED;
 	_playerId = -1;
 	_socket = nullptr;
+	_tchat._getch = false;
 }
 
 Indie::Core::~Core()
@@ -44,11 +45,22 @@ void Indie::Core::drawCaption()
 
 void Indie::Core::processEvents()
 {
-	if (m_event.isKeyDown(irr::KEY_ESCAPE))
-		m_run = false;
-	if (m_event.isKeyDown(irr::KEY_KEY_A))
-		std::cout << m_event.MouseState.Position.X << " : "
-				  << m_event.MouseState.Position.Y << std::endl;
+	if (_tchat._getch)
+		manageTchat();
+	else {
+		if (m_event.isKeyDown(irr::KEY_ESCAPE))
+			m_run = false;
+		if (m_event.isKeyDown(irr::KEY_KEY_A)) {
+			std::cout << m_event.MouseState.Position.X << " : "
+					<< m_event.MouseState.Position.Y << std::endl;
+			m_event.setKeyUp(irr::KEY_KEY_A);
+		}
+		if (m_event.isKeyDown(irr::KEY_KEY_T)) {
+			m_event.setKeyUp(irr::KEY_KEY_T);
+			if (_socket)
+				_tchat._getch = true;
+		}
+	}
 	menuEvents();
 }
 
@@ -121,12 +133,7 @@ void Indie::Core::run()
 			m_core.getCamera().change(m_core.getSceneManager());
 		}
 
-		int y = m_opts.getHeight() - 50;
-
-		for (int i = static_cast<int>(_messages.size()) - 1 ; i >= 0 ; i--) {
-			m_core.m_font->draw(irr::core::stringw(_messages[i].c_str()), irr::core::rect<irr::s32>(50, y, 0, 0), irr::video::SColor(255,255,255,255));
-			y -= 20;
-		}
+		printTchat();
 		m_core.m_driver->endScene();
 		drawCaption();
 	}

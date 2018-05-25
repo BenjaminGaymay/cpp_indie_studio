@@ -72,8 +72,10 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 
 
 			for (auto &i : _clients) {
-				dprintf(i->_fd, tmp);
-				dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), tmp);
+				if (std::string(tmp).compare(0, 4, "1:4:") == 0)
+					dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &tmp[4]);
+				else
+					dprintf(i->_fd, tmp);
 			}
 			tmp = strtok(nullptr, "\n");
 		}

@@ -22,6 +22,12 @@
 namespace Indie {
 	class Player;
 
+	struct s_tchat {
+		bool _getch;
+		std::vector<std::string> _messages;
+		std::string _toSend;
+	};
+
 	class Core {
 	public:
 		Core();
@@ -47,6 +53,8 @@ namespace Indie {
 		void handleMenu();
 		void menuEvents();
 		void sendMapToServer(const std::string &);
+		void manageTchat();
+		void printTchat() const;
 
 
 	private:
@@ -66,7 +74,7 @@ namespace Indie {
 		Events m_event;
 		irr::video::SColor _color;
 		GameState _state;
-		std::vector<std::string> _messages;
+		s_tchat _tchat;
 		int _playerId;
 	};
 }
