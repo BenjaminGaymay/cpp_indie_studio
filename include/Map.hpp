@@ -13,7 +13,9 @@
 namespace Indie {
 	class Map {
 	public:
-		Map();
+		Map() {}
+		Map(std::vector<std::string> &, const float &,
+			const float &, std::unique_ptr<Indie::Graphism> &);
 		~Map();
 		void initMap(const std::string &map);
 		void load(std::unique_ptr<Graphism> &core);

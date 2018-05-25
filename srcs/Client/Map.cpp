@@ -6,10 +6,30 @@
 //
 
 #include "Map.hpp"
+#include "ManageStrings.hpp"
 
-Indie::Map::Map()
-		: _max_height(0), _max_width(0)
-{}
+Indie::Map::Map(std::vector<std::string> &map, const float &size,
+	const float &y, std::unique_ptr<Indie::Graphism> &graphism)
+{
+	std::vector<std::string> oneLine;
+
+	_max_height = 0;
+ 	_max_width = 0;
+ 	_size = size;
+ 	_height = y;
+ 	clear3dMap();
+ 	clear2dMap();
+	for (auto &line : map) {
+		std::vector<int> tmp;
+		oneLine = ManageStrings::splitString(line, ' ');
+		for (auto &nb : oneLine)
+			tmp.push_back(std::stoi(nb));
+		_2dmap.push_back(tmp);
+		_max_width = (tmp.size() > _max_width ? tmp.size() : _max_width);
+	}
+	_max_height = _2dmap.size();
+	load(graphism);
+}
 
 Indie::Map::~Map()
 {}
@@ -26,7 +46,7 @@ void Indie::Map::clear3dMap()
 
 void Indie::Map::clear2dMap()
 {
-
+	_2dmap.clear();
 }
 
 void Indie::Map::newMap(const std::string &mapPath, const float &size,

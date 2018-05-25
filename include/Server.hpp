@@ -48,6 +48,8 @@ namespace Indie {
 			int _hostFd;
 			GameState _state;
 			std::vector<std::unique_ptr<Client>> _clients;
+			std::vector<std::vector<int>> _map;
+			std::string _mapMsg;
 	};
 
 }
