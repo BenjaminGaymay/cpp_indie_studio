@@ -79,4 +79,5 @@ void Indie::SplashScreen::display(irr::IrrlichtDevice *device, Events &event)
 			break;
 		}
 	}
+	m_fader->fadeIn(0);
 }

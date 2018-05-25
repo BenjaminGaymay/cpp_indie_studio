@@ -30,11 +30,13 @@ namespace Indie {
 		void drawCaption();
 		void processEvents();
 		void cleanMap();
+		void eraseTopandBot();
+		void eraseLeftandRight();
 		void editMap();
 		int editMapEvents();
 		void writeInFile(std::string file, std::vector<std::vector<int>> map);
 		void createZeroMap(std::string name, size_t x, size_t y);
-		void createRandMap(std::string name, size_t x, size_t y);
+		int createRandMap(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
 		void addPlayer(int, irr::core::vector3df &, const irr::f32 &);
@@ -44,6 +46,7 @@ namespace Indie {
 		void handleMenu();
 		void menuEvents();
 		void sendMapToServer(const std::string &);
+
 
 	private:
 		int _lastFps;

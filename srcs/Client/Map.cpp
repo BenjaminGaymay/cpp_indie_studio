@@ -104,12 +104,13 @@ irr::scene::ISceneNode *Indie::Map::putBlock(std::unique_ptr<Graphism> &core, in
 
 void Indie::Map::load(std::unique_ptr<Indie::Graphism> &graphism)
 {
-	for (unsigned i = 0; i < _2dmap.size(); ++i)
+	for (unsigned i = 0; i < _2dmap.size(); ++i) {
 		for (unsigned j = 0; j < _2dmap[i].size(); ++j) {
-			_3dundermap.push_back(putBlock(graphism, 2, i, -1, j));
+			_3dundermap.push_back(putBlock(graphism, 2, 49 - i, -1, 49 - j));
 			if (graphism->getTexture(_2dmap[i][j]))
-				_3dmap.push_back(putBlock(graphism, _2dmap[i][j], i, 0, j));
+				_3dmap.push_back(putBlock(graphism, _2dmap[i][j], 49 - i, 0, 49 - j));
 		}
+	}
 }
 
 std::vector<irr::scene::ISceneNode *> &Indie::Map::getMap3d()
