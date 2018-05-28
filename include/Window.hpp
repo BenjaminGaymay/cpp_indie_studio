@@ -1,13 +1,12 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Window
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Window
+//
 
 #pragma once
 
-#include <irrlicht/irrlicht.h>
 #include <memory>
 #include "Camera.hpp"
 #include "Events.hpp"
@@ -24,7 +23,7 @@ namespace Indie {
 		irr::gui::IGUIEnvironment *getGuiEnv() const;
 		Camera getCamera() const;
 		irr::core::vector3df getCameraPosition() const;
-		void editMapView(Events &evt);
+		void editMapView();
 
 	public:
 		irr::IrrlichtDevice *m_device;

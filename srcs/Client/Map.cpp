@@ -1,23 +1,53 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Map
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Map
+//
 
-#include <cstdio>
-#include <Graphism.hpp>
 #include "Map.hpp"
+#include "ManageStrings.hpp"
 
-Indie::Map::Map(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Graphism> &graphism)
-		: _max_height(0), _max_width(0), _size(size), _height(y)
+Indie::Map::Map(std::vector<std::string> &map, const float &size,
+	const float &y, std::unique_ptr<Indie::Graphism> &graphism)
 {
-	initMap(mapPath);
+	std::vector<std::string> oneLine;
+
+	_max_height = 0;
+ 	_max_width = 0;
+ 	_size = size;
+ 	_height = y;
+ 	clear3dMap();
+ 	clear2dMap();
+	for (auto &line : map) {
+		std::vector<int> tmp;
+		oneLine = ManageStrings::splitString(line, ' ');
+		for (auto &nb : oneLine)
+			tmp.push_back(std::stoi(nb));
+		_2dmap.push_back(tmp);
+		_max_width = (tmp.size() > _max_width ? tmp.size() : _max_width);
+	}
+	_max_height = _2dmap.size();
 	load(graphism);
 }
 
 Indie::Map::~Map()
 {}
+
+void Indie::Map::clear3dMap()
+{
+	for (auto &block : _3dmap)
+		block->remove();
+	for (auto &block : _3dundermap)
+		block->remove();
+	_3dmap.clear();
+	_3dundermap.clear();
+}
+
+void Indie::Map::clear2dMap()
+{
+	_2dmap.clear();
+}
 
 void Indie::Map::newMap(const std::string &mapPath, const float &size,
 						const float &y,
@@ -27,12 +57,8 @@ void Indie::Map::newMap(const std::string &mapPath, const float &size,
  	_max_width = 0;
  	_size = size;
  	_height = y;
- 	for (auto &block : _3dmap)
- 		block->remove();
-	for (auto &block : _3dundermap)
-		block->remove();
-	_3dmap.clear();
-	_3dundermap.clear();
+ 	clear3dMap();
+ 	clear2dMap();
 	initMap(mapPath);
 	load(graphism);
 }
@@ -78,12 +104,13 @@ irr::scene::ISceneNode *Indie::Map::putBlock(std::unique_ptr<Graphism> &core, in
 
 void Indie::Map::load(std::unique_ptr<Indie::Graphism> &graphism)
 {
-	for (unsigned i = 0; i < _2dmap.size(); ++i)
-		for (unsigned j = 0; j < _2dmap[i].size(); ++j) {
-			_3dundermap.push_back(putBlock(graphism, 2, i, -1, j));
+	for (std::size_t i = 0; i < _2dmap.size(); ++i) {
+		for (std::size_t j = 0; j < _2dmap[i].size(); ++j) {
+			_3dundermap.push_back(putBlock(graphism, 2, (_max_height - 1) - i, -1, (_max_width - 1)- j));
 			if (graphism->getTexture(_2dmap[i][j]))
-				_3dmap.push_back(putBlock(graphism, _2dmap[i][j], i, 0, j));
+				_3dmap.push_back(putBlock(graphism, _2dmap[i][j], (_max_height - 1) - i, 0, (_max_width - 1) - j));
 		}
+	}
 }
 
 std::vector<irr::scene::ISceneNode *> &Indie::Map::getMap3d()
@@ -106,6 +133,7 @@ const float &Indie::Map::getHeight() const
 	return _height;
 }
 
+// >>>> DANS UN OBJET ?
 bool infequal(irr::core::vector3df one, irr::core::vector3df two)
 {
 	return  (one.X <= two.X && one.Y <= two.Y && one.Z <= two.Z);
@@ -120,6 +148,8 @@ bool supequal(irr::core::vector3df one, irr::core::vector3df two)
 {
 	return  (one.X >= two.X && one.Y >= two.Y && one.Z >= two.Z);
 }
+
+// <<<<<
 
 irr::scene::ISceneNode *Indie::Map::get3dBlock(const irr::core::vector3df &target)
 {

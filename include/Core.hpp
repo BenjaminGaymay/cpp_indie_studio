@@ -1,9 +1,9 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Core
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Core
+//
 
 #pragma once
 
@@ -30,11 +30,13 @@ namespace Indie {
 		void drawCaption();
 		void processEvents();
 		void cleanMap();
+		void eraseTopandBot();
+		void eraseLeftandRight();
 		void editMap();
 		int editMapEvents();
 		void writeInFile(std::string file, std::vector<std::vector<int>> map);
 		void createZeroMap(std::string name, size_t x, size_t y);
-		void create_rand_map(std::string name, size_t x, size_t y);
+		int createRandMap(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
 		void addPlayer(int, irr::core::vector3df &, const irr::f32 &);
@@ -43,6 +45,8 @@ namespace Indie {
 		void checkAppContext();
 		void handleMenu();
 		void menuEvents();
+		void sendMapToServer(const std::string &);
+
 
 	private:
 		int _lastFps;

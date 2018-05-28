@@ -1,13 +1,12 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** SplashScreen
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// SplashScreen
+//
 
 #pragma once
 
-#include <irrlicht/irrlicht.h>
 #include "Clock.hpp"
 #include "Events.hpp"
 

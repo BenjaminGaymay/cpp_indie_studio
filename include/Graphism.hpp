@@ -1,14 +1,13 @@
-/*
-** EPITECH PROJECT, 2018
-** student
-** File description:
-** 16/05/18
-*/
+//
+// EPITECH PROJECT, 2018
+// student
+// File description:
+// 16/05/18
+//
 
 #ifndef BOMBERMAN_GRAPHISM_HPP
 #define BOMBERMAN_GRAPHISM_HPP
 
-#include <vector>
 #include <map>
 #include "Window.hpp"
 

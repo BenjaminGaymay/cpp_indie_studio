@@ -1,9 +1,9 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Core
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Core
+//
 
 #include "Window.hpp"
 
@@ -15,11 +15,10 @@ Indie::Window::~Window()
 	m_device->drop();
 }
 
-void Indie::Window::editMapView(Events &evt)
+void Indie::Window::editMapView()
 {
 	irr::core::vector3df vec = {0, 800, 100};
 
-	(void)evt;
 	m_camera.initCamera(m_sceneManager, vec);
 }
 

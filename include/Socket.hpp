@@ -1,28 +1,24 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Socket
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Socket
+//
 
 #pragma once
 
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-#include <netinet/in.h>
 #include <string.h>
 #include <iostream>
 #include <vector>
-#include <chrono>
 
 namespace Indie {
 	enum ObjectsType {
 		PLAYER,
-		GAMEINFOS
+		GAMEINFOS,
+		MAP
 	};
 
 	enum ObjectsEvents {

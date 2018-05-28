@@ -1,26 +1,27 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Map
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Map
+//
 
 #pragma once
 
-#include <irrlicht/irrlicht.h>
-#include <vector>
-#include <iostream>
 #include <fstream>
 #include "Graphism.hpp"
 
 namespace Indie {
 	class Map {
 	public:
-		Map(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Graphism> &graphism);
+		Map() {}
+		Map(std::vector<std::string> &, const float &,
+			const float &, std::unique_ptr<Indie::Graphism> &);
 		~Map();
 		void initMap(const std::string &map);
 		void load(std::unique_ptr<Graphism> &core);
 		void newMap(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Graphism> &graphism);
+		void clear2dMap();
+		void clear3dMap();
 		irr::scene::ISceneNode *putBlock(std::unique_ptr<Graphism> &core, int id, int i, int mulY, int j);
 		bool emptyBlock(const irr::core::vector3df &position);
 		std::vector<irr::scene::ISceneNode*> &getMap3d();

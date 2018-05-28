@@ -1,11 +1,10 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Events
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Events
+//
 
-#include <iostream>
 #include "Events.hpp"
 
 Indie::Events::Events() :

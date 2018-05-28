@@ -1,14 +1,14 @@
-/*
-** EPITECH PROJECT, 2018
-** student
-** File description:
-** 14/05/18
-*/
+//
+// EPITECH PROJECT, 2018
+// student
+// File description:
+// 14/05/18
+//
 #ifndef BOMBERMAN_BOMB_HPP
 #define BOMBERMAN_BOMB_HPP
 
-#include <ctime>
-#include <irrlicht/IAnimatedMeshSceneNode.h>
+//#include <ctime>
+//#include <irrlicht/IAnimatedMeshSceneNode.h>
 
 namespace Indie {
 	class Bomb {

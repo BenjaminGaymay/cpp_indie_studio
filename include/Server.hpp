@@ -1,15 +1,15 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** Server
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// Server
+//
 
 #pragma once
 
-#include "Socket.hpp"
 #include <memory>
 #include <algorithm>
+#include "Socket.hpp"
 
 namespace Indie {
 	enum GameState {
@@ -48,6 +48,8 @@ namespace Indie {
 			int _hostFd;
 			GameState _state;
 			std::vector<std::unique_ptr<Client>> _clients;
+			std::vector<std::vector<int>> _map;
+			std::string _mapMsg;
 	};
 
 }
