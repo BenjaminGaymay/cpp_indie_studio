@@ -6,10 +6,30 @@
 //
 
 #include "Map.hpp"
+#include "ManageStrings.hpp"
 
-Indie::Map::Map()
-		: _max_height(0), _max_width(0)
-{}
+Indie::Map::Map(std::vector<std::string> &map, const float &size,
+	const float &y, std::unique_ptr<Indie::Graphism> &graphism)
+{
+	std::vector<std::string> oneLine;
+
+	_max_height = 0;
+ 	_max_width = 0;
+ 	_size = size;
+ 	_height = y;
+ 	clear3dMap();
+ 	clear2dMap();
+	for (auto &line : map) {
+		std::vector<int> tmp;
+		oneLine = ManageStrings::splitString(line, ' ');
+		for (auto &nb : oneLine)
+			tmp.push_back(std::stoi(nb));
+		_2dmap.push_back(tmp);
+		_max_width = (tmp.size() > _max_width ? tmp.size() : _max_width);
+	}
+	_max_height = _2dmap.size();
+	load(graphism);
+}
 
 Indie::Map::~Map()
 {}
@@ -26,7 +46,7 @@ void Indie::Map::clear3dMap()
 
 void Indie::Map::clear2dMap()
 {
-
+	_2dmap.clear();
 }
 
 void Indie::Map::newMap(const std::string &mapPath, const float &size,
@@ -84,11 +104,11 @@ irr::scene::ISceneNode *Indie::Map::putBlock(std::unique_ptr<Graphism> &core, in
 
 void Indie::Map::load(std::unique_ptr<Indie::Graphism> &graphism)
 {
-	for (unsigned i = 0; i < _2dmap.size(); ++i) {
-		for (unsigned j = 0; j < _2dmap[i].size(); ++j) {
-			_3dundermap.push_back(putBlock(graphism, 2, 49 - i, -1, 49 - j));
+	for (std::size_t i = 0; i < _2dmap.size(); ++i) {
+		for (std::size_t j = 0; j < _2dmap[i].size(); ++j) {
+			_3dundermap.push_back(putBlock(graphism, 2, (_max_height - 1) - i, -1, (_max_width - 1)- j));
 			if (graphism->getTexture(_2dmap[i][j]))
-				_3dmap.push_back(putBlock(graphism, _2dmap[i][j], 49 - i, 0, 49 - j));
+				_3dmap.push_back(putBlock(graphism, _2dmap[i][j], (_max_height - 1) - i, 0, (_max_width - 1) - j));
 		}
 	}
 }

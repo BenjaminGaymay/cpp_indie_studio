@@ -17,14 +17,16 @@
 namespace Indie {
 	enum ObjectsType {
 		PLAYER,
-		GAMEINFOS
+		GAMEINFOS,
+		MAP
 	};
 
 	enum ObjectsEvents {
 		APPEAR,
 		DEAD,
 		MOVE,
-		START
+		START,
+		MESSAGE
 	};
 
 	class Socket {

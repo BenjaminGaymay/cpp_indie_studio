@@ -27,6 +27,12 @@ namespace Indie {
 		PERSO
 	};
 
+	struct s_tchat {
+		bool _getch;
+		std::vector<std::string> _messages;
+		irr::gui::IGUIEditBox *_textBox;
+	};
+
 	class Core {
 	public:
 		Core();
@@ -47,9 +53,13 @@ namespace Indie {
 		void addPlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void removePlayer(int, irr::core::vector3df &, const irr::f32 &);
 		void movePlayer(int, irr::core::vector3df &, const irr::f32 &);
+		void serverMessage(const std::vector<std::string> &);
 		void checkAppContext();
 		void handleMenu();
 		void menuEvents();
+		void sendMapToServer(const std::string &);
+		void manageTchat();
+		void printTchat() const;
 
 
 	private:
@@ -69,6 +79,7 @@ namespace Indie {
 		Events m_event;
 		irr::video::SColor _color;
 		GameState _state;
+		s_tchat _tchat;
 		int _playerId;
 		editorState _editState;
 		std::pair<std::size_t, std::size_t> _counter;

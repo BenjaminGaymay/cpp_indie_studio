@@ -23,6 +23,7 @@ Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 	_state = NOTCONNECTED;
 	_playerId = -1;
 	_socket = nullptr;
+	_tchat._getch = false;
 }
 
 Indie::Core::~Core()
@@ -44,11 +45,26 @@ void Indie::Core::drawCaption()
 
 void Indie::Core::processEvents()
 {
-	if (m_event.isKeyDown(irr::KEY_ESCAPE))
-		m_run = false;
-	if (m_event.isKeyDown(irr::KEY_KEY_A))
-		std::cout << m_event.MouseState.Position.X << " : "
-				  << m_event.MouseState.Position.Y << std::endl;
+	if (_tchat._getch)
+		manageTchat();
+	else {
+		if (m_event.isKeyDown(irr::KEY_ESCAPE))
+			m_run = false;
+		if (m_event.isKeyDown(irr::KEY_KEY_A)) {
+			std::cout << m_event.MouseState.Position.X << " : "
+					<< m_event.MouseState.Position.Y << std::endl;
+			m_event.setKeyUp(irr::KEY_KEY_A);
+		}
+		if (m_event.isKeyDown(irr::KEY_KEY_T)) {
+			m_event.setKeyUp(irr::KEY_KEY_T);
+			if (_socket) {
+				_tchat._getch = true;
+				_tchat._textBox->setVisible(true);
+				m_core.m_gui->setFocus(_tchat._textBox);
+				_tchat._textBox->setText(L"");
+			}
+		}
+	}
 	menuEvents();
 }
 
@@ -69,6 +85,9 @@ void Indie::Core::checkAppContext()
 			} catch (const std::exception &e) {}
 		}
 		_playerId = waitForId();
+		// >> on gerera ca dans la room de l'host
+		sendMapToServer("assets/maps/map.txt");
+		// <<
 	}
 	if (m_state == READY && _state == WAITING)
 		dprintf(_socket->getFd(), "READY\n");
@@ -91,10 +110,15 @@ void Indie::Core::run()
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
+	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 500, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
+	_tchat._textBox->setMax(40);
+	_tchat._textBox->setVisible(false);
+
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		m_core.m_driver->beginScene(true, true, _color);
 		checkAppContext();
+
 		if (_state != NOTCONNECTED && _socket)
 			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
 		if (m_state == PLAY) {
@@ -111,9 +135,10 @@ void Indie::Core::run()
 			m_state = MENU;
 		} else {
 			m_core.m_device->getCursorControl()->setVisible(true);
-		 	m_core.m_gui->drawAll();//handleMenu();
 			m_core.getCamera().change(m_core.getSceneManager());
 		}
+		m_core.m_gui->drawAll();//handleMenu();
+		printTchat();
 		m_core.m_driver->endScene();
 		drawCaption();
 	}
@@ -157,9 +182,11 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_MAP_RANDOM_BUTTON:
 					createRandMap("azerty.txt", 50, 50);
+					//m_menu.m_mapEdit->setVisible(false);
 					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:
 					m_state = MAPPING;
+					m_menu.m_mapEdit->setVisible(false);
 					break;
 				case GUI_ID_READY:
 					m_state = READY;

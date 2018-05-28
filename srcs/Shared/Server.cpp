@@ -44,11 +44,11 @@ void Indie::Server::addClient()
 
 int Indie::Server::readClient(std::unique_ptr<Client> &client)
 {
-	char buffer[4096];
+	static char buffer[8192];
 	char *tmp = nullptr;
 	int size;
 
-	size = read(client->_fd, buffer, 4096);
+	size = read(client->_fd, buffer, 8192);
 	if (size > 0) {
 		buffer[size] = '\0';
 		tmp = strtok(buffer, "\n");
@@ -58,12 +58,25 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				client->_state = PLAYING;
 				break;
 			}
+			// >> reception map
+			if (std::string(tmp).compare(0, 4, "2:0:") == 0) {
+				std::cout << "SERVER: Je recois la map" << std::endl;
+				_mapMsg = std::string(tmp);
+
+			}
+			// <<
 			if (_state == WAITING)
 				return 0;
 			// On renvoi l'info a tlm
 			// Verifier qu'il y a que des numéros et ':'
-			for (auto &i : _clients)
-				dprintf(i->_fd, tmp);
+
+			for (auto &i : _clients) {
+				if (std::string(tmp).compare(0, 4, "1:4:") == 0)
+					// Renvoyer les msg dans le menu d'attente
+					dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &tmp[4]);
+				else
+					dprintf(i->_fd, tmp);
+			}
 			tmp = strtok(nullptr, "\n");
 		}
 		return 0;
@@ -102,8 +115,11 @@ Indie::GameState Indie::Server::checkIfStartGame()
 		if (client->_state == WAITING)
 			return WAITING;
 	}
-	for (auto &client : _clients)
+	for (auto &client : _clients) {
+		std::cout << _mapMsg << std::endl;
+		dprintf(client->_fd, "%s\n", _mapMsg.c_str()); // ENVOI DE LA CARTE
 		dprintf(client->_fd, "1:3\n"); // CODE POUR GAME START
+	}
 
 	// On donne la pos de chaque joueur
 	for (auto &client : _clients) {
