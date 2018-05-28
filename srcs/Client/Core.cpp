@@ -25,6 +25,7 @@ Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 	_state = NOTCONNECTED;
 	_playerId = -1;
 	_socket = nullptr;
+	m_bappe = true;
 	_tchat._getch = false;
 }
 
@@ -180,11 +181,11 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_MAP_BUTTON:
 					m_menu.m_main->setVisible(false);
-					m_menu.m_mapEdit->setVisible(true);
+					m_menu.m_mapMenu->setVisible(true);
 					break;
 				case GUI_ID_MAP_BACK_BUTTON:
 					m_menu.m_main->setVisible(true);
-					m_menu.m_mapEdit->setVisible(false);
+					m_menu.m_mapMenu->setVisible(false);
 					break;
 				case GUI_ID_PLAY_BACK_BUTTON:
 					m_menu.m_main->setVisible(true);
@@ -204,7 +205,8 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:
 					m_state = MAPPING;
-					m_menu.m_mapEdit->setVisible(false);
+					m_menu.m_mapMenu->setVisible(false);
+					m_menu.m_mapEdit->setVisible(true);
 					break;
 				case GUI_ID_READY:
 					m_state = READY;
@@ -219,6 +221,11 @@ void Indie::Core::menuEvents()
 					m_state = LAUNCH_SERVER;
 					m_menu.m_room->setVisible(true);
 					m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_MAP_SAVE_BUTTON:
+					m_menu.m_mapEdit->setVisible(false);
+					m_menu.m_mapMenu->setVisible(true);
+					m_bappe = false;
 					break;
 				default:
 					break;

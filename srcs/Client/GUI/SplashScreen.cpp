@@ -57,8 +57,7 @@ void Indie::SplashScreen::display(irr::IrrlichtDevice *device, Events &event)
 	m_fader->isReady();
 
 	while (device->run()) {
-		if (event.isKeyDown(irr::KEY_ESCAPE) or
-			event.isKeyDown(irr::KEY_SPACE) or
+		if (event.isKeyDown(irr::KEY_SPACE) or
 			event.isKeyDown(irr::KEY_RETURN))
 			break;
 		fadeIn();
@@ -67,8 +66,7 @@ void Indie::SplashScreen::display(irr::IrrlichtDevice *device, Events &event)
 			m_fader->isReady();
 			m_clock.reset();
 			while (device->run()) {
-				if (event.isKeyDown(irr::KEY_ESCAPE) or
-					event.isKeyDown(irr::KEY_SPACE) or
+				if (event.isKeyDown(irr::KEY_SPACE) or
 					event.isKeyDown(irr::KEY_RETURN)) {
 					m_fader->fadeIn(0);
 					break;
