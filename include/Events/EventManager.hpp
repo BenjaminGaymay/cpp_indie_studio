@@ -6,17 +6,19 @@
 */
 
 #pragma once
-
-class Core;
+#include "Core.hpp"
 
 namespace Indie {
+
 	class EventManager {
 	public:
 		EventManager();
 		EventManager(Core &);
 		~EventManager();
 
+		void init(Core &);
+
 	private:
-		Core &m_core;
+		Core *m_core;
 	};
 }

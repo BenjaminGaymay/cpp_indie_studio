@@ -24,6 +24,7 @@ Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 	_playerId = -1;
 	_socket = nullptr;
 	m_bappe = true;
+	// m_evtManager->init(this);
 }
 
 Indie::Core::~Core()

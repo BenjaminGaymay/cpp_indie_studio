@@ -7,9 +7,13 @@
 
 #include "EventManager.hpp"
 
-Indie::EventManager::EventManager(Core &core) :
-	m_core(core)
+Indie::EventManager::EventManager()
 {}
 
 Indie::EventManager::~EventManager()
 {}
+
+void Indie::EventManager::init(Core &core)
+{
+	m_core = &core;
+}

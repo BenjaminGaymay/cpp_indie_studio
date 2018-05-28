@@ -65,3 +65,11 @@ bool ManageStrings::isInteger(std::string &str)
 	}
 	return true;
 }
+
+std::string ManageStrings::convertWchart(const wchar_t *msg)
+{
+	std::wstring t(msg);
+	std::string res(t.begin(), t.end());
+
+	return res;
+}
