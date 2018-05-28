@@ -5,8 +5,9 @@
 // MapEdit
 //
 
-#include "Core.hpp"
 #include <random>
+#include "Core.hpp"
+#include "ManageStrings.hpp"
 
 int Indie::Core::createRandMap(std::string name, std::size_t x, std::size_t y)
 {
@@ -185,8 +186,12 @@ int Indie::Core::editMapEvents()
 {
 	if (m_event.isKeyDown(irr::KEY_ESCAPE))
 		m_run = false;
-	else if (m_event.isKeyDown(irr::KEY_KEY_S)) {
+	if (m_event.isKeyDown(irr::KEY_KEY_S)) {
+		auto textbox = m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME, true);
+		auto mapName = ManageStrings::convertWchart(textbox->getText());
+		std::cout << mapName << std::endl;
 		cleanMap();
+		writeInFile(std::string("assets/maps/" + mapName), _mapper->getMap2d());
 		return -1;
 	} else if (m_event.MouseState.LeftButtonDown) {
 		auto x = int((m_event.MouseState.Position.X - 362) / BLOCK_SIZE);

@@ -5,10 +5,11 @@
 // Multiplayer
 //
 
+#include <cstring>
 #include <Player.hpp>
 #include "ManageStrings.hpp"
 
-void Indie::Core::addPlayer(int id, irr::core::vector3df &pos, const irr::f32 &rota)
+void Indie::Core::addPlayer(int id, irr::core::vector2di &pos2d, irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	std::cout << "Add player: " << id << std::endl;
 	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(
@@ -19,7 +20,7 @@ void Indie::Core::addPlayer(int id, irr::core::vector3df &pos, const irr::f32 &r
 	_playerObjects.push_back(std::move(newPlayer));
 }
 
-void Indie::Core::removePlayer(int id, irr::core::vector3df &pos, const irr::f32 &rota)
+void Indie::Core::removePlayer(int id, irr::core::vector2di &pos2d, irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	(void)pos;
 	(void)rota;
@@ -35,7 +36,7 @@ void Indie::Core::removePlayer(int id, irr::core::vector3df &pos, const irr::f32
 	}
 }
 
-void Indie::Core::movePlayer(int id, irr::core::vector3df &pos, const irr::f32 &rota)
+void Indie::Core::movePlayer(int id, irr::core::vector2di &pos2d, irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	for (auto &p : _playerObjects)
 		if (p->getId() == id) {
@@ -69,8 +70,8 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 
 	for (auto &line : servSend) {
 		info = ManageStrings::splitString(line, ':');
-		if (!info.empty()) {
-			if (ManageStrings::isInteger(info[0]) and ManageStrings::isInteger(info[1])) {
+		if (!info.empty() && info.size() >= 2) { // bha oui, si info[1] exist pas, segfault...
+			if (ManageStrings::isInteger(info[0]) && ManageStrings::isInteger(info[1])) {
 				type = std::stoi(info[0]);
 				event = std::stoi(info[1]);
 				info.erase(info.begin(), info.begin() + 2);
@@ -89,11 +90,12 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 				} else {
 					id = std::stoi(info[0]);
 
-					irr::core::vector3df pos(std::stof(info[1]), std::stof(info[2]), std::stof(info[3]));
-					rota = std::stof(info[4]);
+					irr::core::vector2di pos2d(stoi(info[1]), std::stoi(info[2]));
+					irr::core::vector3df pos3d(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
+					rota = std::stof(info[6]);
 					switch (type) {
 						case Indie::PLAYER:
-							(this->*_playersFct[event])(id, pos, rota); break;
+							(this->*_playersFct[event])(id, pos2d, pos3d, rota); break;
 						default:break;
 					}
 				}
