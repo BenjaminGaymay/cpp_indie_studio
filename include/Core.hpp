@@ -76,5 +76,6 @@ namespace Indie {
 		GameState _state;
 		s_tchat _tchat;
 		int _playerId;
+		bool m_bappe;
 	};
 }
