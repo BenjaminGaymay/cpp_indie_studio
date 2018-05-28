@@ -38,9 +38,9 @@ Indie::Map::~Map()
 void Indie::Map::clear3dMap()
 {
 	for (auto &block : _3dmap)
-		block->remove();
+		block.first->remove();
 	for (auto &block : _3dundermap)
-		block->remove();
+		block.first->remove();
 	_3dmap.clear();
 	_3dundermap.clear();
 }
@@ -105,16 +105,20 @@ irr::scene::ISceneNode *Indie::Map::putBlock(std::unique_ptr<Graphism> &core, in
 
 void Indie::Map::load(std::unique_ptr<Indie::Graphism> &graphism)
 {
+	_3dmap.clear();
+	_3dundermap.clear();
 	for (std::size_t i = 0; i < _2dmap.size(); ++i) {
 		for (std::size_t j = 0; j < _2dmap[i].size(); ++j) {
-			_3dundermap.push_back(putBlock(graphism, 2, (_max_height - 1) - i, -1, (_max_width - 1)- j));
+			_3dundermap.insert(std::pair<irr::scene::ISceneNode *, irr::core::vector2di>
+			        (putBlock(graphism, 2, (_max_height - 1) - i, -1, (_max_width - 1)- j), irr::core::vector2di(i, j)));
 			if (graphism->getTexture(_2dmap[i][j]))
-				_3dmap.push_back(putBlock(graphism, _2dmap[i][j], (_max_height - 1) - i, 0, (_max_width - 1) - j));
+				_3dmap.insert(std::pair<irr::scene::ISceneNode *, irr::core::vector2di>
+				        (putBlock(graphism, _2dmap[i][j], (_max_height - 1) - i, 0, (_max_width - 1) - j), irr::core::vector2di(i, j)));
 		}
 	}
 }
 
-std::vector<irr::scene::ISceneNode *> &Indie::Map::getMap3d()
+std::map<irr::scene::ISceneNode *, irr::core::vector2di> &Indie::Map::getMap3d()
 {
 	return _3dmap;
 }
@@ -155,21 +159,21 @@ bool supequal(irr::core::vector3df one, irr::core::vector3df two)
 irr::core::vector2di Indie::Map::get2dBlock(const irr::core::vector3df &target)
 {
 	for (auto &block : _3dmap) {
-		const auto &pos = block->getPosition();
+		const auto &pos = block.first->getPosition();
 		if (infequal(pos, target) && inf(target, pos + _size)) {
-			return irr::core::vector2di(pos.X / _size, pos.Y / _size);
+			return block.second;
 		}
 	}
-	throw std::logic_error("Bha, le player n'est sur aucune case, il cheat");
+	throw std::logic_error("Bha, case non trouvé wtf");
+	//return nullptr;
 }
 
 irr::scene::ISceneNode *Indie::Map::get3dBlock(const irr::core::vector3df &target)
 {
 	for (auto &block : _3dmap) {
-		const auto &pos = block->getPosition();
-		if (infequal(pos, target) && inf(target, pos + _size)) {
-			return block;
-		}
+		const auto &pos = block.first->getPosition();
+		if (infequal(pos, target) && inf(target, pos + _size))
+			return block.first;
 	}
 	return nullptr;
 }

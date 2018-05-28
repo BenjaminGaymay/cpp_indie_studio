@@ -24,7 +24,7 @@ namespace Indie {
 		void clear3dMap();
 		irr::scene::ISceneNode *putBlock(std::unique_ptr<Graphism> &core, int id, int i, int mulY, int j);
 		bool emptyBlock(const irr::core::vector3df &position);
-		std::vector<irr::scene::ISceneNode*> &getMap3d();
+		std::map<irr::scene::ISceneNode *, irr::core::vector2di> &getMap3d();
 		std::vector<std::vector<int>> &getMap2d();
 		const float &getSize() const;
 		const float &getHeight() const;
@@ -37,7 +37,7 @@ namespace Indie {
 		float _size;
 		float _height;
 		std::vector<std::vector<int>> _2dmap;
-		std::vector<irr::scene::ISceneNode *> _3dmap;
-		std::vector<irr::scene::ISceneNode *> _3dundermap;
+		std::map<irr::scene::ISceneNode *, irr::core::vector2di> _3dmap;
+		std::map<irr::scene::ISceneNode *, irr::core::vector2di> _3dundermap;
 	};
 }

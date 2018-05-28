@@ -43,6 +43,7 @@ namespace Indie {
 			int readClient(std::unique_ptr<Client> &);
 			GameState checkIfStartGame();
 			static void runServer();
+			std::vector<std::vector<int>> buildMap(const std::string &msg);
 		private:
 			fd_set _fdRead;
 

@@ -5,8 +5,10 @@
 // server
 //
 
+#include <sys/time.h>
 #include <irrlicht/vector3d.h>
 #include <irrlicht/vector2d.h>
+#include <ManageStrings.hpp>
 #include "Server.hpp"
 
 Indie::Server::Server() : _socket(Socket(5567, INADDR_ANY, Indie::Socket::SERVER)), _hostFd(_socket.getFd()), _state(WAITING)
@@ -44,14 +46,34 @@ void Indie::Server::addClient()
 	id += 1;
 }
 
-irr::f32 cutF(char *str)
+irr::f32 cutF(char *&str)
 {
 	return static_cast<irr::f32>(std::stof(strsep(&str, ":")));
 }
 
-int cutI(char *str)
+int cutI(char *&str)
 {
 	return std::stoi(strsep(&str, ":"));
+}
+
+std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
+{
+	std::vector<std::vector<int>> map;
+	auto copy = (char *)msg.c_str();
+	char *line = strtok(copy, ":");
+
+	while (line != nullptr) {
+		std::vector<int> tmp;
+		std::vector<std::string> oneLine;
+		std::string str(line);
+
+		oneLine = ManageStrings::splitString(str, ' ');
+		for (auto &nb : oneLine)
+			tmp.push_back(std::stoi(nb));
+		map.push_back(tmp);
+		line = strtok(nullptr, ":");
+	}
+	return map;
 }
 
 int Indie::Server::readClient(std::unique_ptr<Client> &client)
@@ -72,9 +94,9 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			}
 			// >> reception map
 			if (std::string(tmp).compare(0, 4, "2:0:") == 0) {
-				std::cout << "SERVER: Je recois la map" << std::endl;
 				_mapMsg = std::string(tmp);
-
+				_map.clear();
+				_map = buildMap(&tmp[4]);
 			}
 			// <<
 			if (_state == WAITING)
@@ -83,21 +105,23 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			auto enumPlayer = std::stoi(strsep(&tmp, ":"));
 			auto enumMove = std::stoi(strsep(&tmp, ":"));
 			auto enumId = std::stoi(strsep(&tmp, ":"));
-			irr::core::vector2di position2d = {cutI(tmp), cutI(tmp)};
-			irr::core::vector3df position3d = {cutF(tmp), cutF(tmp), cutF(tmp)};
-			irr::f32 rotation = cutF(tmp);
-			// On renvoi l'info a tlm
-			// Verifier qu'il y a que des numéros et ':'
-			if (_map.empty())
-				throw std::logic_error("MAIS POURQUOI C VIDE ???");
+			irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));// = {cutI(tmp), cutI(tmp)};
+			irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));// = {cutF(tmp), cutF(tmp), cutF(tmp)};
+			irr::f32 rotation = std::stof(strsep(&tmp, ":"));
+			(void) rotation;
+			(void) position3d;
+			(void) enumId;
+			(void) enumMove;
+			(void) enumPlayer;
 			if (_map[position2d.Y][position2d.X] == 0) {
 				client->pos2d.Y = position2d.Y;
 				client->pos2d.X = position2d.X;
 				//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
-				// Nouvelle position valide, on envoie à tous le changement
 				for (auto &i : _clients)
 					dprintf(i->_fd, cmd.c_str());
-			}
+			} /*else
+				std::cout << "BLOCK:" << "map[" << position2d.Y << "][" << position2d.X << "]:"
+						<< _map[position2d.Y][position2d.X] << std::endl;*/
 			tmp = strtok(nullptr, "\n");
 		}
 		return 0;
