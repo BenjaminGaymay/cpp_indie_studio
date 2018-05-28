@@ -158,17 +158,11 @@ bool supequal(irr::core::vector3df one, irr::core::vector3df two)
 
 irr::core::vector2di Indie::Map::get2dBlock(const irr::core::vector3df &target)
 {
-	irr::core::vector2di save;
 	for (auto &block : _3dmap) {
 		const auto &pos = block.first->getPosition();
-		if (infequal(pos, target) && inf(target, pos + _size)) {
-			save = block.second;
-			std::cout << "trouvé" << std::endl;
-			//return block.second;
-		}
+		if (infequal(pos, target) && inf(target, pos + _size))
+			return block.second;
 	}
-	std::cout << "Je quitte" << std::endl;
-	return save;
 	throw std::logic_error("Bha, case non trouvé wtf");
 	//return nullptr;
 }
