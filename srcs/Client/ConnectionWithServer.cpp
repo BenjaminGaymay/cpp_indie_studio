@@ -98,8 +98,8 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 					if (type == PLAYER && event == MOVE) {
 						rota = std::stof(info[6]); // pas tout le monde l'utilise
 						(this->*_playersFct[event])(id, pos2d, pos3d, rota);
-					} else if (type == PLAYER && event == DROPBOMB)
-						type = type;
+					} /*else if (type == PLAYER && event == DROPBOMB)
+						type = type;*/
 					/*switch (type) {
 						case Indie::PLAYER:
 							(this->*_playersFct[event])(id, pos2d, pos3d, rota); break;
