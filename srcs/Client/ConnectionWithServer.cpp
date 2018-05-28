@@ -17,13 +17,15 @@ void Indie::Core::addPlayer(int id, irr::core::vector2di &pos2d, irr::core::vect
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
 	newPlayer->getPlayer()->setRotation({0, rota, 0});
+	newPlayer->setPos2d(pos2d);
 	_playerObjects.push_back(std::move(newPlayer));
 }
 
 void Indie::Core::removePlayer(int id, irr::core::vector2di &pos2d, irr::core::vector3df &pos, const irr::f32 &rota)
 {
-	(void)pos;
-	(void)rota;
+	(void) pos;
+	(void) rota;
+	(void) pos2d;
 	if (id == _playerObjects[0]->getId())
 		return;
 	for (auto &p : _playerObjects) {
@@ -45,6 +47,7 @@ void Indie::Core::movePlayer(int id, irr::core::vector2di &pos2d, irr::core::vec
 			p->setStanding(false);
 			p->getPlayer()->setRotation({0, rota, 0});
 			p->setPosition(pos);
+			p->setPos2d(pos2d);
 			return;
 		}
 }
@@ -92,12 +95,16 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 
 					irr::core::vector2di pos2d(stoi(info[1]), std::stoi(info[2]));
 					irr::core::vector3df pos3d(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
-					rota = std::stof(info[6]);
-					switch (type) {
+					if (type == PLAYER && event == MOVE) {
+						rota = std::stof(info[6]); // pas tout le monde l'utilise
+						(this->*_playersFct[event])(id, pos2d, pos3d, rota);
+					} else if (type == PLAYER && event == DROPBOMB)
+						type = type;
+					/*switch (type) {
 						case Indie::PLAYER:
 							(this->*_playersFct[event])(id, pos2d, pos3d, rota); break;
 						default:break;
-					}
+					}*/
 				}
 			}
 		}
