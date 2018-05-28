@@ -117,11 +117,14 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				client->pos2d.Y = position2d.Y;
 				client->pos2d.X = position2d.X;
 				//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
-				for (auto &i : _clients)
-					dprintf(i->_fd, cmd.c_str());
-			} /*else
-				std::cout << "BLOCK:" << "map[" << position2d.Y << "][" << position2d.X << "]:"
-						<< _map[position2d.Y][position2d.X] << std::endl;*/
+				for (auto &i : _clients) {
+					if (std::string(cmd).compare(0, 4, "1:4:") == 0)
+						// Renvoyer les msg dans le menu d'attente
+						dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &cmd[4]);
+					else
+						dprintf(i->_fd, cmd.c_str());
+				}
+			}
 			tmp = strtok(nullptr, "\n");
 		}
 		return 0;

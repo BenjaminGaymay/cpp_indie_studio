@@ -13,9 +13,9 @@
 namespace Indie {
 	class Player {
 	public:
-		explicit Player(int id, irr::scene::ISceneNode *node);
+		explicit Player(int id, irr::scene::ISceneNode *, s_tchat &);
 		~Player();
-		irr::core::vector3df move(const Events &event);
+		irr::core::vector3df move(Events &event);
 		irr::scene::IAnimatedMeshSceneNode *getPlayer();
 		void rotationWithMove(irr::scene::ISceneNode *node, const irr::core::vector3df &newPosition);
 		bool isStanding();
@@ -32,6 +32,7 @@ namespace Indie {
 		bool _stand;
 		irr::scene::IAnimatedMeshSceneNode *_player;
 		irr::f32 _speed;
+		s_tchat _tchat;
 	protected:
 	};
 }

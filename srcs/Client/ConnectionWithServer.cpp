@@ -13,7 +13,7 @@ void Indie::Core::addPlayer(int id, irr::core::vector2di &pos2d, irr::core::vect
 {
 	std::cout << "Add player: " << id << std::endl;
 	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(
-					*_graphism->getTexture(10), pos, {0, 0, 0}, {2, 2, 2}, true));
+					*_graphism->getTexture(10), pos, {0, 0, 0}, {2, 2, 2}, true), _tchat);
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
 	newPlayer->getPlayer()->setRotation({0, rota, 0});
@@ -49,6 +49,19 @@ void Indie::Core::movePlayer(int id, irr::core::vector2di &pos2d, irr::core::vec
 		}
 }
 
+void Indie::Core::serverMessage(const std::vector<std::string> &message)
+{
+	std::string msg;
+
+	for (auto &line : message)
+		msg += line + ":";
+	msg[msg.size() - 1] = '\0';
+	_tchat._messages.push_back(msg);
+
+	if (_tchat._messages.size() > 5)
+		_tchat._messages.erase(_tchat._messages.begin(), _tchat._messages.end() - 5);
+}
+
 void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 {
 	std::vector<std::string> info;
@@ -65,10 +78,12 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 				if (type == GAMEINFOS && event == START) {
 					_state = PLAYING;
 					m_state = PLAY;
-					_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true)));
+					_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true), _tchat));
 					_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
 					m_core.getCamera().change(m_core.getSceneManager());
 					_graphism->buildDecor();
+				} else if (type == GAMEINFOS && event == MESSAGE) {
+					serverMessage(info);
 				} else if (type == MAP and event == APPEAR) {
 					std::cout << "On recois la carte\n";
 					_mapper = std::make_unique<Map>(info, 20.0f, 100.0f, _graphism);
