@@ -34,7 +34,7 @@ void Indie::Window::initWindow(Events &evt, const Options &opt)
 	m_device->setWindowCaption(L"floating");
 	m_gui = m_device->getGUIEnvironment();
 	m_camera.initCamera(m_sceneManager, vec);
-	m_font = m_device->getGUIEnvironment()->getFont("assets/fonts/fontlucida.png");
+	m_font = m_device->getGUIEnvironment()->getFont("assets/fonts/font.xml");
 }
 
 irr::video::IVideoDriver *Indie::Window::getDriver() const

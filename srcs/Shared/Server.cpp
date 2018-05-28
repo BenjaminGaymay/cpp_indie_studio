@@ -70,9 +70,9 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			// On renvoi l'info a tlm
 			// Verifier qu'il y a que des numéros et ':'
 
-
 			for (auto &i : _clients) {
 				if (std::string(tmp).compare(0, 4, "1:4:") == 0)
+					// Renvoyer les msg dans le menu d'attente
 					dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &tmp[4]);
 				else
 					dprintf(i->_fd, tmp);

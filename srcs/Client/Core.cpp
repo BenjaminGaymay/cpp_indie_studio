@@ -57,8 +57,12 @@ void Indie::Core::processEvents()
 		}
 		if (m_event.isKeyDown(irr::KEY_KEY_T)) {
 			m_event.setKeyUp(irr::KEY_KEY_T);
-			if (_socket)
+			if (_socket) {
 				_tchat._getch = true;
+				_tchat._textBox->setVisible(true);
+				m_core.m_gui->setFocus(_tchat._textBox);
+				_tchat._textBox->setText(L"");
+			}
 		}
 	}
 	menuEvents();
@@ -106,7 +110,9 @@ void Indie::Core::run()
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
-
+	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 500, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
+	_tchat._textBox->setMax(40);
+	_tchat._textBox->setVisible(false);
 
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
@@ -129,10 +135,9 @@ void Indie::Core::run()
 			m_state = MENU;
 		} else {
 			m_core.m_device->getCursorControl()->setVisible(true);
-		 	m_core.m_gui->drawAll();//handleMenu();
 			m_core.getCamera().change(m_core.getSceneManager());
 		}
-
+		m_core.m_gui->drawAll();//handleMenu();
 		printTchat();
 		m_core.m_driver->endScene();
 		drawCaption();

@@ -25,7 +25,7 @@ namespace Indie {
 	struct s_tchat {
 		bool _getch;
 		std::vector<std::string> _messages;
-		std::string _toSend;
+		irr::gui::IGUIEditBox *_textBox;
 	};
 
 	class Core {
