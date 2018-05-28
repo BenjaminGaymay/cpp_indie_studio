@@ -60,7 +60,7 @@ namespace Indie {
 		void sendMapToServer(const std::string &);
 		void manageTchat();
 		void printTchat() const;
-
+		void changeMapWithEvent(auto x, auto y);
 
 	private:
 		int _lastFps;
