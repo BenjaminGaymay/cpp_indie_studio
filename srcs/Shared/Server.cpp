@@ -5,6 +5,10 @@
 // server
 //
 
+#include <sys/time.h>
+#include <irrlicht/vector3d.h>
+#include <irrlicht/vector2d.h>
+#include <ManageStrings.hpp>
 #include "Server.hpp"
 
 Indie::Server::Server() : _socket(Socket(5567, INADDR_ANY, Indie::Socket::SERVER)), _hostFd(_socket.getFd()), _state(WAITING)
@@ -42,11 +46,41 @@ void Indie::Server::addClient()
 	id += 1;
 }
 
+irr::f32 cutF(char *&str)
+{
+	return static_cast<irr::f32>(std::stof(strsep(&str, ":")));
+}
+
+int cutI(char *&str)
+{
+	return std::stoi(strsep(&str, ":"));
+}
+
+std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
+{
+	std::vector<std::vector<int>> map;
+	auto copy = (char *)msg.c_str();
+	char *line = strtok(copy, ":");
+
+	while (line != nullptr) {
+		std::vector<int> tmp;
+		std::vector<std::string> oneLine;
+		std::string str(line);
+
+		oneLine = ManageStrings::splitString(str, ' ');
+		for (auto &nb : oneLine)
+			tmp.push_back(std::stoi(nb));
+		map.push_back(tmp);
+		line = strtok(nullptr, ":");
+	}
+	return map;
+}
+
 int Indie::Server::readClient(std::unique_ptr<Client> &client)
 {
 	static char buffer[8192];
 	char *tmp = nullptr;
-	int size;
+	ssize_t size;
 
 	size = read(client->_fd, buffer, 8192);
 	if (size > 0) {
@@ -54,28 +88,42 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
 			std::cout << "Client " << client->_id << " say " << tmp << std::endl;
-			if (std::string(tmp).compare("READY") == 0) {
+			if (std::string(tmp) == "READY") {
 				client->_state = PLAYING;
 				break;
 			}
 			// >> reception map
 			if (std::string(tmp).compare(0, 4, "2:0:") == 0) {
-				std::cout << "SERVER: Je recois la map" << std::endl;
 				_mapMsg = std::string(tmp);
-
+				_map.clear();
+				_map = buildMap(&tmp[4]);
 			}
 			// <<
 			if (_state == WAITING)
 				return 0;
-			// On renvoi l'info a tlm
-			// Verifier qu'il y a que des numéros et ':'
-
-			for (auto &i : _clients) {
-				if (std::string(tmp).compare(0, 4, "1:4:") == 0)
-					// Renvoyer les msg dans le menu d'attente
-					dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &tmp[4]);
-				else
-					dprintf(i->_fd, tmp);
+			std::string cmd = tmp;
+			auto enumPlayer = std::stoi(strsep(&tmp, ":"));
+			auto enumMove = std::stoi(strsep(&tmp, ":"));
+			auto enumId = std::stoi(strsep(&tmp, ":"));
+			irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));// = {cutI(tmp), cutI(tmp)};
+			irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));// = {cutF(tmp), cutF(tmp), cutF(tmp)};
+			irr::f32 rotation = std::stof(strsep(&tmp, ":"));
+			(void) rotation;
+			(void) position3d;
+			(void) enumId;
+			(void) enumMove;
+			(void) enumPlayer;
+			if (_map[position2d.Y][position2d.X] == 0) {
+				client->pos2d.Y = position2d.Y;
+				client->pos2d.X = position2d.X;
+				//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
+				for (auto &i : _clients) {
+					if (std::string(cmd).compare(0, 4, "1:4:") == 0)
+						// Renvoyer les msg dans le menu d'attente
+						dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &cmd[4]);
+					else
+						dprintf(i->_fd, cmd.c_str());
+				}
 			}
 			tmp = strtok(nullptr, "\n");
 		}
@@ -88,8 +136,8 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		pos->reset();
 		_clients.erase(pos);
 	}
-	for (auto &client : _clients)
-		dprintf(client->_fd, "0:1:%d:0:0:0:0\n", client->_id);
+	for (auto &aClient : _clients)
+		dprintf(aClient->_fd, "0:1:%d:0:0:0:0:0:0\n", aClient->_id);
 	return 1;
 }
 

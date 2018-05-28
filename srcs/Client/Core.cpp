@@ -5,8 +5,10 @@
 // Core
 //
 
+#include <sstream>
 #include <thread>
 #include <Player.hpp>
+#include <iomanip>
 #include "Core.hpp"
 
 Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
@@ -104,6 +106,13 @@ void Indie::Core::checkAppContext()
 	}
 }
 
+/*std::string floatToInt(float nb)
+{
+	std::stringstream ss;
+	ss << std::fixed << std::setprecision(6) << nb;
+	return ss.str();
+}*/
+
 void Indie::Core::run()
 {
 	irr::core::vector3df prevPos, pos;
@@ -127,9 +136,18 @@ void Indie::Core::run()
 			prevPos = _playerObjects[0]->getPosition();
 			pos = _playerObjects[0]->move(m_event);
 
-			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z)
-				_socket->sendInfos(Indie::PLAYER, Indie::MOVE, std::to_string(_playerObjects[0]->getId()) + ':' + std::to_string(pos.X) + ':' + std::to_string(pos.Y) + ':' + std::to_string(pos.Z) + ':'  + std::to_string(_playerObjects[0]->getRotation().Y));
-			m_core.m_sceneManager->drawAll(); // draw and do collision
+			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z) {
+				irr::core::vector2di pos2d = _mapper->get2dBlock(pos + _mapper->getSize() / 2);
+				_socket->sendInfos(Indie::PLAYER, Indie::MOVE,
+								   std::to_string(_playerObjects[0]->getId()) + ':' +
+								   std::to_string(pos2d.X) + ':' +
+								   std::to_string(pos2d.Y) + ':' +
+								   std::to_string(pos.X) + ':' +
+								   std::to_string(pos.Y) + ':' +
+								   std::to_string(pos.Z) + ':' +
+								   std::to_string(_playerObjects[0]->getRotation().Y));
+			}
+			m_core.m_sceneManager->drawAll();
 		} else if (m_state == MAPPING) {
 			editMap();
 			m_state = MENU;

@@ -20,6 +20,7 @@ Indie::Graphism::~Graphism()
 irr::f32 Indie::Graphism::resizeNode(irr::scene::ISceneNode *node, const float &size)
 {
 	irr::f32 cubeSize = (node->getBoundingBox().getExtent().Z) * node->getScale().Z;
+
 	if (cubeSize != size)
 		node->setScale({size / cubeSize, size / cubeSize, size / cubeSize});
 	cubeSize = (node->getBoundingBox().getExtent().Z) * node->getScale().Z;
