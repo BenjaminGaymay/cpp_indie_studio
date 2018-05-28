@@ -50,9 +50,15 @@ namespace Indie {
 		int createRandMap(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
-		void addPlayer(int, irr::core::vector2di &, irr::core::vector3df &, const irr::f32 &);
-		void removePlayer(int, irr::core::vector2di &, irr::core::vector3df &, const irr::f32 &);
-		void movePlayer(int, irr::core::vector2di &, irr::core::vector3df &, const irr::f32 &);
+
+		void comPlayer(int, std::vector<std::string> &);
+		void addPlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
+		void removePlayer(int);
+		void movePlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
+
+		void comGameInfos(int, std::vector<std::string> &);
+		void comMap(int, std::vector<std::string> &);
+
 		void serverMessage(const std::vector<std::string> &);
 		void checkAppContext();
 		void handleMenu();
@@ -72,7 +78,7 @@ namespace Indie {
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
-		std::vector<void (Indie::Core::*)(int, irr::core::vector2di &pos2d, irr::core::vector3df &pos3d, const irr::f32 &)> _playersFct;
+		std::vector<void (Indie::Core::*)(int, std::vector<std::string> &)> _objectsFct;
 		SplashScreen m_splash;
 		Menu m_menu;
 		AppState m_state;
