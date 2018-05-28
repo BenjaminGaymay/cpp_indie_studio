@@ -26,7 +26,8 @@ namespace Indie {
 		DEAD,
 		MOVE,
 		START,
-		MESSAGE
+		MESSAGE,
+		DROPBOMB
 	};
 
 	class Socket {

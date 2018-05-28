@@ -48,6 +48,8 @@ namespace Indie {
 		void addPlayer(int, irr::core::vector2di &, irr::core::vector3df &, const irr::f32 &);
 		void removePlayer(int, irr::core::vector2di &, irr::core::vector3df &, const irr::f32 &);
 		void movePlayer(int, irr::core::vector2di &, irr::core::vector3df &, const irr::f32 &);
+		void moveEvent(irr::core::vector3df &pos);
+		void dropBombEvent(irr::core::vector3df &pos);
 		void serverMessage(const std::vector<std::string> &);
 		void checkAppContext();
 		void handleMenu();

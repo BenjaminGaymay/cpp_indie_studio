@@ -106,16 +106,9 @@ void Indie::Core::checkAppContext()
 	}
 }
 
-/*std::string floatToInt(float nb)
-{
-	std::stringstream ss;
-	ss << std::fixed << std::setprecision(6) << nb;
-	return ss.str();
-}*/
-
 void Indie::Core::run()
 {
-	irr::core::vector3df prevPos, pos;
+	irr::core::vector3df pos;
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
@@ -133,20 +126,9 @@ void Indie::Core::run()
 		if (m_state == PLAY) {
 			m_core.getCamera().change(m_core.getSceneManager());
 			m_core.m_device->getCursorControl()->setVisible(false);
-			prevPos = _playerObjects[0]->getPosition();
-			pos = _playerObjects[0]->move(m_event);
-
-			if (prevPos.X != pos.X || prevPos.Y != pos.Y || prevPos.Z != pos.Z) {
-				irr::core::vector2di pos2d = _mapper->get2dBlock(pos + _mapper->getSize() / 2);
-				_socket->sendInfos(Indie::PLAYER, Indie::MOVE,
-								   std::to_string(_playerObjects[0]->getId()) + ':' +
-								   std::to_string(pos2d.X) + ':' +
-								   std::to_string(pos2d.Y) + ':' +
-								   std::to_string(pos.X) + ':' +
-								   std::to_string(pos.Y) + ':' +
-								   std::to_string(pos.Z) + ':' +
-								   std::to_string(_playerObjects[0]->getRotation().Y));
-			}
+			pos = _playerObjects[0]->getPosition();
+			moveEvent(pos);
+			dropBombEvent(pos);
 			m_core.m_sceneManager->drawAll();
 		} else if (m_state == MAPPING) {
 			editMap();

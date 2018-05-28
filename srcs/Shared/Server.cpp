@@ -11,7 +11,9 @@
 #include <ManageStrings.hpp>
 #include "Server.hpp"
 
-Indie::Server::Server() : _socket(Socket(5567, INADDR_ANY, Indie::Socket::SERVER)), _hostFd(_socket.getFd()), _state(WAITING)
+Indie::Server::Server() : _socket(
+		Socket(5567, INADDR_ANY, Indie::Socket::SERVER)),
+						  _hostFd(_socket.getFd()), _state(WAITING)
 {
 	if (_hostFd == -1)
 		throw std::runtime_error("Error while creating server socket");
@@ -39,7 +41,11 @@ void Indie::Server::addClient()
 	static int id = 0;
 	struct sockaddr_in client_sin;
 	socklen_t client_sin_len = sizeof(client_sin);
-	std::unique_ptr<Client> newClient = std::make_unique<Client>(id, accept(_hostFd, (struct sockaddr *)&client_sin, &client_sin_len), "Anonymous");
+	std::unique_ptr<Client> newClient = std::make_unique<Client>(id,
+																 accept(_hostFd,
+																		(struct sockaddr *) &client_sin,
+																		&client_sin_len),
+																 "Anonymous");
 
 	dprintf(newClient->_fd, "%d\n", id);
 	_clients.push_back(std::move(newClient));
@@ -59,7 +65,7 @@ int cutI(char *&str)
 std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
 {
 	std::vector<std::vector<int>> map;
-	auto copy = (char *)msg.c_str();
+	auto copy = (char *) msg.c_str();
 	char *line = strtok(copy, ":");
 
 	while (line != nullptr) {
@@ -87,7 +93,8 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		buffer[size] = '\0';
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
-			std::cout << "Client " << client->_id << " say " << tmp << std::endl;
+			std::cout << "Client " << client->_id << " say " << tmp
+					  << std::endl;
 			if (std::string(tmp) == "READY") {
 				client->_state = PLAYING;
 				break;
@@ -102,29 +109,43 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			if (_state == WAITING)
 				return 0;
 			std::string cmd = tmp;
-			auto enumPlayer = std::stoi(strsep(&tmp, ":"));
-			auto enumMove = std::stoi(strsep(&tmp, ":"));
-			auto enumId = std::stoi(strsep(&tmp, ":"));
-			irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));// = {cutI(tmp), cutI(tmp)};
-			irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));// = {cutF(tmp), cutF(tmp), cutF(tmp)};
-			irr::f32 rotation = std::stof(strsep(&tmp, ":"));
-			(void) rotation;
-			(void) position3d;
-			(void) enumId;
-			(void) enumMove;
-			(void) enumPlayer;
-			if (_map[position2d.Y][position2d.X] == 0) {
-				client->pos2d.Y = position2d.Y;
-				client->pos2d.X = position2d.X;
-				//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
+			auto enumType = std::stoi(strsep(&tmp, ":")); //PLAYER
+			auto enumEvent = std::stoi(strsep(&tmp, ":")); //MOVE
+			if (enumType == PLAYER && enumEvent == DROPBOMB) {
+				auto enumId = std::stoi(strsep(&tmp, ":"));
+				(void) enumId;
+				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));// = {cutI(tmp), cutI(tmp)};
+				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));// = {cutF(tmp), cutF(tmp), cutF(tmp)};
+				if (_map[position2d.Y][position2d.X] == 0) {
+					_map[position2d.Y][position2d.X] = 3;
+					for (auto &i : _clients)
+						dprintf(i->_fd, cmd.c_str());
+				}
+			} else if (enumType == PLAYER && enumEvent == MOVE) {
+				auto enumId = std::stoi(strsep(&tmp, ":"));
+				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));// = {cutI(tmp), cutI(tmp)};
+				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));// = {cutF(tmp), cutF(tmp), cutF(tmp)};
+				irr::f32 rotation = std::stof(strsep(&tmp, ":"));
+				(void) rotation;
+				(void) position3d;
+				(void) enumId;
+				if (_map[position2d.Y][position2d.X] == 0) {
+					client->pos2d.Y = position2d.Y;
+					client->pos2d.X = position2d.X;
+					//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
+					for (auto &i : _clients)
+							dprintf(i->_fd, cmd.c_str());
+				}
+			} else {
 				for (auto &i : _clients) {
 					if (std::string(cmd).compare(0, 4, "1:4:") == 0)
 						// Renvoyer les msg dans le menu d'attente
-						dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &cmd[4]);
-					else
-						dprintf(i->_fd, cmd.c_str());
+						dprintf(i->_fd, "1:4:%s: %s",
+								client->_name.c_str(), &cmd[4]);
 				}
 			}
+
+
 			tmp = strtok(nullptr, "\n");
 		}
 		return 0;
@@ -149,7 +170,7 @@ void Indie::Server::readOnFds()
 		throw std::runtime_error("Error while reading server socket");
 	if (FD_ISSET(_hostFd, &_fdRead))
 		addClient();
-	for (unsigned i = 0 ; i < _clients.size() ; i++) {
+	for (unsigned i = 0; i < _clients.size(); i++) {
 		if (FD_ISSET(_clients[i]->_fd, &_fdRead))
 			i = (readClient(_clients[i]) == 1 ? i - 1 : i);
 	}
@@ -174,7 +195,8 @@ Indie::GameState Indie::Server::checkIfStartGame()
 		// Stocker la pos de chaque client pour pouvoir l'envoyer
 		for (auto &pop : _clients) {
 			if (client != pop)
-				dprintf(client->_fd, "0:0:%d:0:112:0:0\n", pop->_id); // PLAYER:APPEAR:x:y:z:rotation
+				dprintf(client->_fd, "0:0:%d:0:112:0:0\n",
+						pop->_id); // PLAYER:APPEAR:x:y:z:rotation
 		}
 	}
 	return PLAYING;
@@ -201,12 +223,16 @@ void Indie::Server::runServer()
 	}
 }
 
-bool Indie::operator!=(std::unique_ptr<Indie::Client> &lhs, std::unique_ptr<Indie::Client> &rhs)
+bool Indie::operator!=(std::unique_ptr<Indie::Client> &lhs,
+					   std::unique_ptr<Indie::Client> &rhs)
 {
-	return !(lhs->_id == rhs->_id && lhs->_fd == rhs->_fd && lhs->_name == rhs->_name);
+	return !(lhs->_id == rhs->_id && lhs->_fd == rhs->_fd &&
+			 lhs->_name == rhs->_name);
 }
 
-bool Indie::operator==(std::unique_ptr<Indie::Client> &lhs, std::unique_ptr<Indie::Client> &rhs)
+bool Indie::operator==(std::unique_ptr<Indie::Client> &lhs,
+					   std::unique_ptr<Indie::Client> &rhs)
 {
-	return (lhs->_id == rhs->_id && lhs->_fd == rhs->_fd && lhs->_name == rhs->_name);
+	return (lhs->_id == rhs->_id && lhs->_fd == rhs->_fd &&
+			lhs->_name == rhs->_name);
 }
