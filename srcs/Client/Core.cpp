@@ -13,9 +13,9 @@
 
 Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 {
-	_playersFct.push_back(&Indie::Core::addPlayer);
-	_playersFct.push_back(&Indie::Core::removePlayer);
-	_playersFct.push_back(&Indie::Core::movePlayer);
+	_objectsFct.push_back(&Indie::Core::comPlayer);
+	_objectsFct.push_back(&Indie::Core::comGameInfos);
+	_objectsFct.push_back(&Indie::Core::comMap);
 	m_state = MENU;
 	m_run = true;
 	_color = {255, 168, 201, 255};
@@ -120,7 +120,7 @@ void Indie::Core::run()
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
-	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 500, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
+	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 1020, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
 	_tchat._textBox->setMax(40);
 	_tchat._textBox->setVisible(false);
 
