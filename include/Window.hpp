@@ -30,6 +30,7 @@ namespace Indie {
 		irr::video::IVideoDriver *m_driver;
 		irr::scene::ISceneManager *m_sceneManager;
 		irr::gui::IGUIEnvironment *m_gui;
+		irr::gui::IGUIFont *m_font;
 
 	private:
 		Camera m_camera;

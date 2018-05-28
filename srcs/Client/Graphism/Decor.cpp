@@ -33,10 +33,9 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	object->setRotation(rotation);
 	object->setScale(scale);
 	//object->setDebugDataVisible(irr::scene::E_DEBUG_SCENE_TYPE::EDS_BBOX);
-	m_core->m_driver->draw3DBox(object->getBoundingBox());
-	object->updateAbsolutePosition();
-	if (collision)
-		addCollision(object);
+	(void) collision;
+	/*if (collision)
+		addCollision(object);*/
 	_nodesList.push_back(object);
 	return object;
 }

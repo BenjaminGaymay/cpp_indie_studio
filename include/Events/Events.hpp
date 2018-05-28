@@ -33,6 +33,7 @@ namespace Indie {
 			virtual bool OnEvent(const irr::SEvent &);
 			virtual bool isKeyDown(irr::EKEY_CODE) const;
 			bool isButtonClicked(IdGui);
+			void setKeyUp(irr::EKEY_CODE key) { KeyIsDown[key] = false; }
 		public:
 			SMouseState MouseState;
 		private:

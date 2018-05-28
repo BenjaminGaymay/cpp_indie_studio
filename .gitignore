@@ -9,6 +9,7 @@ bomberman.cbp
 *.o
 .vscode/
 server
+peda-session*
 peda/
 # Created by https://www.gitignore.io/api/c++
 

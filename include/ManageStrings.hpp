@@ -6,7 +6,8 @@
 //
 
 #pragma once
-
+#include <iostream>
+#include <vector>
 class ManageStrings {
 public:
 	static std::string replaceStr(std::string, std::string, std::string &);
