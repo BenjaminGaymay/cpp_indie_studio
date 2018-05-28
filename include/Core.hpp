@@ -22,6 +22,11 @@
 namespace Indie {
 	class Player;
 
+	enum editorState {
+		BLOCK,
+		PERSO
+	};
+
 	struct s_tchat {
 		bool _getch;
 		std::vector<std::string> _messages;
@@ -55,7 +60,7 @@ namespace Indie {
 		void sendMapToServer(const std::string &);
 		void manageTchat();
 		void printTchat() const;
-
+		void changeMapWithEvent(auto x, auto y);
 
 	private:
 		int _lastFps;
@@ -76,6 +81,8 @@ namespace Indie {
 		GameState _state;
 		s_tchat _tchat;
 		int _playerId;
+		editorState _editState;
+		std::pair<std::size_t, std::size_t> _counter;
 		bool m_bappe;
 	};
 }
