@@ -40,22 +40,22 @@ int Indie::Core::createRandMap(std::string name, std::size_t x, std::size_t y)
 	}
 
 	// TOP LEFT CORNER
-	map[1][1] = 0;
+	map[1][1] = 10;
 	map[1][2] = 0;
 	map[2][1] = 0;
 
 	// TOP RIGHT CORNER
-	map[1][x - 2] = 0;
+	map[1][x - 2] = 10;
 	map[1][x - 3] = 0;
 	map[2][x - 2] = 0;
 
 	// BOT LEFT CORNER
-	map[y - 2][1] = 0;
+	map[y - 2][1] = 10;
 	map[y - 2][2] = 0;
 	map[y - 3][1] = 0;
 
 	// BOT RIGHT CORNER
-	map[y - 2][x - 2] = 0;
+	map[y - 2][x - 2] = 10;
 	map[y - 2][x - 3] = 0;
 	map[y - 3][x - 2] = 0;
 
@@ -84,7 +84,9 @@ void Indie::Core::writeInFile(std::string file, std::vector<std::vector<int>> ma
 
 	for (std::size_t i = 0; i < map.size(); ++i) {
 		for (std::size_t j = 0; j < map[i].size(); ++j) {
-			outfile << "0" << map[i][j] << " ";
+			if (map[i][j] >= 0 && map[i][j] <= 9)
+				outfile << "0";
+			outfile << map[i][j] << " ";
 		}
 		outfile << std::endl;
 	}
