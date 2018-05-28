@@ -46,12 +46,12 @@ void Indie::Server::addClient()
 
 irr::f32 cutF(char *str)
 {
-	return static_cast<irr::f32>(std::atof(strsep(&str, ":")));
+	return static_cast<irr::f32>(std::stof(strsep(&str, ":")));
 }
 
 int cutI(char *str)
 {
-	return std::atoi(strsep(&str, ":"));
+	return std::stoi(strsep(&str, ":"));
 }
 
 int Indie::Server::readClient(std::unique_ptr<Client> &client)
@@ -79,19 +79,25 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			// <<
 			if (_state == WAITING)
 				return 0;
-
-			auto enumPlayer = atoi(strsep(&tmp, ":"));
-			auto enumMove = atoi(strsep(&tmp, ":"));
-			auto enumId = atoi(strsep(&tmp, ":"));
+			std::string cmd = tmp;
+			auto enumPlayer = std::stoi(strsep(&tmp, ":"));
+			auto enumMove = std::stoi(strsep(&tmp, ":"));
+			auto enumId = std::stoi(strsep(&tmp, ":"));
 			irr::core::vector2di position2d = {cutI(tmp), cutI(tmp)};
 			irr::core::vector3df position3d = {cutF(tmp), cutF(tmp), cutF(tmp)};
 			irr::f32 rotation = cutF(tmp);
 			// On renvoi l'info a tlm
 			// Verifier qu'il y a que des numéros et ':'
-
-
-			for (auto &i : _clients)
-				dprintf(i->_fd, tmp);
+			if (_map.empty())
+				throw std::logic_error("MAIS POURQUOI C VIDE ???");
+			if (_map[position2d.Y][position2d.X] == 0) {
+				client->pos2d.Y = position2d.Y;
+				client->pos2d.X = position2d.X;
+				//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
+				// Nouvelle position valide, on envoie à tous le changement
+				for (auto &i : _clients)
+					dprintf(i->_fd, cmd.c_str());
+			}
 			tmp = strtok(nullptr, "\n");
 		}
 		return 0;
@@ -103,8 +109,8 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		pos->reset();
 		_clients.erase(pos);
 	}
-	for (auto &client : _clients)
-		dprintf(client->_fd, "0:1:%d:0:0:0:0:0:0\n", client->_id);
+	for (auto &aClient : _clients)
+		dprintf(aClient->_fd, "0:1:%d:0:0:0:0:0:0\n", aClient->_id);
 	return 1;
 }
 

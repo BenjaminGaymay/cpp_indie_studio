@@ -59,6 +59,8 @@ std::vector<std::string> ManageStrings::splitString(std::string &str, char separ
 
 bool ManageStrings::isInteger(std::string &str)
 {
+	if (str.empty())
+		return false;
 	for (auto &c : str) {
 		if (!isdigit(c))
 			return false;

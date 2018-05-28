@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <algorithm>
+#include <irrlicht/vector2d.h>
 #include "Socket.hpp"
 
 namespace Indie {
@@ -25,6 +26,7 @@ namespace Indie {
 			int _fd;
 			std::string _name;
 			GameState _state;
+			irr::core::vector2di pos2d;
 	};
 
 	bool operator==(std::unique_ptr<Client> &, std::unique_ptr<Client> &);

@@ -5,6 +5,7 @@
 // Map
 //
 
+#include <cstdlib>
 #include "Map.hpp"
 #include "ManageStrings.hpp"
 
@@ -75,7 +76,7 @@ void Indie::Map::initMap(const std::string &fileName)
 		std::vector<int> line;
 		number = strtok(buffer, " ");
 		while (number && *number != '\n' && *number != '\0') {
-			line.push_back(atoi(number));
+			line.push_back(std::stoi(number));
 			number = strtok(nullptr, " ");
 		}
 		_2dmap.push_back(line);
