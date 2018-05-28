@@ -33,6 +33,7 @@ Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 	_state = NOTCONNECTED;
 	_playerId = -1;
 	_socket = nullptr;
+	m_bappe = true;
 }
 
 Indie::Core::~Core()
@@ -264,7 +265,9 @@ void Indie::Core::editMap()
 	createZeroMap("mdr.txt", 50, 50);
 	_mapper = std::make_unique<Map>("assets/maps/mdr.txt", 20.0f, 100.0f, _graphism);
 	std::vector<std::vector<int>> mdr = _mapper->getMap2d();
-	while (m_core.m_device->run() && m_run) {
+	m_bappe = true;
+	while (m_core.m_device->run() && m_bappe) {
+		processEvents();
 		if (editMapEvents() == -1)
 			break;
 		m_core.m_driver->beginScene(true, true, _color);
@@ -297,6 +300,7 @@ void Indie::Core::run()
 			m_core.m_sceneManager->drawAll(); // draw and do collision
 		} else if (m_state == MAPPING) {
 			editMap();
+			m_core.m_gui->drawAll();
 			// create_rand_map("mdr.txt", 50, 50);
 			// _mapper = std::make_unique<Map>("assets/maps/mdr.txt", 20.0f, 100.0f, graphism);
 			m_state = MENU;
@@ -328,11 +332,11 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_MAP_BUTTON:
 					m_menu.m_main->setVisible(false);
-					m_menu.m_mapEdit->setVisible(true);
+					m_menu.m_mapMenu->setVisible(true);
 					break;
 				case GUI_ID_MAP_BACK_BUTTON:
 					m_menu.m_main->setVisible(true);
-					m_menu.m_mapEdit->setVisible(false);
+					m_menu.m_mapMenu->setVisible(false);
 					break;
 				case GUI_ID_PLAY_BACK_BUTTON:
 					m_menu.m_main->setVisible(true);
@@ -348,7 +352,8 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:
 					m_state = MAPPING;
-					m_menu.m_mapEdit->setVisible(false);
+					m_menu.m_mapMenu->setVisible(false);
+					m_menu.m_mapEdit->setVisible(true);
 					break;
 				case GUI_ID_READY:
 					m_state = READY;
@@ -363,6 +368,11 @@ void Indie::Core::menuEvents()
 					m_state = LAUNCH_SERVER;
 					m_menu.m_room->setVisible(true);
 					m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_MAP_SAVE_BUTTON:
+					m_menu.m_mapEdit->setVisible(false);
+					m_menu.m_mapMenu->setVisible(true);
+					m_bappe = false;
 					break;
 				default:
 					break;

@@ -35,7 +35,8 @@ namespace Indie {
 		GUI_ID_READY,
 		GUI_ID_MAP_EDITOR_BUTTON,
 		GUI_ID_MAP_RANDOM_BUTTON,
-		GUI_ID_MAP_NAME
+		GUI_ID_MAP_NAME,
+		GUI_ID_MAP_SAVE_BUTTON
 	};
 
 
@@ -82,8 +83,10 @@ namespace Indie {
 		irr::gui::IGUIElement *m_main;
 		irr::gui::IGUIElement *m_option;
 		irr::gui::IGUIElement *m_play;
-		irr::gui::IGUIElement *m_mapEdit;
 		irr::gui::IGUIElement *m_room;
+		irr::gui::IGUIElement *m_mapMenu;
+		irr::gui::IGUIElement *m_mapEdit;
+		// irr::gui::IGUIElement *m_room;
 
 		irr::gui::IGUIElement *m_server;
 

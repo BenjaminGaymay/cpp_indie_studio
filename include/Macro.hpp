@@ -7,4 +7,4 @@
 
 #pragma once
 
-#define BTN_COUNT 21
+#define BTN_COUNT 22

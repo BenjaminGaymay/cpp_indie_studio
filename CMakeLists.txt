@@ -4,7 +4,7 @@ project(bomberman)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(./include
-        ./include/GUI)
+                    ./include/GUI)
 
 add_definitions(
         -Wall

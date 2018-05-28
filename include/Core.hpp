@@ -62,5 +62,6 @@ namespace Indie {
 		irr::video::SColor _color;
 		GameState _state;
 		int _playerId;
+		bool m_bappe;
 	};
 }

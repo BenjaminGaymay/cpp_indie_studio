@@ -31,20 +31,21 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_main = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_MAIN_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_play = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_PLAY_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_option = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_OPTION_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
+	m_mapMenu = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_MAP_EDIT_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_mapEdit = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_MAP_EDIT_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_room = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_ROOM_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
-
-	m_root->addChild(m_mapEdit);
-	m_root->addChild(m_option);
-	m_root->addChild(m_room);
-	m_root->addChild(m_play);
-	m_root->addChild(m_main);
+	// m_root->addChild(m_mapMenu);
+	// m_root->addChild(m_option);
+	// m_root->addChild(m_room);
+	// m_root->addChild(m_play);
+	// m_root->addChild(m_main);
 
 	m_main->setVisible(true);
-	m_mapEdit->setVisible(false);
 	m_option->setVisible(false);
 	m_play->setVisible(false);
 	m_room->setVisible(false);
+	m_mapMenu->setVisible(false);
+	m_mapEdit->setVisible(false);
 
 	if (!m_images)
 		throw std::runtime_error("Error: can't load menu's images.");
@@ -59,8 +60,8 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	loadRoomMenu();
 	loadPlayMenu();
 
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,200,800,200 + m_height), m_root, GUI_ID_PLAY_BUTTON,
-            L"Play", L"Launches the game"));
+	// m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,200,800,200 + m_height), m_root, GUI_ID_PLAY_BUTTON,
+        //     L"Play", L"Launches the game"));
 	for (auto &btn : m_btns) {
 		btn->setImage(m_driver->getTexture("assets/models/menu/button.png"));
 		btn->setPressedImage(m_driver->getTexture("assets/models/menu/button_hover.png"));
@@ -99,15 +100,18 @@ void Indie::Menu::loadMapMenu()
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
 
-	irr::gui::IGUIEditBox *edit = m_gui->addEditBox(L"Map's name", irr::core::rect<irr::s32>(x_left,90,x_right,90 + m_height - 10), false, m_mapEdit, GUI_ID_MAP_NAME);
+	irr::gui::IGUIEditBox *edit = m_gui->addEditBox(L"Map's name", irr::core::rect<irr::s32>(x_left,90,x_right,90 + m_height - 10), true, m_mapMenu, GUI_ID_MAP_NAME);
 	edit->setMax(10);
 	edit->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_mapEdit, GUI_ID_MAP_EDITOR_BUTTON,
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_mapMenu, GUI_ID_MAP_EDITOR_BUTTON,
 		L"Map Editor"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_mapEdit, GUI_ID_MAP_RANDOM_BUTTON,
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_mapMenu, GUI_ID_MAP_RANDOM_BUTTON,
 		L"Random map"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 435, x_right, 435 + m_height), m_mapEdit, GUI_ID_MAP_BACK_BUTTON,
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 435, x_right, 435 + m_height), m_mapMenu, GUI_ID_MAP_BACK_BUTTON,
 		L"Back"));
+	// m_gui->addStaticText(L"S to save", irr::core::recti(10, 10, 10 + m_width, 10 + m_height), true, true, m_mapEdit);
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(10, m_opt.getHeight() / 2 - m_height / 2 , m_width, m_opt.getHeight() / 2 + m_height / 2 ), m_mapEdit, GUI_ID_MAP_SAVE_BUTTON,
+		L"Save"));
 }
 
 void Indie::Menu::loadPlayMenu()
