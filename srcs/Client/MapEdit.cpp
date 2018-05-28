@@ -162,20 +162,41 @@ int Indie::Core::editMapEvents()
 		cleanMap();
 		return -1;
 	}
+	if (m_event.isKeyDown(irr::KEY_KEY_A))
+		std::cout << m_event.MouseState.Position.X << " : "
+				  << m_event.MouseState.Position.Y << std::endl;
 	if (m_event.MouseState.LeftButtonDown) {
 		//m_event.MouseState.LeftButtonDown = false;
 		auto x = int((m_event.MouseState.Position.X - 362) / BLOCK_SIZE);
 		auto y = int((m_event.MouseState.Position.Y - 12) / BLOCK_SIZE);
-		if (x >= 0 && y >= 0 && x < 50 && y < 50)
+		if (x >= 0 && y >= 0 && x < 50 && y < 50) {
+			(_editState == BLOCK ? _counter.first -= 1 : _counter.second -= 1);
 			_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? 0 : 1);
-		_mapper->clear3dMap();
-		_mapper->load(_graphism);
+			_mapper->clear3dMap();
+			_mapper->load(_graphism);
+		}
+		else if (x < -4 && y <= 5)
+			_editState = BLOCK;
+		else if (x < -4 && y <= 10)
+			_editState = PERSO;
+		std::cout << _counter.first<< std::endl;
+		std::cout << x << " " << y << std::endl;
+		if (_counter.first == 2499) {
+		auto block =_graphism->createTexture(*_graphism->getTexture(1), {380, 200, 800}, {0, 0, 0}, {1, 1, 1}, false);
+		_graphism->resizeNode(block, _mapper->getSize());
+		// std::string wow = std::to_string(_counter.first);
+		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.first).c_str()), irr::core::rect<irr::s32>(50, y, 0, 0), irr::video::SColor(255,255,255,255));
+		auto perso =_graphism->createTexture(*_graphism->getTexture(10), {280, 200, 800}, {0, 0, 0}, {1, 1, 1}, false);
+		_graphism->resizeNode(perso, _mapper->getSize());
+		}
 	}
 	return 0;
 }
 
 void Indie::Core::editMap()
 {
+	_editState = BLOCK;
+	_counter = {2500, 4};
 	m_core.editMapView();
 	createZeroMap("mdr.txt", 50, 50);
 	_mapper = std::make_unique<Map>();

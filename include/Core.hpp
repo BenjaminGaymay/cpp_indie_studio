@@ -22,6 +22,11 @@
 namespace Indie {
 	class Player;
 
+	enum editorState {
+		BLOCK,
+		PERSO
+	};
+
 	class Core {
 	public:
 		Core();
@@ -65,5 +70,7 @@ namespace Indie {
 		irr::video::SColor _color;
 		GameState _state;
 		int _playerId;
+		editorState _editState;
+		std::pair<std::size_t, std::size_t> _counter;
 	};
 }
