@@ -9,6 +9,8 @@
 
 #include <irrlicht/irrlicht.h>
 #include <vector>
+#include <sys/types.h>
+#include <dirent.h>
 #include "Options.hpp"
 
 namespace Indie {
@@ -75,6 +77,7 @@ namespace Indie {
 		void loadMapMenu();
 		void loadPlayMenu();
 		void loadRoomMenu();
+		void chooseMap();
 
 		void setSkinTransparency(irr::s32 , irr::gui::IGUISkin *);
 
@@ -102,6 +105,7 @@ namespace Indie {
 
 		std::size_t m_height;
 		std::size_t m_width;
+		std::vector<std::string> v_map;
 		std::size_t m_small_height;
 		std::size_t m_small_width;
 	};

@@ -127,6 +127,20 @@ void Indie::Menu::loadPlayMenu()
 		L"Back"));
 }
 
+void Indie::Menu::chooseMap()
+{
+	DIR* dirp = opendir("./assets/maps/");
+    	struct dirent * dp;
+    	while ((dp = readdir(dirp)) != NULL) {
+		    if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0) {
+			    v_map.push_back(dp->d_name);
+			    std::cout << dp->d_name << std::endl;
+		    }
+    	}
+    	closedir(dirp);
+}
+
+
 void Indie::Menu::loadRoomMenu()
 {
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
@@ -135,6 +149,13 @@ void Indie::Menu::loadRoomMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_room, GUI_ID_READY, L"READY"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_room, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
+
+	//ROBZZ
+	chooseMap();
+	std::cout << v_map.size() << std::endl;
+	for (size_t i = 0; v_map[i] != "\0"; ++i) {
+		std::cout << v_map[i] << std::endl;
+	}
 }
 
 void Indie::Menu::setSkinTransparency(irr::s32 alpha , irr::gui::IGUISkin *skin)
