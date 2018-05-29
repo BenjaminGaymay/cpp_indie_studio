@@ -69,8 +69,6 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 {
 	std::vector<std::string> info;
 	int type, event, id;
-	irr::f32 rota;
-
 	for (auto &line : servSend) {
 		info = ManageStrings::splitString(line, ':');
 		if (!info.empty() && info.size() >= 2) { // bha oui, si info[1] exist pas, segfault...
@@ -92,14 +90,18 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 					_mapper = std::make_unique<Map>(info, 20.0f, 100.0f, _graphism);
 				} else {
 					id = std::stoi(info[0]);
-
 					irr::core::vector2di pos2d(stoi(info[1]), std::stoi(info[2]));
 					irr::core::vector3df pos3d(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
 					if (type == PLAYER && event == MOVE) {
-						rota = std::stof(info[6]); // pas tout le monde l'utilise
+						irr::f32 rota = std::stof(info[6]); // pas tout le monde l'utilise
 						(this->*_playersFct[event])(id, pos2d, pos3d, rota);
-					} else if (type == PLAYER && event == DROPBOMB)
-						type = type;
+					} else if (type == PLAYER && event == DROPBOMB) {
+						auto block = _mapper->get3dBlock(pos3d + _mapper->getSize() / 2);
+						auto power = static_cast<std::size_t>(std::stoi(info[6])); // pas tout le monde l'utilise
+						auto bomb = _graphism->createTexture(*_graphism->getTexture(3), block->getPosition(), {0, 0, 0}, {2, 2, 2}, true);
+						_graphism->resizeNode(bomb, _mapper->getSize());
+						(void) power;
+					}
 					/*switch (type) {
 						case Indie::PLAYER:
 							(this->*_playersFct[event])(id, pos2d, pos3d, rota); break;
