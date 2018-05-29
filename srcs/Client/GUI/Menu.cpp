@@ -11,6 +11,8 @@ Indie::Menu::Menu()
 {
 	m_height = 95;
 	m_width = 325;
+	m_small_height = 72;
+	m_small_width = 250;
 }
 
 Indie::Menu::~Menu()
@@ -62,6 +64,12 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 		btn->setUseAlphaChannel(true);
 		btn->setDrawBorder(0);
 	}
+	for (auto &btn : m_small_btns) {
+		btn->setImage(m_driver->getTexture("assets/models/menu/small_button.png"));
+		btn->setPressedImage(m_driver->getTexture("assets/models/menu/small_button_hover.png"));
+		btn->setUseAlphaChannel(true);
+		btn->setDrawBorder(0);
+	}
 }
 
 void Indie::Menu::loadMainMenu()
@@ -104,7 +112,7 @@ void Indie::Menu::loadMapMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 435, x_right, 435 + m_height), m_mapMenu, GUI_ID_MAP_BACK_BUTTON,
 		L"Back"));
 	// m_gui->addStaticText(L"S to save", irr::core::recti(10, 10, 10 + m_width, 10 + m_height), true, true, m_mapEdit);
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(10, m_opt.getHeight() / 2 - m_height / 2 , m_width, m_opt.getHeight() / 2 + m_height / 2 ), m_mapEdit, GUI_ID_MAP_SAVE_BUTTON,
+	m_small_btns.emplace_back(m_gui->addButton(irr::core::recti(10, m_opt.getHeight() / 2 - m_small_height / 2 , m_small_width, m_opt.getHeight() / 2 + m_small_height / 2 ), m_mapEdit, GUI_ID_MAP_SAVE_BUTTON,
 		L"Save"));
 }
 
@@ -140,33 +148,6 @@ void Indie::Menu::setSkinTransparency(irr::s32 alpha , irr::gui::IGUISkin *skin)
 
 Indie::AppState Indie::Menu::display()
 {
-	//irr::gui::IGUIFont *font = m_gui->getFont("fontlucida.png");
-	// irr::gui::IGUIStaticText *texte = m_gui->addStaticText(L"Apprendre Irrlicht les yeux fermés avec le\n"
-    	// 							" 'Petit guide d'Irrlicht' de Kevin Leonhart",
-    	// 			irr::core::rect<irr::s32>(100,20,400,100), true, true, 0, -1, true);
-
-	// texte->setOverrideFont(m_font);
-
 	m_gui->drawAll();
-
-	// irr::video::SColor color(255, 255, 255, 255);
-	// irr::core::position2di mouse = event.MouseState.Position;
-	// irr::core::dimension2di imgSize = {285, 64};
-	// std::array<SpriteMenu, 3> sprites;
-	// int hovered;
-	// initSpriteMenu(sprites);
-
-	// for (auto &sprite : sprites) {
-	// 	if (sprite.m_zone.isPointInside(mouse)) {
-	// 		hovered = 0;
-	// 		if (event.MouseState.LeftButtonDown)
-	// 			return sprite.m_return;
-	// 	}
-	// 	else
-	// 		hovered = 1;
-	// 	m_driver->draw2DImage(m_images,
-	// 		irr::core::position2di(sprite.m_zone.UpperLeftCorner),
-	// 		sprite.m_images[hovered], 0, color, true);
-	// }
 	return NONE;
 }

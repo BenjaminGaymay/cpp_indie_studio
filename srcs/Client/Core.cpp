@@ -225,7 +225,7 @@ void Indie::Core::menuEvents()
 				case GUI_ID_MAP_SAVE_BUTTON:
 					m_menu.m_mapEdit->setVisible(false);
 					m_menu.m_mapMenu->setVisible(true);
-					m_bappe = false;
+					m_run = false;
 					break;
 				default:
 					break;
