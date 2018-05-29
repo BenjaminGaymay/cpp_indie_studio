@@ -92,9 +92,7 @@ void Indie::Map::initMap(const std::string &fileName)
 irr::scene::ISceneNode *Indie::Map::putBlock(std::unique_ptr<Graphism> &core, int id, int x, int mulY, int z)
 {
 	irr::f32 cubeSize;
-
-	auto block = core->createTexture(*core->getTexture(id), {0, 0, 0}, {0, 0, 0},
-									{1, 1, 1}, false);
+	auto block = core->createTexture(*core->getTexture(id), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);
 	cubeSize = core->resizeNode(block, _size);
 	block->setPosition(irr::core::vector3df(
 			static_cast<irr::f32>((x * cubeSize) - (((_max_width - 1) * cubeSize) / 2.0)),

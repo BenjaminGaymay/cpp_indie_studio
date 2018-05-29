@@ -21,6 +21,8 @@ namespace Indie {
 		bool isStanding();
 		void setStanding(bool state);
 		void setSpeed(float speed);
+		void setPower(std::size_t power);
+		std::size_t getPower();
 		void setPos2d(const irr::core::vector2di &pos) { _pos2d = pos;}
 		const float &getSpeed();
 		irr::core::vector3df getPosition() { return _player->getPosition(); }
@@ -35,6 +37,7 @@ namespace Indie {
 		irr::f32 _speed;
 		s_tchat _tchat;
 		irr::core::vector2di _pos2d;
+		std::size_t _power;
 	protected:
 	};
 }

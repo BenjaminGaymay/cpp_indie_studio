@@ -30,6 +30,7 @@ namespace Indie {
 		/* FIRST object, SECOND texture */
 		std::map<int, textureElem> _texturesMap;
 		std::vector<irr::scene::ISceneNode *> _nodesList;
+		std::vector<irr::scene::ISceneNode *> _bombsList;
 		Window *m_core;
 	};
 }
