@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <irrlicht/vector2d.h>
 #include "Socket.hpp"
+#include "Bomb.hpp"
 
 namespace Indie {
 	enum GameState {
@@ -51,6 +52,7 @@ namespace Indie {
 			int _hostFd;
 			GameState _state;
 			std::vector<std::unique_ptr<Client>> _clients;
+			std::vector<std::unique_ptr<Indie::Bomb>> _bombs;
 			std::vector<std::vector<int>> _map;
 			std::string _mapMsg;
 	};

@@ -7,28 +7,25 @@
 #ifndef BOMBERMAN_BOMB_HPP
 #define BOMBERMAN_BOMB_HPP
 
-//#include <ctime>
-//#include <irrlicht/IAnimatedMeshSceneNode.h>
+#include <chrono>
+#include <irrlicht/vector2d.h>
+#include <irrlicht/IAnimatedMeshSceneNode.h>
 
 namespace Indie {
 	class Bomb {
 	public:
-		Bomb(int timeMax, int lenght);
-		~Bomb();
-		void setTexture(irr::scene::ISceneNode *texture);
-		irr::scene::IAnimatedMeshSceneNode *getTexture();
-		void fire(Player *player, std::unique_ptr<Map> &_mapper, std::unique_ptr<Graphism> &graphism);
-		bool boom(Player *player, std::unique_ptr<Map> &map);
+		Bomb(const int &timeMax, const std::size_t &lenght, const irr::core::vector2di &pos2d) : _timeMax(std::time(nullptr) + timeMax), _lenght(lenght), _state(TICTAC), _pos2d(pos2d) {};
+		~Bomb() {};
+		bool tictac();
 	private:
-		// Renommer l'enum (genre BombState)
-		enum State {
+		enum BombState {
 			BOOM,
-			NONE
+			TICTAC
 		};
 		std::time_t _timeMax;
-		int _lenght;
-		bool _state;
-		irr::scene::IAnimatedMeshSceneNode *_texture;
+		std::size_t _lenght;
+		BombState _state;
+		irr::core::vector2di _pos2d;
 	};
 }
 

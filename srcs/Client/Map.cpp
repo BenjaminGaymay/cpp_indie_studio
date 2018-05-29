@@ -165,6 +165,17 @@ irr::core::vector2di Indie::Map::get2dBlock(const irr::core::vector3df &target)
 	//return nullptr;
 }
 
+irr::scene::ISceneNode* Indie::Map::get3dBlock(const irr::core::vector2di &target)
+{
+	for (auto &block : _3dmap) {
+		const auto &pos = block.first->getPosition();
+		if ((pos.X <= target.X && pos.Y <= target.Y)
+			&& (target.X < pos.X + _size && target.Y < pos.Y + _size))
+			return block.first;
+	}
+	return nullptr;
+}
+
 irr::scene::ISceneNode *Indie::Map::get3dBlock(const irr::core::vector3df &target)
 {
 	for (auto &block : _3dmap) {

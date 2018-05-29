@@ -39,27 +39,13 @@ int Indie::Server::maxFd() const
 void Indie::Server::addClient()
 {
 	static int id = 0;
-	struct sockaddr_in client_sin;
+	struct sockaddr_in client_sin{};
 	socklen_t client_sin_len = sizeof(client_sin);
-	std::unique_ptr<Client> newClient = std::make_unique<Client>(id,
-																 accept(_hostFd,
-																		(struct sockaddr *) &client_sin,
-																		&client_sin_len),
-																 "Anonymous");
+	std::unique_ptr<Client> newClient = std::make_unique<Client>(id, accept(_hostFd, (struct sockaddr *) &client_sin, &client_sin_len), "Anonymous");
 
 	dprintf(newClient->_fd, "%d\n", id);
 	_clients.push_back(std::move(newClient));
 	id += 1;
-}
-
-irr::f32 cutF(char *&str)
-{
-	return static_cast<irr::f32>(std::stof(strsep(&str, ":")));
-}
-
-int cutI(char *&str)
-{
-	return std::stoi(strsep(&str, ":"));
 }
 
 std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
@@ -117,9 +103,10 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));
 				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));
 				std::size_t power = std::stoul(strsep(&tmp, ":"));
-				(void) power;
 				(void) position3d;
 				if (_map[position2d.Y][position2d.X] == 0) {
+					std::unique_ptr<Indie::Bomb> mdr = std::make_unique<Indie::Bomb>(5, power, position2d);
+					_bombs.push_back(std::move(mdr));
 					_map[position2d.Y][position2d.X] = 3;
 					for (auto &i : _clients)
 						dprintf(i->_fd, cmd.c_str());
