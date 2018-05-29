@@ -21,6 +21,7 @@ void Indie::Core::comGameInfos(int event, std::vector<std::string> &infos)
 			_graphism->buildDecor();
 			break;
 		case MESSAGE: serverMessage(infos); break;
+		default:break;
 	}
 }
 
@@ -59,8 +60,7 @@ void Indie::Core::dropBombPlayer(int id, const irr::core::vector2di &pos2d, cons
 
 void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const irr::f32 &rota)
 {
-	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(
-					*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true), _tchat);
+	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true), _tchat);
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
 	newPlayer->getPlayer()->setRotation({0, rota, 0});
@@ -111,39 +111,6 @@ void Indie::Core::serverMessage(const std::vector<std::string> &message)
 
 void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 {
-/*<<<<<<< HEAD
-	std::vector<std::string> info;
-	int type, event, id;
-	for (auto &line : servSend) {
-		info = ManageStrings::splitString(line, ':');
-		if (!info.empty() && info.size() >= 2) { // bha oui, si info[1] exist pas, segfault...
-			if (ManageStrings::isInteger(info[0]) && ManageStrings::isInteger(info[1])) {
-				type = std::stoi(info[0]);
-				event = std::stoi(info[1]);
-				info.erase(info.begin(), info.begin() + 2);
-				if (type == GAMEINFOS && event == START) {
-					_state = PLAYING;
-					m_state = PLAY;
-					_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true), _tchat));
-					_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
-					m_core.getCamera().change(m_core.getSceneManager());
-					_graphism->buildDecor();
-				} else if (type == GAMEINFOS && event == MESSAGE) {
-					serverMessage(info);
-				} else if (type == MAP and event == APPEAR) {
-					std::cout << "On recois la carte\n";
-					_mapper = std::make_unique<Map>(info, 20.0f, 100.0f, _graphism);
-				} else {
-					id = std::stoi(info[0]);
-					irr::core::vector2di pos2d(stoi(info[1]), std::stoi(info[2]));
-					irr::core::vector3df pos3d(std::stof(info[3]), std::stof(info[4]), std::stof(info[5]));
-					if (type == PLAYER && event == MOVE) {
-						irr::f32 rota = std::stof(info[6]); // pas tout le monde l'utilise
-						(this->*_playersFct[event])(id, pos2d, pos3d, rota);
-					}
-				}
-			}
-=======*/
 	std::vector<std::string> infos;
 	int type, event;
 
@@ -154,7 +121,6 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 			event = std::stoi(infos[1]);
 			infos.erase(infos.begin(), infos.begin() + 2);
 			(this->*_objectsFct[type])(event, infos);
-/*>>>>>>> a852c0d924f89a3e0bdd84cf3452c4cdaf98e289*/
 		}
 	}
 }
