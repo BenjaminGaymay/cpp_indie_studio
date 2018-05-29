@@ -11,6 +11,7 @@
 #include <vector>
 #include <sys/types.h>
 #include <dirent.h>
+#include "ManageStrings.hpp"
 #include "Options.hpp"
 
 namespace Indie {
@@ -40,7 +41,8 @@ namespace Indie {
 		GUI_ID_MAP_RANDOM_BUTTON,
 		GUI_ID_MAP_NAME,
 		GUI_ID_MAP_SAVE_BUTTON,
-		GUI_ID_DOWN_BUTTON
+		GUI_ID_DOWN_BUTTON,
+		ID_GUI_LIST_MAP
 	};
 
 
