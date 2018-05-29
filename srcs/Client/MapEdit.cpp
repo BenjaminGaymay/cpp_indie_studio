@@ -40,22 +40,22 @@ int Indie::Core::createRandMap(std::string name, std::size_t x, std::size_t y)
 	}
 
 	// TOP LEFT CORNER
-	map[1][1] = 0;
+	map[1][1] = 10;
 	map[1][2] = 0;
 	map[2][1] = 0;
 
 	// TOP RIGHT CORNER
-	map[1][x - 2] = 0;
+	map[1][x - 2] = 10;
 	map[1][x - 3] = 0;
 	map[2][x - 2] = 0;
 
 	// BOT LEFT CORNER
-	map[y - 2][1] = 0;
+	map[y - 2][1] = 10;
 	map[y - 2][2] = 0;
 	map[y - 3][1] = 0;
 
 	// BOT RIGHT CORNER
-	map[y - 2][x - 2] = 0;
+	map[y - 2][x - 2] = 10;
 	map[y - 2][x - 3] = 0;
 	map[y - 3][x - 2] = 0;
 
@@ -84,7 +84,9 @@ void Indie::Core::writeInFile(std::string file, std::vector<std::vector<int>> ma
 
 	for (std::size_t i = 0; i < map.size(); ++i) {
 		for (std::size_t j = 0; j < map[i].size(); ++j) {
-			outfile << "0" << map[i][j] << " ";
+			if (map[i][j] >= 0 && map[i][j] <= 9)
+				outfile << "0";
+			outfile << map[i][j] << " ";
 		}
 		outfile << std::endl;
 	}
@@ -189,7 +191,6 @@ int Indie::Core::editMapEvents()
 	if (m_event.isKeyDown(irr::KEY_KEY_S)) {
 		auto textbox = m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME, true);
 		auto mapName = ManageStrings::convertWchart(textbox->getText());
-		std::cout << mapName << std::endl;
 		cleanMap();
 		writeInFile(std::string("assets/maps/" + mapName), _mapper->getMap2d());
 		return -1;
@@ -214,7 +215,6 @@ void Indie::Core::editMap()
 	_mapper->newMap("assets/maps/mdr.txt", 20.0f, 100.0f, _graphism);
 
 	//SELECTION SIDE
-	const static char *selection = "->";
 	_editState = BLOCK;
 	_counter = {2500, 4};
 	auto block =_graphism->createTexture(*_graphism->getTexture(1), {380, 200, 800}, {0, 0, 0}, {1, 1, 1}, false);
@@ -230,9 +230,10 @@ void Indie::Core::editMap()
 		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.first).c_str()), irr::core::rect<irr::s32>(150, 25, 0, 0), irr::video::SColor(255,255,255,255));
 		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.second).c_str()), irr::core::rect<irr::s32>(150, 105, 0, 0), irr::video::SColor(255,255,255,255));
 		if (_editState == BLOCK)
-			m_core.m_font->draw(irr::core::stringw(selection), irr::core::rect<irr::s32>(0, 25, 0, 0), irr::video::SColor(255,255,0,255));
+			m_core.m_font->draw(irr::core::stringw("->"), irr::core::rect<irr::s32>(0, 25, 0, 0), irr::video::SColor(255,255,0,255));
 		else
-			m_core.m_font->draw(irr::core::stringw(selection), irr::core::rect<irr::s32>(0, 105, 0, 0), irr::video::SColor(255,255,0,255));
+			m_core.m_font->draw(irr::core::stringw("->"), irr::core::rect<irr::s32>(0, 105, 0, 0), irr::video::SColor(255,255,0,255));
+		m_core.m_font->draw(irr::core::stringw("S TO SAVE"), irr::core::rect<irr::s32>(15, 680, 0, 0), irr::video::SColor(255,255,255,255));
 		m_core.m_driver->endScene();
 	}
 }
