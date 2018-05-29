@@ -114,9 +114,9 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			if (enumType == PLAYER && enumEvent == DROPBOMB) {
 				auto enumId = std::stoi(strsep(&tmp, ":"));
 				(void) enumId;
-				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));// = {cutI(tmp), cutI(tmp)};
-				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));// = {cutF(tmp), cutF(tmp), cutF(tmp)};
-				std::size_t power = static_cast<std::size_t>(std::stoi(strsep(&tmp, ":")));
+				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));
+				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));
+				std::size_t power = std::stoul(strsep(&tmp, ":"));
 				(void) power;
 				(void) position3d;
 				if (_map[position2d.Y][position2d.X] == 0) {
@@ -126,8 +126,8 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				}
 			} else if (enumType == PLAYER && enumEvent == MOVE) {
 				auto enumId = std::stoi(strsep(&tmp, ":"));
-				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));// = {cutI(tmp), cutI(tmp)};
-				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));// = {cutF(tmp), cutF(tmp), cutF(tmp)};
+				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));
+				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));
 				irr::f32 rotation = std::stof(strsep(&tmp, ":"));
 				(void) rotation;
 				(void) position3d;
