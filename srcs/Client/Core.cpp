@@ -88,12 +88,13 @@ void Indie::Core::checkAppContext()
 			} catch (const std::exception &e) {}
 		}
 		_playerId = waitForId();
-		// >> on gerera ca dans la room de l'host
-		sendMapToServer("assets/maps/map.txt");
-		// <<
 	}
-	if (m_state == READY && _state == WAITING)
+	if (m_state == READY && _state == WAITING) {
+		irr::gui::IGUIListBox *list = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(ID_GUI_LIST_MAP, true));
+		auto map = ManageStrings::convertWchart(list->getListItem(list->getSelected()));
+		sendMapToServer(std::string("assets/maps/" + map));
 		dprintf(_socket->getFd(), "READY\n");
+	}
 	if (m_state == CONNECT && _state == NOTCONNECTED) {
 		try {
 			_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);

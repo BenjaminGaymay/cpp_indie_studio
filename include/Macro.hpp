@@ -8,4 +8,4 @@
 #pragma once
 
 #define BLOCK_SIZE 14
-#define BTN_COUNT 23
+#define BTN_COUNT 24
