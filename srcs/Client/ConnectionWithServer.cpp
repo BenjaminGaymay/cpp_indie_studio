@@ -32,6 +32,30 @@ void Indie::Core::comMap(int event, std::vector<std::string> &infos)
 	}
 }
 
+void Indie::Core::destroyBomb(const irr::core::vector2di &target)
+{
+	auto &bombs = _graphism->getBombs();
+
+	for (auto elem = bombs.begin() ; elem != bombs.end() ; ++elem) {
+		auto &bomb = *elem;
+		if (bomb.getPosition2d() == target) {
+			bomb.getTexture()->remove();
+			bombs.erase(elem);
+			return ;
+		}
+	}
+}
+
+void Indie::Core::destroyBlock(const irr::core::vector2di &target)
+{
+	std::cerr << "DESTROY: X:" << target.X << " et Y:" << target.Y << std::endl;
+	auto block = _mapper->get3dBlock(target);
+	block->setVisible(false);
+	block->setName("");
+	auto &map = _mapper->getMap2d();
+	map[target.Y][target.X] = 0;
+}
+
 void Indie::Core::comPlayer(int event, std::vector<std::string> &infos)
 {
 	try {
@@ -53,7 +77,9 @@ void Indie::Core::comBomb(int event, std::vector<std::string> &infos)
 
 		switch (event) {
 			case CREATEBOMB: dropBomb(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stoi(infos[4]), std::stof(infos[5])), std::stoul(infos[6])); break;
-			default:break;
+			case DESTROYBLOCK: destroyBlock(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1]))); break;
+			case DESTROYBOMB: destroyBomb(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1]))); break;
+			default: break;
 		}
 	} catch (const std::exception &e) {}
 }
@@ -66,6 +92,8 @@ void Indie::Core::dropBomb(int id, const irr::core::vector2di &pos2d, const irr:
 	auto block = _mapper->get3dBlock(pos3d + _mapper->getSize() / 2);
 	auto bomb = _graphism->createTexture(*_graphism->getTexture(3), block->getPosition(), {0, 0, 0}, {2, 2, 2}, true);
 	_graphism->resizeNode(bomb, _mapper->getSize());
+	_graphism->getBombs().emplace_back(pos2d, bomb);
+
 }
 
 void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const irr::f32 &rota)
@@ -84,6 +112,7 @@ void Indie::Core::removePlayer(int id)
 		return;
 	for (auto &p : _playerObjects) {
 		if (p->getId() == id) {
+			p->getPlayer()->remove();
 			auto pPos = std::find(_playerObjects.begin(), _playerObjects.end(), p);
 			pPos->reset();
 			_playerObjects.erase(pPos);

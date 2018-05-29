@@ -44,6 +44,9 @@ namespace Indie {
 			int readClient(std::unique_ptr<Client> &);
 			GameState checkIfStartGame();
 			static void runServer();
+			void destroyEntities(std::unique_ptr<Indie::Bomb> &bomb);
+			bool hitPlayer(const irr::core::vector2di &target);
+			void manageBomb();
 			std::vector<std::vector<int>> buildMap(const std::string &msg);
 		private:
 			fd_set _fdRead;

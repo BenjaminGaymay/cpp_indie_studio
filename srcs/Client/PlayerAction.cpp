@@ -30,7 +30,7 @@ void Indie::Core::dropBombEvent(irr::core::vector3df &pos)
 	if (!m_event.isKeyDown(irr::KEY_SPACE))
 		return ;
 	irr::core::vector2di pos2d = _mapper->get2dBlock(pos + _mapper->getSize() / 2);
-
+	std::cerr << "BOMB DROP POWER:" << _playerObjects[0]->getPower() << " X:" << pos2d.X << " Y:" << pos2d.Y << std::endl;
 	_socket->sendInfos(Indie::BOMB, Indie::CREATEBOMB,
 					   std::to_string(_playerObjects[0]->getId()) + ':' +
 					   std::to_string(pos2d.X) + ':' +
@@ -38,5 +38,5 @@ void Indie::Core::dropBombEvent(irr::core::vector3df &pos)
 					   std::to_string(pos.X) + ':' +
 					   std::to_string(pos.Y) + ':' +
 					   std::to_string(pos.Z) + ':' +
-					   std::to_string(_playerObjects[0]->getPower() + ':'));
+					   std::to_string(_playerObjects[0]->getPower()));
 }

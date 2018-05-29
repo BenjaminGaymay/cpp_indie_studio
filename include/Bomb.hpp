@@ -14,18 +14,26 @@
 namespace Indie {
 	class Bomb {
 	public:
-		Bomb(const int &timeMax, const std::size_t &lenght, const irr::core::vector2di &pos2d) : _timeMax(std::time(nullptr) + timeMax), _lenght(lenght), _state(TICTAC), _pos2d(pos2d) {};
-		~Bomb() = default;
-		bool tictac();
-	private:
 		enum BombState {
 			BOOM,
 			TICTAC
 		};
+		Bomb(const int &timeMax, const std::size_t &power, const irr::core::vector2di &pos2d)
+				: _timeMax(std::time(nullptr) + timeMax), _power(power), _pos2d(pos2d), _state(TICTAC) {};
+		~Bomb() = default;
+		bool tictac() {
+			if (_state == TICTAC && std::time(nullptr) >= _timeMax)
+				_state = BOOM;
+			return _state;
+		};
+		Indie::Bomb::BombState getState() { return _state; };
+		irr::core::vector2di getPosition() { return _pos2d; };
+		std::size_t getPower() { return _power; };
+	private:
 		std::time_t _timeMax;
-		std::size_t _lenght;
-		BombState _state;
+		std::size_t _power;
 		irr::core::vector2di _pos2d;
+		BombState _state;
 	};
 }
 

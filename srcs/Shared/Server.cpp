@@ -99,22 +99,32 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			auto enumEvent = std::stoi(strsep(&tmp, ":")); //MOVE
 			if (enumType == BOMB && enumEvent == CREATEBOMB) {
 				auto enumId = std::stoi(strsep(&tmp, ":"));
-				(void) enumId;
-				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));
-				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));
+				irr::core::vector2di position2d;
+				position2d.X = std::stoi(strsep(&tmp, ":"));
+				position2d.Y = std::stoi(strsep(&tmp, ":"));
+				irr::core::vector3df position3d;
+				position3d.X = std::stof(strsep(&tmp, ":"));
+				position3d.Y = std::stof(strsep(&tmp, ":"));
+				position3d.Z = std::stof(strsep(&tmp, ":"));
 				std::size_t power = std::stoul(strsep(&tmp, ":"));
 				(void) position3d;
+				(void) enumId;
+				std::cerr << "BOMB CREATION: POWER:" << power << " X:" << position2d.X << " et Y:" << position2d.Y << std::endl;
 				if (_map[position2d.Y][position2d.X] == 0) {
-					std::unique_ptr<Indie::Bomb> mdr = std::make_unique<Indie::Bomb>(5, power, position2d);
-					_bombs.push_back(std::move(mdr));
+					_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, position2d));
 					_map[position2d.Y][position2d.X] = 3;
 					for (auto &i : _clients)
 						dprintf(i->_fd, cmd.c_str());
 				}
 			} else if (enumType == PLAYER && enumEvent == MOVE) {
 				auto enumId = std::stoi(strsep(&tmp, ":"));
-				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));
-				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));
+				irr::core::vector2di position2d;
+				position2d.X = std::stoi(strsep(&tmp, ":"));
+				position2d.Y = std::stoi(strsep(&tmp, ":"));
+				irr::core::vector3df position3d;
+				position3d.X = std::stof(strsep(&tmp, ":"));
+				position3d.Y = std::stof(strsep(&tmp, ":"));
+				position3d.Z = std::stof(strsep(&tmp, ":"));
 				irr::f32 rotation = std::stof(strsep(&tmp, ":"));
 				(void) rotation;
 				(void) position3d;
@@ -156,7 +166,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 
 void Indie::Server::readOnFds()
 {
-	struct timeval tv = {1, 0};
+	struct timeval tv = {0, 200};
 
 	if (select(maxFd() + 1, &_fdRead, nullptr, nullptr, &tv) == -1)
 		throw std::runtime_error("Error while reading server socket");
@@ -194,10 +204,93 @@ Indie::GameState Indie::Server::checkIfStartGame()
 	return PLAYING;
 }
 
+bool Indie::Server::hitPlayer(const irr::core::vector2di &target)
+{
+	for (auto &aClient : _clients) {
+		if (aClient->pos2d.X == target.X && aClient->pos2d.Y == target.Y) {
+			dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, DEAD, aClient->_id);
+			return true;
+		}
+	}
+	return false;
+}
+
+void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
+{
+	auto pos2d = bomb->getPosition();
+	auto power = static_cast<int>(bomb->getPower());
+
+	for (int pos = 1 ; pos <= power ; ++pos) {
+		if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y)))
+			break ;
+		else if (pos2d.X + pos < static_cast<int>(_map[pos2d.Y].size()) && _map[pos2d.Y][pos2d.X + pos] == 1) {
+			_map[pos2d.Y][pos2d.X + pos] = 0;
+			for (auto &aClient : _clients)
+				dprintf(aClient->_fd, "%d:%d:%i:%i\n", BOMB, DESTROYBLOCK, pos2d.X + pos, pos2d.Y);
+			break;
+		}
+	}
+
+	for (int pos = power ; pos >= 1 && pos2d.X - pos > 0; --pos) {
+		if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y)))
+			break ;
+		else if (_map[pos2d.Y][pos2d.X - pos] == 1) {
+			_map[pos2d.Y][pos2d.X - pos] = 0;
+			for (auto &aClient : _clients)
+				dprintf(aClient->_fd, "%d:%d:%i:%i\n", BOMB, DESTROYBLOCK, pos2d.X - pos, pos2d.Y);
+			break;
+		}
+	}
+
+	for (int pos = 1 ; pos <= power ; ++pos) {
+		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos)))
+			break ;
+		else if (pos2d.Y + pos < static_cast<int>(_map.size()) && _map[pos2d.Y + pos][pos2d.X] == 1) {
+			_map[pos2d.Y + pos][pos2d.X] = 0;
+			for (auto &aClient : _clients)
+				dprintf(aClient->_fd, "%d:%d:%i:%i\n", BOMB, DESTROYBLOCK, pos2d.X, pos2d.Y + pos);
+			break;
+		}
+	}
+
+	for (int pos = power ; pos >= 1 && pos2d.Y - pos > 0; --pos) {
+		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos)))
+			break ;
+		else if (_map[pos2d.Y - pos][pos2d.X] == 1) {
+			_map[pos2d.Y - pos][pos2d.X] = 0;
+			for (auto &aClient : _clients)
+				dprintf(aClient->_fd, "%d:%d:%i:%i\n", BOMB, DESTROYBLOCK, pos2d.X, pos2d.Y - pos);
+			break;
+		}
+	}
+	for (auto &aClient : _clients)
+		dprintf(aClient->_fd, "%d:%d:%i:%i\n", BOMB, DESTROYBOMB, pos2d.X, pos2d.Y);
+}
+
+
+void Indie::Server::manageBomb()
+{
+	auto elem = _bombs.begin();
+
+	while (elem != _bombs.end()) {
+		auto &bomb = *elem;
+		bomb->tictac();
+		if (bomb->getState() == Indie::Bomb::BOOM) {
+			std::cerr << "BOOM" << std::endl;
+			destroyEntities(bomb);
+			_map[bomb->getPosition().Y][bomb->getPosition().X] = 0;
+			_bombs.erase(elem);
+			elem = _bombs.begin();
+		} else
+			++elem;
+	}
+}
+
 void Indie::Server::start()
 {
 	// GERER LA DESTRUCTION DU SALON (tlm quitte / partie terminée etc..)
 	while (1) {
+		manageBomb();
 		if (_state == WAITING)
 			_state = checkIfStartGame();
 		setClientsFds();

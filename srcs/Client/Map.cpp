@@ -108,10 +108,10 @@ void Indie::Map::load(std::unique_ptr<Indie::Graphism> &graphism)
 	for (std::size_t i = 0; i < _2dmap.size(); ++i) {
 		for (std::size_t j = 0; j < _2dmap[i].size(); ++j) {
 			_3dundermap.insert(std::pair<irr::scene::ISceneNode *, irr::core::vector2di>
-			        (putBlock(graphism, 2, (_max_height - 1) - i, -1, (_max_width - 1)- j), irr::core::vector2di(i, j)));
+			        (putBlock(graphism, 2, (_max_height - 1) - i, -1, (_max_width - 1)- j), irr::core::vector2di(j, i)));
 			if (graphism->getTexture(_2dmap[i][j]))
 				_3dmap.insert(std::pair<irr::scene::ISceneNode *, irr::core::vector2di>
-				        (putBlock(graphism, _2dmap[i][j], (_max_height - 1) - i, 0, (_max_width - 1) - j), irr::core::vector2di(i, j)));
+				        (putBlock(graphism, _2dmap[i][j], (_max_height - 1) - i, 0, (_max_width - 1) - j), irr::core::vector2di(j, i)));
 		}
 	}
 }
@@ -168,9 +168,8 @@ irr::core::vector2di Indie::Map::get2dBlock(const irr::core::vector3df &target)
 irr::scene::ISceneNode* Indie::Map::get3dBlock(const irr::core::vector2di &target)
 {
 	for (auto &block : _3dmap) {
-		const auto &pos = block.first->getPosition();
-		if ((pos.X <= target.X && pos.Y <= target.Y)
-			&& (target.X < pos.X + _size && target.Y < pos.Y + _size))
+		const auto &pos = block.second;
+		if (target.X == pos.X && target.Y == pos.Y)
 			return block.first;
 	}
 	return nullptr;

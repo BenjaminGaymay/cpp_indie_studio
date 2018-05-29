@@ -28,7 +28,9 @@ namespace Indie {
 		MOVE,
 		START,
 		MESSAGE,
-		CREATEBOMB
+		CREATEBOMB,
+		DESTROYBOMB,
+		DESTROYBLOCK
 	};
 
 	class Socket {
