@@ -16,6 +16,7 @@ Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 	_objectsFct.push_back(&Indie::Core::comPlayer);
 	_objectsFct.push_back(&Indie::Core::comGameInfos);
 	_objectsFct.push_back(&Indie::Core::comMap);
+	_objectsFct.push_back(&Indie::Core::comBomb);
 	m_state = MENU;
 	m_run = true;
 	_color = {255, 168, 201, 255};

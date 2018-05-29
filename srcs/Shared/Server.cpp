@@ -97,7 +97,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			std::string cmd = tmp;
 			auto enumType = std::stoi(strsep(&tmp, ":")); //PLAYER
 			auto enumEvent = std::stoi(strsep(&tmp, ":")); //MOVE
-			if (enumType == PLAYER && enumEvent == DROPBOMB) {
+			if (enumType == BOMB && enumEvent == CREATEBOMB) {
 				auto enumId = std::stoi(strsep(&tmp, ":"));
 				(void) enumId;
 				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));

@@ -18,7 +18,8 @@ namespace Indie {
 	enum ObjectsType {
 		PLAYER,
 		GAMEINFOS,
-		MAP
+		MAP,
+		BOMB
 	};
 
 	enum ObjectsEvents {
@@ -27,7 +28,7 @@ namespace Indie {
 		MOVE,
 		START,
 		MESSAGE,
-		DROPBOMB
+		CREATEBOMB
 	};
 
 	class Socket {

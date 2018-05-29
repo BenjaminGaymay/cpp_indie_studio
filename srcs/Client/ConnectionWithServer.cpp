@@ -42,13 +42,24 @@ void Indie::Core::comPlayer(int event, std::vector<std::string> &infos)
 			case DEAD: removePlayer(id); break;
 			case APPEAR: addPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
 			case MOVE: movePlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
-			case DROPBOMB: dropBombPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stoi(infos[4]), std::stof(infos[5])), std::stoul(infos[6])); break;
 			default:break;
 		}
 	} catch (const std::exception &e) {}
 }
 
-void Indie::Core::dropBombPlayer(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power)
+void Indie::Core::comBomb(int event, std::vector<std::string> &infos)
+{
+	try {
+		auto id = std::stoi(infos[0]);
+
+		switch (event) {
+			case CREATEBOMB: dropBomb(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stoi(infos[4]), std::stof(infos[5])), std::stoul(infos[6])); break;
+			default:break;
+		}
+	} catch (const std::exception &e) {}
+}
+
+void Indie::Core::dropBomb(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power)
 {
 	(void) id;
 	(void) pos2d;
