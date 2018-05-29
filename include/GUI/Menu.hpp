@@ -100,9 +100,13 @@ namespace Indie {
 		irr::gui::IGUIEnvironment *m_gui;
 		irr::video::ITexture* m_images;
 		std::vector<irr::gui::IGUIButton *> m_btns;
+		std::vector<irr::gui::IGUIButton *> m_small_btns;
 		Options m_opt;
+
 		std::size_t m_height;
 		std::size_t m_width;
 		std::vector<std::string> v_map;
+		std::size_t m_small_height;
+		std::size_t m_small_width;
 	};
 }
