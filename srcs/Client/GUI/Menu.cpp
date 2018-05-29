@@ -162,12 +162,13 @@ void Indie::Menu::loadRoomMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_room, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
 
-	//ROBZZ
 	chooseMap();
 	std::cout << v_map.size() << std::endl;
-	for (size_t i = 0; i < v_map.size() ; ++i) {
-		std::cout << v_map[i] << std::endl;
-	}
+	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 20, 800, 20 + m_height), false, true, m_room)->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
+	irr::gui::IGUIListBox *list = m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_room, ID_GUI_LIST_MAP);
+	for (auto &c : v_map)
+		list->addItem(irr::core::stringw(c.c_str()).c_str());
+	list->setSelected(0);
 }
 
 void Indie::Menu::setSkinTransparency(irr::s32 alpha , irr::gui::IGUISkin *skin)
