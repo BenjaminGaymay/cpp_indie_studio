@@ -153,7 +153,7 @@ void Indie::Menu::loadRoomMenu()
 	//ROBZZ
 	chooseMap();
 	std::cout << v_map.size() << std::endl;
-	for (size_t i = 0; v_map[i] != "\0"; ++i) {
+	for (size_t i = 0; i < v_map.size() ; ++i) {
 		std::cout << v_map[i] << std::endl;
 	}
 }
