@@ -116,6 +116,9 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				(void) enumId;
 				irr::core::vector2di position2d(std::stoi(strsep(&tmp, ":")), std::stoi(strsep(&tmp, ":")));// = {cutI(tmp), cutI(tmp)};
 				irr::core::vector3df position3d(std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")), std::stof(strsep(&tmp, ":")));// = {cutF(tmp), cutF(tmp), cutF(tmp)};
+				std::size_t power = static_cast<std::size_t>(std::stoi(strsep(&tmp, ":")));
+				(void) power;
+				(void) position3d;
 				if (_map[position2d.Y][position2d.X] == 0) {
 					_map[position2d.Y][position2d.X] = 3;
 					for (auto &i : _clients)
@@ -129,7 +132,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				(void) rotation;
 				(void) position3d;
 				(void) enumId;
-				if (_map[position2d.Y][position2d.X] == 0) {
+				if (_map[client->pos2d.Y][client->pos2d.X] == 3 || _map[position2d.Y][position2d.X] == 0) {
 					client->pos2d.Y = position2d.Y;
 					client->pos2d.X = position2d.X;
 					//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
