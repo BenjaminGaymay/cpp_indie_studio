@@ -156,7 +156,7 @@ void Indie::Core::cleanMap()
 	eraseLeftandRight();
 }
 
-void Indie::Core::changeMapWithEvent(auto x, auto y)
+void Indie::Core::changeMapWithEvent(std::size_t x, std::size_t y)
 {
 	//BLOCKS
 	if (_editState == BLOCK && _counter.first > 0 && _mapper->getMap2d()[y][x] != 10) {
