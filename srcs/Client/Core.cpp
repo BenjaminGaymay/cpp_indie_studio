@@ -13,9 +13,9 @@
 
 Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 {
-	_playersFct.push_back(&Indie::Core::addPlayer);
-	_playersFct.push_back(&Indie::Core::removePlayer);
-	_playersFct.push_back(&Indie::Core::movePlayer);
+	_objectsFct.push_back(&Indie::Core::comPlayer);
+	_objectsFct.push_back(&Indie::Core::comGameInfos);
+	_objectsFct.push_back(&Indie::Core::comMap);
 	m_state = MENU;
 	m_run = true;
 	_color = {255, 168, 201, 255};
@@ -25,6 +25,7 @@ Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
 	_state = NOTCONNECTED;
 	_playerId = -1;
 	_socket = nullptr;
+	m_bappe = true;
 	_tchat._getch = false;
 }
 
@@ -112,7 +113,7 @@ void Indie::Core::run()
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
-	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 500, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
+	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 1020, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
 	_tchat._textBox->setMax(40);
 	_tchat._textBox->setVisible(false);
 
@@ -162,11 +163,11 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_MAP_BUTTON:
 					m_menu.m_main->setVisible(false);
-					m_menu.m_mapEdit->setVisible(true);
+					m_menu.m_mapMenu->setVisible(true);
 					break;
 				case GUI_ID_MAP_BACK_BUTTON:
 					m_menu.m_main->setVisible(true);
-					m_menu.m_mapEdit->setVisible(false);
+					m_menu.m_mapMenu->setVisible(false);
 					break;
 				case GUI_ID_PLAY_BACK_BUTTON:
 					m_menu.m_main->setVisible(true);
@@ -186,7 +187,8 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:
 					m_state = MAPPING;
-					m_menu.m_mapEdit->setVisible(false);
+					m_menu.m_mapMenu->setVisible(false);
+					m_menu.m_mapEdit->setVisible(true);
 					break;
 				case GUI_ID_READY:
 					m_state = READY;
@@ -201,6 +203,11 @@ void Indie::Core::menuEvents()
 					m_state = LAUNCH_SERVER;
 					m_menu.m_room->setVisible(true);
 					m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_MAP_SAVE_BUTTON:
+					m_menu.m_mapEdit->setVisible(false);
+					m_menu.m_mapMenu->setVisible(true);
+					m_bappe = false;
 					break;
 				default:
 					break;

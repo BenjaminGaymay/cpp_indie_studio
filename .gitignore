@@ -10,3 +10,8 @@ bomberman.cbp
 .vscode/
 server
 peda-session*
+peda/
+Indie.srctrlbm
+Indie.srctrldb
+Indie.srctrlprj
+fontconfig/

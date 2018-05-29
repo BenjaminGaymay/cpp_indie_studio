@@ -22,6 +22,11 @@
 namespace Indie {
 	class Player;
 
+	enum editorState {
+		BLOCK,
+		PERSO
+	};
+
 	struct s_tchat {
 		bool _getch;
 		std::vector<std::string> _messages;
@@ -45,11 +50,16 @@ namespace Indie {
 		int createRandMap(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
-		void addPlayer(int, irr::core::vector2di &, irr::core::vector3df &, const irr::f32 &);
-		void removePlayer(int, irr::core::vector2di &, irr::core::vector3df &, const irr::f32 &);
-		void movePlayer(int, irr::core::vector2di &, irr::core::vector3df &, const irr::f32 &);
 		void moveEvent(irr::core::vector3df &pos);
 		void dropBombEvent(irr::core::vector3df &pos);
+		void comPlayer(int, std::vector<std::string> &);
+		void addPlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
+		void removePlayer(int);
+		void movePlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
+		void dropBombPlayer(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power);
+
+		void comGameInfos(int, std::vector<std::string> &);
+		void comMap(int, std::vector<std::string> &);
 		void serverMessage(const std::vector<std::string> &);
 		void checkAppContext();
 		void handleMenu();
@@ -57,7 +67,7 @@ namespace Indie {
 		void sendMapToServer(const std::string &);
 		void manageTchat();
 		void printTchat() const;
-
+		void changeMapWithEvent(std::size_t x, std::size_t y);
 
 	private:
 		int _lastFps;
@@ -69,7 +79,7 @@ namespace Indie {
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
-		std::vector<void (Indie::Core::*)(int, irr::core::vector2di &pos2d, irr::core::vector3df &pos3d, const irr::f32 &)> _playersFct;
+		std::vector<void (Indie::Core::*)(int, std::vector<std::string> &)> _objectsFct;
 		SplashScreen m_splash;
 		Menu m_menu;
 		AppState m_state;
@@ -78,5 +88,8 @@ namespace Indie {
 		GameState _state;
 		s_tchat _tchat;
 		int _playerId;
+		editorState _editState;
+		std::pair<std::size_t, std::size_t> _counter;
+		bool m_bappe;
 	};
 }

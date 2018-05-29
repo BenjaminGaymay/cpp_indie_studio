@@ -14,4 +14,5 @@ public:
 	static std::string lstrip(std::string &);
 	static std::vector<std::string> splitString(std::string &, char);
 	static bool isInteger(std::string &);
+	static std::string convertWchart(const wchar_t *);
 };
