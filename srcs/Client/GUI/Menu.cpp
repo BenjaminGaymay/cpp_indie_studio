@@ -35,6 +35,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_mapMenu = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_MAP_EDIT_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_mapEdit = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_MAP_EDIT_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_room = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_ROOM_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
+	m_down = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_DOWN_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 
 	m_main->setVisible(true);
 	m_option->setVisible(false);
@@ -42,6 +43,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_room->setVisible(false);
 	m_mapMenu->setVisible(false);
 	m_mapEdit->setVisible(false);
+	m_down->setVisible(false);
 
 	if (!m_images)
 		throw std::runtime_error("Error: can't load menu's images.");
@@ -55,6 +57,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	loadMapMenu();
 	loadRoomMenu();
 	loadPlayMenu();
+	loadDownMenu();
 
 	// m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,200,800,200 + m_height), m_root, GUI_ID_PLAY_BUTTON,
         //     L"Play", L"Launches the game"));
@@ -95,6 +98,15 @@ void Indie::Menu::loadOptionsMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_option, GUI_ID_OPTION_BACK_BUTTON,
 		L"Back"));
 	m_gui->addCheckBox(m_opt.getFullScreen(), irr::core::recti(m_width, m_height, m_width + 250, m_height + 50), m_option, GUI_ID_FULLSCREEN, L"FullScreen");
+}
+
+void Indie::Menu::loadDownMenu()
+{
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_gui->addStaticText(L"Server is down", irr::core::rect<irr::s32>(x_left + 20, 250, x_right + 50, 250 + m_height), false, true, m_down);
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 435, x_right, 435 + m_height), m_down, GUI_ID_DOWN_BUTTON, L"Back to menu"));
 }
 
 void Indie::Menu::loadMapMenu()

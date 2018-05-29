@@ -53,13 +53,8 @@ void Indie::Core::processEvents()
 	else {
 		if (m_event.isKeyDown(irr::KEY_ESCAPE))
 			m_run = false;
-		if (m_event.isKeyDown(irr::KEY_KEY_A)) {
-			std::cout << m_event.MouseState.Position.X << " : "
-					<< m_event.MouseState.Position.Y << std::endl;
-			m_event.setKeyUp(irr::KEY_KEY_A);
-		}
-		if (m_event.isKeyDown(irr::KEY_KEY_T)) {
-			m_event.setKeyUp(irr::KEY_KEY_T);
+		if (m_event.isKeyDown(irr::KEY_RETURN)) {
+			m_event.setKeyUp(irr::KEY_RETURN);
 			if (_socket) {
 				_tchat._getch = true;
 				_tchat._textBox->setVisible(true);
@@ -106,6 +101,11 @@ void Indie::Core::checkAppContext()
 			m_menu.m_play->setVisible(true);
 		}
 	}
+	if (m_state == SERVER_DOWN) {
+		if (m_menu.m_room->isVisible())
+			m_menu.m_room->setVisible(false);
+		m_menu.m_down->setVisible(true);
+	}
 }
 
 /*std::string floatToInt(float nb)
@@ -130,8 +130,20 @@ void Indie::Core::run()
 		m_core.m_driver->beginScene(true, true, _color);
 		checkAppContext();
 
-		if (_state != NOTCONNECTED && _socket)
-			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
+		if (_state != NOTCONNECTED && _socket) {
+			try {
+				readServerInformations(_socket->readSocket());
+			} catch (const std::exception &e) {
+				_mapper.release();
+				_playerObjects.clear();
+				_socket.release();
+				_tchat._messages.clear();
+				if (_tchat._textBox->isVisible())
+					_tchat._textBox->setVisible(false);
+				_state = NOTCONNECTED;
+				m_state = SERVER_DOWN;
+			}
+		}
 		if (m_state == PLAY) {
 			m_core.getCamera().change(m_core.getSceneManager());
 			m_core.m_device->getCursorControl()->setVisible(false);
@@ -227,6 +239,11 @@ void Indie::Core::menuEvents()
 					m_menu.m_mapEdit->setVisible(false);
 					m_menu.m_mapMenu->setVisible(true);
 					m_run = false;
+					break;
+				case GUI_ID_DOWN_BUTTON:
+					m_menu.m_down->setVisible(false);
+					m_menu.m_main->setVisible(true);
+					m_state = MENU;
 					break;
 				default:
 					break;
