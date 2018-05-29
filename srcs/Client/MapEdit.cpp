@@ -95,11 +95,16 @@ void Indie::Core::writeInFile(std::string file, std::vector<std::vector<int>> ma
 
 void Indie::Core::eraseTopandBot()
 {
-	while (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]))
+	bool a = (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]));
+	while (a == 0) {
 		_mapper->getMap2d().erase(_mapper->getMap2d().begin());
+		a = (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]));
+	}
 	int i = _mapper->getMap2d().size() - 1;
-	while (std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i])) {
+	a = (std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i]));
+	while (a == 0) {
 		_mapper->getMap2d().erase(_mapper->getMap2d().end());
+		a = std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i]);
 		--i;
 	}
 }
