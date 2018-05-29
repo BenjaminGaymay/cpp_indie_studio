@@ -132,7 +132,9 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				(void) rotation;
 				(void) position3d;
 				(void) enumId;
-				if (_map[client->pos2d.Y][client->pos2d.X] == 3 || _map[position2d.Y][position2d.X] == 0) {
+				if ((_map[client->pos2d.Y][client->pos2d.X] == 1 && _map[position2d.Y][position2d.X] == 3) /* sinon on reste bloqué contre le mur*/
+					|| (_map[client->pos2d.Y][client->pos2d.X] == 3) /* sinon on reste bloqué dans la bomb qu'on vient de drop*/
+					|| (_map[position2d.Y][position2d.X] == 0)) /*normal*/{
 					client->pos2d.Y = position2d.Y;
 					client->pos2d.X = position2d.X;
 					//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
