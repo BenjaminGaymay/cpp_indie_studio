@@ -15,8 +15,8 @@ void Indie::Core::comGameInfos(int event, std::vector<std::string> &infos)
 		case START:
 			_state = PLAYING;
 			m_state = PLAY;
-			_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true), _tchat));
-			_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
+			// _playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true), _tchat));
+			// _graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
 			m_core.getCamera().change(m_core.getSceneManager());
 			_graphism->buildDecor();
 			break;
@@ -38,19 +38,21 @@ void Indie::Core::comPlayer(int event, std::vector<std::string> &infos)
 
 		switch (event) {
 			case DEAD: removePlayer(id); break;
-			case APPEAR: addPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
+			case APPEAR: addPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2]))); break;
 			case MOVE: movePlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
 		}
 	} catch (const std::exception &e) {}
 }
 
-void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const irr::f32 &rota)
+void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d)
 {
+	auto pos3d = _mapper->get3dBlock(pos2d)->getPosition();
+
+	std::cout << pos3d.X <<  ":" << pos3d.Y << ":" << pos3d.Z << std::endl;
 	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(
 					*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true), _tchat);
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
-	newPlayer->getPlayer()->setRotation({0, rota, 0});
 	newPlayer->setPos2d(pos2d);
 	_playerObjects.push_back(std::move(newPlayer));
 }
