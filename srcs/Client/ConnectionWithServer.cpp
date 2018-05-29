@@ -5,7 +5,6 @@
 // Multiplayer
 //
 
-#include <cstring>
 #include <Player.hpp>
 #include "ManageStrings.hpp"
 
@@ -21,7 +20,7 @@ void Indie::Core::comGameInfos(int event, std::vector<std::string> &infos)
 			_graphism->buildDecor();
 			break;
 		case MESSAGE: serverMessage(infos); break;
-		default:break;
+		default: break;
 	}
 }
 
@@ -29,7 +28,7 @@ void Indie::Core::comMap(int event, std::vector<std::string> &infos)
 {
 	switch (event) {
 		case APPEAR: _mapper = std::make_unique<Map>(infos, 20.0f, 100.0f, _graphism); break;
-		default:break;
+		default: break;
 	}
 }
 
@@ -42,7 +41,7 @@ void Indie::Core::comPlayer(int event, std::vector<std::string> &infos)
 			case DEAD: removePlayer(id); break;
 			case APPEAR: addPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
 			case MOVE: movePlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
-			default:break;
+			default: break;
 		}
 	} catch (const std::exception &e) {}
 }
@@ -63,10 +62,10 @@ void Indie::Core::dropBomb(int id, const irr::core::vector2di &pos2d, const irr:
 {
 	(void) id;
 	(void) pos2d;
+	(void) power;
 	auto block = _mapper->get3dBlock(pos3d + _mapper->getSize() / 2);
 	auto bomb = _graphism->createTexture(*_graphism->getTexture(3), block->getPosition(), {0, 0, 0}, {2, 2, 2}, true);
 	_graphism->resizeNode(bomb, _mapper->getSize());
-	(void) power;
 }
 
 void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const irr::f32 &rota)

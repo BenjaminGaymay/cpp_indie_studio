@@ -15,7 +15,7 @@ namespace Indie {
 	class Bomb {
 	public:
 		Bomb(const int &timeMax, const std::size_t &lenght, const irr::core::vector2di &pos2d) : _timeMax(std::time(nullptr) + timeMax), _lenght(lenght), _state(TICTAC), _pos2d(pos2d) {};
-		~Bomb() {};
+		~Bomb() = default;
 		bool tictac();
 	private:
 		enum BombState {
