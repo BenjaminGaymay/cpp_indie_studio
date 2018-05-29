@@ -24,6 +24,22 @@ std::string ManageStrings::replaceStr(std::string oldStr, std::string newStr, st
 	return str;
 }
 
+std::string ManageStrings::replaceStr(std::string oldStr, std::string newStr, char *cStr)
+{
+	size_t index = 0;
+	size_t oldStrLen = oldStr.length();
+	std::string str = std::string(cStr);
+
+	while (true) {
+		index = str.find(oldStr, 0);
+		if (index == std::string::npos)
+			break;
+		str.replace(index, oldStrLen, newStr);
+		index += oldStrLen;
+	}
+	return str;
+}
+
 std::string ManageStrings::lstrip(std::string &str)
 {
 	std::string::iterator it = str.begin();

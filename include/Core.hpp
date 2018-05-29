@@ -52,7 +52,7 @@ namespace Indie {
 		void readServerInformations(std::vector<std::string>);
 
 		void comPlayer(int, std::vector<std::string> &);
-		void addPlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
+		void addPlayer(int, const irr::core::vector2di &);
 		void removePlayer(int);
 		void movePlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
 

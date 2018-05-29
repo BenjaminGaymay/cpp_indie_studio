@@ -26,6 +26,7 @@ namespace Indie {
 		GUI_ID_MAP_EDIT_MENU_ELEMENT,
 		GUI_ID_MAIN_MENU_ELEMENT,
 		GUI_ID_ROOM_MENU_ELEMENT,
+		GUI_ID_DOWN_ELEMENT,
 		GUI_ID_ROOM_BACK_BUTTON,
 		GUI_ID_OPTION_BACK_BUTTON,
 		GUI_ID_PLAY_BACK_BUTTON,
@@ -38,7 +39,8 @@ namespace Indie {
 		GUI_ID_TCHAT_BUTTON,
 		GUI_ID_MAP_RANDOM_BUTTON,
 		GUI_ID_MAP_NAME,
-		GUI_ID_MAP_SAVE_BUTTON
+		GUI_ID_MAP_SAVE_BUTTON,
+		GUI_ID_DOWN_BUTTON
 	};
 
 
@@ -52,6 +54,7 @@ namespace Indie {
 		CONNECT,
 		READY,
 		PLAY,
+		SERVER_DOWN,
 		NONE
 	};
 
@@ -77,6 +80,7 @@ namespace Indie {
 		void loadMapMenu();
 		void loadPlayMenu();
 		void loadRoomMenu();
+		void loadDownMenu();
 		void chooseMap();
 
 		void setSkinTransparency(irr::s32 , irr::gui::IGUISkin *);
@@ -87,6 +91,7 @@ namespace Indie {
 		irr::gui::IGUIElement *m_option;
 		irr::gui::IGUIElement *m_play;
 		irr::gui::IGUIElement *m_room;
+		irr::gui::IGUIElement *m_down;
 		irr::gui::IGUIElement *m_mapMenu;
 		irr::gui::IGUIElement *m_mapEdit;
 		// irr::gui::IGUIElement *m_room;
