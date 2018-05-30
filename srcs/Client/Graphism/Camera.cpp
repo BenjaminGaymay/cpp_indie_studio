@@ -28,6 +28,7 @@ Indie::Camera::~Camera()
 
 void Indie::Camera::initCamera(irr::scene::ISceneManager *sceneManager, irr::core::vector3df &pos)
 {
+	(void) pos;
 	m_cameras.resize(2);
 	m_cameras[FPS] = sceneManager->addCameraSceneNodeFPS(nullptr, 100, 0.5, -1, m_keyMap, 5);
 	m_cameras[FPS]->setPosition({0, 200, 0});
