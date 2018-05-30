@@ -56,19 +56,25 @@ void Indie::Core::destroyBomb(const irr::core::vector2di &target)
 	}
 }
 
-void Indie::Core::destroyBlock(const irr::core::vector2di &target)
+bool Indie::Core::findAndDestroyEntity(const irr::core::vector2di &target)
 {
-	auto &map = _mapper->getMap2d();
-	map[target.Y][target.X] = 0;
 	for (auto elem = _graphism->getBonus().begin() ; elem != _graphism->getBonus().end() ; ++elem) {
 		auto &bonus = *elem;
 		if (bonus.getPosition2d() == target) {
 			bonus.getTexture()->remove();
 			_graphism->getBonus().erase(elem);
-			return ;
+			return true;
 		}
 	};
+	return false;
+}
 
+void Indie::Core::destroyBlock(const irr::core::vector2di &target)
+{
+	auto &map = _mapper->getMap2d();
+	map[target.Y][target.X] = 0;
+	if (findAndDestroyEntity(target))
+		return ;
 	auto block = _mapper->get3dBlock(target);
 	block->setVisible(false);
 	block->setName("");

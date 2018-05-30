@@ -139,15 +139,21 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				(void) rotation;
 				(void) position3d;
 				(void) enumId;
+				std::cerr << "map:" << _map[position2d.Y][position2d.X] << std::endl;
 				if ((_map[client->pos2d.Y][client->pos2d.X] == 1 && _map[position2d.Y][position2d.X] == 3) /* sinon on reste bloqué contre le mur*/
-					|| (_map[client->pos2d.Y][client->pos2d.X] == 3) /* sinon on reste bloqué dans la bomb qu'on vient de drop*/
+					|| (_map[client->pos2d.Y][client->pos2d.X] == 3)
 					|| (_map[position2d.Y][position2d.X] == 0)) /*normal*/{
 					client->pos2d.Y = position2d.Y;
 					client->pos2d.X = position2d.X;
-					//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
 					for (auto &i : _clients)
-							dprintf(i->_fd, cmd.c_str());
-				}
+						dprintf(i->_fd, cmd.c_str());
+				} else if (_map[position2d.Y][position2d.X] > FIRE_UP && _map[position2d.Y][position2d.X] < LAST_UP) {
+					_map[position2d.Y][position2d.X] = 0;
+					client->pos2d.Y = position2d.Y;
+					client->pos2d.X = position2d.X;
+					for (auto &i : _clients)
+						dprintf(i->_fd, "%d:%d:%d:%d\n", MAP, DESTROYBLOCK, position2d.X, position2d.Y);
+					}
 			} else {
 				for (auto &i : _clients) {
 					if (std::string(cmd).compare(0, 4, "1:4:") == 0)
