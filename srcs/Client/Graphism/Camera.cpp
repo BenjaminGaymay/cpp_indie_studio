@@ -49,6 +49,12 @@ void Indie::Camera::change(irr::scene::ISceneManager *sceneManager)
 	}
 }
 
+void Indie::Camera::change(irr::scene::ISceneManager *sceneManager, Indie::Camera::Mode mode)
+{
+	m_mode = mode;
+	sceneManager->setActiveCamera(m_cameras[m_mode]);
+}
+
 Indie::Camera::Mode Indie::Camera::getMode() const
 {
 	return m_mode;

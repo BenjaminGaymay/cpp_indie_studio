@@ -70,6 +70,7 @@ namespace Indie {
 		void manageTchat();
 		void printTchat() const;
 		void changeMapWithEvent(std::size_t x, std::size_t y);
+		void exitGame();
 
 	private:
 		int _lastFps;

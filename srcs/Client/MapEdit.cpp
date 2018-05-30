@@ -95,11 +95,16 @@ void Indie::Core::writeInFile(std::string file, std::vector<std::vector<int>> ma
 
 void Indie::Core::eraseTopandBot()
 {
-	while (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]))
+	bool a = (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]));
+	while (a == 0) {
 		_mapper->getMap2d().erase(_mapper->getMap2d().begin());
+		a = (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]));
+	}
 	int i = _mapper->getMap2d().size() - 1;
-	while (std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i])) {
+	a = (std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i]));
+	while (a == 0) {
 		_mapper->getMap2d().erase(_mapper->getMap2d().end());
+		a = std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i]);
 		--i;
 	}
 }
@@ -188,7 +193,7 @@ int Indie::Core::editMapEvents()
 {
 	if (m_event.isKeyDown(irr::KEY_ESCAPE))
 		m_run = false;
-	if (m_event.isKeyDown(irr::KEY_KEY_S)) {
+	if (m_run == false) {
 		auto textbox = m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME, true);
 		auto mapName = ManageStrings::convertWchart(textbox->getText());
 		cleanMap();
@@ -223,9 +228,11 @@ void Indie::Core::editMap()
 	_graphism->resizeNode(perso, _mapper->getSize());
 
 	while (m_core.m_device->run() && m_run) {
+		processEvents();
 		if (editMapEvents() == -1)
 			break;
 		m_core.m_driver->beginScene(true, true, _color);
+		m_core.m_gui->drawAll();
     		m_core.m_sceneManager->drawAll();
 		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.first).c_str()), irr::core::rect<irr::s32>(150, 25, 0, 0), irr::video::SColor(255,255,255,255));
 		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.second).c_str()), irr::core::rect<irr::s32>(150, 105, 0, 0), irr::video::SColor(255,255,255,255));
@@ -233,7 +240,7 @@ void Indie::Core::editMap()
 			m_core.m_font->draw(irr::core::stringw("->"), irr::core::rect<irr::s32>(0, 25, 0, 0), irr::video::SColor(255,255,0,255));
 		else
 			m_core.m_font->draw(irr::core::stringw("->"), irr::core::rect<irr::s32>(0, 105, 0, 0), irr::video::SColor(255,255,0,255));
-		m_core.m_font->draw(irr::core::stringw("S TO SAVE"), irr::core::rect<irr::s32>(15, 680, 0, 0), irr::video::SColor(255,255,255,255));
 		m_core.m_driver->endScene();
 	}
+	m_run = true;
 }

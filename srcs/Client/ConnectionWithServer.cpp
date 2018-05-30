@@ -14,9 +14,8 @@ void Indie::Core::comGameInfos(int event, std::vector<std::string> &infos)
 		case START:
 			_state = PLAYING;
 			m_state = PLAY;
-			_playerObjects.insert(_playerObjects.begin(), std::make_unique<Player>(_playerId, _graphism->createTexture(*_graphism->getTexture(10), {0, _mapper->getHeight(), 0}, {0, 0, 0}, {2, 2, 2}, true), _tchat));
-			_graphism->resizeNode(_playerObjects[0]->getPlayer(), _mapper->getSize());
-			m_core.getCamera().change(m_core.getSceneManager());
+			m_core.m_device->getCursorControl()->setVisible(false);
+			m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
 			_graphism->buildDecor();
 			break;
 		case MESSAGE: serverMessage(infos); break;
@@ -101,7 +100,6 @@ void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d, const irr
 	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true), _tchat);
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
-	newPlayer->getPlayer()->setRotation({0, rota, 0});
 	newPlayer->setPos2d(pos2d);
 	_playerObjects.push_back(std::move(newPlayer));
 }

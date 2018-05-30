@@ -52,15 +52,16 @@ void Indie::Core::processEvents()
 	if (_tchat._getch)
 		manageTchat();
 	else {
-		if (m_event.isKeyDown(irr::KEY_ESCAPE))
-			m_run = false;
-		if (m_event.isKeyDown(irr::KEY_KEY_A)) {
-			std::cout << m_event.MouseState.Position.X << " : "
-					<< m_event.MouseState.Position.Y << std::endl;
-			m_event.setKeyUp(irr::KEY_KEY_A);
+		if (m_event.isKeyDown(irr::KEY_ESCAPE)) {
+			m_event.setKeyUp(irr::KEY_ESCAPE);
+			if (m_state == PLAY) {
+				m_core.m_device->getCursorControl()->setVisible(true);
+				m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
+				m_menu.m_gameOptions->setVisible(true);
+			}
 		}
-		if (m_event.isKeyDown(irr::KEY_KEY_T)) {
-			m_event.setKeyUp(irr::KEY_KEY_T);
+		if (m_event.isKeyDown(irr::KEY_RETURN)) {
+			m_event.setKeyUp(irr::KEY_RETURN);
 			if (_socket) {
 				_tchat._getch = true;
 				_tchat._textBox->setVisible(true);
@@ -84,28 +85,54 @@ void Indie::Core::checkAppContext()
 		_state = WAITING;
 		while (1) {
 			try {
-				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
+				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Socket::CLIENT);
 				break;
 			} catch (const std::exception &e) {}
 		}
 		_playerId = waitForId();
-		// >> on gerera ca dans la room de l'host
-		sendMapToServer("assets/maps/map.txt");
-		// <<
 	}
-	if (m_state == READY && _state == WAITING)
+	if (m_state == READY && _state == WAITING) {
+		if (_playerId == 0) {
+			irr::gui::IGUIListBox *list = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(ID_GUI_LIST_MAP, true));
+			auto map = ManageStrings::convertWchart(list->getListItem(list->getSelected()));
+			sendMapToServer(std::string("assets/maps/" + map));
+		}
 		dprintf(_socket->getFd(), "READY\n");
+	}
 	if (m_state == CONNECT && _state == NOTCONNECTED) {
 		try {
-			_socket = std::make_unique<Socket>(5567, "127.0.0.1", Indie::Socket::CLIENT);
+			_socket = std::make_unique<Socket>(5567, "127.0.0.1", Socket::CLIENT);
 			_state = WAITING;
 			_playerId = waitForId();
 		} catch (const std::exception &e) {
 			m_state = MENU;
-			m_menu.m_room->setVisible(false);
+			m_menu.m_roomC->setVisible(false);
 			m_menu.m_play->setVisible(true);
 		}
 	}
+	if (m_state == SERVER_DOWN) {
+		if (m_menu.m_roomS->isVisible())
+			m_menu.m_roomS->setVisible(false);
+		else if (m_menu.m_roomC->isVisible())
+			m_menu.m_roomC->setVisible(false);
+		m_menu.m_down->setVisible(true);
+	}
+}
+
+void Indie::Core::exitGame()
+{
+	// Y A DES TRUCS QUI SE DELETE PAS (lancer deux joueurs / quitter le serveur / lancer un serveur sur le second et jouer)
+	_mapper.release();
+	_playerObjects.clear();
+	_socket->closeSocket();
+	_socket.release();
+	_tchat._messages.clear();
+	if (_tchat._textBox->isVisible())
+		_tchat._textBox->setVisible(false);
+	_playerId = -1;
+	_state = NOTCONNECTED;
+	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
+	m_core.m_device->getCursorControl()->setVisible(true);
 }
 
 void Indie::Core::run()
@@ -118,13 +145,21 @@ void Indie::Core::run()
 	_tchat._textBox->setMax(40);
 	_tchat._textBox->setVisible(false);
 
+	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
+	m_core.m_device->getCursorControl()->setVisible(true);
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		m_core.m_driver->beginScene(true, true, _color);
 		checkAppContext();
 
-		if (_state != NOTCONNECTED && _socket)
-			readServerInformations(_socket->readSocket()); // Must be before drawall, readServer apply position, drawAll do collision
+		if (_state != NOTCONNECTED && _socket) {
+			try {
+				readServerInformations(_socket->readSocket());
+			} catch (const std::exception &e) {
+				exitGame();
+				m_state = SERVER_DOWN;
+			}
+		}
 		if (m_state == PLAY) {
 			m_core.getCamera().change(m_core.getSceneManager());
 			m_core.m_device->getCursorControl()->setVisible(false);
@@ -135,11 +170,8 @@ void Indie::Core::run()
 		} else if (m_state == MAPPING) {
 			editMap();
 			m_state = MENU;
-		} else {
-			m_core.m_device->getCursorControl()->setVisible(true);
-			m_core.getCamera().change(m_core.getSceneManager());
 		}
-		m_core.m_gui->drawAll();//handleMenu();
+		m_core.m_gui->drawAll();
 		printTchat();
 		m_core.m_driver->endScene();
 		drawCaption();
@@ -176,7 +208,10 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_ROOM_BACK_BUTTON:
 					m_menu.m_play->setVisible(true);
-					m_menu.m_room->setVisible(false);
+					if (_playerId == 0)
+						m_menu.m_roomS->setVisible(false);
+					else
+						m_menu.m_roomC->setVisible(false);
 					break;
 				case GUI_ID_OPTION_BACK_BUTTON:
 					m_menu.m_main->setVisible(true);
@@ -193,22 +228,44 @@ void Indie::Core::menuEvents()
 					break;
 				case GUI_ID_READY:
 					m_state = READY;
-					m_menu.m_room->setVisible(false);
+					if (_playerId == 0)
+						m_menu.m_roomS->setVisible(false);
+					else
+						m_menu.m_roomC->setVisible(false);
 					break;
 				case GUI_ID_PLAY_CLIENT:
 					m_state = CONNECT;
-					m_menu.m_room->setVisible(true);
+					m_menu.m_roomC->setVisible(true);
 					m_menu.m_play->setVisible(false);
 					break;
 				case GUI_ID_PLAY_SERVER:
 					m_state = LAUNCH_SERVER;
-					m_menu.m_room->setVisible(true);
+					m_menu.m_roomS->setVisible(true);
 					m_menu.m_play->setVisible(false);
 					break;
 				case GUI_ID_MAP_SAVE_BUTTON:
 					m_menu.m_mapEdit->setVisible(false);
 					m_menu.m_mapMenu->setVisible(true);
-					m_bappe = false;
+					m_run = false;
+					break;
+				case GUI_ID_DOWN_BUTTON:
+					m_menu.m_down->setVisible(false);
+					m_menu.m_main->setVisible(true);
+					m_state = MENU;
+					break;
+				case GUI_ID_LEAVE_GAME_BUTTON:
+					exitGame();
+					m_state = MENU;
+					m_menu.m_gameOptions->setVisible(false);
+					m_menu.m_main->setVisible(true);
+					break;
+				case GUI_ID_QUIT_GAME_BUTTON:
+					m_run = false;
+					break;
+				case GUI_ID_STAY_GAME_BUTTON:
+					m_menu.m_gameOptions->setVisible(false);
+					m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
+					m_core.m_device->getCursorControl()->setVisible(false);
 					break;
 				default:
 					break;

@@ -9,6 +9,9 @@
 
 #include <irrlicht/irrlicht.h>
 #include <vector>
+#include <sys/types.h>
+#include <dirent.h>
+#include "ManageStrings.hpp"
 #include "Options.hpp"
 
 namespace Indie {
@@ -23,7 +26,10 @@ namespace Indie {
 		GUI_ID_OPTION_MENU_ELEMENT,
 		GUI_ID_MAP_EDIT_MENU_ELEMENT,
 		GUI_ID_MAIN_MENU_ELEMENT,
-		GUI_ID_ROOM_MENU_ELEMENT,
+		GUI_ID_ROOMS_MENU_ELEMENT,
+		GUI_ID_ROOMC_MENU_ELEMENT,
+		GUI_ID_DOWN_ELEMENT,
+		GUI_ID_GAME_OPTIONS_ELEMENT,
 		GUI_ID_ROOM_BACK_BUTTON,
 		GUI_ID_OPTION_BACK_BUTTON,
 		GUI_ID_PLAY_BACK_BUTTON,
@@ -36,7 +42,12 @@ namespace Indie {
 		GUI_ID_TCHAT_BUTTON,
 		GUI_ID_MAP_RANDOM_BUTTON,
 		GUI_ID_MAP_NAME,
-		GUI_ID_MAP_SAVE_BUTTON
+		GUI_ID_MAP_SAVE_BUTTON,
+		GUI_ID_DOWN_BUTTON,
+		GUI_ID_LEAVE_GAME_BUTTON,
+		GUI_ID_QUIT_GAME_BUTTON,
+		GUI_ID_STAY_GAME_BUTTON,
+		ID_GUI_LIST_MAP
 	};
 
 
@@ -50,6 +61,7 @@ namespace Indie {
 		CONNECT,
 		READY,
 		PLAY,
+		SERVER_DOWN,
 		NONE
 	};
 
@@ -74,7 +86,11 @@ namespace Indie {
 		void loadOptionsMenu();
 		void loadMapMenu();
 		void loadPlayMenu();
-		void loadRoomMenu();
+		void loadRoomSMenu();
+		void loadRoomCMenu();
+		void loadDownMenu();
+		void loadGameOptionsMenu();
+		void chooseMap();
 
 		void setSkinTransparency(irr::s32 , irr::gui::IGUISkin *);
 
@@ -83,12 +99,12 @@ namespace Indie {
 		irr::gui::IGUIElement *m_main;
 		irr::gui::IGUIElement *m_option;
 		irr::gui::IGUIElement *m_play;
-		irr::gui::IGUIElement *m_room;
+		irr::gui::IGUIElement *m_roomS;
+		irr::gui::IGUIElement *m_roomC;
+		irr::gui::IGUIElement *m_down;
 		irr::gui::IGUIElement *m_mapMenu;
 		irr::gui::IGUIElement *m_mapEdit;
-		// irr::gui::IGUIElement *m_room;
-
-		irr::gui::IGUIElement *m_server;
+		irr::gui::IGUIElement *m_gameOptions;
 
 	private:
 		irr::gui::IGUIFont *m_font;
@@ -97,8 +113,13 @@ namespace Indie {
 		irr::gui::IGUIEnvironment *m_gui;
 		irr::video::ITexture* m_images;
 		std::vector<irr::gui::IGUIButton *> m_btns;
+		std::vector<irr::gui::IGUIButton *> m_small_btns;
 		Options m_opt;
+
 		std::size_t m_height;
 		std::size_t m_width;
+		std::vector<std::string> v_map;
+		std::size_t m_small_height;
+		std::size_t m_small_width;
 	};
 }

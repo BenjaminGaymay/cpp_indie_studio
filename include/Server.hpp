@@ -57,6 +57,7 @@ namespace Indie {
 			std::vector<std::unique_ptr<Client>> _clients;
 			std::vector<std::unique_ptr<Indie::Bomb>> _bombs;
 			std::vector<std::vector<int>> _map;
+			std::vector<std::vector<int>> _spawn;
 			std::string _mapMsg;
 	};
 

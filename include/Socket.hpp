@@ -51,6 +51,7 @@ namespace Indie {
 			void sendInfos(ObjectsType, ObjectsEvents, const std::string &);
 			bool isSocketWritten();
 			std::vector<std::string> readSocket();
+			void closeSocket() { close(_fd); }
 		private:
 			int _port;
 			std::string _addr;

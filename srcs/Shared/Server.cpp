@@ -53,17 +53,26 @@ std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
 	std::vector<std::vector<int>> map;
 	auto copy = (char *) msg.c_str();
 	char *line = strtok(copy, ":");
+	auto lineNumberOptimization = 0;
 
+	_map.clear();
+	_spawn.clear();
 	while (line != nullptr) {
 		std::vector<int> tmp;
 		std::vector<std::string> oneLine;
 		std::string str(line);
 
 		oneLine = ManageStrings::splitString(str, ' ');
-		for (auto &nb : oneLine)
-			tmp.push_back(std::stoi(nb));
+		for (auto i = 0 ; static_cast<unsigned>(i) < oneLine.size() ; i++) {
+			if (oneLine[i] == "10") {
+				_spawn.push_back({i, lineNumberOptimization});
+				tmp.push_back(0);
+			} else
+				tmp.push_back(std::stoi(oneLine[i]));
+		}
 		map.push_back(tmp);
-		line = strtok(nullptr, ":");
+		line = strtok(nullptr, ":");_map.clear();
+		lineNumberOptimization += 1;
 	}
 	return map;
 }
@@ -87,9 +96,8 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 			}
 			// >> reception map
 			if (std::string(tmp).compare(0, 4, "2:0:") == 0) {
-				_mapMsg = std::string(tmp);
-				_map.clear();
 				_map = buildMap(&tmp[4]);
+				_mapMsg = std::string(ManageStrings::replaceStr("10", "00", tmp));
 			}
 			// <<
 			if (_state == WAITING)
@@ -160,7 +168,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		_clients.erase(pos);
 	}
 	for (auto &aClient : _clients)
-		dprintf(aClient->_fd, "0:1:%d:0:0:0:0:0:0\n", aClient->_id);
+		dprintf(aClient->_fd, "0:1:%d\n", aClient->_id);
 	return 1;
 }
 
@@ -180,6 +188,8 @@ void Indie::Server::readOnFds()
 
 Indie::GameState Indie::Server::checkIfStartGame()
 {
+	unsigned spawnId = 0;
+
 	if (_clients.empty())
 		return WAITING;
 	for (auto &client : _clients) {
@@ -190,15 +200,16 @@ Indie::GameState Indie::Server::checkIfStartGame()
 		std::cout << _mapMsg << std::endl;
 		dprintf(client->_fd, "%s\n", _mapMsg.c_str()); // ENVOI DE LA CARTE
 		dprintf(client->_fd, "1:3\n"); // CODE POUR GAME START
+		client->pos2d = irr::core::vector2di(_spawn[spawnId][0], _spawn[spawnId][1]);
+		spawnId = (spawnId + 1) % _spawn.size();
 	}
 
 	// On donne la pos de chaque joueur
 	for (auto &client : _clients) {
-		// Stocker la pos de chaque client pour pouvoir l'envoyer
+		dprintf(client->_fd, "0:0:%d:%d:%d\n", client->_id, client->pos2d.X, client->pos2d.Y);
 		for (auto &pop : _clients) {
-			if (client != pop)
-				dprintf(client->_fd, "0:0:%d:0:112:0:0\n",
-						pop->_id); // PLAYER:APPEAR:x:y:z:rotation
+			if (pop != client)
+				dprintf(client->_fd, "0:0:%d:%d:%d\n", pop->_id, pop->pos2d.X, pop->pos2d.Y);
 		}
 	}
 	return PLAYING;
