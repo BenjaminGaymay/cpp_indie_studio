@@ -161,8 +161,6 @@ void Indie::Core::run()
 			}
 		}
 		if (m_state == PLAY) {
-			m_core.getCamera().change(m_core.getSceneManager());
-			m_core.m_device->getCursorControl()->setVisible(false);
 			pos = _playerObjects[0]->getPosition();
 			moveEvent(pos);
 			dropBombEvent(pos);
