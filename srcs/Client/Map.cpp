@@ -162,7 +162,6 @@ irr::core::vector2di Indie::Map::get2dBlock(const irr::core::vector3df &target)
 			return block.second;
 	}
 	throw std::logic_error("Bha, case non trouvé wtf");
-	//return nullptr;
 }
 
 irr::scene::ISceneNode *Indie::Map::get3dBlock(const irr::core::vector2di &target)
