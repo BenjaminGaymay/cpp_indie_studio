@@ -35,7 +35,6 @@ void Indie::Core::comMap(int event, std::vector<std::string> &infos)
 
 void Indie::Core::createBlock(const Indie::PowerUpType &bonus, const irr::core::vector2di &pos)
 {
-	std::cerr << "Create bonus" << std::endl;
 	destroyBlock(pos);
 	auto block = _mapper->get3dBlock(pos);
 	auto bonusBlock = _graphism->createTexture(*_graphism->getTexture(bonus), block->getPosition(), {0, 0, 0}, {2, 2, 2}, true);
@@ -59,8 +58,6 @@ void Indie::Core::destroyBomb(const irr::core::vector2di &target)
 
 void Indie::Core::destroyBlock(const irr::core::vector2di &target)
 {
-	std::cerr << "DESTROY: X:" << target.X << " et Y:" << target.Y << std::endl;
-
 	auto &map = _mapper->getMap2d();
 	map[target.Y][target.X] = 0;
 	for (auto elem = _graphism->getBonus().begin() ; elem != _graphism->getBonus().end() ; ++elem) {
