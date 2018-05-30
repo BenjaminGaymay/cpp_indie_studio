@@ -95,15 +95,6 @@ void Indie::Core::dropBomb(int id, const irr::core::vector2di &pos2d, const irr:
 
 }
 
-/*void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const irr::f32 &rota)
-{
-	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true), _tchat);
-	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
-	newPlayer->setSpeed(1);
-	newPlayer->setPos2d(pos2d);
-	_playerObjects.push_back(std::move(newPlayer));
-}*/
-
 void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d)
 {
 	auto pos3d = _mapper->get3dBlock(pos2d)->getPosition();
