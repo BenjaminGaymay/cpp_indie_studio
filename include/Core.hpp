@@ -54,7 +54,7 @@ namespace Indie {
 		void dropBombEvent(irr::core::vector3df &pos);
 		void comPlayer(int, std::vector<std::string> &);
 		void comBomb(int, std::vector<std::string> &);
-		void addPlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
+		void addPlayer(int, const irr::core::vector2di &);
 		void removePlayer(int);
 		void movePlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
 		void dropBomb(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power);
