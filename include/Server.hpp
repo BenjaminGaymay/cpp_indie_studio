@@ -47,6 +47,7 @@ namespace Indie {
 			void destroyEntities(std::unique_ptr<Indie::Bomb> &bomb);
 			bool hitPlayer(const irr::core::vector2di &target);
 			void manageBomb();
+			void replaceByBonus(const irr::core::vector2di &pos);
 			std::vector<std::vector<int>> buildMap(const std::string &msg);
 		private:
 			fd_set _fdRead;

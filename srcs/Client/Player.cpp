@@ -43,7 +43,7 @@ irr::core::vector3df Indie::Player::move(Events &event)
 
 	if (_tchat._getch)
 		return nodePosition;
-	if (event.isKeyDown(irr::KEY_SPACE)) {
+	if (event.isKeyDown(irr::KEY_KEY_Q)) {
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);
 		setStanding(false);
 		nodePosition.Z += _speed;

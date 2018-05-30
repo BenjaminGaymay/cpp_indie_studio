@@ -27,8 +27,20 @@ void Indie::Core::comMap(int event, std::vector<std::string> &infos)
 {
 	switch (event) {
 		case APPEAR: _mapper = std::make_unique<Map>(infos, 20.0f, 100.0f, _graphism); break;
+		case DESTROYBLOCK: destroyBlock(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1]))); break;
+		case CREATEBLOCK: createBlock(static_cast<PowerUpType>(std::stoi(infos[0])), irr::core::vector2di(std::stoi(infos[1]), std::stoi(infos[2]))); break;
 		default: break;
 	}
+}
+
+void Indie::Core::createBlock(const Indie::PowerUpType &bonus, const irr::core::vector2di &pos)
+{
+	std::cerr << "Create bonus" << std::endl;
+	destroyBlock(pos);
+	auto block = _mapper->get3dBlock(pos);
+	auto bonusBlock = _graphism->createTexture(*_graphism->getTexture(bonus), block->getPosition(), {0, 0, 0}, {2, 2, 2}, true);
+	_graphism->resizeNode(bonusBlock, _mapper->getSize());
+	_graphism->getBonus().emplace_back(pos, bonusBlock);
 }
 
 void Indie::Core::destroyBomb(const irr::core::vector2di &target)
@@ -48,11 +60,21 @@ void Indie::Core::destroyBomb(const irr::core::vector2di &target)
 void Indie::Core::destroyBlock(const irr::core::vector2di &target)
 {
 	std::cerr << "DESTROY: X:" << target.X << " et Y:" << target.Y << std::endl;
+
+	auto &map = _mapper->getMap2d();
+	map[target.Y][target.X] = 0;
+	for (auto elem = _graphism->getBonus().begin() ; elem != _graphism->getBonus().end() ; ++elem) {
+		auto &bonus = *elem;
+		if (bonus.getPosition2d() == target) {
+			bonus.getTexture()->remove();
+			_graphism->getBonus().erase(elem);
+			return ;
+		}
+	};
+
 	auto block = _mapper->get3dBlock(target);
 	block->setVisible(false);
 	block->setName("");
-	auto &map = _mapper->getMap2d();
-	map[target.Y][target.X] = 0;
 }
 
 void Indie::Core::comPlayer(int event, std::vector<std::string> &infos)
@@ -76,7 +98,6 @@ void Indie::Core::comBomb(int event, std::vector<std::string> &infos)
 
 		switch (event) {
 			case CREATEBOMB: dropBomb(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stoi(infos[4]), std::stof(infos[5])), std::stoul(infos[6])); break;
-			case DESTROYBLOCK: destroyBlock(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1]))); break;
 			case DESTROYBOMB: destroyBomb(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1]))); break;
 			default: break;
 		}

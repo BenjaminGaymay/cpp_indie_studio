@@ -10,11 +10,19 @@
 #include <unistd.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-#include <string.h>
+#include <cstring>
 #include <iostream>
 #include <vector>
 
 namespace Indie {
+	enum PowerUpType {
+		FIRST_UP = 3,
+		SPEED_UP = 4,
+		BOMB_UP = 5,
+		FIRE_UP = 6,
+		WALLPASS_UP = 7,
+		LAST_UP = 8//don't use it
+	};
 	enum ObjectsType {
 		PLAYER,
 		GAMEINFOS,
@@ -30,7 +38,8 @@ namespace Indie {
 		MESSAGE,
 		CREATEBOMB,
 		DESTROYBOMB,
-		DESTROYBLOCK
+		DESTROYBLOCK,
+		CREATEBLOCK
 	};
 
 	class Socket {

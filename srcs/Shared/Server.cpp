@@ -9,6 +9,7 @@
 #include <irrlicht/vector3d.h>
 #include <irrlicht/vector2d.h>
 #include <malloc.h>
+#include <random>
 #include "ManageStrings.hpp"
 #include "Server.hpp"
 
@@ -189,7 +190,7 @@ void Indie::Server::readOnFds()
 
 Indie::GameState Indie::Server::checkIfStartGame()
 {
-	unsigned spawnId = 0;
+	std::size_t spawnId = 0;
 
 	if (_clients.empty())
 		return WAITING;
@@ -228,6 +229,23 @@ bool Indie::Server::hitPlayer(const irr::core::vector2di &target)
 	return false;
 }
 
+void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
+{
+	std::default_random_engine generator;
+	std::uniform_int_distribution<int> distribution(FIRE_UP + 1, LAST_UP);
+	auto bonus = static_cast<PowerUpType>(distribution(generator));
+
+	if (_map[pos.Y][pos.X] != 1 || bonus == LAST_UP) {
+		_map[pos.Y][pos.X] = 0;
+		for (auto &aClient : _clients)
+			dprintf(aClient->_fd, "%d:%d:%d:%d\n", MAP, DESTROYBLOCK, pos.X, pos.Y);
+	} else {
+		_map[pos.Y][pos.X] = static_cast<int>(bonus);
+		for (auto &aClient : _clients)
+			dprintf(aClient->_fd, "%d:%d:%d:%d:%d\n", MAP, CREATEBLOCK, bonus, pos.X, pos.Y);
+	}
+}
+
 void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 {
 	auto pos2d = bomb->getPosition();
@@ -236,10 +254,8 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 	for (int pos = 1 ; pos <= power ; ++pos) {
 		if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y)))
 			break ;
-		else if (pos2d.X + pos < static_cast<int>(_map[pos2d.Y].size()) && _map[pos2d.Y][pos2d.X + pos] == 1) {
-			_map[pos2d.Y][pos2d.X + pos] = 0;
-			for (auto &aClient : _clients)
-				dprintf(aClient->_fd, "%d:%d:%i:%i\n", BOMB, DESTROYBLOCK, pos2d.X + pos, pos2d.Y);
+		else if (pos2d.X + pos < static_cast<int>(_map[pos2d.Y].size()) && _map[pos2d.Y][pos2d.X + pos] != 0) {
+			replaceByBonus(irr::core::vector2di(pos2d.X + pos, pos2d.Y));
 			break;
 		}
 	}
@@ -247,10 +263,8 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 	for (int pos = power ; pos >= 1 && pos2d.X - pos > 0; --pos) {
 		if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y)))
 			break ;
-		else if (_map[pos2d.Y][pos2d.X - pos] == 1) {
-			_map[pos2d.Y][pos2d.X - pos] = 0;
-			for (auto &aClient : _clients)
-				dprintf(aClient->_fd, "%d:%d:%i:%i\n", BOMB, DESTROYBLOCK, pos2d.X - pos, pos2d.Y);
+		else if (_map[pos2d.Y][pos2d.X - pos] != 0) {
+			replaceByBonus(irr::core::vector2di(pos2d.X - pos, pos2d.Y));
 			break;
 		}
 	}
@@ -258,10 +272,8 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 	for (int pos = 1 ; pos <= power ; ++pos) {
 		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos)))
 			break ;
-		else if (pos2d.Y + pos < static_cast<int>(_map.size()) && _map[pos2d.Y + pos][pos2d.X] == 1) {
-			_map[pos2d.Y + pos][pos2d.X] = 0;
-			for (auto &aClient : _clients)
-				dprintf(aClient->_fd, "%d:%d:%i:%i\n", BOMB, DESTROYBLOCK, pos2d.X, pos2d.Y + pos);
+		else if (pos2d.Y + pos < static_cast<int>(_map.size()) && _map[pos2d.Y + pos][pos2d.X] != 0) {
+			replaceByBonus(irr::core::vector2di(pos2d.X, pos2d.Y + pos));
 			break;
 		}
 	}
@@ -269,10 +281,8 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 	for (int pos = power ; pos >= 1 && pos2d.Y - pos > 0; --pos) {
 		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos)))
 			break ;
-		else if (_map[pos2d.Y - pos][pos2d.X] == 1) {
-			_map[pos2d.Y - pos][pos2d.X] = 0;
-			for (auto &aClient : _clients)
-				dprintf(aClient->_fd, "%d:%d:%i:%i\n", BOMB, DESTROYBLOCK, pos2d.X, pos2d.Y - pos);
+		else if (_map[pos2d.Y - pos][pos2d.X] != 0 ) {
+			replaceByBonus(irr::core::vector2di(pos2d.X, pos2d.Y - pos));
 			break;
 		}
 	}
