@@ -18,7 +18,7 @@ Indie::Camera::Camera()
 	m_keyMap[3].Action = irr::EKA_STRAFE_RIGHT;
 	m_keyMap[3].KeyCode = irr::KEY_RIGHT;
 	m_keyMap[4].Action = irr::EKA_JUMP_UP;
-	m_keyMap[4].KeyCode = irr::KEY_SPACE;
+	/*m_keyMap[4].KeyCode = irr::KEY_SPACE;*/
 
   	m_mode = BASIC;
 }
@@ -35,7 +35,7 @@ void Indie::Camera::initCamera(irr::scene::ISceneManager *sceneManager, irr::cor
 	m_cameras[FPS]->setRotation({0, 90, 0});
 
 	m_cameras[BASIC] = sceneManager->addCameraSceneNode();
-	m_cameras[BASIC]->setPosition({0, 500, 0});
+	m_cameras[BASIC]->setPosition(pos);
 	m_cameras[BASIC]->setRotation(irr::core::vector3df(0, 20, 0));
 }
 

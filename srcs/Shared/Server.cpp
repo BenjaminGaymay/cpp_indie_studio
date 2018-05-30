@@ -8,12 +8,12 @@
 #include <sys/time.h>
 #include <irrlicht/vector3d.h>
 #include <irrlicht/vector2d.h>
-#include <ManageStrings.hpp>
+#include <malloc.h>
+#include "ManageStrings.hpp"
 #include "Server.hpp"
 
 Indie::Server::Server() : _socket(
-		Socket(5567, INADDR_ANY, Indie::Socket::SERVER)),
-						  _hostFd(_socket.getFd()), _state(WAITING)
+		Socket(5567, INADDR_ANY, Indie::Socket::SERVER)),  _hostFd(_socket.getFd()), _state(WAITING)
 {
 	if (_hostFd == -1)
 		throw std::runtime_error("Error while creating server socket");
@@ -51,7 +51,7 @@ void Indie::Server::addClient()
 std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
 {
 	std::vector<std::vector<int>> map;
-	auto copy = (char *) msg.c_str();
+	char *copy = strdup(msg.c_str());
 	char *line = strtok(copy, ":");
 	auto lineNumberOptimization = 0;
 
@@ -74,6 +74,7 @@ std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
 		line = strtok(nullptr, ":");_map.clear();
 		lineNumberOptimization += 1;
 	}
+	free(copy);
 	return map;
 }
 
