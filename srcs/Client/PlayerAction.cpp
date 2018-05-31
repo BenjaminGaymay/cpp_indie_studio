@@ -43,5 +43,6 @@ void Indie::Core::dropBombEvent(irr::core::vector3df &pos)
 					   std::to_string(pos.X) + ':' +
 					   std::to_string(pos.Y) + ':' +
 					   std::to_string(pos.Z) + ':' +
-					   std::to_string(_playerObjects[0]->getPower()));
+					   std::to_string(_playerObjects[0]->getPower()) + ':' +
+					   std::to_string(_playerObjects[0]->getBombNumber()));
 }

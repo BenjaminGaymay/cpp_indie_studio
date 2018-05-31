@@ -116,11 +116,16 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				position3d.Y = std::stof(strsep(&tmp, ":"));
 				position3d.Z = std::stof(strsep(&tmp, ":"));
 				std::size_t power = std::stoul(strsep(&tmp, ":"));
+				std::size_t limit = std::stoul(strsep(&tmp, ":"));
 				(void) position3d;
 				(void) enumId;
 				std::cerr << "BOMB CREATION: POWER:" << power << " X:" << position2d.X << " et Y:" << position2d.Y << std::endl;
-				if (_map[position2d.Y][position2d.X] == 0) {
-					_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, position2d));
+				std::size_t elem = 0;
+				for (auto &bomb : _bombs)
+					if (bomb->getId() == client->_id)
+						++elem;
+				if (elem < limit && _map[position2d.Y][position2d.X] == 0) {
+					_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, position2d, client->_id));
 					_map[position2d.Y][position2d.X] = 3;
 					for (auto &i : _clients)
 						dprintf(i->_fd, cmd.c_str());
@@ -238,7 +243,6 @@ void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
 	static std::default_random_engine generator;
 	static std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP);
 	auto bonus = static_cast<PowerUpType>(distribution(generator));
-	bonus = FIRE_UP;
 
 	std::cerr << "bonus généré:" << bonus << std::endl;
 	if (_map[pos.Y][pos.X] != 1 || bonus == LAST_UP) {

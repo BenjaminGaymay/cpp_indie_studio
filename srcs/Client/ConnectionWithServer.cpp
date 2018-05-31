@@ -39,7 +39,7 @@ void Indie::Core::takeBonus(const irr::core::vector2di &pos, const PowerUpType &
 	std::cerr << "J'ai pris un bonus:" << bonus << std::endl;
 	switch (bonus) {
 		case SPEED_UP : _playerObjects[0]->setSpeed(_playerObjects[0]->getSpeed() + 0.1f); std::cerr << "SPEEDUP" << std::endl; break ;
-		case BOMB_UP : std::cerr << "BOMBUP" << std::endl; break ;
+		case BOMB_UP : _playerObjects[0]->setBombNumber(_playerObjects[0]->getBombNumber() + 1); std::cerr << "BOMBUP" << std::endl; break;
 		case FIRE_UP : _playerObjects[0]->setPower(_playerObjects[0]->getPower() + 1); std::cerr << "FIREUP" << std::endl; break ;
 		case WALLPASS_UP : std::cerr << "WALLUP" << std::endl; break ;
 		default: std::cerr << "DEFAULT:" << bonus << std::endl; break ;

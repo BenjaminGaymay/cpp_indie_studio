@@ -23,6 +23,8 @@ namespace Indie {
 		void setSpeed(const float &speed);
 		void setPower(const std::size_t &power);
 		const std::size_t &getPower() const;
+		const std::size_t &getBombNumber() const;
+		void  setBombNumber(const std::size_t bombNumber);
 		void setPos2d(const irr::core::vector2di &pos) { _pos2d = pos;}
 		const float &getSpeed() const;
 		irr::core::vector3df getPosition() { return _player->getPosition(); }
@@ -38,6 +40,7 @@ namespace Indie {
 		s_tchat _tchat;
 		irr::core::vector2di _pos2d;
 		std::size_t _power;
+		std::size_t _bombNumber;
 	protected:
 	};
 }

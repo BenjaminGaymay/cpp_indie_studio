@@ -12,7 +12,7 @@
 // @param node
 //
 Indie::Player::Player(int id, irr::scene::ISceneNode *node, s_tchat &tchat)
-: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1.5f), _tchat(tchat), _power(1)
+: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1.5f), _tchat(tchat), _power(1), _bombNumber(1)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -27,9 +27,19 @@ void Indie::Player::setPower(const std::size_t &power)
 	_power = power;
 }
 
+void Indie::Player::setBombNumber(const std::size_t bombNumber)
+{
+	_bombNumber = bombNumber;
+}
+
 const std::size_t &Indie::Player::getPower() const
 {
 	return _power;
+}
+
+const std::size_t &Indie::Player::getBombNumber() const
+{
+	return _bombNumber;
 }
 
 //
