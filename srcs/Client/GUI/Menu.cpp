@@ -87,6 +87,7 @@ void Indie::Menu::loadMainMenu()
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
 
+
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,200,x_right,200 + m_height), m_main, GUI_ID_PLAY_BUTTON,
             L"Play", L"Launches the game"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,310,x_right,310 + m_height), m_main, GUI_ID_MAP_BUTTON,

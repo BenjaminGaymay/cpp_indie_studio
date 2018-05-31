@@ -7,16 +7,20 @@
 
 #pragma once
 
+#include <iostream>
+#include "Macro.hpp"
+
 namespace Indie {
 	class Core;
 
 	class EventManager {
 	public:
 		EventManager();
-		EventManager(Core &);
+		EventManager(Core *);
 		~EventManager();
 
-		void init(Core &);
+		void manage();
+		void init(Core *);
 
 	private:
 		Core *m_core;

@@ -10,25 +10,10 @@
 #include <Player.hpp>
 #include <iomanip>
 #include "Core.hpp"
+#include "EventManager.hpp"
 
-Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
-{
-	_objectsFct.push_back(&Indie::Core::comPlayer);
-	_objectsFct.push_back(&Indie::Core::comGameInfos);
-	_objectsFct.push_back(&Indie::Core::comMap);
-	_objectsFct.push_back(&Indie::Core::comBomb);
-	m_state = MENU;
-	m_run = true;
-	_color = {255, 168, 201, 255};
-	m_core.initWindow(m_event, m_opts);
-	m_core.m_sceneManager->setAmbientLight({255.0, 255.0, 255.0});
-	_graphism = std::make_unique<Graphism>(&m_core);
-	_state = NOTCONNECTED;
-	_playerId = -1;
-	_socket = nullptr;
-	m_bappe = true;
-	_tchat._getch = false;
-}
+Indie::Core::Core() : _lastFps(-1)
+{}
 
 Indie::Core::~Core()
 {}
@@ -70,7 +55,7 @@ void Indie::Core::processEvents()
 			}
 		}
 	}
-	menuEvents();
+	m_evtManager->manage();
 }
 
 void Indie::Core::checkAppContext()
@@ -178,101 +163,117 @@ void Indie::Core::run()
 
 void Indie::Core::menuEvents()
 {
-	for (std::size_t id = 0; id < BTN_COUNT; id++) {
-		if (m_event.isButtonClicked(static_cast<IdGui>(id))) {
-			switch (id) {
-				case GUI_ID_QUIT_BUTTON:
-					m_core.m_device->closeDevice();
-					break;
-				case GUI_ID_PLAY_BUTTON:
-					m_menu.m_main->setVisible(false);
-					m_menu.m_play->setVisible(true);
-					break;
-				case GUI_ID_OPTIONS_BUTTON:
-					m_menu.m_main->setVisible(false);
-					m_menu.m_option->setVisible(true);
-					break;
-				case GUI_ID_MAP_BUTTON:
-					m_menu.m_main->setVisible(false);
-					m_menu.m_mapMenu->setVisible(true);
-					break;
-				case GUI_ID_MAP_BACK_BUTTON:
-					m_menu.m_main->setVisible(true);
-					m_menu.m_mapMenu->setVisible(false);
-					break;
-				case GUI_ID_PLAY_BACK_BUTTON:
-					m_menu.m_main->setVisible(true);
-					m_menu.m_play->setVisible(false);
-					break;
-				case GUI_ID_ROOM_BACK_BUTTON:
-					m_menu.m_play->setVisible(true);
-					if (_playerId == 0)
-						m_menu.m_roomS->setVisible(false);
-					else
-						m_menu.m_roomC->setVisible(false);
-					break;
-				case GUI_ID_OPTION_BACK_BUTTON:
-					m_menu.m_main->setVisible(true);
-					m_menu.m_option->setVisible(false);
-					break;
-				case GUI_ID_MAP_RANDOM_BUTTON:
-					createRandMap("azerty.txt", 50, 50);
-					//m_menu.m_mapEdit->setVisible(false);
-					break;
-				case GUI_ID_MAP_EDITOR_BUTTON:
-					m_state = MAPPING;
-					m_menu.m_mapMenu->setVisible(false);
-					m_menu.m_mapEdit->setVisible(true);
-					break;
-				case GUI_ID_READY:
-					m_state = READY;
-					if (_playerId == 0)
-						m_menu.m_roomS->setVisible(false);
-					else
-						m_menu.m_roomC->setVisible(false);
-					break;
-				case GUI_ID_PLAY_CLIENT:
-					m_state = CONNECT;
-					m_menu.m_roomC->setVisible(true);
-					m_menu.m_play->setVisible(false);
-					break;
-				case GUI_ID_PLAY_SERVER:
-					m_state = LAUNCH_SERVER;
-					m_menu.m_roomS->setVisible(true);
-					m_menu.m_play->setVisible(false);
-					break;
-				case GUI_ID_MAP_SAVE_BUTTON:
-					m_menu.m_mapEdit->setVisible(false);
-					m_menu.m_mapMenu->setVisible(true);
-					m_run = false;
-					break;
-				case GUI_ID_DOWN_BUTTON:
-					m_menu.m_down->setVisible(false);
-					m_menu.m_main->setVisible(true);
-					m_state = MENU;
-					break;
-				case GUI_ID_LEAVE_GAME_BUTTON:
-					exitGame();
-					m_state = MENU;
-					m_menu.m_gameOptions->setVisible(false);
-					m_menu.m_main->setVisible(true);
-					break;
-				case GUI_ID_QUIT_GAME_BUTTON:
-					m_run = false;
-					break;
-				case GUI_ID_STAY_GAME_BUTTON:
-					m_menu.m_gameOptions->setVisible(false);
-					m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
-					m_core.m_device->getCursorControl()->setVisible(false);
-					break;
-				default:
-					break;
-			}
-		}
-	}
+	// for (std::size_t id = 0; id < BTN_COUNT; id++) {
+	// 	if (m_event.isButtonClicked(static_cast<IdGui>(id))) {
+	// 		switch (id) {
+	// 			case GUI_ID_QUIT_BUTTON:
+	// 				m_core.m_device->closeDevice();
+	// 				break;
+	// 			case GUI_ID_PLAY_BUTTON:
+	// 				m_menu.m_main->setVisible(false);
+	// 				m_menu.m_play->setVisible(true);
+	// 				break;
+	// 			case GUI_ID_OPTIONS_BUTTON:
+	// 				m_menu.m_main->setVisible(false);
+	// 				m_menu.m_option->setVisible(true);
+	// 				break;
+	// 			case GUI_ID_MAP_BUTTON:
+	// 				m_menu.m_main->setVisible(false);
+	// 				m_menu.m_mapMenu->setVisible(true);
+	// 				break;
+	// 			case GUI_ID_MAP_BACK_BUTTON:
+	// 				m_menu.m_main->setVisible(true);
+	// 				m_menu.m_mapMenu->setVisible(false);
+	// 				break;
+	// 			case GUI_ID_PLAY_BACK_BUTTON:
+	// 				m_menu.m_main->setVisible(true);
+	// 				m_menu.m_play->setVisible(false);
+	// 				break;
+	// 			case GUI_ID_ROOM_BACK_BUTTON:
+	// 				m_menu.m_play->setVisible(true);
+	// 				if (_playerId == 0)
+	// 					m_menu.m_roomS->setVisible(false);
+	// 				else
+	// 					m_menu.m_roomC->setVisible(false);
+	// 				break;
+	// 			case GUI_ID_OPTION_BACK_BUTTON:
+	// 				m_menu.m_main->setVisible(true);
+	// 				m_menu.m_option->setVisible(false);
+	// 				break;
+	// 			case GUI_ID_MAP_RANDOM_BUTTON:
+	// 				createRandMap("azerty.txt", 50, 50);
+	// 				//m_menu.m_mapEdit->setVisible(false);
+	// 				break;
+	// 			case GUI_ID_MAP_EDITOR_BUTTON:
+	// 				m_state = MAPPING;
+	// 				m_menu.m_mapMenu->setVisible(false);
+	// 				m_menu.m_mapEdit->setVisible(true);
+	// 				break;
+	// 			case GUI_ID_READY:
+	// 				m_state = READY;
+	// 				if (_playerId == 0)
+	// 					m_menu.m_roomS->setVisible(false);
+	// 				else
+	// 					m_menu.m_roomC->setVisible(false);
+	// 				break;
+	// 			case GUI_ID_PLAY_CLIENT:
+	// 				m_state = CONNECT;
+	// 				m_menu.m_roomC->setVisible(true);
+	// 				m_menu.m_play->setVisible(false);
+	// 				break;
+	// 			case GUI_ID_PLAY_SERVER:
+	// 				m_state = LAUNCH_SERVER;
+	// 				m_menu.m_roomS->setVisible(true);
+	// 				m_menu.m_play->setVisible(false);
+	// 				break;
+	// 			case GUI_ID_MAP_SAVE_BUTTON:
+	// 				m_menu.m_mapEdit->setVisible(false);
+	// 				m_menu.m_mapMenu->setVisible(true);
+	// 				m_run = false;
+	// 				break;
+	// 			case GUI_ID_DOWN_BUTTON:
+	// 				m_menu.m_down->setVisible(false);
+	// 				m_menu.m_main->setVisible(true);
+	// 				m_state = MENU;
+	// 				break;
+	// 			case GUI_ID_LEAVE_GAME_BUTTON:
+	// 				exitGame();
+	// 				m_state = MENU;
+	// 				m_menu.m_gameOptions->setVisible(false);
+	// 				m_menu.m_main->setVisible(true);
+	// 				break;
+	// 			case GUI_ID_QUIT_GAME_BUTTON:
+	// 				m_run = false;
+	// 				break;
+	// 			case GUI_ID_STAY_GAME_BUTTON:
+	// 				m_menu.m_gameOptions->setVisible(false);
+	// 				m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
+	// 				m_core.m_device->getCursorControl()->setVisible(false);
+	// 				break;
+	// 			default:
+	// 				break;
+	// 		}
+	// 	}
+	// }
 }
 
-void Indie::Core::init()
+void Indie::Core::init(Options &opt)
 {
-	m_evtManager = std::make_unique<EventManager>();
+	m_opts = opt;
+	m_evtManager = std::make_unique<EventManager>(this);
+	_objectsFct.push_back(&Indie::Core::comPlayer);
+	_objectsFct.push_back(&Indie::Core::comGameInfos);
+	_objectsFct.push_back(&Indie::Core::comMap);
+	_objectsFct.push_back(&Indie::Core::comBomb);
+	m_state = MENU;
+	m_run = true;
+	_color = {255, 168, 201, 255};
+	m_core.initWindow(m_event, m_opts);
+	m_core.m_sceneManager->setAmbientLight({255.0, 255.0, 255.0});
+	_graphism = std::make_unique<Graphism>(&m_core);
+	_state = NOTCONNECTED;
+	_playerId = -1;
+	_socket = nullptr;
+	m_bappe = true;
+	_tchat._getch = false;
 }
