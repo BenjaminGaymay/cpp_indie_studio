@@ -17,7 +17,7 @@ Indie::Window::~Window()
 
 void Indie::Window::editMapView()
 {
-	irr::core::vector3df vec = {0, 800, 100};
+	irr::core::vector3df vec = {0, 450, 100};
 
 	m_camera.initCamera(m_sceneManager, vec);
 }

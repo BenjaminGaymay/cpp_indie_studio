@@ -130,7 +130,7 @@ void Indie::Core::eraseLeftandRight()
 			}
 		}
 	}
-	if (min == 50 || max == 50)
+	if (min == 25 || max == 25)
 		return ;
 	for (std::size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
 		_mapper->getMap2d()[i].erase(_mapper->getMap2d()[i].begin() + max, _mapper->getMap2d()[i].end());
@@ -140,17 +140,10 @@ void Indie::Core::eraseLeftandRight()
 
 void Indie::Core::cleanMap()
 {
-	//sa affiche la map bande de gogol
-	// for (size_t i = 0; i < 50; ++i) {
-	// 	for (size_t j = 0; j < 50; ++j) {
-	// 		std::cout << _mapper->getMap2d()[i][j];
-	// 	}
-	// 	std::cout << std::endl;
-	// }
 	int is_empty = 0;
 	for (std::size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
 		for (std::size_t j = 0; j < _mapper->getMap2d()[i].size(); ++j)
-			if (_mapper->getMap2d()[i][j] == 1)
+			if (_mapper->getMap2d()[i][j] != 0)
 				is_empty += 1;
 		if (is_empty > 0)
 			break;
@@ -168,45 +161,40 @@ void Indie::Core::changeMapWithEvent(std::size_t x, std::size_t y)
 		(_editState == BLOCK ? (_counter.first -= (_counter.first == 0 ? 0 : 1)) : (_counter.second -= (_counter.second == 0 ? 0 : 1)));
 		_counter.first += (_mapper->getMap2d()[y][x] == 1 ? 2 : 0);
 		_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? 0 : 1);
-		_mapper->clear3dMap();
-		_mapper->load(_graphism);
 	}
 	//PERSO
 	else if (_editState == PERSO && _counter.second > 0 && _mapper->getMap2d()[y][x] != 1) {
 		(_editState == BLOCK ? (_counter.first -= (_counter.first == 0 ? 0 : 1)) : (_counter.second -= (_counter.second == 0 ? 0 : 1)));
 		_counter.second += (_mapper->getMap2d()[y][x] == 10 ? 2 : 0);
 		_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 10 ? 0 : 10);
-		_mapper->clear3dMap();
-		_mapper->load(_graphism);
 	}
 	//SUPPR PERSO
 	else if (_editState == PERSO && _counter.second == 0 && _mapper->getMap2d()[y][x] == 10) {
 		_counter.second += 1;
 		_mapper->getMap2d()[y][x] = 0;
-		_mapper->clear3dMap();
-		_mapper->load(_graphism);
 	}
-}
+	_mapper->clear3dMap();
+	_mapper->load(_graphism);
 
+}
 
 int Indie::Core::editMapEvents()
 {
 	if (m_event.isKeyDown(irr::KEY_ESCAPE))
 		m_run = false;
-	if (m_run == false) {
+	if (_counter.second < 4 && m_run == false) {
 		auto textbox = m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME, true);
 		auto mapName = ManageStrings::convertWchart(textbox->getText());
-		cleanMap();
 		writeInFile(std::string("assets/maps/" + mapName), _mapper->getMap2d());
 		return -1;
 	} else if (m_event.MouseState.LeftButtonDown) {
-		auto x = int((m_event.MouseState.Position.X - 362) / BLOCK_SIZE);
-		auto y = int((m_event.MouseState.Position.Y - 12) / BLOCK_SIZE);
-		if (x >= 0 && y >= 0 && x < 50 && y < 50)
+		auto x = int((m_event.MouseState.Position.X - 435) / BLOCK_SIZE);
+		auto y = int((m_event.MouseState.Position.Y - 15) / BLOCK_SIZE);
+		if (x >= 0 && y >= 0 && x < 25 && y < 25)
 			changeMapWithEvent(x, y);
-		else if (x < -4 && y <= 5)
+		else if (x < 0 && y <= 2)
 			_editState = BLOCK;
-		else if (x < -4 && y <= 10)
+		else if (x < 0 && y <= 5)
 			_editState = PERSO;
 	}
 	return 0;
@@ -222,20 +210,24 @@ void Indie::Core::editMap()
 	//SELECTION SIDE
 	_editState = BLOCK;
 	_counter = {625, 4};
-	auto block =_graphism->createTexture(*_graphism->getTexture(1), {380, 200, 800}, {0, 0, 0}, {1, 1, 1}, false);
+	auto block =_graphism->createTexture(*_graphism->getTexture(1), {95, 300, 270}, {0, 0, 0}, {3, 3, 3}, false);
 	_graphism->resizeNode(block, _mapper->getSize());
-	auto perso =_graphism->createTexture(*_graphism->getTexture(10), {280, 200, 800}, {0, 0, 0}, {1, 1, 1}, false);
+	auto perso =_graphism->createTexture(*_graphism->getTexture(10), {70, 300, 270}, {0, 0, 0}, {3, 3, 3}, false);
 	_graphism->resizeNode(perso, _mapper->getSize());
 
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
-		if (editMapEvents() == -1)
+		if (editMapEvents() == -1) {
+			block->remove();
+			perso->remove();
+			_mapper->clear3dMap();
 			break;
+		}
 		m_core.m_driver->beginScene(true, true, _color);
 		m_core.m_gui->drawAll();
     		m_core.m_sceneManager->drawAll();
-		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.first).c_str()), irr::core::rect<irr::s32>(150, 25, 0, 0), irr::video::SColor(255,255,255,255));
-		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.second).c_str()), irr::core::rect<irr::s32>(150, 105, 0, 0), irr::video::SColor(255,255,255,255));
+		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.first).c_str()), irr::core::rect<irr::s32>(125, 25, 0, 0), irr::video::SColor(255,255,255,255));
+		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.second).c_str()), irr::core::rect<irr::s32>(125, 105, 0, 0), irr::video::SColor(255,255,255,255));
 		if (_editState == BLOCK)
 			m_core.m_font->draw(irr::core::stringw("->"), irr::core::rect<irr::s32>(0, 25, 0, 0), irr::video::SColor(255,255,0,255));
 		else
