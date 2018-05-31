@@ -51,7 +51,7 @@ void Indie::Core::createBlock(const Indie::PowerUpType &bonus, const irr::core::
 {
 	destroyBlock(pos);
 	auto block = _mapper->get3dBlock(pos);
-	auto bonusBlock = _graphism->createTexture(*_graphism->getTexture(bonus), block->getPosition(), {0, 0, 0}, {2, 2, 2}, true);
+	auto bonusBlock = _graphism->createTexture(*_graphism->getTexture(bonus), block->getPosition(), {0, 0, 0}, {2, 2 , 2}, true);
 	_graphism->resizeNode(bonusBlock, _mapper->getSize());
 	_graphism->getBonus().emplace_back(pos, bonusBlock);
 }
