@@ -24,20 +24,25 @@ int Indie::Core::createRandMap(std::string name, std::size_t x, std::size_t y)
 	for (std::size_t i = 0; i < y; ++i) {
 		std::vector<int> line;
 		for (std::size_t j = 0; j < x; ++j) {
-			line.push_back(distribution(generator));
+			int rand = distribution(generator);
+			if (rand == 2)
+				rand = 8;
+			line.push_back(rand);
 		}
 		map.push_back(line);
 	}
 
 	for (std::size_t i = 0; i < x; ++i) {
-		map[0][i] = 1;
-		map[y - 1][i] = 1;
+		map[0][i] = 8;
+		map[y - 1][i] = 8;
+		map[i][0] = 8;
+		map[i][x - 1] = 8;
 	}
 
-	for (std::size_t i = 0; i < y; ++i) {
-		map[i][0] = 1;
-		map[i][x - 1] = 1;
-	}
+	// for (std::size_t i = 0; i < y; ++i) {
+	// 	map[i][0] = 1;
+	// 	map[i][x - 1] = 1;
+	// }
 
 	// TOP LEFT CORNER
 	map[1][1] = 10;
@@ -68,13 +73,25 @@ void Indie::Core::createZeroMap(std::string name, size_t x, size_t y)
 	std::string file = "assets/maps/" + name;
 	std::vector<std::vector<int>> map;
 
-	for (std::size_t i = 0; i < y; ++i) {
+	std::vector<int> first_line;
+	for (std::size_t j = 0; j < x; ++j) {
+		first_line.push_back(8);
+	}
+	map.push_back(first_line);
+	for (std::size_t i = 1; i < y - 1; ++i) {
 		std::vector<int> line;
-		for (std::size_t j = 0; j < x; ++j) {
+		line.push_back(8);
+		for (std::size_t j = 1; j < x - 1; ++j) {
 			line.push_back(0);
 		}
+		line.push_back(8);
 		map.push_back(line);
 	}
+	std::vector<int> end_line;
+	for (std::size_t j = 0; j < x; ++j) {
+		end_line.push_back(8);
+	}
+	map.push_back(end_line);
 	writeInFile(file, map);
 }
 
@@ -157,10 +174,16 @@ void Indie::Core::cleanMap()
 void Indie::Core::changeMapWithEvent(std::size_t x, std::size_t y)
 {
 	//BLOCKS
-	if (_editState == BLOCK && _counter.first > 0 && _mapper->getMap2d()[y][x] != 10) {
+	if (_editState == BLOCK && _counter.first > 0 && _mapper->getMap2d()[y][x] != 10 && _mapper->getMap2d()[y][x] != 8) {
 		(_editState == BLOCK ? (_counter.first -= (_counter.first == 0 ? 0 : 1)) : (_counter.second -= (_counter.second == 0 ? 0 : 1)));
 		_counter.first += (_mapper->getMap2d()[y][x] == 1 ? 2 : 0);
 		_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? 0 : 1);
+	}
+	//INDESTRUCTIBLE_BLOCK
+	else if (_editState == INDESTRUCTIBLE_BLOCK && _counter.first > 0 && _mapper->getMap2d()[y][x] != 10 && _mapper->getMap2d()[y][x] != 1) {
+		(_editState == INDESTRUCTIBLE_BLOCK ? (_counter.first -= (_counter.first == 0 ? 0 : 1)) : (_counter.second -= (_counter.second == 0 ? 0 : 1)));
+		_counter.first += (_mapper->getMap2d()[y][x] == 8 ? 2 : 0);
+		_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 8 ? 0 : 8);
 	}
 	//PERSO
 	else if (_editState == PERSO && _counter.second > 0 && _mapper->getMap2d()[y][x] != 1) {
@@ -190,11 +213,13 @@ int Indie::Core::editMapEvents()
 	} else if (m_event.MouseState.LeftButtonDown) {
 		auto x = int((m_event.MouseState.Position.X - 435) / BLOCK_SIZE);
 		auto y = int((m_event.MouseState.Position.Y - 15) / BLOCK_SIZE);
-		if (x >= 0 && y >= 0 && x < 25 && y < 25)
+		if (x >= 1 && y >= 1 && x < 24 && y < 24)
 			changeMapWithEvent(x, y);
 		else if (x < 0 && y <= 2)
 			_editState = BLOCK;
-		else if (x < 0 && y <= 5)
+		else if (x < 0 && y <= 6)
+			_editState = INDESTRUCTIBLE_BLOCK;
+		else if (x < 0 && y <= 12)
 			_editState = PERSO;
 	}
 	return 0;
@@ -202,23 +227,28 @@ int Indie::Core::editMapEvents()
 
 void Indie::Core::editMap()
 {
+	auto textbox = m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME, true);
+	auto mapName = ManageStrings::convertWchart(textbox->getText());
+
 	m_core.editMapView();
-	createZeroMap("mdr.txt", 25, 25);
+	createZeroMap(mapName, 25, 25);
 	_mapper = std::make_unique<Map>();
-	_mapper->newMap("assets/maps/mdr.txt", 20.0f, 100.0f, _graphism);
+	_mapper->newMap("assets/maps/" + mapName, 20.0f, 100.0f, _graphism);
 
 	//SELECTION SIDE
 	_editState = BLOCK;
-	_counter = {625, 4};
+	_counter = {529, 4};
 	auto block =_graphism->createTexture(*_graphism->getTexture(1), {95, 300, 270}, {0, 0, 0}, {3, 3, 3}, false);
 	_graphism->resizeNode(block, _mapper->getSize());
-	auto perso =_graphism->createTexture(*_graphism->getTexture(10), {70, 300, 270}, {0, 0, 0}, {3, 3, 3}, false);
+	auto block2 =_graphism->createTexture(*_graphism->getTexture(8), {65, 300, 270}, {0, 0, 0}, {3, 3, 3}, false);
+	_graphism->resizeNode(block2, _mapper->getSize());
+	auto perso =_graphism->createTexture(*_graphism->getTexture(10), {35, 300, 270}, {0, 0, 0}, {3, 3, 3}, false);
 	_graphism->resizeNode(perso, _mapper->getSize());
-
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		if (editMapEvents() == -1) {
 			block->remove();
+			block2->remove();
 			perso->remove();
 			_mapper->clear3dMap();
 			break;
@@ -227,11 +257,14 @@ void Indie::Core::editMap()
 		m_core.m_gui->drawAll();
     		m_core.m_sceneManager->drawAll();
 		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.first).c_str()), irr::core::rect<irr::s32>(125, 25, 0, 0), irr::video::SColor(255,255,255,255));
-		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.second).c_str()), irr::core::rect<irr::s32>(125, 105, 0, 0), irr::video::SColor(255,255,255,255));
+		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.first).c_str()), irr::core::rect<irr::s32>(125, 125, 0, 0), irr::video::SColor(255,255,255,255));
+		m_core.m_font->draw(irr::core::stringw(std::to_string(_counter.second).c_str()), irr::core::rect<irr::s32>(125, 225, 0, 0), irr::video::SColor(255,255,255,255));
 		if (_editState == BLOCK)
 			m_core.m_font->draw(irr::core::stringw("->"), irr::core::rect<irr::s32>(0, 25, 0, 0), irr::video::SColor(255,255,0,255));
+		else if (_editState == INDESTRUCTIBLE_BLOCK)
+			m_core.m_font->draw(irr::core::stringw("->"), irr::core::rect<irr::s32>(0, 125, 0, 0), irr::video::SColor(255,255,0,255));
 		else
-			m_core.m_font->draw(irr::core::stringw("->"), irr::core::rect<irr::s32>(0, 105, 0, 0), irr::video::SColor(255,255,0,255));
+			m_core.m_font->draw(irr::core::stringw("->"), irr::core::rect<irr::s32>(0, 225, 0, 0), irr::video::SColor(255,255,0,255));
 		m_core.m_driver->endScene();
 	}
 	m_run = true;
