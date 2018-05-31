@@ -266,36 +266,45 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 	auto power = static_cast<int>(bomb->getPower());
 
 	for (int pos = 1 ; pos <= power ; ++pos) {
-		if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y)))
-			break ;
-		else if (pos2d.X + pos < static_cast<int>(_map[pos2d.Y].size()) && _map[pos2d.Y][pos2d.X + pos] != 0) {
+		if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y))) {
+			break;
+		} else if (_map[pos2d.Y][pos2d.X + pos] == 8) {
+			break;
+		} else if (pos2d.X + pos < static_cast<int>(_map[pos2d.Y].size() - 1)
+				 && _map[pos2d.Y][pos2d.X + pos] != 0) {
 			replaceByBonus(irr::core::vector2di(pos2d.X + pos, pos2d.Y));
 			break;
 		}
 	}
 
 	for (int pos = 1 ; pos <= power && pos2d.X - pos > 0; ++pos) {
-		if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y)))
-			break ;
-		else if (_map[pos2d.Y][pos2d.X - pos] != 0) {
+		if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y))) {
+			break;
+		} else if (_map[pos2d.Y][pos2d.X - pos] == 8) {
+			break;
+		} else if (_map[pos2d.Y][pos2d.X - pos] != 0) {
 			replaceByBonus(irr::core::vector2di(pos2d.X - pos, pos2d.Y));
 			break;
 		}
 	}
 
 	for (int pos = 1 ; pos <= power ; ++pos) {
-		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos)))
-			break ;
-		else if (pos2d.Y + pos < static_cast<int>(_map.size()) && _map[pos2d.Y + pos][pos2d.X] != 0) {
+		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos))) {
+			break;
+		} else if (_map[pos2d.Y + pos][pos2d.X] == 8) {
+				break ;
+		} else if (pos2d.Y + pos < static_cast<int>(_map.size() - 1) && _map[pos2d.Y + pos][pos2d.X] != 0) {
 			replaceByBonus(irr::core::vector2di(pos2d.X, pos2d.Y + pos));
 			break;
 		}
 	}
 
 	for (int pos = 1 ; pos <= power && pos2d.Y - pos > 0; ++pos) {
-		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos)))
-			break ;
-		else if (_map[pos2d.Y - pos][pos2d.X] != 0 ) {
+		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos))) {
+			break;
+		} else if (_map[pos2d.Y - pos][pos2d.X] == 8) {
+				break ;
+		} else if (_map[pos2d.Y - pos][pos2d.X] != 0) {
 			replaceByBonus(irr::core::vector2di(pos2d.X, pos2d.Y - pos));
 			break;
 		}
