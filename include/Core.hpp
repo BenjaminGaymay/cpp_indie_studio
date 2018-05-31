@@ -77,88 +77,88 @@ namespace Indie {
 		void changeMapWithEvent(std::size_t x, std::size_t y);
 		void exitGame();
 
-	public:
-		Events getEvent() const {
-			return m_event;
-		}
+	// public:
+	// 	Events getEvent() const {
+	// 		return m_event;
+	// 	}
 
-		void setEvent(const Events &evt) {
-			m_event = evt;
-		}
+	// 	void setEvent(const Events &evt) {
+	// 		m_event = evt;
+	// 	}
 
-		GameState getGameState() const {
-			return _state;
-		}
+	// 	GameState getGameState() const {
+	// 		return _state;
+	// 	}
 
-		void setGameState(const GameState &state) {
-			_state = state;
-		}
+	// 	void setGameState(const GameState &state) {
+	// 		_state = state;
+	// 	}
 
-		AppState getAppState() const {
-			return m_state;
-		}
+	// 	AppState getAppState() const {
+	// 		return m_state;
+	// 	}
 
-		void setAppState(const AppState &state) {
-			m_state = state;
-		}
+	// 	void setAppState(const AppState &state) {
+	// 		m_state = state;
+	// 	}
 
-		SplashScreen getSplashScreen() const {
-			return m_splash;
-		}
+	// 	SplashScreen getSplashScreen() const {
+	// 		return m_splash;
+	// 	}
 
-		bool isRunning() const {
-			return m_run;
-		}
+	// 	bool isRunning() const {
+	// 		return m_run;
+	// 	}
 
-		void setRun(const bool &run) {
-			m_run = run;
-		}
+	// 	void setRun(const bool &run) {
+	// 		m_run = run;
+	// 	}
 
-		Options getOptions() const {
-			return m_opts;
-		}
+	// 	Options getOptions() const {
+	// 		return m_opts;
+	// 	}
 
-		void setOptions(const Options &opt) {
-			m_opts = opt;
-		}
+	// 	void setOptions(const Options &opt) {
+	// 		m_opts = opt;
+	// 	}
 
-		Window getWindow() const {
-			return m_core;
-		}
+	// 	Window getWindow() const {
+	// 		return m_core;
+	// 	}
 
-		// Map getMap() const {
-		// 	return *_mapper.get();
-		// }
+	// 	// Map getMap() const {
+	// 	// 	return *_mapper.get();
+	// 	// }
 
-		// Map getEditing() const {
-		// 	return *_editing.get();
-		// }
+	// 	// Map getEditing() const {
+	// 	// 	return *_editing.get();
+	// 	// }
 
-		// std::vector<std::unique_ptr<Player>> getPlayers() const {
-		// 	return _playerObjects;
-		// }
+	// 	// std::vector<std::unique_ptr<Player>> getPlayers() const {
+	// 	// 	return _playerObjects;
+	// 	// }
 
-		s_tchat getChat() const {
-			return _tchat;
-		}
+	// 	s_tchat getChat() const {
+	// 		return _tchat;
+	// 	}
 
-		int getPlayerId() const {
-			return _playerId;
-		}
+	// 	int getPlayerId() const {
+	// 		return _playerId;
+	// 	}
 
-		editorState getEditState() const {
-			return _editState;
-		}
+	// 	editorState getEditState() const {
+	// 		return _editState;
+	// 	}
 
-		void setEditState(const editorState &state) {
-			_editState = state;
-		}
+	// 	void setEditState(const editorState &state) {
+	// 		_editState = state;
+	// 	}
 
-		Menu getMenu() const {
-			return m_menu;
-		}
+	// 	Menu getMenu() const {
+	// 		return m_menu;
+	// 	}
 
-	private:
+	// private:
 		int _lastFps;
 		std::unique_ptr<EventManager> m_evtManager;
 		std::unique_ptr<Graphism> _graphism;

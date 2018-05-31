@@ -125,6 +125,7 @@ namespace Indie {
 		irr::video::ITexture* m_images;
 		std::vector<irr::gui::IGUIButton *> m_btns;
 		std::vector<irr::gui::IGUIButton *> m_small_btns;
+		std::vector<irr::gui::IGUIButton *> m_square_btns;
 		Options m_opt;
 
 		std::size_t m_height;
@@ -132,5 +133,7 @@ namespace Indie {
 		std::vector<std::string> v_map;
 		std::size_t m_small_height;
 		std::size_t m_small_width;
+		std::size_t m_square_height;
+		std::size_t m_square_width;
 	};
 }
