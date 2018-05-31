@@ -17,7 +17,7 @@ int Indie::Core::createRandMap(std::string name, std::size_t x, std::size_t y)
 	std::default_random_engine generator;
 	std::uniform_int_distribution<int> distribution(0,1);
 
-	if (x < 10 || y < 10 || x > 50 || y > 50) {
+	if (x < 10 || y < 10 || x > 25 || y > 25) {
 		std::cerr << "x and y minimum values are 10" << std::endl;
 		return -1;
 	}
@@ -215,13 +215,13 @@ int Indie::Core::editMapEvents()
 void Indie::Core::editMap()
 {
 	m_core.editMapView();
-	createZeroMap("mdr.txt", 50, 50);
+	createZeroMap("mdr.txt", 25, 25);
 	_mapper = std::make_unique<Map>();
 	_mapper->newMap("assets/maps/mdr.txt", 20.0f, 100.0f, _graphism);
 
 	//SELECTION SIDE
 	_editState = BLOCK;
-	_counter = {2500, 4};
+	_counter = {625, 4};
 	auto block =_graphism->createTexture(*_graphism->getTexture(1), {380, 200, 800}, {0, 0, 0}, {1, 1, 1}, false);
 	_graphism->resizeNode(block, _mapper->getSize());
 	auto perso =_graphism->createTexture(*_graphism->getTexture(10), {280, 200, 800}, {0, 0, 0}, {1, 1, 1}, false);
