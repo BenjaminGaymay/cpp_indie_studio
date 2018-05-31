@@ -6,9 +6,9 @@
 */
 
 #pragma once
-#include "Core.hpp"
 
 namespace Indie {
+	class Core;
 
 	class EventManager {
 	public:

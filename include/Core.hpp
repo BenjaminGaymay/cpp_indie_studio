@@ -21,6 +21,7 @@
 
 namespace Indie {
 	class Player;
+	class EventManager;
 
 	enum editorState {
 		BLOCK,
@@ -37,6 +38,7 @@ namespace Indie {
 	public:
 		Core();
 		~Core();
+		void init();
 		void run();
 		void drawCaption();
 		void processEvents();
@@ -94,5 +96,6 @@ namespace Indie {
 		editorState _editState;
 		std::pair<std::size_t, std::size_t> _counter;
 		bool m_bappe;
+		std::unique_ptr<EventManager> m_evtManager;
 	};
 }

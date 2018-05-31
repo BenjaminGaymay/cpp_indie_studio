@@ -271,3 +271,8 @@ void Indie::Core::menuEvents()
 		}
 	}
 }
+
+void Indie::Core::init()
+{
+
+}
