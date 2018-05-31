@@ -78,6 +78,41 @@ std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
 	return map;
 }
 
+bool Indie::Server::validMove(const int &block)
+{
+	std::cerr << "derrière map[y][x]=" << block << std::endl;
+	return ((block == 0) ||
+		   (block > FIRE_UP && block < LAST_UP));
+}
+
+bool Indie::Server::wallMove(std::unique_ptr<Client> &client, irr::core::vector3df &pos3d, irr::core::vector2di &pos2d, irr::f32 &rotation)
+{
+	std::cerr << "devant map[y][x]=" << _map[pos2d.Y][pos2d.X] << std::endl;
+	if (rotation == 270 && pos2d.X > 0 && validMove(_map[pos2d.Y][pos2d.X - 1])) {
+		client->pos2d.Y = pos2d.Y;
+		client->pos2d.X = pos2d.X - 1;
+		pos2d.X -= 1;
+		pos3d.Z += 20.00f; //taille d'un block, fuck c'est en dur
+	} else if (rotation == 90 && pos2d.X < static_cast<int>(_map[pos2d.Y].size()) && validMove(_map[pos2d.Y][pos2d.X + 1])) {
+		client->pos2d.Y = pos2d.Y;
+		client->pos2d.X = pos2d.X + 1;
+		pos2d.X += 1;
+		pos3d.Z -= 20.00f; //taille d'un block, fuck c'est en dur
+	} else if (rotation == 180 && pos2d.Y < static_cast<int>(_map.size()) && validMove(_map[pos2d.Y + 1][pos2d.X])) {
+		client->pos2d.Y = pos2d.Y + 1;
+		client->pos2d.X = pos2d.X;
+		pos2d.Y += 1;
+		pos3d.X -= 20.00f; //taille d'un block, fuck c'est en dur
+	} else if (rotation == 0 && pos2d.Y > 0 && validMove(_map[pos2d.Y - 1][pos2d.X])) {
+		client->pos2d.Y = pos2d.Y - 1;
+		client->pos2d.X = pos2d.X;
+		pos2d.Y -= 1;
+		pos3d.X += 20.00f; //taille d'un block, fuck c'est en dur
+	} else
+		return false;
+	return true;
+}
+
 int Indie::Server::readClient(std::unique_ptr<Client> &client)
 {
 	static char buffer[8192];
@@ -144,16 +179,21 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				position3d.Y = std::stof(strsep(&tmp, ":"));
 				position3d.Z = std::stof(strsep(&tmp, ":"));
 				irr::f32 rotation = std::stof(strsep(&tmp, ":"));
-				(void) rotation;
+				bool wallUp = static_cast<bool>(std::stoi(strsep(&tmp, ":")));
 				(void) position3d;
 				(void) enumId;
-				if ((_map[client->pos2d.Y][client->pos2d.X] == 1 && _map[position2d.Y][position2d.X] == 3) /* sinon on reste bloqué contre le mur*/
+				if (_map[position2d.Y][position2d.X] == 8 && wallUp) {
+					std::cerr << "Tentative wall hack normal, rotation:" << rotation << std::endl;
+					if (wallMove(client, position3d, position2d, rotation))
+						for (auto &i : _clients)
+							dprintf(i->_fd, "%d:%d:%d:%d:%d:%f:%f:%f:%f:%i\n", enumType, enumEvent, client->_id, position2d.X, position2d.Y, position3d.X, position3d.Y, position3d.Z, rotation, wallUp);
+				} else if ((_map[client->pos2d.Y][client->pos2d.X] == 1 && _map[position2d.Y][position2d.X] == 3) /* sinon on reste bloqué contre le mur*/
 					|| (_map[client->pos2d.Y][client->pos2d.X] == 3)
 					|| (_map[position2d.Y][position2d.X] == 0)) /*normal*/{
 					client->pos2d.Y = position2d.Y;
 					client->pos2d.X = position2d.X;
 					for (auto &i : _clients)
-						dprintf(i->_fd, cmd.c_str());
+						dprintf(i->_fd, "%d:%d:%d:%d:%d:%f:%f:%f:%f:%i\n", enumType, enumEvent, client->_id, position2d.X, position2d.Y, position3d.X, position3d.Y, position3d.Z, rotation, wallUp);
 				} else if (_map[position2d.Y][position2d.X] > FIRST_UP && _map[position2d.Y][position2d.X] < LAST_UP) {
 					client->pos2d.Y = position2d.Y;
 					client->pos2d.X = position2d.X;

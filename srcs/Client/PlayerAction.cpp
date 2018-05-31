@@ -26,7 +26,8 @@ void Indie::Core::moveEvent(irr::core::vector3df &pos)
 					std::to_string(newPos.X) + ':' +
 					std::to_string(newPos.Y) + ':' +
 					std::to_string(newPos.Z) + ':' +
-					std::to_string(_playerObjects[0]->getRotation().Y));
+					std::to_string(_playerObjects[0]->getRotation().Y) + ':' +
+					std::to_string(_playerObjects[0]->getWallUp()));
 	}
 }
 
