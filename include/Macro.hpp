@@ -7,5 +7,5 @@
 
 #pragma once
 
-#define BLOCK_SIZE 14
-#define BTN_COUNT 34
+#define BLOCK_SIZE 27.6
+#define BTN_COUNT 30

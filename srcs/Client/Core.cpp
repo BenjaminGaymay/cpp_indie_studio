@@ -220,7 +220,7 @@ void Indie::Core::menuEvents()
 					m_menu.m_option->setVisible(false);
 					break;
 				case GUI_ID_MAP_RANDOM_BUTTON:
-					createRandMap("azerty.txt", 50, 50);
+					createRandMap("azerty.txt", 25, 25);
 					//m_menu.m_mapEdit->setVisible(false);
 					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:
