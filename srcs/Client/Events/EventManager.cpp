@@ -64,7 +64,7 @@ void Indie::EventManager::manage()
 					m_core->m_menu.m_option->setVisible(false);
 					break;
 				case GUI_ID_MAP_RANDOM_BUTTON:
-					m_core->createRandMap("azerty.txt", 50, 50);
+					m_core->createRandMap("azerty.txt", 25, 25);
 					//m_core->m_menu.m_mapEdit->setVisible(false);
 					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:
@@ -78,16 +78,23 @@ void Indie::EventManager::manage()
 						m_core->m_menu.m_roomS->setVisible(false);
 					else
 						m_core->m_menu.m_roomC->setVisible(false);
+					m_core->m_menu.m_ready->setVisible(true);
+					break;
+				case GUI_ID_UNREADY:
+					m_core->m_state = UNREADY;
+					m_core->m_menu.m_join->setVisible(false);
+					if (m_core->_playerId == 0)
+						m_core->m_menu.m_roomS->setVisible(true);
+					else
+						m_core->m_menu.m_roomC->setVisible(true);
 					break;
 				case GUI_ID_PLAY_CLIENT:
-					m_core->m_state = CONNECT;
-					//m_state = CONNECT;
+					//m_core->m_state = CONNECT;
 					m_core->m_menu.m_roomC->setVisible(true);
 					m_core->m_menu.m_play->setVisible(false);
 					break;
 				case GUI_ID_PLAY_SERVER:
-				m_core->m_state = LAUNCH_SERVER;
-					// m_state = LAUNCH_SERVER;
+					m_core->m_state = LAUNCH_SERVER;
 					m_core->m_menu.m_roomS->setVisible(true);
 					m_core->m_menu.m_play->setVisible(false);
 					break;
@@ -100,7 +107,6 @@ void Indie::EventManager::manage()
 					m_core->m_menu.m_down->setVisible(false);
 					m_core->m_menu.m_main->setVisible(true);
 					m_core->m_state = MENU;
-					// m_state = MENU;
 					break;
 				case GUI_ID_LEAVE_GAME_BUTTON:
 					m_core->exitGame();

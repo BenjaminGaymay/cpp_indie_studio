@@ -31,6 +31,7 @@ namespace Indie {
 		GUI_ID_DOWN_ELEMENT,
 		GUI_ID_JOIN_MENU_ELEMENT,
 		GUI_ID_GAME_OPTIONS_ELEMENT,
+		GUI_ID_READY_ELEMENT,
 		GUI_ID_ROOM_BACK_BUTTON,
 		GUI_ID_OPTION_BACK_BUTTON,
 		GUI_ID_PLAY_BACK_BUTTON,
@@ -39,6 +40,7 @@ namespace Indie {
 		GUI_ID_PLAY_SERVER,
 		GUI_ID_PLAY_CLIENT,
 		GUI_ID_READY,
+		GUI_ID_UNREADY,
 		GUI_ID_MAP_EDITOR_BUTTON,
 		GUI_ID_TCHAT_BUTTON,
 		GUI_ID_MAP_RANDOM_BUTTON,
@@ -64,6 +66,7 @@ namespace Indie {
 		LAUNCH_SERVER,
 		CONNECT,
 		READY,
+		UNREADY,
 		PLAY,
 		SERVER_DOWN,
 		NONE
@@ -95,6 +98,7 @@ namespace Indie {
 		void loadDownMenu();
 		void loadGameOptionsMenu();
 		void loadJoinMenu();
+		void loadReadyMenu();
 		void chooseMap();
 
 		void setSkinTransparency(irr::s32 , irr::gui::IGUISkin *);
@@ -111,6 +115,7 @@ namespace Indie {
 		irr::gui::IGUIElement *m_mapEdit;
 		irr::gui::IGUIElement *m_gameOptions;
 		irr::gui::IGUIElement *m_join;
+		irr::gui::IGUIElement *m_ready;
 
 	private:
 		irr::gui::IGUIFont *m_font;

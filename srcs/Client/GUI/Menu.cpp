@@ -39,6 +39,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_roomC = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_ROOMC_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_down = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_DOWN_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_gameOptions = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_GAME_OPTIONS_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
+	m_ready = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_READY_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 
 	m_main->setVisible(true);
 	m_option->setVisible(false);
@@ -50,6 +51,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_down->setVisible(false);
 	m_gameOptions->setVisible(false);
 	m_join->setVisible(false);
+	m_ready->setVisible(false);
 
 	if (!m_images)
 		throw std::runtime_error("Error: can't load menu's images.");
@@ -67,6 +69,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	loadDownMenu();
 	loadGameOptionsMenu();
 	loadJoinMenu();
+	loadReadyMenu();
 
 	// m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,200,800,200 + m_height), m_root, GUI_ID_PLAY_BUTTON,
         //     L"Play", L"Launches the game"));
@@ -100,6 +103,14 @@ void Indie::Menu::loadMainMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,530,x_right,530 + m_height), m_main, GUI_ID_QUIT_BUTTON,
             L"Quit", L"Exits the program"));
 	m_gui->addImage(image, irr::core::vector2di(0, 0), true, m_main);
+}
+
+void Indie::Menu::loadReadyMenu()
+{
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_ready, GUI_ID_UNREADY, L"NOT READY"));
 }
 
 void Indie::Menu::loadOptionsMenu()

@@ -41,7 +41,7 @@ void Indie::Server::addClient()
 	static int id = 0;
 	struct sockaddr_in client_sin{};
 	socklen_t client_sin_len = sizeof(client_sin);
-	std::unique_ptr<Client> newClient = std::make_unique<Client>(id, accept(_hostFd, (struct sockaddr *) &client_sin, &client_sin_len), "Anonymous");
+	std::unique_ptr<Client> newClient = std::make_unique<Client>(id, accept(_hostFd, (struct sockaddr *) &client_sin, &client_sin_len), "Anonymous-" + std::to_string(id + 1));
 
 	dprintf(newClient->_fd, "%d\n", id);
 	_clients.push_back(std::move(newClient));
@@ -93,6 +93,10 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 					  << std::endl;
 			if (std::string(tmp) == "READY") {
 				client->_state = PLAYING;
+				break;
+			}
+			else if (std::string(tmp) == "UNREADY") {
+				client->_state = WAITING;
 				break;
 			}
 			// >> reception map
@@ -208,8 +212,8 @@ Indie::GameState Indie::Server::checkIfStartGame()
 			return WAITING;
 	}
 	for (auto &client : _clients) {
-		std::cout << _mapMsg << std::endl;
 		dprintf(client->_fd, "%s\n", _mapMsg.c_str()); // ENVOI DE LA CARTE
+		std::cout << "Envoi de la carte\n";
 		dprintf(client->_fd, "1:3\n"); // CODE POUR GAME START
 		client->pos2d = irr::core::vector2di(_spawn[spawnId][0], _spawn[spawnId][1]);
 		spawnId = (spawnId + 1) % _spawn.size();
