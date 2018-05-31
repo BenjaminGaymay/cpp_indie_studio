@@ -23,3 +23,7 @@ J3 (client)
 -----
 
 Si l'hébergeur quitte la game -> supprimer le thread
+
+-----
+
+Serveur segv de temps en temps ?
