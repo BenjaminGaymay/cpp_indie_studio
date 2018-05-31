@@ -11,9 +11,6 @@ bomberman.cbp
 server
 peda-session*
 peda/
-Indie.srctrlbm
-Indie.srctrldb
-Indie.srctrlprj
 fontconfig/
 
 # Created by https://www.gitignore.io/api/c++

@@ -11,7 +11,7 @@ Indie::Graphism::Graphism(Indie::Window *core)
 : m_core(core)
 {
 	generateTextureMap();
-	buildDecor();
+	//buildDecor();
 }
 
 Indie::Graphism::~Graphism()

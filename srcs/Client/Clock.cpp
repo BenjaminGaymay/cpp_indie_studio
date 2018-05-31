@@ -9,21 +9,18 @@
 
 Indie::Clock::Clock()
 {
-	m_start = time(nullptr);
+	m_start = std::chrono::system_clock::now();
 }
 
 Indie::Clock::~Clock()
 {}
 
-int Indie::Clock::getElapsedTime()
+std::size_t Indie::Clock::getElapsedTime()
 {
-	time_t stop = time(nullptr);
-	int elapsed = stop - m_start;
-
-	return elapsed;
+	return std::chrono::duration_cast<std::chrono::milliseconds> (std::chrono::system_clock::now() - m_start).count();
 }
 
 void Indie::Clock::reset()
 {
-	m_start = time(nullptr);
+	m_start = std::chrono::system_clock::now();
 }

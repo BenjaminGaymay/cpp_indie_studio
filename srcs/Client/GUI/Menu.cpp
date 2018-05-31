@@ -39,6 +39,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_roomC = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_ROOMC_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_down = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_DOWN_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_gameOptions = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_GAME_OPTIONS_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
+	m_ready = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_READY_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 
 	m_main->setVisible(true);
 	m_option->setVisible(false);
@@ -50,6 +51,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_down->setVisible(false);
 	m_gameOptions->setVisible(false);
 	m_join->setVisible(false);
+	m_ready->setVisible(false);
 
 	if (!m_images)
 		throw std::runtime_error("Error: can't load menu's images.");
@@ -67,6 +69,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	loadDownMenu();
 	loadGameOptionsMenu();
 	loadJoinMenu();
+	loadReadyMenu();
 
 	// m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,200,800,200 + m_height), m_root, GUI_ID_PLAY_BUTTON,
         //     L"Play", L"Launches the game"));
@@ -86,8 +89,10 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 
 void Indie::Menu::loadMainMenu()
 {
+	irr::video::ITexture *image = m_driver->getTexture ("assets/models/menu/background.png");
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
 
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,200,x_right,200 + m_height), m_main, GUI_ID_PLAY_BUTTON,
             L"Play", L"Launches the game"));
@@ -97,6 +102,15 @@ void Indie::Menu::loadMainMenu()
             L"Option", L"Changes options"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,530,x_right,530 + m_height), m_main, GUI_ID_QUIT_BUTTON,
             L"Quit", L"Exits the program"));
+	m_gui->addImage(image, irr::core::vector2di(0, 0), true, m_main);
+}
+
+void Indie::Menu::loadReadyMenu()
+{
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_ready, GUI_ID_UNREADY, L"NOT READY"));
 }
 
 void Indie::Menu::loadOptionsMenu()
@@ -113,6 +127,7 @@ void Indie::Menu::loadJoinMenu()
 {
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
 
 	irr::gui::IGUIEditBox *edit = m_gui->addEditBox(L"127.0.0.1", irr::core::rect<irr::s32>(x_left,90,x_right,90 + m_height - 10), true, m_join, GUI_ID_IP);
 	edit->setMax(15);
@@ -169,7 +184,6 @@ void Indie::Menu::chooseMap()
     	while ((dp = readdir(dirp)) != NULL) {
 		    if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0) {
 			    v_map.push_back(dp->d_name);
-			    std::cout << dp->d_name << std::endl;
 		    }
     	}
     	closedir(dirp);
@@ -186,7 +200,6 @@ void Indie::Menu::loadRoomSMenu()
 		L"Back"));
 
 	chooseMap();
-	std::cout << v_map.size() << std::endl;
 	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 20, 800, 20 + m_height), false, true, m_roomS)->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
 	irr::gui::IGUIListBox *list = m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_roomS, ID_GUI_LIST_MAP);
 	for (auto &c : v_map)

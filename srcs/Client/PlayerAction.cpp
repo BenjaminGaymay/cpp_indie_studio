@@ -20,13 +20,13 @@ void Indie::Core::moveEvent(irr::core::vector3df &pos)
 			return ;
 		}
 		_socket->sendInfos(Indie::PLAYER, Indie::MOVE,
-						   std::to_string(_playerObjects[0]->getId()) + ':' +
-						   std::to_string(pos2d.X) + ':' +
-						   std::to_string(pos2d.Y) + ':' +
-						   std::to_string(newPos.X) + ':' +
-						   std::to_string(newPos.Y) + ':' +
-						   std::to_string(newPos.Z) + ':' +
-						   std::to_string(_playerObjects[0]->getRotation().Y));
+					std::to_string(_playerObjects[0]->getId()) + ':' +
+					std::to_string(pos2d.X) + ':' +
+					std::to_string(pos2d.Y) + ':' +
+					std::to_string(newPos.X) + ':' +
+					std::to_string(newPos.Y) + ':' +
+					std::to_string(newPos.Z) + ':' +
+					std::to_string(_playerObjects[0]->getRotation().Y));
 	}
 }
 

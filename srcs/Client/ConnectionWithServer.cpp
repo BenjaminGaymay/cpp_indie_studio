@@ -14,6 +14,7 @@ void Indie::Core::comGameInfos(int event, std::vector<std::string> &infos)
 		case START:
 			_state = PLAYING;
 			m_state = PLAY;
+			m_menu.m_ready->setVisible(false);
 			m_core.m_device->getCursorControl()->setVisible(false);
 			m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
 			_graphism->buildDecor();

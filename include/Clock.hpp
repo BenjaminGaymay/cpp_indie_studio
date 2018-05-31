@@ -14,10 +14,10 @@ namespace Indie {
 	public:
 		Clock();
 		~Clock();
-		int getElapsedTime();
+		std::size_t getElapsedTime();
 		void reset();
 
 	private:
-		time_t m_start;
+		std::chrono::time_point<std::chrono::system_clock> m_start;
 	};
 }
