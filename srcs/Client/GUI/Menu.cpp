@@ -169,7 +169,6 @@ void Indie::Menu::chooseMap()
     	while ((dp = readdir(dirp)) != NULL) {
 		    if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0) {
 			    v_map.push_back(dp->d_name);
-			    std::cout << dp->d_name << std::endl;
 		    }
     	}
     	closedir(dirp);
@@ -186,7 +185,6 @@ void Indie::Menu::loadRoomSMenu()
 		L"Back"));
 
 	chooseMap();
-	std::cout << v_map.size() << std::endl;
 	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 20, 800, 20 + m_height), false, true, m_roomS)->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
 	irr::gui::IGUIListBox *list = m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_roomS, ID_GUI_LIST_MAP);
 	for (auto &c : v_map)
