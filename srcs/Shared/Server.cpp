@@ -13,8 +13,7 @@
 #include "ManageStrings.hpp"
 #include "Server.hpp"
 
-Indie::Server::Server() : _socket(
-		Socket(5567, INADDR_ANY, Indie::Socket::SERVER)),  _hostFd(_socket.getFd()), _state(WAITING)
+Indie::Server::Server() : _socket(Socket(5567, INADDR_ANY, Indie::Socket::SERVER)), _hostFd(_socket.getFd()), _state(WAITING)
 {
 	if (_hostFd == -1)
 		throw std::runtime_error("Error while creating server socket");
