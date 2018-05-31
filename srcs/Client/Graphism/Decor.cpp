@@ -23,9 +23,10 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	auto object = m_core->m_sceneManager->addAnimatedMeshSceneNode(m_core->m_sceneManager->getMesh(textures.first));
 	object->setName(textures.first);
 	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
-	if (!textures.second.empty())
-		object->setMaterialTexture(0, m_core->m_driver->getTexture(textures.second));
-	else {
+	if (!textures.second.empty()) {
+		if (textures.second != ".")
+			object->setMaterialTexture(0, m_core->m_driver->getTexture(textures.second));
+	} else {
 		object->setName("");
 		object->setVisible(false);
 	}
@@ -87,14 +88,9 @@ void Indie::Graphism::createWater(irr::core::vector3df position,  irr::core::vec
 //
 void Indie::Graphism::buildDecor()
 {
-//	createArena();
-	createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
-	createIsland(irr::core::vector3df(450, -60, 250), irr::core::vector3df(0, 0, 0));
-	createIsland(irr::core::vector3df(-350, -60, -350), irr::core::vector3df(0, 55, 0));
-	//createMoon(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
-	//auto sun = createSun(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
-	//object->getMaterial(0).setTexture(0, m_core.m_driver->getTexture("lol/rope.png"););
-	//object->getMaterial(0).setTexture(0, m_core.m_driver->getTexture("lol/rope.png"););
+	/*createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
+	createTexture(_texturesMap[52], {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);*/
+//	createTexture(_texturesMap[51], {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);
 }
 
 //
@@ -106,11 +102,13 @@ void Indie::Graphism::generateTextureMap()
 	_texturesMap[1] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/crate.jpg");
 	_texturesMap[2] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/sand.jpg");
 	_texturesMap[3] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png");
-	_texturesMap[4] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png"); //SPEEDUP
-	_texturesMap[5] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png"); //BOMBUP
-	_texturesMap[6] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png"); //FIREUP
-	_texturesMap[7] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png"); //WALLPASSUP
+	_texturesMap[4] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/lightning.png"); //SPEEDUP
+	_texturesMap[5] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/bomb.png"); //BOMBUP
+	_texturesMap[6] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/power.png"); //FIREUP
+	_texturesMap[7] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/ghost.jpg"); //WALLPASSUP
 	_texturesMap[10] = textureElem("assets/models/sydney.md2", "assets/models/sydney.bmp");
 	_texturesMap[50] = textureElem("assets/models/palmier/palmier.obj", "assets/models/palmier/palmier.bmp");
-	_texturesMap[51] = textureElem("assets/models/island/island.3ds", "assets/models/island/island.jpg");
+	//_texturesMap[51] = textureElem("assets/models/island/island.3ds", "assets/models/island/island.jpg");
+	//_texturesMap[51] = textureElem("lol/NewfolderLava_Land.obj", ".");
+	//_texturesMap[51] = textureElem("lol/Tropical/SmallTropicalIsland.obj", ".");
 }

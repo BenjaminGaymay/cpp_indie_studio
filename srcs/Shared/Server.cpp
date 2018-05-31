@@ -125,8 +125,8 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				(void) enumId;
 				std::cerr << "BOMB CREATION: POWER:" << power << " X:" << position2d.X << " et Y:" << position2d.Y << std::endl;
 				std::size_t elem = 0;
-				for (auto &bomb : _bombs)
-					if (bomb->getId() == client->_id)
+				for (auto bomb = _bombs.begin() ; elem < limit && bomb != _bombs.end() ; ++bomb)
+					if ((*bomb)->getId() == client->_id)
 						++elem;
 				if (elem < limit && _map[position2d.Y][position2d.X] == 0) {
 					_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, position2d, client->_id));
