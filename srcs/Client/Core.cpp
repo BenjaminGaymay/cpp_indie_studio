@@ -95,10 +95,17 @@ void Indie::Core::checkAppContext()
 		if (_playerId == 0) {
 			irr::gui::IGUIListBox *list = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(ID_GUI_LIST_MAP, true));
 			auto map = ManageStrings::convertWchart(list->getListItem(list->getSelected()));
-			sendMapToServer(std::string("assets/maps/" + map));
+			static std::string oldMap;
+
+			if (map != oldMap) {
+				sendMapToServer(std::string("assets/maps/" + map));
+				oldMap = map;
+			}
 		}
 		dprintf(_socket->getFd(), "READY\n");
 	}
+	if (m_state == UNREADY && _state == WAITING)
+		dprintf(_socket->getFd(), "UNREADY\n");
 	if (m_state == CONNECT && _state == NOTCONNECTED) {
 		try {
 			_socket = std::make_unique<Socket>(5567, ManageStrings::convertWchart(m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_IP, true)->getText()), Socket::CLIENT);
@@ -164,8 +171,8 @@ void Indie::Core::run()
 		if (m_state == PLAY) {
 			pos = _playerObjects[0]->getPosition();
 			if (playerClock.getElapsedTime() > 10) {
-				moveEvent(pos, playerClock);
-				dropBombEvent(pos, playerClock);
+				moveEvent(pos);
+				dropBombEvent(pos);
 				playerClock.reset();
 			}
 			m_core.m_sceneManager->drawAll();
@@ -234,6 +241,15 @@ void Indie::Core::menuEvents()
 						m_menu.m_roomS->setVisible(false);
 					else
 						m_menu.m_roomC->setVisible(false);
+					m_menu.m_ready->setVisible(true);
+					break;
+				case GUI_ID_UNREADY:
+					m_state = UNREADY;
+					m_menu.m_ready->setVisible(false);
+					if (_playerId == 0)
+						m_menu.m_roomS->setVisible(true);
+					else
+						m_menu.m_roomC->setVisible(true);
 					break;
 				case GUI_ID_PLAY_CLIENT:
 					m_menu.m_play->setVisible(false);

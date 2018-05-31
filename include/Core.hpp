@@ -50,8 +50,8 @@ namespace Indie {
 		int createRandMap(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
-		void moveEvent(irr::core::vector3df &pos, Clock &);
-		void dropBombEvent(irr::core::vector3df &pos, Clock &);
+		void moveEvent(irr::core::vector3df &pos);
+		void dropBombEvent(irr::core::vector3df &pos);
 		void comPlayer(int, std::vector<std::string> &);
 		void comBomb(int, std::vector<std::string> &);
 		void addPlayer(int, const irr::core::vector2di &);
