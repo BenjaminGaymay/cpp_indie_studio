@@ -86,8 +86,10 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 
 void Indie::Menu::loadMainMenu()
 {
+	irr::video::ITexture *image = m_driver->getTexture ("assets/models/menu/background.png");
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
 
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,200,x_right,200 + m_height), m_main, GUI_ID_PLAY_BUTTON,
             L"Play", L"Launches the game"));
@@ -97,6 +99,7 @@ void Indie::Menu::loadMainMenu()
             L"Option", L"Changes options"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left,530,x_right,530 + m_height), m_main, GUI_ID_QUIT_BUTTON,
             L"Quit", L"Exits the program"));
+	m_gui->addImage(image, irr::core::vector2di(0, 0), true, m_main);
 }
 
 void Indie::Menu::loadOptionsMenu()

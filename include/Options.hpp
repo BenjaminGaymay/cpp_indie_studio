@@ -19,10 +19,12 @@ public:
 
 	std::size_t getWidth() const {
 		return m_width;
-	};
+	}
+
 	std::size_t getHeight() const {
 		return m_height;
 	}
+
 	bool getFullScreen() const {
 		return m_fullscreen;
 	}
