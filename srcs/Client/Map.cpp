@@ -92,9 +92,7 @@ void Indie::Map::initMap(const std::string &fileName)
 irr::scene::ISceneNode *Indie::Map::putBlock(std::unique_ptr<Graphism> &core, int id, int x, int mulY, int z)
 {
 	irr::f32 cubeSize;
-
-	auto block = core->createTexture(*core->getTexture(id), {0, 0, 0}, {0, 0, 0},
-									{1, 1, 1}, false);
+	auto block = core->createTexture(*core->getTexture(id), {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);
 	cubeSize = core->resizeNode(block, _size);
 	block->setPosition(irr::core::vector3df(
 			static_cast<irr::f32>((x * cubeSize) - (((_max_width - 1) * cubeSize) / 2.0)),
@@ -110,10 +108,10 @@ void Indie::Map::load(std::unique_ptr<Indie::Graphism> &graphism)
 	for (std::size_t i = 0; i < _2dmap.size(); ++i) {
 		for (std::size_t j = 0; j < _2dmap[i].size(); ++j) {
 			_3dundermap.insert(std::pair<irr::scene::ISceneNode *, irr::core::vector2di>
-			        (putBlock(graphism, 2, (_max_height - 1) - i, -1, (_max_width - 1)- j), irr::core::vector2di(i, j)));
+			        (putBlock(graphism, 2, (_max_height - 1) - i, -1, (_max_width - 1)- j), irr::core::vector2di(j, i)));
 			if (graphism->getTexture(_2dmap[i][j]))
 				_3dmap.insert(std::pair<irr::scene::ISceneNode *, irr::core::vector2di>
-				        (putBlock(graphism, _2dmap[i][j], (_max_height - 1) - i, 0, (_max_width - 1) - j), irr::core::vector2di(i, j)));
+				        (putBlock(graphism, _2dmap[i][j], (_max_height - 1) - i, 0, (_max_width - 1) - j), irr::core::vector2di(j, i)));
 		}
 	}
 }
@@ -164,7 +162,6 @@ irr::core::vector2di Indie::Map::get2dBlock(const irr::core::vector3df &target)
 			return block.second;
 	}
 	throw std::logic_error("Bha, case non trouvé wtf");
-	//return nullptr;
 }
 
 irr::scene::ISceneNode *Indie::Map::get3dBlock(const irr::core::vector2di &target)

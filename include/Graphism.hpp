@@ -10,6 +10,7 @@
 
 #include <map>
 #include "Window.hpp"
+#include "Object.hpp"
 
 namespace Indie {
 	class Graphism {
@@ -25,11 +26,13 @@ namespace Indie {
 		irr::scene::ISceneNode *createIsland(irr::core::vector3df position, irr::core::vector3df rotation);
 		void setCollision(irr::scene::ISceneNode *wall, irr::scene::ISceneNode *target);
 		const textureElem *getTexture(const int &nb);
+		std::vector<Indie::Object> &getBombs() { return _bombs; };
 	private:
 		void generateTextureMap();
 		/* FIRST object, SECOND texture */
 		std::map<int, textureElem> _texturesMap;
 		std::vector<irr::scene::ISceneNode *> _nodesList;
+		std::vector<Indie::Object> _bombs;
 		Window *m_core;
 	};
 }

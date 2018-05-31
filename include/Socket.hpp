@@ -18,7 +18,8 @@ namespace Indie {
 	enum ObjectsType {
 		PLAYER,
 		GAMEINFOS,
-		MAP
+		MAP,
+		BOMB
 	};
 
 	enum ObjectsEvents {
@@ -26,7 +27,10 @@ namespace Indie {
 		DEAD,
 		MOVE,
 		START,
-		MESSAGE
+		MESSAGE,
+		CREATEBOMB,
+		DESTROYBOMB,
+		DESTROYBLOCK
 	};
 
 	class Socket {
@@ -47,6 +51,7 @@ namespace Indie {
 			void sendInfos(ObjectsType, ObjectsEvents, const std::string &);
 			bool isSocketWritten();
 			std::vector<std::string> readSocket();
+			void closeSocket() { close(_fd); }
 		private:
 			int _port;
 			std::string _addr;

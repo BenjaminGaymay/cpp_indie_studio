@@ -21,6 +21,7 @@ namespace Indie {
 		~Camera();
 		void initCamera(irr::scene::ISceneManager *, irr::core::vector3df &);
 		void change(irr::scene::ISceneManager *);
+		void change(irr::scene::ISceneManager *sceneManager, Camera::Mode);
 		void reset();
 		Mode getMode() const;
 

@@ -50,15 +50,18 @@ namespace Indie {
 		int createRandMap(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
-
+		void moveEvent(irr::core::vector3df &pos);
+		void dropBombEvent(irr::core::vector3df &pos);
 		void comPlayer(int, std::vector<std::string> &);
+		void comBomb(int, std::vector<std::string> &);
 		void addPlayer(int, const irr::core::vector2di &);
 		void removePlayer(int);
 		void movePlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
-
+		void dropBomb(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power);
+		void destroyBlock(const irr::core::vector2di &target);
+		void destroyBomb(const irr::core::vector2di &target);
 		void comGameInfos(int, std::vector<std::string> &);
 		void comMap(int, std::vector<std::string> &);
-
 		void serverMessage(const std::vector<std::string> &);
 		void checkAppContext();
 		void handleMenu();
@@ -67,6 +70,7 @@ namespace Indie {
 		void manageTchat();
 		void printTchat() const;
 		void changeMapWithEvent(std::size_t x, std::size_t y);
+		void exitGame();
 
 	private:
 		int _lastFps;

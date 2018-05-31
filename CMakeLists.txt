@@ -3,16 +3,17 @@ project(bomberman)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(./include
-                    ./include/GUI
-                    ./include/Events)
+include_directories(include
+                    include/GUI
+                    include/Events)
 
 add_definitions(
+        -g3
         -Wall
         -Wextra
 )
 
-file(GLOB INCLUDES include/*.hpp)
+file(GLOB_RECURSE INCLUDES include/*.hpp)
 file(GLOB_RECURSE SRCS_C srcs/Client/*.cpp)
 
 file(GLOB_RECURSE SRCS_SHARED srcs/Shared/*.cpp)

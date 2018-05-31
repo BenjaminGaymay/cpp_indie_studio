@@ -12,7 +12,7 @@
 // @param node
 //
 Indie::Player::Player(int id, irr::scene::ISceneNode *node, s_tchat &tchat)
-: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1.5f), _tchat(tchat)
+: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1.5f), _tchat(tchat), _power(1)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -21,6 +21,16 @@ Indie::Player::Player(int id, irr::scene::ISceneNode *node, s_tchat &tchat)
 // @brief destroy
 //
 Indie::Player::~Player() = default;
+
+void Indie::Player::setPower(std::size_t power)
+{
+	_power = power;
+}
+
+std::size_t Indie::Player::getPower()
+{
+	return _power;
+}
 
 //
 // @brief set the futur position of player

@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <irrlicht/vector2d.h>
 #include "Socket.hpp"
+#include "Bomb.hpp"
 
 namespace Indie {
 	enum GameState {
@@ -43,6 +44,9 @@ namespace Indie {
 			int readClient(std::unique_ptr<Client> &);
 			GameState checkIfStartGame();
 			static void runServer();
+			void destroyEntities(std::unique_ptr<Indie::Bomb> &bomb);
+			bool hitPlayer(const irr::core::vector2di &target);
+			void manageBomb();
 			std::vector<std::vector<int>> buildMap(const std::string &msg);
 		private:
 			fd_set _fdRead;
@@ -51,6 +55,7 @@ namespace Indie {
 			int _hostFd;
 			GameState _state;
 			std::vector<std::unique_ptr<Client>> _clients;
+			std::vector<std::unique_ptr<Indie::Bomb>> _bombs;
 			std::vector<std::vector<int>> _map;
 			std::vector<std::vector<int>> _spawn;
 			std::string _mapMsg;

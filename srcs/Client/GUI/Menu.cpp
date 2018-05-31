@@ -34,16 +34,20 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	m_option = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_OPTION_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_mapMenu = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_MAP_EDIT_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_mapEdit = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_MAP_EDIT_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
-	m_room = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_ROOM_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
+	m_roomS = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_ROOMS_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
+	m_roomC = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_ROOMC_MENU_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 	m_down = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_DOWN_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
+	m_gameOptions = new irr::gui::IGUIElement(irr::gui::EGUIET_TAB, m_gui, m_root, GUI_ID_GAME_OPTIONS_ELEMENT, irr::core::rect<irr::s32>(0, 0, opt.getWidth(), opt.getHeight()));
 
 	m_main->setVisible(true);
 	m_option->setVisible(false);
 	m_play->setVisible(false);
-	m_room->setVisible(false);
+	m_roomS->setVisible(false);
+	m_roomC->setVisible(false);
 	m_mapMenu->setVisible(false);
 	m_mapEdit->setVisible(false);
 	m_down->setVisible(false);
+	m_gameOptions->setVisible(false);
 
 	if (!m_images)
 		throw std::runtime_error("Error: can't load menu's images.");
@@ -55,9 +59,11 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	loadMainMenu();
 	loadOptionsMenu();
 	loadMapMenu();
-	loadRoomMenu();
+	loadRoomSMenu();
+	loadRoomCMenu();
 	loadPlayMenu();
 	loadDownMenu();
+	loadGameOptionsMenu();
 
 	// m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,200,800,200 + m_height), m_root, GUI_ID_PLAY_BUTTON,
         //     L"Play", L"Launches the game"));
@@ -153,21 +159,44 @@ void Indie::Menu::chooseMap()
 }
 
 
-void Indie::Menu::loadRoomMenu()
+void Indie::Menu::loadRoomSMenu()
 {
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
 
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_room, GUI_ID_READY, L"READY"));
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_room, GUI_ID_ROOM_BACK_BUTTON,
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_roomS, GUI_ID_READY, L"READY"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_roomS, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
 
-	//ROBZZ
 	chooseMap();
 	std::cout << v_map.size() << std::endl;
-	for (size_t i = 0; i < v_map.size() ; ++i) {
-		std::cout << v_map[i] << std::endl;
-	}
+	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 20, 800, 20 + m_height), false, true, m_roomS)->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
+	irr::gui::IGUIListBox *list = m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_roomS, ID_GUI_LIST_MAP);
+	for (auto &c : v_map)
+		list->addItem(irr::core::stringw(c.c_str()).c_str());
+	list->setSelected(0);
+}
+
+void Indie::Menu::loadRoomCMenu()
+{
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_roomC, GUI_ID_READY, L"READY"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_roomC, GUI_ID_ROOM_BACK_BUTTON,
+		L"Back"));
+}
+
+void Indie::Menu::loadGameOptionsMenu()
+{
+	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
+	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
+
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_gameOptions, GUI_ID_STAY_GAME_BUTTON, L"CONTINUE"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_gameOptions, GUI_ID_LEAVE_GAME_BUTTON, L"LEAVE ROOM"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 435, x_right, 435 + m_height), m_gameOptions, GUI_ID_QUIT_GAME_BUTTON, L"QUIT GAME"));
+
+
 }
 
 void Indie::Menu::setSkinTransparency(irr::s32 alpha , irr::gui::IGUISkin *skin)
