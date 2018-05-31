@@ -18,7 +18,7 @@ Indie::Camera::Camera()
 	m_keyMap[3].Action = irr::EKA_STRAFE_RIGHT;
 	m_keyMap[3].KeyCode = irr::KEY_RIGHT;
 	m_keyMap[4].Action = irr::EKA_JUMP_UP;
-	m_keyMap[4].KeyCode = irr::KEY_SPACE;
+	/*m_keyMap[4].KeyCode = irr::KEY_SPACE;*/
 
   	m_mode = BASIC;
 }

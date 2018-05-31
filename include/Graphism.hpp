@@ -27,12 +27,14 @@ namespace Indie {
 		void setCollision(irr::scene::ISceneNode *wall, irr::scene::ISceneNode *target);
 		const textureElem *getTexture(const int &nb);
 		std::vector<Indie::Object> &getBombs() { return _bombs; };
+		std::vector<Indie::Object> &getBonus() { return _bonus; };
 	private:
 		void generateTextureMap();
 		/* FIRST object, SECOND texture */
 		std::map<int, textureElem> _texturesMap;
 		std::vector<irr::scene::ISceneNode *> _nodesList;
 		std::vector<Indie::Object> _bombs;
+		std::vector<Indie::Object> _bonus;
 		Window *m_core;
 	};
 }

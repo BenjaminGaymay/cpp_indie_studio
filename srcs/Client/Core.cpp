@@ -101,13 +101,13 @@ void Indie::Core::checkAppContext()
 	}
 	if (m_state == CONNECT && _state == NOTCONNECTED) {
 		try {
-			_socket = std::make_unique<Socket>(5567, "127.0.0.1", Socket::CLIENT);
+			_socket = std::make_unique<Socket>(5567, ManageStrings::convertWchart(m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_IP, true)->getText()), Socket::CLIENT);
 			_state = WAITING;
 			_playerId = waitForId();
 		} catch (const std::exception &e) {
 			m_state = MENU;
 			m_menu.m_roomC->setVisible(false);
-			m_menu.m_play->setVisible(true);
+			m_menu.m_join->setVisible(true);
 		}
 	}
 	if (m_state == SERVER_DOWN) {
@@ -138,6 +138,7 @@ void Indie::Core::exitGame()
 void Indie::Core::run()
 {
 	irr::core::vector3df pos;
+	Clock playerClock;
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
@@ -162,8 +163,11 @@ void Indie::Core::run()
 		}
 		if (m_state == PLAY) {
 			pos = _playerObjects[0]->getPosition();
-			moveEvent(pos);
-			dropBombEvent(pos);
+			if (playerClock.getElapsedTime() > 10) {
+				moveEvent(pos, playerClock);
+				dropBombEvent(pos, playerClock);
+				playerClock.reset();
+			}
 			m_core.m_sceneManager->drawAll();
 		} else if (m_state == MAPPING) {
 			editMap();
@@ -232,9 +236,8 @@ void Indie::Core::menuEvents()
 						m_menu.m_roomC->setVisible(false);
 					break;
 				case GUI_ID_PLAY_CLIENT:
-					m_state = CONNECT;
-					m_menu.m_roomC->setVisible(true);
 					m_menu.m_play->setVisible(false);
+					m_menu.m_join->setVisible(true);
 					break;
 				case GUI_ID_PLAY_SERVER:
 					m_state = LAUNCH_SERVER;
@@ -245,6 +248,15 @@ void Indie::Core::menuEvents()
 					m_menu.m_mapEdit->setVisible(false);
 					m_menu.m_mapMenu->setVisible(true);
 					m_run = false;
+					break;
+				case GUI_ID_JOIN_BUTTON:
+					m_state = CONNECT;
+					m_menu.m_join->setVisible(false);
+					m_menu.m_roomC->setVisible(true);
+					break;
+				case GUI_ID_JOIN_BACK_BUTTON:
+					m_menu.m_join->setVisible(false);
+					m_menu.m_play->setVisible(true);
 					break;
 				case GUI_ID_DOWN_BUTTON:
 					m_menu.m_down->setVisible(false);
