@@ -61,7 +61,7 @@ void Indie::SplashScreen::display(irr::IrrlichtDevice *device, Events &event)
 			event.isKeyDown(irr::KEY_RETURN))
 			break;
 		fadeIn();
-		if (m_clock.getElapsedTime() >= 4) {
+		if (m_clock.getElapsedTime() >= 4000) {
 			m_fader->fadeOut(2000);
 			m_fader->isReady();
 			m_clock.reset();

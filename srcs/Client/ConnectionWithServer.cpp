@@ -27,8 +27,57 @@ void Indie::Core::comMap(int event, std::vector<std::string> &infos)
 {
 	switch (event) {
 		case APPEAR: _mapper = std::make_unique<Map>(infos, 20.0f, 100.0f, _graphism); break;
+		case DESTROYBLOCK: destroyBlock(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1]))); break;
+		case CREATEBLOCK: createBlock(static_cast<PowerUpType>(std::stoi(infos[0])), irr::core::vector2di(std::stoi(infos[1]), std::stoi(infos[2]))); break;
+		case TAKEBONUS: takeBonus(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1])), static_cast<PowerUpType >(std::stoi(infos[2]))); break;
 		default: break;
 	}
+}
+
+void Indie::Core::takeBonus(const irr::core::vector2di &pos, const PowerUpType &bonus)
+{
+	std::cerr << "J'ai pris un bonus:" << bonus << std::endl;
+	switch (bonus) {
+		case SPEED_UP : _playerObjects[0]->setSpeed(_playerObjects[0]->getSpeed() + 0.1f); std::cerr << "SPEEDUP" << std::endl; break ;
+		case BOMB_UP : _playerObjects[0]->setBombNumber(_playerObjects[0]->getBombNumber() + 1); std::cerr << "BOMBUP" << std::endl; break;
+		case FIRE_UP : _playerObjects[0]->setPower(_playerObjects[0]->getPower() + 1); std::cerr << "FIREUP" << std::endl; break ;
+		case WALLPASS_UP : std::cerr << "WALLUP" << std::endl; break ;
+		default: std::cerr << "DEFAULT:" << bonus << std::endl; break ;
+	}
+	findAndDestroyEntity(pos);
+}
+
+void Indie::Core::createBlock(const Indie::PowerUpType &bonus, const irr::core::vector2di &pos)
+{
+	destroyBlock(pos);
+	auto block = _mapper->get3dBlock(pos);
+	auto bonusBlock = _graphism->createTexture(*_graphism->getTexture(bonus), block->getPosition(), {0, 0, 0}, {2, 2, 2}, true);
+	_graphism->resizeNode(bonusBlock, _mapper->getSize());
+	_graphism->getBonus().emplace_back(pos, bonusBlock);
+}
+
+bool Indie::Core::findAndDestroyEntity(const irr::core::vector2di &target)
+{
+	for (auto elem = _graphism->getBonus().begin() ; elem != _graphism->getBonus().end() ; ++elem) {
+		auto &bonus = *elem;
+		if (bonus.getPosition2d() == target) {
+			bonus.getTexture()->remove();
+			_graphism->getBonus().erase(elem);
+			return true;
+		}
+	};
+	return false;
+}
+
+void Indie::Core::destroyBlock(const irr::core::vector2di &target)
+{
+	auto &map = _mapper->getMap2d();
+	map[target.Y][target.X] = 0;
+	if (findAndDestroyEntity(target))
+		return ;
+	auto block = _mapper->get3dBlock(target);
+	block->setVisible(false);
+	block->setName("");
 }
 
 void Indie::Core::destroyBomb(const irr::core::vector2di &target)
@@ -43,16 +92,6 @@ void Indie::Core::destroyBomb(const irr::core::vector2di &target)
 			return ;
 		}
 	}
-}
-
-void Indie::Core::destroyBlock(const irr::core::vector2di &target)
-{
-	std::cerr << "DESTROY: X:" << target.X << " et Y:" << target.Y << std::endl;
-	auto block = _mapper->get3dBlock(target);
-	block->setVisible(false);
-	block->setName("");
-	auto &map = _mapper->getMap2d();
-	map[target.Y][target.X] = 0;
 }
 
 void Indie::Core::comPlayer(int event, std::vector<std::string> &infos)
@@ -76,7 +115,6 @@ void Indie::Core::comBomb(int event, std::vector<std::string> &infos)
 
 		switch (event) {
 			case CREATEBOMB: dropBomb(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stoi(infos[4]), std::stof(infos[5])), std::stoul(infos[6])); break;
-			case DESTROYBLOCK: destroyBlock(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1]))); break;
 			case DESTROYBOMB: destroyBomb(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1]))); break;
 			default: break;
 		}
@@ -157,6 +195,7 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 
 	for (auto &line : servSend) {
 		infos = ManageStrings::splitString(line, ':');
+		std::cout << line << std::endl;
 		if (infos.size() >= 2 && ManageStrings::isInteger(infos[0]) && ManageStrings::isInteger(infos[1])) {
 			type = std::stoi(infos[0]);
 			event = std::stoi(infos[1]);

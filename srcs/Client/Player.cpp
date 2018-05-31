@@ -12,7 +12,7 @@
 // @param node
 //
 Indie::Player::Player(int id, irr::scene::ISceneNode *node, s_tchat &tchat)
-: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1.5f), _tchat(tchat), _power(1)
+: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1.5f), _tchat(tchat), _power(1), _bombNumber(1)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -22,14 +22,24 @@ Indie::Player::Player(int id, irr::scene::ISceneNode *node, s_tchat &tchat)
 //
 Indie::Player::~Player() = default;
 
-void Indie::Player::setPower(std::size_t power)
+void Indie::Player::setPower(const std::size_t &power)
 {
 	_power = power;
 }
 
-std::size_t Indie::Player::getPower()
+void Indie::Player::setBombNumber(const std::size_t bombNumber)
+{
+	_bombNumber = bombNumber;
+}
+
+const std::size_t &Indie::Player::getPower() const
 {
 	return _power;
+}
+
+const std::size_t &Indie::Player::getBombNumber() const
+{
+	return _bombNumber;
 }
 
 //
@@ -112,7 +122,7 @@ bool Indie::Player::isStanding()
 // @brief change state
 // @param state
 //
-void Indie::Player::setStanding(bool state)
+void Indie::Player::setStanding(const bool &state)
 {
 	_stand = state;
 }
@@ -121,7 +131,7 @@ void Indie::Player::setStanding(bool state)
 // @brief setSpeed of player
 // @param speed
 //
-void Indie::Player::setSpeed(float speed)
+void Indie::Player::setSpeed(const float &speed)
 {
 	_speed = speed;
 }
@@ -130,7 +140,7 @@ void Indie::Player::setSpeed(float speed)
 // @brief get speed of player
 // @return
 //
-const float &Indie::Player::getSpeed()
+const float &Indie::Player::getSpeed() const
 {
 	return _speed;
 }

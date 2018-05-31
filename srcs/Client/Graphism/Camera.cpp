@@ -35,7 +35,7 @@ void Indie::Camera::initCamera(irr::scene::ISceneManager *sceneManager, irr::cor
 	m_cameras[FPS]->setRotation({0, 90, 0});
 
 	m_cameras[BASIC] = sceneManager->addCameraSceneNode();
-	m_cameras[BASIC]->setPosition({0, 500, 0});
+	m_cameras[BASIC]->setPosition(pos);
 	m_cameras[BASIC]->setRotation(irr::core::vector3df(0, 20, 0));
 }
 
