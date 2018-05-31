@@ -274,5 +274,5 @@ void Indie::Core::menuEvents()
 
 void Indie::Core::init()
 {
-
+	m_evtManager = std::make_unique<EventManager>();
 }
