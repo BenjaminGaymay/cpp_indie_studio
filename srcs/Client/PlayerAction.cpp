@@ -8,7 +8,7 @@
 #include "Player.hpp"
 #include "Core.hpp"
 
-void Indie::Core::moveEvent(irr::core::vector3df &pos)
+void Indie::Core::moveEvent(irr::core::vector3df &pos, Clock &playerClock)
 {
 	irr::core::vector2di pos2d;
 	irr::core::vector3df newPos = _playerObjects[0]->move(m_event);
@@ -20,17 +20,17 @@ void Indie::Core::moveEvent(irr::core::vector3df &pos)
 			return ;
 		}
 		_socket->sendInfos(Indie::PLAYER, Indie::MOVE,
-						   std::to_string(_playerObjects[0]->getId()) + ':' +
-						   std::to_string(pos2d.X) + ':' +
-						   std::to_string(pos2d.Y) + ':' +
-						   std::to_string(newPos.X) + ':' +
-						   std::to_string(newPos.Y) + ':' +
-						   std::to_string(newPos.Z) + ':' +
-						   std::to_string(_playerObjects[0]->getRotation().Y));
+					std::to_string(_playerObjects[0]->getId()) + ':' +
+					std::to_string(pos2d.X) + ':' +
+					std::to_string(pos2d.Y) + ':' +
+					std::to_string(newPos.X) + ':' +
+					std::to_string(newPos.Y) + ':' +
+					std::to_string(newPos.Z) + ':' +
+					std::to_string(_playerObjects[0]->getRotation().Y));
 	}
 }
 
-void Indie::Core::dropBombEvent(irr::core::vector3df &pos)
+void Indie::Core::dropBombEvent(irr::core::vector3df &pos, Clock &playerClock)
 {
 	if (!m_event.isKeyDown(irr::KEY_KEY_B))
 		return ;

@@ -138,6 +138,7 @@ void Indie::Core::exitGame()
 void Indie::Core::run()
 {
 	irr::core::vector3df pos;
+	Clock playerClock;
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
@@ -162,8 +163,11 @@ void Indie::Core::run()
 		}
 		if (m_state == PLAY) {
 			pos = _playerObjects[0]->getPosition();
-			moveEvent(pos);
-			dropBombEvent(pos);
+			if (playerClock.getElapsedTime() > 10) {
+				moveEvent(pos, playerClock);
+				dropBombEvent(pos, playerClock);
+				playerClock.reset();
+			}
 			m_core.m_sceneManager->drawAll();
 		} else if (m_state == MAPPING) {
 			editMap();
