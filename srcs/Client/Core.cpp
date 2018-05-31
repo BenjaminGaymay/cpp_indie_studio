@@ -10,25 +10,10 @@
 #include <Player.hpp>
 #include <iomanip>
 #include "Core.hpp"
+#include "EventManager.hpp"
 
-Indie::Core::Core() : _lastFps(-1), m_opts(1280, 720, false)
-{
-	_objectsFct.push_back(&Indie::Core::comPlayer);
-	_objectsFct.push_back(&Indie::Core::comGameInfos);
-	_objectsFct.push_back(&Indie::Core::comMap);
-	_objectsFct.push_back(&Indie::Core::comBomb);
-	m_state = MENU;
-	m_run = true;
-	_color = {255, 168, 201, 255};
-	m_core.initWindow(m_event, m_opts);
-	m_core.m_sceneManager->setAmbientLight({255.0, 255.0, 255.0});
-	_graphism = std::make_unique<Graphism>(&m_core);
-	_state = NOTCONNECTED;
-	_playerId = -1;
-	_socket = nullptr;
-	m_bappe = true;
-	_tchat._getch = false;
-}
+Indie::Core::Core() : _lastFps(-1)
+{}
 
 Indie::Core::~Core()
 {}
@@ -70,6 +55,7 @@ void Indie::Core::processEvents()
 			}
 		}
 	}
+	//m_evtManager->manage();
 	menuEvents();
 }
 
@@ -298,4 +284,25 @@ void Indie::Core::menuEvents()
 			}
 		}
 	}
+}
+
+void Indie::Core::init(Options &opt)
+{
+	m_opts = opt;
+	m_evtManager = std::make_unique<EventManager>(this);
+	_objectsFct.push_back(&Indie::Core::comPlayer);
+	_objectsFct.push_back(&Indie::Core::comGameInfos);
+	_objectsFct.push_back(&Indie::Core::comMap);
+	_objectsFct.push_back(&Indie::Core::comBomb);
+	m_state = MENU;
+	m_run = true;
+	_color = {255, 168, 201, 255};
+	m_core.initWindow(m_event, m_opts);
+	m_core.m_sceneManager->setAmbientLight({255.0, 255.0, 255.0});
+	_graphism = std::make_unique<Graphism>(&m_core);
+	_state = NOTCONNECTED;
+	_playerId = -1;
+	_socket = nullptr;
+	m_bappe = true;
+	_tchat._getch = false;
 }
