@@ -26,9 +26,10 @@ namespace Indie {
 				_state = BOOM;
 			return _state;
 		};
-		Indie::Bomb::BombState getState() { return _state; };
-		irr::core::vector2di getPosition() { return _pos2d; };
-		std::size_t getPower() { return _power; };
+		const Indie::Bomb::BombState &getState() const { return _state; };
+		const irr::core::vector2di &getPosition() const { return _pos2d; };
+		const std::size_t &getPower() const { return _power; };
+		void setPower(const std::size_t &power) { _power = power; };
 	private:
 		std::time_t _timeMax;
 		std::size_t _power;

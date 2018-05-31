@@ -238,6 +238,7 @@ void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
 	static std::default_random_engine generator;
 	static std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP);
 	auto bonus = static_cast<PowerUpType>(distribution(generator));
+	bonus = FIRE_UP;
 
 	std::cerr << "bonus généré:" << bonus << std::endl;
 	if (_map[pos.Y][pos.X] != 1 || bonus == LAST_UP) {
@@ -265,7 +266,7 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 		}
 	}
 
-	for (int pos = power ; pos >= 1 && pos2d.X - pos > 0; --pos) {
+	for (int pos = 1 ; pos <= power && pos2d.X - pos > 0; ++pos) {
 		if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y)))
 			break ;
 		else if (_map[pos2d.Y][pos2d.X - pos] != 0) {
@@ -283,7 +284,7 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 		}
 	}
 
-	for (int pos = power ; pos >= 1 && pos2d.Y - pos > 0; --pos) {
+	for (int pos = 1 ; pos <= power && pos2d.Y - pos > 0; ++pos) {
 		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos)))
 			break ;
 		else if (_map[pos2d.Y - pos][pos2d.X] != 0 ) {
@@ -304,7 +305,6 @@ void Indie::Server::manageBomb()
 		auto &bomb = *elem;
 		bomb->tictac();
 		if (bomb->getState() == Indie::Bomb::BOOM) {
-			std::cerr << "BOOM" << std::endl;
 			destroyEntities(bomb);
 			_map[bomb->getPosition().Y][bomb->getPosition().X] = 0;
 			_bombs.erase(elem);
