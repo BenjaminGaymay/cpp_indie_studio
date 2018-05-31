@@ -29,6 +29,7 @@ namespace Indie {
 		GUI_ID_ROOMS_MENU_ELEMENT,
 		GUI_ID_ROOMC_MENU_ELEMENT,
 		GUI_ID_DOWN_ELEMENT,
+		GUI_ID_JOIN_MENU_ELEMENT,
 		GUI_ID_GAME_OPTIONS_ELEMENT,
 		GUI_ID_ROOM_BACK_BUTTON,
 		GUI_ID_OPTION_BACK_BUTTON,
@@ -47,7 +48,10 @@ namespace Indie {
 		GUI_ID_LEAVE_GAME_BUTTON,
 		GUI_ID_QUIT_GAME_BUTTON,
 		GUI_ID_STAY_GAME_BUTTON,
-		ID_GUI_LIST_MAP
+		GUI_ID_JOIN_BUTTON,
+		GUI_ID_JOIN_BACK_BUTTON,
+		ID_GUI_LIST_MAP,
+		GUI_ID_IP
 	};
 
 
@@ -90,6 +94,7 @@ namespace Indie {
 		void loadRoomCMenu();
 		void loadDownMenu();
 		void loadGameOptionsMenu();
+		void loadJoinMenu();
 		void chooseMap();
 
 		void setSkinTransparency(irr::s32 , irr::gui::IGUISkin *);
@@ -105,6 +110,7 @@ namespace Indie {
 		irr::gui::IGUIElement *m_mapMenu;
 		irr::gui::IGUIElement *m_mapEdit;
 		irr::gui::IGUIElement *m_gameOptions;
+		irr::gui::IGUIElement *m_join;
 
 	private:
 		irr::gui::IGUIFont *m_font;

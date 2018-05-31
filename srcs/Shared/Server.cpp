@@ -122,7 +122,7 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 					_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, position2d));
 					_map[position2d.Y][position2d.X] = 3;
 					for (auto &i : _clients)
-						dprintf(i->_fd, cmd.c_str());
+						dprintf(i->_fd, "%s\n", cmd.c_str());
 				}
 			} else if (enumType == PLAYER && enumEvent == MOVE) {
 				auto enumId = std::stoi(strsep(&tmp, ":"));
@@ -144,14 +144,14 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 					client->pos2d.X = position2d.X;
 					//_map[position2d.Y][position2d.X] == //ici mettre un nombre qui represente le joueur
 					for (auto &i : _clients)
-							dprintf(i->_fd, cmd.c_str());
+							dprintf(i->_fd, "%s\n", cmd.c_str());
 				}
 			} else {
 				for (auto &i : _clients) {
 					if (std::string(cmd).compare(0, 4, "1:4:") == 0)
 						// Renvoyer les msg dans le menu d'attente
-						dprintf(i->_fd, "1:4:%s: %s",
-								client->_name.c_str(), &cmd[4]);
+						dprintf(i->_fd, "1:4:%s: %s\n",
+							client->_name.c_str(), &cmd[4]);
 				}
 			}
 
@@ -323,7 +323,7 @@ void Indie::Server::runServer()
 bool Indie::operator!=(std::unique_ptr<Indie::Client> &lhs,
 					   std::unique_ptr<Indie::Client> &rhs)
 {
-	return !(lhs->_id == rhs->_id && lhs->_fd == rhs->_fd &&
+	return ! (lhs->_id == rhs->_id && lhs->_fd == rhs->_fd &&
 			 lhs->_name == rhs->_name);
 }
 

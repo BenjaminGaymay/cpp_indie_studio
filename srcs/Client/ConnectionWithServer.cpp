@@ -157,6 +157,7 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 
 	for (auto &line : servSend) {
 		infos = ManageStrings::splitString(line, ':');
+		std::cout << line << std::endl;
 		if (infos.size() >= 2 && ManageStrings::isInteger(infos[0]) && ManageStrings::isInteger(infos[1])) {
 			type = std::stoi(infos[0]);
 			event = std::stoi(infos[1]);
