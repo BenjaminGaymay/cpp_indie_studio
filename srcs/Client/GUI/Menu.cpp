@@ -117,6 +117,7 @@ void Indie::Menu::loadJoinMenu()
 	std::size_t x_left = (m_opt.getWidth() / 2) - (m_width / 2);
 	std::size_t x_right = (m_opt.getWidth() / 2) + (m_width / 2);
 
+
 	irr::gui::IGUIEditBox *edit = m_gui->addEditBox(L"127.0.0.1", irr::core::rect<irr::s32>(x_left,90,x_right,90 + m_height - 10), true, m_join, GUI_ID_IP);
 	edit->setMax(15);
 	edit->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
