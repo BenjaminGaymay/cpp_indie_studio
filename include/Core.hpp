@@ -25,6 +25,7 @@ namespace Indie {
 
 	enum editorState {
 		BLOCK,
+		INDESTRUCTIBLE_BLOCK,
 		PERSO
 	};
 
