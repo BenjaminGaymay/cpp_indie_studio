@@ -39,7 +39,8 @@ namespace Indie {
 		CREATEBOMB,
 		DESTROYBOMB,
 		DESTROYBLOCK,
-		CREATEBLOCK
+		CREATEBLOCK,
+		TAKEBONUS
 	};
 
 	class Socket {

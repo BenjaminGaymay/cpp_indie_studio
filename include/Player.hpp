@@ -19,12 +19,12 @@ namespace Indie {
 		irr::scene::IAnimatedMeshSceneNode *getPlayer();
 		void rotationWithMove(irr::scene::ISceneNode *node, const irr::core::vector3df &newPosition);
 		bool isStanding();
-		void setStanding(bool state);
-		void setSpeed(float speed);
-		void setPower(std::size_t power);
-		std::size_t getPower();
+		void setStanding(const bool &state);
+		void setSpeed(const float &speed);
+		void setPower(const std::size_t &power);
+		const std::size_t &getPower() const;
 		void setPos2d(const irr::core::vector2di &pos) { _pos2d = pos;}
-		const float &getSpeed();
+		const float &getSpeed() const;
 		irr::core::vector3df getPosition() { return _player->getPosition(); }
 		irr::core::vector3df getRotation() { return _player->getRotation(); }
 		void setPosition(const irr::core::vector3df &pos) { _player->setPosition(pos); }

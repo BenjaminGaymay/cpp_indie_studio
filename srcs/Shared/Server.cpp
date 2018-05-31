@@ -139,7 +139,6 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				(void) rotation;
 				(void) position3d;
 				(void) enumId;
-				std::cerr << "map:" << _map[position2d.Y][position2d.X] << std::endl;
 				if ((_map[client->pos2d.Y][client->pos2d.X] == 1 && _map[position2d.Y][position2d.X] == 3) /* sinon on reste bloqué contre le mur*/
 					|| (_map[client->pos2d.Y][client->pos2d.X] == 3)
 					|| (_map[position2d.Y][position2d.X] == 0)) /*normal*/{
@@ -147,12 +146,12 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 					client->pos2d.X = position2d.X;
 					for (auto &i : _clients)
 						dprintf(i->_fd, cmd.c_str());
-				} else if (_map[position2d.Y][position2d.X] > FIRE_UP && _map[position2d.Y][position2d.X] < LAST_UP) {
-					_map[position2d.Y][position2d.X] = 0;
+				} else if (_map[position2d.Y][position2d.X] > FIRST_UP && _map[position2d.Y][position2d.X] < LAST_UP) {
 					client->pos2d.Y = position2d.Y;
 					client->pos2d.X = position2d.X;
 					for (auto &i : _clients)
-						dprintf(i->_fd, "%d:%d:%d:%d\n", MAP, DESTROYBLOCK, position2d.X, position2d.Y);
+						dprintf(i->_fd, "%d:%d:%d:%d:%d\n", MAP, TAKEBONUS, position2d.X, position2d.Y, _map[position2d.Y][position2d.X]);
+					_map[position2d.Y][position2d.X] = 0;
 					}
 			} else {
 				for (auto &i : _clients) {
@@ -237,10 +236,11 @@ bool Indie::Server::hitPlayer(const irr::core::vector2di &target)
 
 void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
 {
-	std::default_random_engine generator;
-	std::uniform_int_distribution<int> distribution(FIRE_UP + 1, LAST_UP);
+	static std::default_random_engine generator;
+	static std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP);
 	auto bonus = static_cast<PowerUpType>(distribution(generator));
 
+	std::cerr << "bonus généré:" << bonus << std::endl;
 	if (_map[pos.Y][pos.X] != 1 || bonus == LAST_UP) {
 		_map[pos.Y][pos.X] = 0;
 		for (auto &aClient : _clients)

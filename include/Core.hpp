@@ -60,6 +60,7 @@ namespace Indie {
 		void dropBomb(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power);
 		void createBlock(const Indie::PowerUpType &bonus, const irr::core::vector2di &pos);
 		bool findAndDestroyEntity(const irr::core::vector2di &target);
+		void takeBonus(const irr::core::vector2di &pos, const PowerUpType &bonus);
 		void destroyBlock(const irr::core::vector2di &target);
 		void destroyBomb(const irr::core::vector2di &target);
 		void comGameInfos(int, std::vector<std::string> &);
