@@ -48,6 +48,8 @@ namespace Indie {
 			bool hitPlayer(const irr::core::vector2di &target);
 			void manageBomb();
 			void replaceByBonus(const irr::core::vector2di &pos);
+			bool wallMove(std::unique_ptr<Client> &client, irr::core::vector3df &pos3d, irr::core::vector2di &pos2d, irr::f32 &rotation);
+			bool validMove(const int &block);
 			std::vector<std::vector<int>> buildMap(const std::string &msg);
 		private:
 			fd_set _fdRead;
