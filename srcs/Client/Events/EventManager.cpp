@@ -5,7 +5,9 @@
 ** EventManager
 */
 
+
 #include "EventManager.hpp"
+#include "Core.hpp"
 
 Indie::EventManager::EventManager()
 {}
@@ -13,7 +15,116 @@ Indie::EventManager::EventManager()
 Indie::EventManager::~EventManager()
 {}
 
-void Indie::EventManager::init(Core &core)
+Indie::EventManager::EventManager(Core *core) :
+	m_core(core)
+{}
+
+void Indie::EventManager::init(Core *core)
 {
-	m_core = &core;
+	m_core = core;
+}
+
+void Indie::EventManager::manage()
+{
+	for (std::size_t id = 0; id < BTN_COUNT; id++) {
+		if (m_core->m_event.isButtonClicked(static_cast<IdGui>(id))) {
+			switch (id) {
+				case GUI_ID_QUIT_BUTTON:
+					m_core->m_core.m_device->closeDevice();
+					break;
+				case GUI_ID_PLAY_BUTTON:
+					m_core->m_menu.m_main->setVisible(false);
+					m_core->m_menu.m_play->setVisible(true);
+					break;
+				case GUI_ID_OPTIONS_BUTTON:
+					m_core->m_menu.m_main->setVisible(false);
+					m_core->m_menu.m_option->setVisible(true);
+					break;
+				case GUI_ID_MAP_BUTTON:
+					m_core->m_menu.m_main->setVisible(false);
+					m_core->m_menu.m_mapMenu->setVisible(true);
+					break;
+				case GUI_ID_MAP_BACK_BUTTON:
+					m_core->m_menu.m_main->setVisible(true);
+					m_core->m_menu.m_mapMenu->setVisible(false);
+					break;
+				case GUI_ID_PLAY_BACK_BUTTON:
+					m_core->m_menu.m_main->setVisible(true);
+					m_core->m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_ROOM_BACK_BUTTON:
+					m_core->m_menu.m_play->setVisible(true);
+					if (m_core->_playerId == 0)
+						m_core->m_menu.m_roomS->setVisible(false);
+					else
+						m_core->m_menu.m_roomC->setVisible(false);
+					break;
+				case GUI_ID_OPTION_BACK_BUTTON:
+					m_core->m_menu.m_main->setVisible(true);
+					m_core->m_menu.m_option->setVisible(false);
+					break;
+				case GUI_ID_MAP_RANDOM_BUTTON:
+					m_core->createRandMap("azerty.txt", 25, 25);
+					//m_core->m_menu.m_mapEdit->setVisible(false);
+					break;
+				case GUI_ID_MAP_EDITOR_BUTTON:
+					m_core->m_state = MAPPING;//m_state = MAPPING;
+					m_core->m_menu.m_mapMenu->setVisible(false);
+					m_core->m_menu.m_mapEdit->setVisible(true);
+					break;
+				case GUI_ID_READY:
+					m_core->m_state = READY;
+					if (m_core->_playerId == 0)
+						m_core->m_menu.m_roomS->setVisible(false);
+					else
+						m_core->m_menu.m_roomC->setVisible(false);
+					m_core->m_menu.m_ready->setVisible(true);
+					break;
+				case GUI_ID_UNREADY:
+					m_core->m_state = UNREADY;
+					m_core->m_menu.m_join->setVisible(false);
+					if (m_core->_playerId == 0)
+						m_core->m_menu.m_roomS->setVisible(true);
+					else
+						m_core->m_menu.m_roomC->setVisible(true);
+					break;
+				case GUI_ID_PLAY_CLIENT:
+					//m_core->m_state = CONNECT;
+					m_core->m_menu.m_roomC->setVisible(true);
+					m_core->m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_PLAY_SERVER:
+					m_core->m_state = LAUNCH_SERVER;
+					m_core->m_menu.m_roomS->setVisible(true);
+					m_core->m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_MAP_SAVE_BUTTON:
+					m_core->m_menu.m_mapEdit->setVisible(false);
+					m_core->m_menu.m_mapMenu->setVisible(true);
+					m_core->m_run = false;
+					break;
+				case GUI_ID_DOWN_BUTTON:
+					m_core->m_menu.m_down->setVisible(false);
+					m_core->m_menu.m_main->setVisible(true);
+					m_core->m_state = MENU;
+					break;
+				case GUI_ID_LEAVE_GAME_BUTTON:
+					m_core->exitGame();
+					m_core->m_state = MENU;
+					m_core->m_menu.m_gameOptions->setVisible(false);
+					m_core->m_menu.m_main->setVisible(true);
+					break;
+				case GUI_ID_QUIT_GAME_BUTTON:
+					m_core->m_run = false;
+					break;
+				case GUI_ID_STAY_GAME_BUTTON:
+					m_core->m_menu.m_gameOptions->setVisible(false);
+					m_core->m_core.getCamera().change(m_core->m_core.getSceneManager(), Camera::FPS);
+					m_core->m_core.m_device->getCursorControl()->setVisible(false);
+					break;
+				default:
+					break;
+			}
+		}
+	}
 }

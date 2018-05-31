@@ -21,6 +21,7 @@
 
 namespace Indie {
 	class Player;
+	class EventManager;
 
 	enum editorState {
 		BLOCK,
@@ -37,6 +38,7 @@ namespace Indie {
 	public:
 		Core();
 		~Core();
+		void init(Options &opt);
 		void run();
 		void drawCaption();
 		void processEvents();
@@ -50,8 +52,8 @@ namespace Indie {
 		int createRandMap(std::string name, size_t x, size_t y);
 		int waitForId();
 		void readServerInformations(std::vector<std::string>);
-		void moveEvent(irr::core::vector3df &pos, Clock &);
-		void dropBombEvent(irr::core::vector3df &pos, Clock &);
+		void moveEvent(irr::core::vector3df &pos);
+		void dropBombEvent(irr::core::vector3df &pos);
 		void comPlayer(int, std::vector<std::string> &);
 		void comBomb(int, std::vector<std::string> &);
 		void addPlayer(int, const irr::core::vector2di &);
@@ -75,8 +77,90 @@ namespace Indie {
 		void changeMapWithEvent(std::size_t x, std::size_t y);
 		void exitGame();
 
-	private:
+	// public:
+	// 	Events getEvent() const {
+	// 		return m_event;
+	// 	}
+
+	// 	void setEvent(const Events &evt) {
+	// 		m_event = evt;
+	// 	}
+
+	// 	GameState getGameState() const {
+	// 		return _state;
+	// 	}
+
+	// 	void setGameState(const GameState &state) {
+	// 		_state = state;
+	// 	}
+
+	// 	AppState getAppState() const {
+	// 		return m_state;
+	// 	}
+
+	// 	void setAppState(const AppState &state) {
+	// 		m_state = state;
+	// 	}
+
+	// 	SplashScreen getSplashScreen() const {
+	// 		return m_splash;
+	// 	}
+
+	// 	bool isRunning() const {
+	// 		return m_run;
+	// 	}
+
+	// 	void setRun(const bool &run) {
+	// 		m_run = run;
+	// 	}
+
+	// 	Options getOptions() const {
+	// 		return m_opts;
+	// 	}
+
+	// 	void setOptions(const Options &opt) {
+	// 		m_opts = opt;
+	// 	}
+
+	// 	Window getWindow() const {
+	// 		return m_core;
+	// 	}
+
+	// 	// Map getMap() const {
+	// 	// 	return *_mapper.get();
+	// 	// }
+
+	// 	// Map getEditing() const {
+	// 	// 	return *_editing.get();
+	// 	// }
+
+	// 	// std::vector<std::unique_ptr<Player>> getPlayers() const {
+	// 	// 	return _playerObjects;
+	// 	// }
+
+	// 	s_tchat getChat() const {
+	// 		return _tchat;
+	// 	}
+
+	// 	int getPlayerId() const {
+	// 		return _playerId;
+	// 	}
+
+	// 	editorState getEditState() const {
+	// 		return _editState;
+	// 	}
+
+	// 	void setEditState(const editorState &state) {
+	// 		_editState = state;
+	// 	}
+
+	// 	Menu getMenu() const {
+	// 		return m_menu;
+	// 	}
+
+	// private:
 		int _lastFps;
+		std::unique_ptr<EventManager> m_evtManager;
 		std::unique_ptr<Graphism> _graphism;
 		Options m_opts;
 		Window m_core;

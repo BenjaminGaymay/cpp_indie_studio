@@ -8,7 +8,7 @@
 #include "Player.hpp"
 #include "Core.hpp"
 
-void Indie::Core::moveEvent(irr::core::vector3df &pos, Clock &playerClock)
+void Indie::Core::moveEvent(irr::core::vector3df &pos)
 {
 	irr::core::vector2di pos2d;
 	irr::core::vector3df newPos = _playerObjects[0]->move(m_event);
@@ -26,11 +26,12 @@ void Indie::Core::moveEvent(irr::core::vector3df &pos, Clock &playerClock)
 					std::to_string(newPos.X) + ':' +
 					std::to_string(newPos.Y) + ':' +
 					std::to_string(newPos.Z) + ':' +
-					std::to_string(_playerObjects[0]->getRotation().Y));
+					std::to_string(_playerObjects[0]->getRotation().Y) + ':' +
+					std::to_string(_playerObjects[0]->getWallUp()));
 	}
 }
 
-void Indie::Core::dropBombEvent(irr::core::vector3df &pos, Clock &playerClock)
+void Indie::Core::dropBombEvent(irr::core::vector3df &pos)
 {
 	if (!m_event.isKeyDown(irr::KEY_KEY_B))
 		return ;

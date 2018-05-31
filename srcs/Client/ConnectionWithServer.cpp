@@ -14,6 +14,7 @@ void Indie::Core::comGameInfos(int event, std::vector<std::string> &infos)
 		case START:
 			_state = PLAYING;
 			m_state = PLAY;
+			m_menu.m_ready->setVisible(false);
 			m_core.m_device->getCursorControl()->setVisible(false);
 			m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
 			_graphism->buildDecor();
@@ -41,7 +42,7 @@ void Indie::Core::takeBonus(const irr::core::vector2di &pos, const PowerUpType &
 		case SPEED_UP : _playerObjects[0]->setSpeed(_playerObjects[0]->getSpeed() + 0.1f); std::cerr << "SPEEDUP" << std::endl; break ;
 		case BOMB_UP : _playerObjects[0]->setBombNumber(_playerObjects[0]->getBombNumber() + 1); std::cerr << "BOMBUP" << std::endl; break;
 		case FIRE_UP : _playerObjects[0]->setPower(_playerObjects[0]->getPower() + 1); std::cerr << "FIREUP" << std::endl; break ;
-		case WALLPASS_UP : std::cerr << "WALLUP" << std::endl; break ;
+		case WALLPASS_UP : _playerObjects[0]->setWallUp(true) ; std::cerr << "WALLUP" << std::endl; break ;
 		default: std::cerr << "DEFAULT:" << bonus << std::endl; break ;
 	}
 	findAndDestroyEntity(pos);
@@ -51,7 +52,7 @@ void Indie::Core::createBlock(const Indie::PowerUpType &bonus, const irr::core::
 {
 	destroyBlock(pos);
 	auto block = _mapper->get3dBlock(pos);
-	auto bonusBlock = _graphism->createTexture(*_graphism->getTexture(bonus), block->getPosition(), {0, 0, 0}, {2, 2, 2}, true);
+	auto bonusBlock = _graphism->createTexture(*_graphism->getTexture(bonus), block->getPosition(), {0, 0, 0}, {2, 2 , 2}, true);
 	_graphism->resizeNode(bonusBlock, _mapper->getSize());
 	_graphism->getBonus().emplace_back(pos, bonusBlock);
 }
