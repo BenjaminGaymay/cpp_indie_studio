@@ -11,7 +11,7 @@
 // @brief texture of the player
 // @param node
 //
-Indie::Player::Player(int id, irr::scene::ISceneNode *node, s_tchat &tchat)
+Indie::Player::Player(const int &id, irr::scene::ISceneNode *node, s_tchat &tchat)
 : _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)),
   _speed(1.5f), _tchat(tchat), _power(1), _bombNumber(1), _wallUp(false)
 {

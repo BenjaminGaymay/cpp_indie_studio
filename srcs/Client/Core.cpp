@@ -137,8 +137,7 @@ void Indie::Core::exitGame()
 
 void Indie::Core::run()
 {
-	irrklang::ISound* music = _engine->play3D("lib/irrKlang/media/getout.ogg", irrklang::vec3df(0,0,0), true, false, true);
-
+	irrklang::ISound* music = _engine->play3D("lib/irrklang/media/getout.ogg", irrklang::vec3df(0,0,0), true, false, true);
 	irr::core::vector3df pos;
 	Clock playerClock;
 

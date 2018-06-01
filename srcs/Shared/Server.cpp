@@ -91,12 +91,12 @@ bool Indie::Server::wallMove(std::unique_ptr<Client> &client, irr::core::vector3
 		client->pos2d.X = pos2d.X - 1;
 		pos2d.X -= 1;
 		pos3d.Z += 20.00f; //taille d'un block, fuck c'est en dur
-	} else if (rotation == 90 && pos2d.X < static_cast<int>(_map[pos2d.Y].size()) && validMove(_map[pos2d.Y][pos2d.X + 1])) {
+	} else if (rotation == 90 && pos2d.X < static_cast<int>(_map[pos2d.Y].size() - 1) && validMove(_map[pos2d.Y][pos2d.X + 1])) {
 		client->pos2d.Y = pos2d.Y;
 		client->pos2d.X = pos2d.X + 1;
 		pos2d.X += 1;
 		pos3d.Z -= 20.00f; //taille d'un block, fuck c'est en dur
-	} else if (rotation == 180 && pos2d.Y < static_cast<int>(_map.size()) && validMove(_map[pos2d.Y + 1][pos2d.X])) {
+	} else if (rotation == 180 && pos2d.Y < static_cast<int>(_map.size() - 1) && validMove(_map[pos2d.Y + 1][pos2d.X])) {
 		client->pos2d.Y = pos2d.Y + 1;
 		client->pos2d.X = pos2d.X;
 		pos2d.Y += 1;
