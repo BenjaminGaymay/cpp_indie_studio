@@ -25,13 +25,19 @@ add_executable(bomberman
 
 file(GLOB_RECURSE SRCS_S srcs/Server/*.cpp)
 
+find_path(IRRLICHT_INCLUDE_DIR irrlicht.h)
+include_directories(${IRRLICHT_PATH_INCLUDE})
+link_directories(${IRRLICHT_PATH_LIB})
+target_link_libraries(bomberman Irrlicht GL pthread)
+
+include_directories("lib/irrKlang/include")
+#[[target_link_libraries(bomberman ${CMAKE_HOME_DIRECTORY}/lib/libIkpFlac.so)
+target_link_libraries(bomberman ${CMAKE_HOME_DIRECTORY}/lib/libIkpMP3.so)]]
+target_link_libraries(bomberman ${CMAKE_HOME_DIRECTORY}/lib/libIrrKlang.so)
+
 add_executable(server
         ${INCLUDES}
         ${SRCS_S}
         ${SRCS_SHARED})
 
 
-find_path(IRRLICHT_INCLUDE_DIR irrlicht.h)
-include_directories(${IRRLICHT_PATH_INCLUDE})
-link_directories(${IRRLICHT_PATH_LIB})
-target_link_libraries(bomberman Irrlicht GL pthread)

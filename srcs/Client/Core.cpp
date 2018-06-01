@@ -9,6 +9,7 @@
 #include <thread>
 #include <Player.hpp>
 #include <iomanip>
+#include <irrKlang.h>
 #include "Core.hpp"
 #include "EventManager.hpp"
 
@@ -130,6 +131,13 @@ void Indie::Core::exitGame()
 
 void Indie::Core::run()
 {
+	irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
+
+	if (!engine)
+		return ; // error starting up the engin
+
+	irrklang::ISound* music = engine->play3D("lib/irrKlang/media/getout.ogg", irrklang::vec3df(0,0,0), true, false, true);
+
 	irr::core::vector3df pos;
 	Clock playerClock;
 
@@ -171,6 +179,10 @@ void Indie::Core::run()
 		m_core.m_driver->endScene();
 		drawCaption();
 	}
+
+	if (music)
+		music->drop(); // release music stream.
+	engine->drop(); // delete engine
 }
 
 void Indie::Core::menuEvents()

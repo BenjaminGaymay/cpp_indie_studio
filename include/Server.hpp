@@ -53,7 +53,6 @@ namespace Indie {
 			std::vector<std::vector<int>> buildMap(const std::string &msg);
 		private:
 			fd_set _fdRead;
-
 			Socket _socket;
 			int _hostFd;
 			GameState _state;
