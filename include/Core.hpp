@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <map>
+#include <ik_ISoundEngine.h>
 #include "Window.hpp"
 #include "SplashScreen.hpp"
 #include "Menu.hpp"
@@ -181,5 +182,6 @@ namespace Indie {
 		editorState _editState;
 		std::pair<std::size_t, std::size_t> _counter;
 		bool m_bappe;
+		irrklang::ISoundEngine* _engine;
 	};
 }

@@ -88,6 +88,7 @@ void Indie::Core::destroyBomb(const irr::core::vector2di &target)
 	for (auto elem = bombs.begin() ; elem != bombs.end() ; ++elem) {
 		auto &bomb = *elem;
 		if (bomb.getPosition2d() == target) {
+			auto music = _engine->play3D("music/boom.wav", irrklang::vec3df(0,0,0), false, false, true);
 			bomb.getTexture()->remove();
 			bombs.erase(elem);
 			return ;

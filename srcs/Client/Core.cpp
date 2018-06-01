@@ -13,11 +13,17 @@
 #include "Core.hpp"
 #include "EventManager.hpp"
 
-Indie::Core::Core() : _lastFps(-1)
-{}
+Indie::Core::Core()
+	:_lastFps(-1), _engine(irrklang::createIrrKlangDevice())
+{
+	if (!_engine)
+		throw std::logic_error("bha la music déconne.");
+}
 
 Indie::Core::~Core()
-{}
+{
+	_engine->drop();
+}
 
 void Indie::Core::drawCaption()
 {
@@ -131,12 +137,7 @@ void Indie::Core::exitGame()
 
 void Indie::Core::run()
 {
-	irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
-
-	if (!engine)
-		return ; // error starting up the engin
-
-	irrklang::ISound* music = engine->play3D("lib/irrKlang/media/getout.ogg", irrklang::vec3df(0,0,0), true, false, true);
+	irrklang::ISound* music = _engine->play3D("lib/irrKlang/media/getout.ogg", irrklang::vec3df(0,0,0), true, false, true);
 
 	irr::core::vector3df pos;
 	Clock playerClock;
@@ -182,7 +183,6 @@ void Indie::Core::run()
 
 	if (music)
 		music->drop(); // release music stream.
-	engine->drop(); // delete engine
 }
 
 void Indie::Core::menuEvents()
