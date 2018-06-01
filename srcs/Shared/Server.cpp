@@ -269,13 +269,13 @@ Indie::GameState Indie::Server::checkIfStartGame()
 
 bool Indie::Server::hitPlayer(const irr::core::vector2di &target)
 {
-	(void) target;
-	/*for (auto &aClient : _clients) {
+	for (auto &aClient : _clients) {
 		if (aClient->pos2d.X == target.X && aClient->pos2d.Y == target.Y) {
+			std::cerr << "player hit" << std::endl;
 			dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, DEAD, aClient->_id);
 			return true;
 		}
-	}*/
+	}
 	return false;
 }
 

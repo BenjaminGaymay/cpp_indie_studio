@@ -150,8 +150,13 @@ void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d)
 
 void Indie::Core::removePlayer(int id)
 {
-	if (id == _playerObjects[0]->getId())
+	if (id == _playerObjects[0]->getId()) { //joueur principale meurt, bha faut gérer
+		_playerObjects[0]->getPlayer()->remove();
+		_playerObjects[0]->setAlive(false); //#BENOIT tu dois quitter proprement
+		m_state = MENU;
+		m_menu.m_main->setVisible(true);
 		return;
+	}
 	for (auto &p : _playerObjects) {
 		if (p->getId() == id) {
 			p->getPlayer()->remove();
