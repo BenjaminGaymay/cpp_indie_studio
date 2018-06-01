@@ -150,7 +150,6 @@ void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d)
 
 void Indie::Core::removePlayer(int id)
 {
-	std::cerr << "on cherche le player" << std::endl;
 	if (id == _playerObjects[0]->getId()) { //joueur principale meurt, bha faut gérer
 		_playerObjects[0]->getPlayer()->remove();
 		_playerObjects[0]->setAlive(false); //#BENOIT tu dois quitter proprement
@@ -160,7 +159,6 @@ void Indie::Core::removePlayer(int id)
 	}
 	for (auto &p : _playerObjects) {
 		if (p->getId() == id) {
-			std::cerr << "Find:" << id << std::endl;
 			p->getPlayer()->remove();
 			auto pPos = std::find(_playerObjects.begin(), _playerObjects.end(), p);
 			pPos->reset();
@@ -168,7 +166,6 @@ void Indie::Core::removePlayer(int id)
 			return;
 		}
 	}
-	std::cerr << "pas trouvé" << std::endl;
 }
 
 void Indie::Core::movePlayer(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos, const irr::f32 &rota)
