@@ -13,6 +13,8 @@ Indie::Menu::Menu()
 	m_width = 325;
 	m_small_height = 72;
 	m_small_width = 250;
+	m_square_height = 100;
+	m_square_width = 100;
 }
 
 Indie::Menu::~Menu()
@@ -85,6 +87,12 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 		btn->setUseAlphaChannel(true);
 		btn->setDrawBorder(0);
 	}
+	for (auto &btn : m_square_btns) {
+		btn->setImage(m_driver->getTexture("assets/models/menu/square_button.png"));
+		btn->setPressedImage(m_driver->getTexture("assets/models/menu/square_button_hover.png"));
+		btn->setUseAlphaChannel(true);
+		btn->setDrawBorder(0);
+	}
 }
 
 void Indie::Menu::loadMainMenu()
@@ -135,7 +143,7 @@ void Indie::Menu::loadJoinMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_join, GUI_ID_JOIN_BUTTON,
 		L"Join"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_join, GUI_ID_JOIN_BACK_BUTTON,
-		L"Back"));
+		L"BacK"));
 }
 
 void Indie::Menu::loadDownMenu()
@@ -215,6 +223,19 @@ void Indie::Menu::loadRoomCMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_roomC, GUI_ID_READY, L"READY"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_roomC, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
+
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(  0,   0, 100, 100), m_roomC, -1, L"1"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(100,   0, 200, 100), m_roomC, -1, L"2"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(200,   0, 300, 100), m_roomC, -1, L"3"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(  0, 100, 100, 200), m_roomC, -1, L"4"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(100, 100, 200, 200), m_roomC, -1, L"5"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(200, 100, 300, 200), m_roomC, -1, L"6"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(  0, 200, 100, 300), m_roomC, -1, L"7"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(100, 200, 200, 300), m_roomC, -1, L"8"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(200, 200, 300, 300), m_roomC, -1, L"9"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(  0, 300, 100, 400), m_roomC, -1, L"."));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(100, 300, 200, 400), m_roomC, -1, L"0"));
+	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(200, 300, 300, 400), m_roomC, -1, L"DEL"));
 }
 
 void Indie::Menu::loadGameOptionsMenu()
@@ -225,7 +246,6 @@ void Indie::Menu::loadGameOptionsMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 215, x_right, 215 + m_height), m_gameOptions, GUI_ID_STAY_GAME_BUTTON, L"CONTINUE"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 325, x_right, 325 + m_height), m_gameOptions, GUI_ID_LEAVE_GAME_BUTTON, L"LEAVE ROOM"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(x_left, 435, x_right, 435 + m_height), m_gameOptions, GUI_ID_QUIT_GAME_BUTTON, L"QUIT GAME"));
-
 
 }
 
