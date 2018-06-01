@@ -137,9 +137,10 @@ void Indie::Core::exitGame()
 
 void Indie::Core::run()
 {
-	irrklang::ISound* music = _engine->play3D("lib/irrklang/media/getout.ogg", irrklang::vec3df(0,0,0), true, false, true);
+	irrklang::ISound* music = _engine->play2D("lib/irrklang/media/getout.ogg", true, false, true);
 	irr::core::vector3df pos;
 	Clock playerClock;
+	music->setVolume(0.5f);
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
@@ -180,8 +181,7 @@ void Indie::Core::run()
 		drawCaption();
 	}
 
-	if (music)
-		music->drop(); // release music stream.
+	music->drop(); // release music stream.
 }
 
 void Indie::Core::menuEvents()

@@ -13,7 +13,7 @@
 namespace Indie {
 	class Player {
 	public:
-		explicit Player(const int &id, irr::scene::IAnimatedMeshSceneNode *, s_tchat &);
+		Player(const int &id, irr::scene::IAnimatedMeshSceneNode *, s_tchat &);
 		~Player();
 		irr::core::vector3df move(Events &event);
 		irr::scene::IAnimatedMeshSceneNode *getPlayer() { return _player; };
@@ -34,6 +34,8 @@ namespace Indie {
 		const int &getId() const { return _id; }
 		void setWallUp(const bool &wallUp) { _wallUp = wallUp; };
 		const bool &getWallUp() const { return _wallUp; };
+		void setAlive(const bool &alive) { _alive = alive; };
+		const bool &isAlive() { return _alive; };
 	private:
 		int _id;
 		bool _stand;
@@ -44,6 +46,7 @@ namespace Indie {
 		std::size_t _power;
 		std::size_t _bombNumber;
 		bool _wallUp;
+		bool _alive;
 	protected:
 	};
 }
