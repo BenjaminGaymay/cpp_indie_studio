@@ -11,8 +11,9 @@
 // @brief texture of the player
 // @param node
 //
-Indie::Player::Player(int id, irr::scene::ISceneNode *node, s_tchat &tchat)
-: _id(id), _stand(true), _player(dynamic_cast<irr::scene::IAnimatedMeshSceneNode *>(node)), _speed(1.5f), _tchat(tchat), _power(1), _bombNumber(1)
+Indie::Player::Player(const int &id, irr::scene::IAnimatedMeshSceneNode *node, s_tchat &tchat)
+: _id(id), _stand(true), _player(node),
+  _speed(1.5f), _tchat(tchat), _power(1), _bombNumber(1), _wallUp(false)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -21,26 +22,6 @@ Indie::Player::Player(int id, irr::scene::ISceneNode *node, s_tchat &tchat)
 // @brief destroy
 //
 Indie::Player::~Player() = default;
-
-void Indie::Player::setPower(const std::size_t &power)
-{
-	_power = power;
-}
-
-void Indie::Player::setBombNumber(const std::size_t bombNumber)
-{
-	_bombNumber = bombNumber;
-}
-
-const std::size_t &Indie::Player::getPower() const
-{
-	return _power;
-}
-
-const std::size_t &Indie::Player::getBombNumber() const
-{
-	return _bombNumber;
-}
 
 //
 // @brief set the futur position of player
@@ -98,49 +79,4 @@ void Indie::Player::rotationWithMove(irr::scene::ISceneNode *node,
 	else
 		return;
 	node->setRotation(rotation);
-}
-
-//
-// @brief return player object
-// @return IAnimatedMeshSceneNode
-//
-irr::scene::IAnimatedMeshSceneNode *Indie::Player::getPlayer()
-{
-	return _player;
-}
-
-//
-// @brief return if the player is doing action like running
-// @return bool
-//
-bool Indie::Player::isStanding()
-{
-	return _stand;
-}
-
-//
-// @brief change state
-// @param state
-//
-void Indie::Player::setStanding(const bool &state)
-{
-	_stand = state;
-}
-
-//
-// @brief setSpeed of player
-// @param speed
-//
-void Indie::Player::setSpeed(const float &speed)
-{
-	_speed = speed;
-}
-
-//
-// @brief get speed of player
-// @return
-//
-const float &Indie::Player::getSpeed() const
-{
-	return _speed;
 }
