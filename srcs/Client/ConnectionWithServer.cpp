@@ -37,6 +37,7 @@ void Indie::Core::comMap(int event, std::vector<std::string> &infos)
 
 void Indie::Core::takeBonus(const irr::core::vector2di &pos, const PowerUpType &bonus)
 {
+	_engine->play2D("music/bonus.wav", false, false, false);
 	std::cerr << "J'ai pris un bonus:" << bonus << std::endl;
 	switch (bonus) {
 		case SPEED_UP : _playerObjects[0]->setSpeed(_playerObjects[0]->getSpeed() + 0.1f); std::cerr << "SPEEDUP" << std::endl; break ;
@@ -83,15 +84,12 @@ void Indie::Core::destroyBlock(const irr::core::vector2di &target)
 
 void Indie::Core::destroyBomb(const irr::core::vector2di &target)
 {
-	static irrklang::ISound *music = nullptr;
 	auto &bombs = _graphism->getBombs();
 
 	for (auto elem = bombs.begin() ; elem != bombs.end() ; ++elem) {
 		auto &bomb = *elem;
 		if (bomb.getPosition2d() == target) {
-			if (music)
-				music->drop();
-			music = _engine->play3D("music/boom.wav", irrklang::vec3df(0,0,0), false, false, true);
+			_engine->play2D("music/boom.wav", false, false, false);
 			bomb.getTexture()->remove();
 			bombs.erase(elem);
 			return ;
