@@ -13,7 +13,7 @@
 namespace Indie {
 	class Player {
 	public:
-		explicit Player(int id, irr::scene::ISceneNode *, s_tchat &);
+		explicit Player(const int &id, irr::scene::ISceneNode *, s_tchat &);
 		~Player();
 		irr::core::vector3df move(Events &event);
 		irr::scene::IAnimatedMeshSceneNode *getPlayer() { return _player; };
