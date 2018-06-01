@@ -83,7 +83,7 @@ void Indie::Core::destroyBlock(const irr::core::vector2di &target)
 
 void Indie::Core::destroyBomb(const irr::core::vector2di &target)
 {
-	irrklang::ISound *music = nullptr;
+	static irrklang::ISound *music = nullptr;
 	auto &bombs = _graphism->getBombs();
 
 	for (auto elem = bombs.begin() ; elem != bombs.end() ; ++elem) {
