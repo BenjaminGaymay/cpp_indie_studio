@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
 #include <vector>
 
 namespace Indie {

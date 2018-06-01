@@ -7,7 +7,7 @@
 #ifndef BOMBERMAN_OBJECT_HPP
 #define BOMBERMAN_OBJECT_HPP
 
-#include <irrlicht/ISceneNode.h>
+#include <ISceneNode.h>
 
 namespace Indie {
 	class Object {

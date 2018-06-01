@@ -8,7 +8,7 @@
 #include <Player.hpp>
 #include "ManageStrings.hpp"
 
-void Indie::Core::comGameInfos(int event, std::vector<std::string> &infos)
+void Indie::Core::comGameInfos(const ObjectsEvents &event, std::vector<std::string> &infos)
 {
 	switch (event) {
 		case START:
@@ -24,7 +24,7 @@ void Indie::Core::comGameInfos(int event, std::vector<std::string> &infos)
 	}
 }
 
-void Indie::Core::comMap(int event, std::vector<std::string> &infos)
+void Indie::Core::comMap(const ObjectsEvents &event, std::vector<std::string> &infos)
 {
 	switch (event) {
 		case APPEAR: _mapper = std::make_unique<Map>(infos, 20.0f, 100.0f, _graphism); break;
@@ -97,7 +97,7 @@ void Indie::Core::destroyBomb(const irr::core::vector2di &target)
 	}
 }
 
-void Indie::Core::comPlayer(int event, std::vector<std::string> &infos)
+void Indie::Core::comPlayer(const ObjectsEvents &event, std::vector<std::string> &infos)
 {
 	try {
 		auto id = std::stoi(infos[0]);
@@ -111,7 +111,7 @@ void Indie::Core::comPlayer(int event, std::vector<std::string> &infos)
 	} catch (const std::exception &e) {}
 }
 
-void Indie::Core::comBomb(int event, std::vector<std::string> &infos)
+void Indie::Core::comBomb(const ObjectsEvents &event, std::vector<std::string> &infos)
 {
 	try {
 		auto id = std::stoi(infos[0]);
@@ -140,9 +140,8 @@ void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d)
 {
 	auto pos3d = _mapper->get3dBlock(pos2d)->getPosition();
 
-	std::cout << pos3d.X <<  ":" << pos3d.Y << ":" << pos3d.Z << std::endl;
-	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, _graphism->createTexture(
-			*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true), _tchat);
+	std::cout << pos3d.X << ":" << pos3d.Y << ":" << pos3d.Z << std::endl;
+	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, static_cast<irr::scene::IAnimatedMeshSceneNode *>(_graphism->createTexture(*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true)), _tchat);
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
 	newPlayer->setPos2d(pos2d);
@@ -194,14 +193,15 @@ void Indie::Core::serverMessage(const std::vector<std::string> &message)
 void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 {
 	std::vector<std::string> infos;
-	int type, event;
+	ObjectsType type;
+	ObjectsEvents event;
 
 	for (auto &line : servSend) {
 		infos = ManageStrings::splitString(line, ':');
 		std::cout << line << std::endl;
 		if (infos.size() >= 2 && ManageStrings::isInteger(infos[0]) && ManageStrings::isInteger(infos[1])) {
-			type = std::stoi(infos[0]);
-			event = std::stoi(infos[1]);
+			type = static_cast<ObjectsType>(std::stoi(infos[0]));
+			event = static_cast<ObjectsEvents>(std::stoi(infos[1]));
 			infos.erase(infos.begin(), infos.begin() + 2);
 			(this->*_objectsFct[type])(event, infos);
 		}

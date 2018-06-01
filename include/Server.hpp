@@ -9,7 +9,7 @@
 
 #include <memory>
 #include <algorithm>
-#include <irrlicht/vector2d.h>
+#include <vector2d.h>
 #include "Socket.hpp"
 #include "Bomb.hpp"
 
