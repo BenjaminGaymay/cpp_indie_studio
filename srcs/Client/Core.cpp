@@ -170,6 +170,8 @@ void Indie::Core::run()
 				playerClock.reset();
 			}
 			m_core.m_sceneManager->drawAll();
+		} else if (m_state == SPEC) {
+			m_core.m_sceneManager->drawAll();
 		} else if (m_state == MAPPING) {
 			editMap();
 			m_state = MENU;
