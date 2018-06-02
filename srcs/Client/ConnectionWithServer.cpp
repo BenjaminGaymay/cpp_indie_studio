@@ -151,6 +151,7 @@ void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d)
 void Indie::Core::removePlayer(int id)
 {
 	if (id == _playerObjects[0]->getId()) { //joueur principale meurt, bha faut gérer
+		_engine->play2D("music/suicide.wav", false, false, false);
 		_playerObjects[0]->getPlayer()->remove();
 		_playerObjects[0]->setAlive(false); //#BENOIT tu dois quitter proprement
 		m_state = SPEC;
