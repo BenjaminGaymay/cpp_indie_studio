@@ -24,8 +24,10 @@ void Indie::EventManager::init(Core *core)
 	m_core = core;
 }
 
-void Indie::EventManager::manage()
+void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 {
+	bool sound = true;
+
 	for (std::size_t id = 0; id < BTN_COUNT; id++) {
 		if (m_core->m_event.isButtonClicked(static_cast<IdGui>(id))) {
 			switch (id) {
@@ -132,8 +134,11 @@ void Indie::EventManager::manage()
 					m_core->m_core.m_device->getCursorControl()->setVisible(false);
 					break;
 				default:
+					sound = false;
 					break;
 			}
+			if (sound)
+				engine->play2D("music/select.wav", false, false, false);
 		}
 	}
 }
