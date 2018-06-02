@@ -51,7 +51,13 @@ namespace Indie {
 			void replaceByBonus(const irr::core::vector2di &pos);
 			bool wallMove(std::unique_ptr<Client> &client, irr::core::vector3df &pos3d, irr::core::vector2di &pos2d, irr::f32 &rotation);
 			bool validMove(const int &block);
+			void comPlayer(const ObjectsEvents &event, std::vector<std::string> &, std::unique_ptr<Client> &);
+			void comBomb(const ObjectsEvents &event, std::vector<std::string> &, std::unique_ptr<Client> &);
+			void comGameInfos(const ObjectsEvents &event, std::vector<std::string> &, std::unique_ptr<Client> &);
+			void comMap(const ObjectsEvents &event, std::vector<std::string> &, std::unique_ptr<Client> &);
 			std::vector<std::vector<int>> buildMap(const std::string &msg);
+			int getBlock(irr::core::vector2di &pos) const { return _map[pos.Y][pos.X]; }
+			void setBlock(irr::core::vector2di &pos, int value) { _map[pos.Y][pos.X] = value; }
 		private:
 			fd_set _fdRead;
 			Socket _socket;
@@ -62,6 +68,8 @@ namespace Indie {
 			std::vector<std::vector<int>> _map;
 			std::vector<std::vector<int>> _spawn;
 			std::string _mapMsg;
+			std::string _lastCmd;
+			std::vector<void (Indie::Server::*)(const ObjectsEvents &event, std::vector<std::string> &, std::unique_ptr<Client> &)> _objectsFct;
 	};
 
 }
