@@ -122,14 +122,10 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		buffer[size] = '\0';
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
-			if (std::string(tmp) == "READY") {
+			if (std::string(tmp) == "READY")
 				client->_state = PLAYING;
-				break;
-			}
-			else if (std::string(tmp) == "UNREADY") {
+			else if (std::string(tmp) == "UNREADY")
 				client->_state = WAITING;
-				break;
-			}
 			// >> reception map
 			if (std::string(tmp).compare(0, 4, "2:0:") == 0) {
 				_map = buildMap(&tmp[4]);
