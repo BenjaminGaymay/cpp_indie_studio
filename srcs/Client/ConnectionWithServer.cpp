@@ -171,7 +171,7 @@ void Indie::Core::removePlayer(int id)
 void Indie::Core::movePlayer(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos, const irr::f32 &rota)
 {
 	for (auto &p : _playerObjects)
-		if (p->getId() == id) {
+		if (p->getId() == id && p->isAlive()) {
 			if (p->isStanding())
 				p->getPlayer()->setMD2Animation(irr::scene::EMAT_RUN);
 			p->setStanding(false);
