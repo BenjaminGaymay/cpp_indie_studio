@@ -40,7 +40,9 @@ namespace Indie {
 		DESTROYBOMB,
 		DESTROYBLOCK,
 		CREATEBLOCK,
-		TAKEBONUS
+		TAKEBONUS,
+		EV_READY,
+		EV_UNREADY
 	};
 
 	class Socket {

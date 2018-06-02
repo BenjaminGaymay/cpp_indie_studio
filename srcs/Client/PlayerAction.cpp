@@ -35,6 +35,7 @@ void Indie::Core::dropBombEvent(irr::core::vector3df &pos)
 {
 	if (!m_event.isKeyDown(irr::KEY_KEY_B))
 		return ;
+	m_event.setKeyUp(irr::KEY_KEY_B);
 	irr::core::vector2di pos2d = _mapper->get2dBlock(pos + _mapper->getSize() / 2);
 	_socket->sendInfos(Indie::BOMB, Indie::CREATEBOMB,
 					   std::to_string(_playerObjects[0]->getId()) + ':' +

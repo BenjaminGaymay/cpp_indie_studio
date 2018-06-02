@@ -201,7 +201,6 @@ void Indie::Core::readServerInformations(std::vector<std::string> servSend)
 	ObjectsEvents event;
 
 	for (auto &line : servSend) {
-		std::cout << line << std::endl;
 		infos = ManageStrings::splitString(line, ':');
 		if (infos.size() >= 2 && ManageStrings::isInteger(infos[0]) && ManageStrings::isInteger(infos[1])) {
 			type = static_cast<ObjectsType>(std::stoi(infos[0]));

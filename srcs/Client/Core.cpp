@@ -94,10 +94,10 @@ void Indie::Core::checkAppContext()
 				oldMap = map;
 			}
 		}
-		dprintf(_socket->getFd(), "READY\n");
+		dprintf(_socket->getFd(), "%d:%d\n", GAMEINFOS, EV_READY);
 	}
 	if (m_state == UNREADY && _state == WAITING)
-		dprintf(_socket->getFd(), "UNREADY\n");
+		dprintf(_socket->getFd(), "%d:%d\n", GAMEINFOS, EV_UNREADY);
 	if (m_state == CONNECT && _state == NOTCONNECTED) {
 		try {
 			_socket = std::make_unique<Socket>(5567, ManageStrings::convertWchart(m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_IP, true)->getText()), Socket::CLIENT);
