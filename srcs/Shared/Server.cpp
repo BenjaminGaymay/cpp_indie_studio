@@ -122,16 +122,10 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		buffer[size] = '\0';
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
-			std::cout << "Client " << client->_id << " say " << tmp
-					  << std::endl;
-			if (std::string(tmp) == "READY") {
+			if (std::string(tmp) == "READY")
 				client->_state = PLAYING;
-				break;
-			}
-			else if (std::string(tmp) == "UNREADY") {
+			else if (std::string(tmp) == "UNREADY")
 				client->_state = WAITING;
-				break;
-			}
 			// >> reception map
 			if (std::string(tmp).compare(0, 4, "2:0:") == 0) {
 				_map = buildMap(&tmp[4]);
@@ -156,7 +150,6 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				std::size_t limit = std::stoul(strsep(&tmp, ":"));
 				(void) position3d;
 				(void) enumId;
-				std::cerr << "BOMB CREATION: POWER:" << power << " X:" << position2d.X << " et Y:" << position2d.Y << std::endl;
 				std::size_t elem = 0;
 				for (auto bomb = _bombs.begin() ; elem < limit && bomb != _bombs.end() ; ++bomb)
 					if ((*bomb)->getId() == client->_id)
@@ -212,7 +205,6 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		}
 		return 0;
 	}
-	std::cout << "Client " << client->_id << " out" << std::endl;
 	auto pos = std::find(_clients.begin(), _clients.end(), client);
 
 	if (pos != _clients.end()) {
@@ -250,7 +242,6 @@ Indie::GameState Indie::Server::checkIfStartGame()
 	}
 	for (auto &client : _clients) {
 		dprintf(client->_fd, "%s\n", _mapMsg.c_str()); // ENVOI DE LA CARTE
-		std::cout << "Envoi de la carte\n";
 		dprintf(client->_fd, "1:3\n"); // CODE POUR GAME START
 		client->pos2d = irr::core::vector2di(_spawn[spawnId][0], _spawn[spawnId][1]);
 		spawnId = (spawnId + 1) % _spawn.size();
@@ -286,7 +277,6 @@ void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
 	static std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP);
 	auto bonus = static_cast<PowerUpType>(distribution(generator));
 
-	std::cerr << "bonus généré:" << bonus << std::endl;
 	if (_map[pos.Y][pos.X] != 1 || bonus == LAST_UP) {
 		_map[pos.Y][pos.X] = 0;
 		for (auto &aClient : _clients)
