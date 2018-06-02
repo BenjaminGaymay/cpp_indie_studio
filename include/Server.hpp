@@ -22,12 +22,13 @@ namespace Indie {
 
 	class Client {
 		public:
-			Client(int id, int fd, const std::string &name) : _id(id), _fd(fd), _name(name), _state(WAITING) {}
+			Client(int id, int fd, const std::string &name) : _id(id), _fd(fd), _name(name), _state(WAITING), _alive(true) {}
 			int _id;
 			int _fd;
 			std::string _name;
 			GameState _state;
 			irr::core::vector2di pos2d;
+			bool _alive;
 	};
 
 	bool operator==(std::unique_ptr<Client> &, std::unique_ptr<Client> &);
