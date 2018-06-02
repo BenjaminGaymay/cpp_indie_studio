@@ -62,7 +62,7 @@ void Indie::Core::processEvents()
 			}
 		}
 	}
-	m_evtManager->manage();
+	m_evtManager->manage(_engine);
 }
 
 void Indie::Core::checkAppContext()
@@ -136,10 +136,10 @@ void Indie::Core::exitGame()
 
 void Indie::Core::run()
 {
-	irrklang::ISound* music = _engine->play2D("lib/irrklang/media/getout.ogg", true, false, true);
+	irrklang::ISound* music = _engine->play2D("music/main.wav", true, false, true);
 	irr::core::vector3df pos;
 	Clock playerClock;
-	music->setVolume(0.5f);
+	music->setVolume(0.3);
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);

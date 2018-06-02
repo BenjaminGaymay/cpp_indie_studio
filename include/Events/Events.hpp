@@ -8,6 +8,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <ik_ISoundEngine.h>
 #include "Menu.hpp"
 #include "Options.hpp"
 #include "Macro.hpp"
