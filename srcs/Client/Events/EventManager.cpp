@@ -82,7 +82,7 @@ void Indie::EventManager::manage()
 					break;
 				case GUI_ID_UNREADY:
 					m_core->m_state = UNREADY;
-					m_core->m_menu.m_join->setVisible(false);
+					m_core->m_menu.m_ready->setVisible(false);
 					if (m_core->_playerId == 0)
 						m_core->m_menu.m_roomS->setVisible(true);
 					else
@@ -90,13 +90,22 @@ void Indie::EventManager::manage()
 					break;
 				case GUI_ID_PLAY_CLIENT:
 					//m_core->m_state = CONNECT;
-					m_core->m_menu.m_roomC->setVisible(true);
+					m_core->m_menu.m_join->setVisible(true);
 					m_core->m_menu.m_play->setVisible(false);
 					break;
 				case GUI_ID_PLAY_SERVER:
 					m_core->m_state = LAUNCH_SERVER;
 					m_core->m_menu.m_roomS->setVisible(true);
 					m_core->m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_JOIN_BACK_BUTTON:
+					m_core->m_menu.m_join->setVisible(false);
+					m_core->m_menu.m_play->setVisible(true);
+					break;
+				case GUI_ID_JOIN_BUTTON:
+					m_core->m_state = CONNECT;
+					m_core->m_menu.m_join->setVisible(false);
+					m_core->m_menu.m_roomC->setVisible(true);
 					break;
 				case GUI_ID_MAP_SAVE_BUTTON:
 					m_core->m_menu.m_mapEdit->setVisible(false);

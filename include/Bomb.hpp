@@ -8,8 +8,8 @@
 #define BOMBERMAN_BOMB_HPP
 
 #include <chrono>
-#include <irrlicht/vector2d.h>
-#include <irrlicht/IAnimatedMeshSceneNode.h>
+#include <vector2d.h>
+#include <IAnimatedMeshSceneNode.h>
 
 namespace Indie {
 	class Bomb {

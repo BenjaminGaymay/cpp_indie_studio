@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
 #include <vector>
 #include <sys/types.h>
 #include <dirent.h>
@@ -69,6 +69,7 @@ namespace Indie {
 		UNREADY,
 		PLAY,
 		SERVER_DOWN,
+		SPEC,
 		NONE
 	};
 
