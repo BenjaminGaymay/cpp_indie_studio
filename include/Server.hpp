@@ -46,7 +46,7 @@ namespace Indie {
 			GameState checkIfStartGame();
 			static void runServer();
 			void destroyEntities(std::unique_ptr<Indie::Bomb> &bomb);
-			bool hitPlayer(const irr::core::vector2di &target);
+			bool hitPlayer(const irr::core::vector2di &target, const int &id);
 			void manageBomb();
 			void replaceByBonus(const irr::core::vector2di &pos);
 			bool wallMove(std::unique_ptr<Client> &client, irr::core::vector3df &pos3d, irr::core::vector2di &pos2d, irr::f32 &rotation);

@@ -42,7 +42,8 @@ namespace Indie {
 		CREATEBLOCK,
 		TAKEBONUS,
 		EV_READY,
-		EV_UNREADY
+		EV_UNREADY,
+		SUICIDE
 	};
 
 	class Socket {

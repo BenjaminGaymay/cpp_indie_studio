@@ -130,10 +130,10 @@ void Indie::Server::comGameInfos(const ObjectsEvents &event, std::vector<std::st
 
 void Indie::Server::comBomb(const ObjectsEvents &event, std::vector<std::string> &infos, std::unique_ptr<Client> &client)
 {
-	(void)event;
+	/*(void)event;
 	(void)infos;
 	(void)client;
-	std::cout << "Bomb - Event: " << event << " - \"" << _lastCmd << "\"\n";
+	std::cout << "Bomb - Event: " << event << " - \"" << _lastCmd << "\"\n";*/
 
 	switch (event) {
 		case CREATEBOMB: {
@@ -158,17 +158,14 @@ void Indie::Server::comBomb(const ObjectsEvents &event, std::vector<std::string>
 
 void Indie::Server::comPlayer(const ObjectsEvents &event, std::vector<std::string> &infos, std::unique_ptr<Client> &client)
 {
-	(void)event;
-	(void)infos;
-	(void)client;
-	std::cout << "Player - Event: " << event << " - \"" << _lastCmd << "\"\n";
+/*	std::cout << "Player - Event: " << event << " - \"" << _lastCmd << "\"\n";*/
 
 	switch (event) {
 		case MOVE: {
 			irr::core::vector2di position2d(std::stoi(infos[1]), std::stoi(infos[2]));
 			irr::core::vector3df position3d(std::stoi(infos[3]), std::stoi(infos[4]), std::stoi(infos[5]));
 			irr::f32 rotation = std::stof(infos[6]);
-			bool wallUp = static_cast<bool>(std::stoi(infos[7]));
+			auto wallUp = static_cast<bool>(std::stoi(infos[7]));
 			if (_map[position2d.Y][position2d.X] == 8 && wallUp) {
 				if (wallMove(client, position3d, position2d, rotation))
 					for (auto &i : _clients)
@@ -281,13 +278,16 @@ Indie::GameState Indie::Server::checkIfStartGame()
 	return PLAYING;
 }
 
-bool Indie::Server::hitPlayer(const irr::core::vector2di &target)
+bool Indie::Server::hitPlayer(const irr::core::vector2di &target, const int &id)
 {
 	for (auto &aClient : _clients) {
 		if (aClient->_alive && aClient->pos2d.X == target.X && aClient->pos2d.Y == target.Y) {
 			std::cerr << "player hit" << std::endl;
 			aClient->_alive = false;
-			dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, DEAD, aClient->_id);
+			if (aClient->_id == id)
+				dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, SUICIDE, aClient->_id);
+			else
+				dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, DEAD, aClient->_id);
 			return true;
 		}
 	}
@@ -316,9 +316,9 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 	auto pos2d = bomb->getPosition();
 	auto power = static_cast<int>(bomb->getPower());
 
-	if (!hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y))) {
+	if (!hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y), bomb->getId())) {
 		for (int pos = 1; pos <= power; ++pos) {
-			if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y))) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y), bomb->getId())) {
 				break;
 			} else if (_map[pos2d.Y][pos2d.X + pos] == 8) {
 				break;
@@ -331,7 +331,7 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 		}
 
 		for (int pos = 1; pos <= power && pos2d.X - pos > 0; ++pos) {
-			if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y))) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y), bomb->getId())) {
 				break;
 			} else if (_map[pos2d.Y][pos2d.X - pos] == 8) {
 				break;
@@ -342,7 +342,7 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 		}
 
 		for (int pos = 1; pos <= power; ++pos) {
-			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos))) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos), bomb->getId())) {
 				break;
 			} else if (_map[pos2d.Y + pos][pos2d.X] == 8) {
 				break;
@@ -354,7 +354,7 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 		}
 
 		for (int pos = 1; pos <= power && pos2d.Y - pos > 0; ++pos) {
-			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos))) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos), bomb->getId())) {
 				break;
 			} else if (_map[pos2d.Y - pos][pos2d.X] == 8) {
 				break;

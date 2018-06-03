@@ -58,7 +58,7 @@ namespace Indie {
 		void comPlayer(const ObjectsEvents &event, std::vector<std::string> &);
 		void comBomb(const ObjectsEvents &event, std::vector<std::string> &);
 		void addPlayer(int, const irr::core::vector2di &);
-		void removePlayer(int);
+		void removePlayer(int, const ObjectsEvents &event);
 		void movePlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
 		void dropBomb(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power);
 		void createBlock(const Indie::PowerUpType &bonus, const irr::core::vector2di &pos);
