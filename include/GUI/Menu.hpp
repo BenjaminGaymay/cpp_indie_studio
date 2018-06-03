@@ -69,6 +69,7 @@ namespace Indie {
 		UNREADY,
 		PLAY,
 		SERVER_DOWN,
+		SPEC,
 		NONE
 	};
 

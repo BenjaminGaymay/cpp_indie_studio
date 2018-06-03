@@ -24,8 +24,10 @@ void Indie::EventManager::init(Core *core)
 	m_core = core;
 }
 
-void Indie::EventManager::manage()
+void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 {
+	bool sound = true;
+
 	for (std::size_t id = 0; id < BTN_COUNT; id++) {
 		if (m_core->m_event.isButtonClicked(static_cast<IdGui>(id))) {
 			switch (id) {
@@ -82,7 +84,7 @@ void Indie::EventManager::manage()
 					break;
 				case GUI_ID_UNREADY:
 					m_core->m_state = UNREADY;
-					m_core->m_menu.m_join->setVisible(false);
+					m_core->m_menu.m_ready->setVisible(false);
 					if (m_core->_playerId == 0)
 						m_core->m_menu.m_roomS->setVisible(true);
 					else
@@ -90,13 +92,22 @@ void Indie::EventManager::manage()
 					break;
 				case GUI_ID_PLAY_CLIENT:
 					//m_core->m_state = CONNECT;
-					m_core->m_menu.m_roomC->setVisible(true);
+					m_core->m_menu.m_join->setVisible(true);
 					m_core->m_menu.m_play->setVisible(false);
 					break;
 				case GUI_ID_PLAY_SERVER:
 					m_core->m_state = LAUNCH_SERVER;
 					m_core->m_menu.m_roomS->setVisible(true);
 					m_core->m_menu.m_play->setVisible(false);
+					break;
+				case GUI_ID_JOIN_BACK_BUTTON:
+					m_core->m_menu.m_join->setVisible(false);
+					m_core->m_menu.m_play->setVisible(true);
+					break;
+				case GUI_ID_JOIN_BUTTON:
+					m_core->m_state = CONNECT;
+					m_core->m_menu.m_join->setVisible(false);
+					m_core->m_menu.m_roomC->setVisible(true);
 					break;
 				case GUI_ID_MAP_SAVE_BUTTON:
 					m_core->m_menu.m_mapEdit->setVisible(false);
@@ -123,8 +134,11 @@ void Indie::EventManager::manage()
 					m_core->m_core.m_device->getCursorControl()->setVisible(false);
 					break;
 				default:
+					sound = false;
 					break;
 			}
+			if (sound)
+				engine->play2D("music/select.wav", false, false, false);
 		}
 	}
 }

@@ -188,7 +188,6 @@ bool Indie::Map::emptyBlock(const irr::core::vector3df &position)
 {
 	auto block = get3dBlock(position);
 	if (!block) {
-		std::cout << "Not found" << std::endl;
 		return false;
 	}
 	return (!block->isVisible());
