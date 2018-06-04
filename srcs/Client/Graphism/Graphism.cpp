@@ -34,3 +34,14 @@ const Indie::Graphism::textureElem *Indie::Graphism::getTexture(const int &nb)
 	return nullptr;
 
 }
+
+void Indie::Graphism::clearNode()
+{
+	std::cerr << "size:" <<_nodesList.size() << std::endl;
+	if (_nodesList.empty())
+		return ;
+	/*for (auto &node : _nodesList)
+		node->remove();*/
+	_nodesList.clear();
+	std::cerr << "size:" <<_nodesList.size() << std::endl;
+}

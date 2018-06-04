@@ -175,6 +175,11 @@ void Indie::Core::run()
 		} else if (m_state == SPEC) {
 			m_core.m_sceneManager->drawAll();
 		} else if (m_state == MAPPING) {
+			_graphism->clearNode();
+			if (_mapper) {
+				_mapper->clear3dMap();
+				_mapper->clear2dMap();
+			}
 			editMap();
 			m_state = MENU;
 		}

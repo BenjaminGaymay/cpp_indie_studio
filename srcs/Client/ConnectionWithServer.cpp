@@ -76,7 +76,7 @@ void Indie::Core::destroyBlock(const irr::core::vector2di &target)
 	auto &map = _mapper->getMap2d();
 	map[target.Y][target.X] = 0;
 	if (findAndDestroyEntity(target))
-		return ;
+		return;
 	auto block = _mapper->get3dBlock(target);
 	block->setVisible(false);
 	block->setName("");
@@ -163,6 +163,7 @@ void Indie::Core::removePlayer(int id, const ObjectsEvents &event)
 	}
 	for (auto &p : _playerObjects) {
 		if (p->getId() == id) {
+			std::cerr << "delete" << std::endl;
 			p->getPlayer()->remove();
 			auto pPos = std::find(_playerObjects.begin(), _playerObjects.end(), p);
 			pPos->reset();
