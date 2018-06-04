@@ -22,11 +22,11 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 {
 	auto object = m_core->m_sceneManager->addAnimatedMeshSceneNode(m_core->m_sceneManager->getMesh(textures.first));
 	object->setName(textures.first);
-	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
-	if (!textures.second.empty()) {
-		if (textures.second != ".")
-			object->setMaterialTexture(0, m_core->m_driver->getTexture(textures.second));
-	} else {
+	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false); // remove fog
+	object->setMaterialFlag(irr::video::EMF_LIGHTING, true); // maybe map will be black
+	if (!textures.second.empty() && textures.second != ".") {
+		object->setMaterialTexture(0, m_core->m_driver->getTexture(textures.second));
+	} else if (textures.second.empty()){
 		object->setName("");
 		object->setVisible(false);
 	}
@@ -38,28 +38,6 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	/*if (collision)
 		addCollision(object);*/
 	_nodesList.push_back(object);
-	return object;
-}
-
-//
-// @brief create one island
-// @param position
-// @param rotation
-// @return
-//
-irr::scene::ISceneNode *Indie::Graphism::createIsland(irr::core::vector3df position, irr::core::vector3df rotation)
-{
-	auto object = createTexture(_texturesMap[51], position, rotation, {15, 30, 15}, false);
-	irr::core::vector3df scale = {0.01, 0.003, 0.01};
-
-	object->addChild(createTexture(_texturesMap[50], {+2, 2, -1}, {0, 0, 0}, scale, false));
-	object->addChild(createTexture(_texturesMap[50], {-4, 2, 1}, {0, 0, 0}, scale, false));
-	object->addChild(createTexture(_texturesMap[50], {-3, 2, -3}, {0, 30, 0}, scale, false));
-	object->addChild(createTexture(_texturesMap[50], {0, 3, -5}, {0, 60, 0}, scale, false));
-	object->addChild(createTexture(_texturesMap[50], {2, 3, -7}, {0, 60, 0}, scale, false));
-	object->addChild(createTexture(_texturesMap[50], {-2, 3, -9}, {0, 0, 0}, scale, false));
-	object->addChild(createTexture(_texturesMap[50], {5, 3, -12}, {0, 0, 0}, scale, false));
-	object->setName("Island");
 	return object;
 }
 
@@ -90,7 +68,8 @@ void Indie::Graphism::buildDecor()
 {
 	/*createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	createTexture(_texturesMap[52], {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);*/
-//	createTexture(_texturesMap[51], {0, 0, 0}, {0, 0, 0}, {0.01f, 0.01f, 0.01f}, false);
+	//createTexture(_texturesMap[51], {300, 0, 0}, {0, 0, 0}, {0.1f, 0.1f, 0.1f}, false);
+	createTexture(_texturesMap[52], {2000, -200, -600}, {270, 0, 0}, {50, 50, 50}, false);
 }
 
 //
@@ -98,20 +77,17 @@ void Indie::Graphism::buildDecor()
 //
 void Indie::Graphism::generateTextureMap()
 {
-	_texturesMap[0] = textureElem("assets/models/cube/Crate1.3ds", "");
-	_texturesMap[1] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/crate.jpg");
-	_texturesMap[2] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/sand.jpg");
+	_texturesMap[0] = textureElem("assets/models/cube/Crate1.3ds", ""); //invisible block
+	_texturesMap[1] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/crate.jpg"); //basic block
+	_texturesMap[2] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/sand.jpg"); //undermap block
 	_texturesMap[3] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png");
-	_texturesMap[4] = textureElem("assets/models/eclair.3ds", "assets/models/2D/yellow.png"); //SPEEDUP
-	_texturesMap[5] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/bomb.png"); //BOMBUP
+	_texturesMap[4] = textureElem("assets/models/lightning.md2", "assets/models/2D/yellow.png"); //SPEEDUP
+	_texturesMap[5] = textureElem("assets/models/bombsBonus.3ds", "."); //BOMBUP
 	_texturesMap[6] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/power.png"); //FIREUP
 	_texturesMap[7] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/ghost.jpg"); //WALLPASSUP
-	_texturesMap[8] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/wall.png");
+	_texturesMap[8] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/wall.png"); //wall block
 	_texturesMap[10] = textureElem("assets/models/sydney.md2", "assets/models/sydney.bmp");
-	//_texturesMap[10] = textureElem("lol/Fortnite/source/astronautaoscuro.obj", ".");
 	_texturesMap[50] = textureElem("assets/models/palmier/palmier.obj", "assets/models/palmier/palmier.bmp");
-	//_texturesMap[51] = textureElem("assets/models/island/island.3ds", "assets/models/island/island.jpg");
-	//_texturesMap[51] = textureElem("lol/Island/OBJ/Twin Islands.obj", ".");
-	//_texturesMap[51] = textureElem("lol/NewfolderLava_Land.obj", ".");
-	//_texturesMap[51] = textureElem("lol/Tropical/SmallTropicalIsland.obj", ".");
+	//_texturesMap[51] = textureElem("lol/city/3DS/Camellia City.3ds", ".");
+	_texturesMap[52] = textureElem("assets/models/Circuit/Luigi Circuit.obj", ".");
 }

@@ -31,7 +31,7 @@ void Indie::Camera::initCamera(irr::scene::ISceneManager *sceneManager, irr::cor
 	pos = pos;
 	m_cameras.resize(2);
 	m_cameras[FPS] = sceneManager->addCameraSceneNodeFPS(nullptr, 100, 0.5, -1, m_keyMap, 4);
-	m_cameras[FPS]->setPosition({0, 200, 0});
+	m_cameras[FPS]->setPosition({0, 500, 0});
 	m_cameras[FPS]->setRotation({0, 90, 0});
 
 	m_cameras[BASIC] = sceneManager->addCameraSceneNode();

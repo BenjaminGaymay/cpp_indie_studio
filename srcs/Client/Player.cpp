@@ -53,6 +53,7 @@ irr::core::vector3df Indie::Player::move(Events &event)
 	} else {
 		if (!isStanding()) _player->setMD2Animation(irr::scene::EMAT_STAND);
 		setStanding(true);
+		return nodePosition;
 	}
 	rotationWithMove(_player, nodePosition);
 	return nodePosition;
@@ -68,6 +69,7 @@ void Indie::Player::rotationWithMove(irr::scene::ISceneNode *node,
 {
 	irr::core::vector3df position = node->getPosition();
 	irr::core::vector3df rotation = node->getRotation();
+
 	if (position.X < newPosition.X)
 		rotation.Y = 0;
 	else if (position.X > newPosition.X)

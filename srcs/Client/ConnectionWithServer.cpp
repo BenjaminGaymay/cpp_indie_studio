@@ -103,7 +103,8 @@ void Indie::Core::comPlayer(const ObjectsEvents &event, std::vector<std::string>
 		auto id = std::stoi(infos[0]);
 
 		switch (event) {
-			case DEAD: removePlayer(id); break;
+			case DEAD: removePlayer(id, DEAD); break;
+			case SUICIDE: removePlayer(id, SUICIDE); break;
 			case APPEAR: addPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2]))); break;
 			case MOVE: movePlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
 			default: break;
@@ -148,10 +149,13 @@ void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d)
 	_playerObjects.push_back(std::move(newPlayer));
 }
 
-void Indie::Core::removePlayer(int id)
+void Indie::Core::removePlayer(int id, const ObjectsEvents &event)
 {
 	if (id == _playerObjects[0]->getId()) { //joueur principale meurt, bha faut gérer
-		_engine->play2D("music/suicide.wav", false, false, false);
+		if (event == SUICIDE) {
+			auto sound = _engine->play2D("music/suicide_1.wav", false, false, true);
+			sound->setVolume(2);
+		}
 		_playerObjects[0]->getPlayer()->remove();
 		_playerObjects[0]->setAlive(false); //#BENOIT tu dois quitter proprement
 		m_state = SPEC;
