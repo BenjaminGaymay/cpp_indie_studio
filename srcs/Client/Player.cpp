@@ -35,22 +35,18 @@ irr::core::vector3df Indie::Player::move(Events &event)
 	if (_tchat._getch)
 		return nodePosition;
 	if (event.isKeyDown(irr::KEY_KEY_Q)) {
-		std::cerr << "AVANT: X:" << nodePosition.X << " Y:" << nodePosition.Y << " Z:" << nodePosition.Z << std::endl;
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);
 		setStanding(false);
 		nodePosition.Z += _speed;
 	} else if(event.isKeyDown(irr::KEY_KEY_D)) {
-		std::cerr << "AVANT: X:" << nodePosition.X << " Y:" << nodePosition.Y << " Z:" << nodePosition.Z << std::endl;
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);
 		setStanding(false);
 		nodePosition.Z -= _speed;
 	} else if(event.isKeyDown(irr::KEY_KEY_S)) {
-		std::cerr << "AVANT: X:" << nodePosition.X << " Y:" << nodePosition.Y << " Z:" << nodePosition.Z << std::endl;
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);
 		setStanding(false);
 		nodePosition.X -= _speed;
 	} else if(event.isKeyDown(irr::KEY_KEY_Z)) {
-		std::cerr << "AVANT: X:" << nodePosition.X << " Y:" << nodePosition.Y << " Z:" << nodePosition.Z << std::endl;
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);
 		setStanding(false);
 		nodePosition.X += _speed;
@@ -60,7 +56,6 @@ irr::core::vector3df Indie::Player::move(Events &event)
 		return nodePosition;
 	}
 	rotationWithMove(_player, nodePosition);
-	std::cerr << "APRES: X:" << nodePosition.X << " Y:" << nodePosition.Y << " Z:" << nodePosition.Z << std::endl;
 	return nodePosition;
 }
 

@@ -296,9 +296,12 @@ bool Indie::Server::hitPlayer(const irr::core::vector2di &target, const int &id)
 
 void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
 {
+	auto bonus = LAST_UP;
 	static std::default_random_engine generator;
-	static std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP);
-	auto bonus = static_cast<PowerUpType>(distribution(generator));
+	static std::uniform_int_distribution<int> random(0, 4);
+	static std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP - 1);
+	if (random(generator) > 0)
+		bonus = static_cast<PowerUpType>(distribution(generator));
 
 	if (_map[pos.Y][pos.X] != 1 || bonus == LAST_UP) {
 		_map[pos.Y][pos.X] = 0;

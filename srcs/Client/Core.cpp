@@ -85,7 +85,7 @@ void Indie::Core::checkAppContext()
 	}
 	if (m_state == READY && _state == WAITING) {
 		if (_playerId == 0) {
-			irr::gui::IGUIListBox *list = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(ID_GUI_LIST_MAP, true));
+			irr::gui::IGUIListBox *list = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_LIST_MAP, true));
 			auto map = ManageStrings::convertWchart(list->getListItem(list->getSelected()));
 			static std::string oldMap;
 
@@ -147,7 +147,7 @@ void Indie::Core::run()
 	_tchat._textBox->setMax(40);
 	_tchat._textBox->setVisible(false);
 
-	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
+	m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
 	m_core.m_device->getCursorControl()->setVisible(true);
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
@@ -165,6 +165,8 @@ void Indie::Core::run()
 		if (m_state == PLAY) {
 			pos = _playerObjects[0]->getPosition();
 			if (playerClock.getElapsedTime() > 10) {
+				m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition({pos.X, pos.Y + 200, pos.Z});
+				m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});
 				moveEvent(pos);
 				dropBombEvent(pos);
 				playerClock.reset();

@@ -29,6 +29,7 @@ bool Indie::Events::OnEvent(const irr::SEvent &event)
 	if (event.EventType == irr::EET_GUI_EVENT) {
 		if (event.GUIEvent.EventType == irr::gui::EGET_BUTTON_CLICKED) {
 			irr::s32 id = event.GUIEvent.Caller->getID();
+			id -= 101;
 			if (id >= 0 && id < BTN_COUNT)
 				ButtonClicked[id] = true;
 		}
