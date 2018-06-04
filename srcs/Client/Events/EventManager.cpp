@@ -178,6 +178,21 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 				case GUI_ID_NUMPAD_DEL:
 					updateIpInput(id);
 					break;
+				case GUI_ID_SOUND:
+					{
+						auto volume = engine->getSoundVolume();
+						irr::gui::IGUIButton *btn = static_cast<irr::gui::IGUIButton *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(id, true));
+
+						if (volume == 0) {
+							engine->setSoundVolume(1);
+							btn->setText(L"On");
+						}
+						else {
+							engine->setSoundVolume(0);
+							btn->setText(L"Off");
+						}
+					}
+					break;
 				default:
 					sound = false;
 					break;

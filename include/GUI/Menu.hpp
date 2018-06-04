@@ -65,7 +65,8 @@ namespace Indie {
 		GUI_ID_NUMPAD_8,
 		GUI_ID_NUMPAD_9,
 		GUI_ID_NUMPAD_DOT,
-		GUI_ID_NUMPAD_DEL
+		GUI_ID_NUMPAD_DEL,
+		GUI_ID_SOUND
 	};
 
 
@@ -113,6 +114,7 @@ namespace Indie {
 		void loadJoinMenu();
 		void loadReadyMenu();
 		void chooseMap();
+		void loadSoundBtn();
 
 		void setSkinTransparency(irr::s32 , irr::gui::IGUISkin *);
 
