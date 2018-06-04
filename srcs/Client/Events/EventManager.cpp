@@ -184,12 +184,12 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 						irr::gui::IGUIButton *btn = static_cast<irr::gui::IGUIButton *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(id, true));
 
 						if (volume == 0) {
-							engine->setSoundVolume(1);
-							btn->setText(L"On");
+							engine->setSoundVolume(0.3);
+							btn->setImage(m_core->m_core.m_driver->getTexture("assets/models/menu/volume.png"));
 						}
 						else {
 							engine->setSoundVolume(0);
-							btn->setText(L"Off");
+							btn->setImage(m_core->m_core.m_driver->getTexture("assets/models/menu/volume_mute.png"));
 						}
 					}
 					break;

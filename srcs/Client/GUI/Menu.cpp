@@ -267,7 +267,12 @@ void Indie::Menu::setSkinTransparency(irr::s32 alpha , irr::gui::IGUISkin *skin)
 
 void Indie::Menu::loadSoundBtn()
 {
-	m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(10, 10, 85, 85), m_root, GUI_ID_SOUND, L"On"));
+	irr::gui::IGUIButton *btn = m_gui->addButton(irr::core::recti(10, m_opt.getHeight() - 85, 85, m_opt.getHeight() - 10), m_root, GUI_ID_SOUND, L"", L"Mute/Unmute");
+
+	btn->setImage(m_driver->getTexture("assets/models/menu/volume.png"));
+	btn->setUseAlphaChannel(true);
+	btn->setDrawBorder(0);
+	// m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(10, 10, 85, 85), m_root, GUI_ID_SOUND, L"On"));
 }
 
 Indie::AppState Indie::Menu::display()
