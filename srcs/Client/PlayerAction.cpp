@@ -5,8 +5,17 @@
 ** 28/05/18
 */
 
+#include <sstream>
+#include <iomanip>
 #include "Player.hpp"
 #include "Core.hpp"
+
+std::string floatToInt(float nb)
+{
+	std::stringstream ss;
+	ss << std::fixed << std::setprecision(10) << nb;
+	return ss.str();
+}
 
 void Indie::Core::moveEvent(irr::core::vector3df &pos)
 {
@@ -23,9 +32,9 @@ void Indie::Core::moveEvent(irr::core::vector3df &pos)
 					std::to_string(_playerObjects[0]->getId()) + ':' +
 					std::to_string(pos2d.X) + ':' +
 					std::to_string(pos2d.Y) + ':' +
-					std::to_string(newPos.X) + ':' +
-					std::to_string(newPos.Y) + ':' +
-					std::to_string(newPos.Z) + ':' +
+					floatToInt(newPos.X) + ':' +
+					floatToInt(newPos.Y) + ':' +
+					floatToInt(newPos.Z) + ':' +
 					std::to_string(_playerObjects[0]->getRotation().Y) + ':' +
 					std::to_string(_playerObjects[0]->getWallUp()));
 	}
