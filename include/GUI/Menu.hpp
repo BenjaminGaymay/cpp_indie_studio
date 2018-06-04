@@ -66,7 +66,9 @@ namespace Indie {
 		GUI_ID_NUMPAD_9,
 		GUI_ID_NUMPAD_DOT,
 		GUI_ID_NUMPAD_DEL,
-		GUI_ID_SOUND
+		GUI_ID_SOUND,
+		GUI_ID_LOCAL,
+		GUI_ID_LOCAL_BACK
 	};
 
 
@@ -113,8 +115,9 @@ namespace Indie {
 		void loadGameOptionsMenu();
 		void loadJoinMenu();
 		void loadReadyMenu();
-		void chooseMap();
+		void chooseMap(irr::s32);
 		void loadSoundBtn();
+		void loadLocalGame();
 
 		void setSkinTransparency(irr::s32 , irr::gui::IGUISkin *);
 
@@ -131,6 +134,7 @@ namespace Indie {
 		irr::gui::IGUIElement *m_gameOptions;
 		irr::gui::IGUIElement *m_join;
 		irr::gui::IGUIElement *m_ready;
+		irr::gui::IGUIElement *m_local;
 
 	private:
 		irr::gui::IGUIFont *m_font;
@@ -145,10 +149,12 @@ namespace Indie {
 
 		std::size_t m_height;
 		std::size_t m_width;
-		std::vector<std::string> v_map;
+		std::vector<std::string> m_map;
 		std::size_t m_small_height;
 		std::size_t m_small_width;
 		std::size_t m_square_height;
 		std::size_t m_square_width;
+		std::size_t m_xRight;
+		std::size_t m_xLeft;
 	};
 }
