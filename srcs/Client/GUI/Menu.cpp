@@ -72,9 +72,8 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	loadGameOptionsMenu();
 	loadJoinMenu();
 	loadReadyMenu();
+	loadSoundBtn();
 
-	// m_btns.emplace_back(m_gui->addButton(irr::core::recti(500,200,800,200 + m_height), m_root, GUI_ID_PLAY_BUTTON,
-        //     L"Play", L"Launches the game"));
 	for (auto &btn : m_btns) {
 		btn->setImage(m_driver->getTexture("assets/models/menu/button.png"));
 		btn->setPressedImage(m_driver->getTexture("assets/models/menu/button_hover.png"));
@@ -264,6 +263,16 @@ void Indie::Menu::setSkinTransparency(irr::s32 alpha , irr::gui::IGUISkin *skin)
 		col.setAlpha(alpha);
 		skin->setColor((irr::gui::EGUI_DEFAULT_COLOR)i, col);
 	}
+}
+
+void Indie::Menu::loadSoundBtn()
+{
+	irr::gui::IGUIButton *btn = m_gui->addButton(irr::core::recti(10, m_opt.getHeight() - 85, 85, m_opt.getHeight() - 10), m_root, GUI_ID_SOUND, L"", L"Mute/Unmute");
+
+	btn->setImage(m_driver->getTexture("assets/models/menu/volume.png"));
+	btn->setUseAlphaChannel(true);
+	btn->setDrawBorder(0);
+	// m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(10, 10, 85, 85), m_root, GUI_ID_SOUND, L"On"));
 }
 
 Indie::AppState Indie::Menu::display()

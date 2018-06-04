@@ -284,10 +284,9 @@ bool Indie::Server::hitPlayer(const irr::core::vector2di &target, const int &id)
 		if (aClient->_alive && aClient->pos2d.X == target.X && aClient->pos2d.Y == target.Y) {
 			std::cerr << "player hit" << std::endl;
 			aClient->_alive = false;
-			if (aClient->_id == id)
-				dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, SUICIDE, aClient->_id);
-			else
-				dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, DEAD, aClient->_id);
+			auto state = aClient->_id == id ? SUICIDE : DEAD;
+			for (auto &toaClient : _clients)
+				dprintf(toaClient->_fd, "%d:%d:%d\n", PLAYER, state, aClient->_id);
 			return true;
 		}
 	}

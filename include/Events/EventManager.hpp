@@ -24,6 +24,7 @@ namespace Indie {
 		void manage(irrklang::ISoundEngine* engine);
 		void init(Core *);
 		void updateIpInput(irr::s32);
+		void checkMapNameValid();
 	private:
 		Core *m_core;
 	};

@@ -24,6 +24,18 @@ void Indie::EventManager::init(Core *core)
 	m_core = core;
 }
 
+void Indie::EventManager::checkMapNameValid()
+{
+	irr::gui::IGUIEditBox *edit = static_cast<irr::gui::IGUIEditBox *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME , true));
+	std::string name = ManageStrings::convertWchart(edit->getText());
+
+	if (name.empty())
+		return;
+	m_core->m_state = MAPPING;//m_state = MAPPING;
+	m_core->m_menu.m_mapMenu->setVisible(false);
+	m_core->m_menu.m_mapEdit->setVisible(true);
+}
+
 void Indie::EventManager::updateIpInput(irr::s32 id)
 {
 	irr::gui::IGUIButton *btn = static_cast<irr::gui::IGUIButton *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(id, true));
@@ -83,13 +95,15 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 					m_core->m_menu.m_option->setVisible(false);
 					break;
 				case GUI_ID_MAP_RANDOM_BUTTON:
-					m_core->createRandMap("azerty.txt", 25, 25);
-					//m_core->m_menu.m_mapEdit->setVisible(false);
+					{
+						irr::gui::IGUIEditBox *edit = static_cast<irr::gui::IGUIEditBox *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME , true));
+						std::string name = ManageStrings::convertWchart(edit->getText());
+						if (!name.empty())
+							m_core->createRandMap(name, 25, 25);
+					}
 					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:
-					m_core->m_state = MAPPING;//m_state = MAPPING;
-					m_core->m_menu.m_mapMenu->setVisible(false);
-					m_core->m_menu.m_mapEdit->setVisible(true);
+					checkMapNameValid();
 					break;
 				case GUI_ID_READY:
 					m_core->m_state = READY;
@@ -163,6 +177,21 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 				case GUI_ID_NUMPAD_DOT:
 				case GUI_ID_NUMPAD_DEL:
 					updateIpInput(id);
+					break;
+				case GUI_ID_SOUND:
+					{
+						auto volume = engine->getSoundVolume();
+						irr::gui::IGUIButton *btn = static_cast<irr::gui::IGUIButton *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(id, true));
+
+						if (volume == 0) {
+							engine->setSoundVolume(0.3);
+							btn->setImage(m_core->m_core.m_driver->getTexture("assets/models/menu/volume.png"));
+						}
+						else {
+							engine->setSoundVolume(0);
+							btn->setImage(m_core->m_core.m_driver->getTexture("assets/models/menu/volume_mute.png"));
+						}
+					}
 					break;
 				default:
 					sound = false;
