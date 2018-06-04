@@ -12,9 +12,9 @@
 class Options {
 public:
 	Options() :
-	m_width(0), m_height(0), m_fullscreen(false) {}
-	Options(const std::size_t width, const std::size_t height, const bool fullscreen) :
-		m_width(width), m_height(height), m_fullscreen(fullscreen) {};
+	m_width(0), m_height(0), m_fullscreen(false), m_splashscreen(true), m_launch(true) {}
+	Options(const std::size_t width, const std::size_t height, const bool fullscreen, const bool splash) :
+		m_width(width), m_height(height), m_fullscreen(fullscreen), m_splashscreen(splash), m_launch(true) {};
 	~Options() {};
 
 	std::size_t getWidth() const {
@@ -29,6 +29,14 @@ public:
 		return m_fullscreen;
 	}
 
+	bool getSplashScreen() const {
+		return m_splashscreen;
+	}
+
+	bool getLaunch() const {
+		return m_launch;
+	}
+
 	void setWidth(std::size_t width) {
 		m_width = width;
 	}
@@ -41,8 +49,18 @@ public:
 		m_fullscreen = fullscreen;
 	}
 
+	void setSplashScreen(bool splash) {
+		m_splashscreen = splash;
+	}
+
+	void setLaunch(bool launch) {
+		m_launch = launch;
+	}
+
 private:
 	std::size_t m_width;
 	std::size_t m_height;
 	bool m_fullscreen;
+	bool m_splashscreen;
+	bool m_launch;
 };
