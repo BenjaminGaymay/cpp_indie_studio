@@ -85,7 +85,7 @@ void Indie::Core::checkAppContext()
 	}
 	if (m_state == READY && _state == WAITING) {
 		if (_playerId == 0) {
-			irr::gui::IGUIListBox *list = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(ID_GUI_LIST_MAP, true));
+			irr::gui::IGUIListBox *list = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_LIST_MAP, true));
 			auto map = ManageStrings::convertWchart(list->getListItem(list->getSelected()));
 			static std::string oldMap;
 
