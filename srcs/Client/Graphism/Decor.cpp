@@ -81,7 +81,7 @@ void Indie::Graphism::generateTextureMap()
 	_texturesMap[1] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/crate.jpg"); //basic block
 	_texturesMap[2] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/sand.jpg"); //undermap block
 	_texturesMap[3] = textureElem("assets/models/bomb/Bomb.obj", "assets/models/bomb/Albedo.png");
-	_texturesMap[4] = textureElem("assets/models/lightning.3ds", "."); //SPEEDUP
+	_texturesMap[4] = textureElem("assets/models/lightning.md2", "assets/models/2D/yellow.png"); //SPEEDUP
 	_texturesMap[5] = textureElem("assets/models/bombsBonus.3ds", "."); //BOMBUP
 	_texturesMap[6] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/power.png"); //FIREUP
 	_texturesMap[7] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/ghost.jpg"); //WALLPASSUP
