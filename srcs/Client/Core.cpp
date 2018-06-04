@@ -147,7 +147,7 @@ void Indie::Core::run()
 	_tchat._textBox->setMax(40);
 	_tchat._textBox->setVisible(false);
 
-	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
+	m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
 	m_core.m_device->getCursorControl()->setVisible(true);
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
