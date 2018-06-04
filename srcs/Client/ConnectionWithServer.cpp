@@ -163,7 +163,6 @@ void Indie::Core::removePlayer(int id, const ObjectsEvents &event)
 	}
 	for (auto &p : _playerObjects) {
 		if (p->getId() == id) {
-			std::cerr << "delete" << std::endl;
 			p->getPlayer()->remove();
 			auto pPos = std::find(_playerObjects.begin(), _playerObjects.end(), p);
 			pPos->reset();
