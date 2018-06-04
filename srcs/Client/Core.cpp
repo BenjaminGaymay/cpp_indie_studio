@@ -141,8 +141,8 @@ void Indie::Core::run()
 	Clock playerClock;
 	music->setVolume(0.3);
 
-
-	m_splash.display(m_core.m_device, m_event);
+	if (m_opts.getSplashScreen())
+		m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
 	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 1020, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
 	_tchat._textBox->setMax(40);
