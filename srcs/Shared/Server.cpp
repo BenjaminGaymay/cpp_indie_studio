@@ -6,8 +6,8 @@
 //
 
 #include <sys/time.h>
-#include <irrlicht/vector3d.h>
-#include <irrlicht/vector2d.h>
+#include <vector3d.h>
+#include <vector2d.h>
 #include <malloc.h>
 #include <random>
 #include "ManageStrings.hpp"
@@ -91,12 +91,12 @@ bool Indie::Server::wallMove(std::unique_ptr<Client> &client, irr::core::vector3
 		client->pos2d.X = pos2d.X - 1;
 		pos2d.X -= 1;
 		pos3d.Z += 20.00f; //taille d'un block, fuck c'est en dur
-	} else if (rotation == 90 && pos2d.X < static_cast<int>(_map[pos2d.Y].size()) && validMove(_map[pos2d.Y][pos2d.X + 1])) {
+	} else if (rotation == 90 && pos2d.X < static_cast<int>(_map[pos2d.Y].size() - 1) && validMove(_map[pos2d.Y][pos2d.X + 1])) {
 		client->pos2d.Y = pos2d.Y;
 		client->pos2d.X = pos2d.X + 1;
 		pos2d.X += 1;
 		pos3d.Z -= 20.00f; //taille d'un block, fuck c'est en dur
-	} else if (rotation == 180 && pos2d.Y < static_cast<int>(_map.size()) && validMove(_map[pos2d.Y + 1][pos2d.X])) {
+	} else if (rotation == 180 && pos2d.Y < static_cast<int>(_map.size() - 1) && validMove(_map[pos2d.Y + 1][pos2d.X])) {
 		client->pos2d.Y = pos2d.Y + 1;
 		client->pos2d.X = pos2d.X;
 		pos2d.Y += 1;
@@ -122,16 +122,10 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		buffer[size] = '\0';
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
-			std::cout << "Client " << client->_id << " say " << tmp
-					  << std::endl;
-			if (std::string(tmp) == "READY") {
+			if (std::string(tmp) == "READY")
 				client->_state = PLAYING;
-				break;
-			}
-			else if (std::string(tmp) == "UNREADY") {
+			else if (std::string(tmp) == "UNREADY")
 				client->_state = WAITING;
-				break;
-			}
 			// >> reception map
 			if (std::string(tmp).compare(0, 4, "2:0:") == 0) {
 				_map = buildMap(&tmp[4]);
@@ -156,7 +150,6 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 				std::size_t limit = std::stoul(strsep(&tmp, ":"));
 				(void) position3d;
 				(void) enumId;
-				std::cerr << "BOMB CREATION: POWER:" << power << " X:" << position2d.X << " et Y:" << position2d.Y << std::endl;
 				std::size_t elem = 0;
 				for (auto bomb = _bombs.begin() ; elem < limit && bomb != _bombs.end() ; ++bomb)
 					if ((*bomb)->getId() == client->_id)
@@ -212,7 +205,6 @@ int Indie::Server::readClient(std::unique_ptr<Client> &client)
 		}
 		return 0;
 	}
-	std::cout << "Client " << client->_id << " out" << std::endl;
 	auto pos = std::find(_clients.begin(), _clients.end(), client);
 
 	if (pos != _clients.end()) {
@@ -250,7 +242,6 @@ Indie::GameState Indie::Server::checkIfStartGame()
 	}
 	for (auto &client : _clients) {
 		dprintf(client->_fd, "%s\n", _mapMsg.c_str()); // ENVOI DE LA CARTE
-		std::cout << "Envoi de la carte\n";
 		dprintf(client->_fd, "1:3\n"); // CODE POUR GAME START
 		client->pos2d = irr::core::vector2di(_spawn[spawnId][0], _spawn[spawnId][1]);
 		spawnId = (spawnId + 1) % _spawn.size();
@@ -269,13 +260,14 @@ Indie::GameState Indie::Server::checkIfStartGame()
 
 bool Indie::Server::hitPlayer(const irr::core::vector2di &target)
 {
-	(void) target;
-	/*for (auto &aClient : _clients) {
-		if (aClient->pos2d.X == target.X && aClient->pos2d.Y == target.Y) {
+	for (auto &aClient : _clients) {
+		if (aClient->_alive && aClient->pos2d.X == target.X && aClient->pos2d.Y == target.Y) {
+			std::cerr << "player hit" << std::endl;
+			aClient->_alive = false;
 			dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, DEAD, aClient->_id);
 			return true;
 		}
-	}*/
+	}
 	return false;
 }
 
@@ -285,7 +277,6 @@ void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
 	static std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP);
 	auto bonus = static_cast<PowerUpType>(distribution(generator));
 
-	std::cerr << "bonus généré:" << bonus << std::endl;
 	if (_map[pos.Y][pos.X] != 1 || bonus == LAST_UP) {
 		_map[pos.Y][pos.X] = 0;
 		for (auto &aClient : _clients)
@@ -302,48 +293,52 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 	auto pos2d = bomb->getPosition();
 	auto power = static_cast<int>(bomb->getPower());
 
-	for (int pos = 1 ; pos <= power ; ++pos) {
-		if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y))) {
-			break;
-		} else if (_map[pos2d.Y][pos2d.X + pos] == 8) {
-			break;
-		} else if (pos2d.X + pos < static_cast<int>(_map[pos2d.Y].size() - 1)
-				 && _map[pos2d.Y][pos2d.X + pos] != 0) {
-			replaceByBonus(irr::core::vector2di(pos2d.X + pos, pos2d.Y));
-			break;
+	if (!hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y))) {
+		for (int pos = 1; pos <= power; ++pos) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y))) {
+				break;
+			} else if (_map[pos2d.Y][pos2d.X + pos] == 8) {
+				break;
+			} else if (pos2d.X + pos <
+					   static_cast<int>(_map[pos2d.Y].size() - 1) &&
+					   _map[pos2d.Y][pos2d.X + pos] != 0) {
+				replaceByBonus(irr::core::vector2di(pos2d.X + pos, pos2d.Y));
+				break;
+			}
 		}
-	}
 
-	for (int pos = 1 ; pos <= power && pos2d.X - pos > 0; ++pos) {
-		if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y))) {
-			break;
-		} else if (_map[pos2d.Y][pos2d.X - pos] == 8) {
-			break;
-		} else if (_map[pos2d.Y][pos2d.X - pos] != 0) {
-			replaceByBonus(irr::core::vector2di(pos2d.X - pos, pos2d.Y));
-			break;
+		for (int pos = 1; pos <= power && pos2d.X - pos > 0; ++pos) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y))) {
+				break;
+			} else if (_map[pos2d.Y][pos2d.X - pos] == 8) {
+				break;
+			} else if (_map[pos2d.Y][pos2d.X - pos] != 0) {
+				replaceByBonus(irr::core::vector2di(pos2d.X - pos, pos2d.Y));
+				break;
+			}
 		}
-	}
 
-	for (int pos = 1 ; pos <= power ; ++pos) {
-		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos))) {
-			break;
-		} else if (_map[pos2d.Y + pos][pos2d.X] == 8) {
-				break ;
-		} else if (pos2d.Y + pos < static_cast<int>(_map.size() - 1) && _map[pos2d.Y + pos][pos2d.X] != 0) {
-			replaceByBonus(irr::core::vector2di(pos2d.X, pos2d.Y + pos));
-			break;
+		for (int pos = 1; pos <= power; ++pos) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos))) {
+				break;
+			} else if (_map[pos2d.Y + pos][pos2d.X] == 8) {
+				break;
+			} else if (pos2d.Y + pos < static_cast<int>(_map.size() - 1) &&
+					   _map[pos2d.Y + pos][pos2d.X] != 0) {
+				replaceByBonus(irr::core::vector2di(pos2d.X, pos2d.Y + pos));
+				break;
+			}
 		}
-	}
 
-	for (int pos = 1 ; pos <= power && pos2d.Y - pos > 0; ++pos) {
-		if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos))) {
-			break;
-		} else if (_map[pos2d.Y - pos][pos2d.X] == 8) {
-				break ;
-		} else if (_map[pos2d.Y - pos][pos2d.X] != 0) {
-			replaceByBonus(irr::core::vector2di(pos2d.X, pos2d.Y - pos));
-			break;
+		for (int pos = 1; pos <= power && pos2d.Y - pos > 0; ++pos) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos))) {
+				break;
+			} else if (_map[pos2d.Y - pos][pos2d.X] == 8) {
+				break;
+			} else if (_map[pos2d.Y - pos][pos2d.X] != 0) {
+				replaceByBonus(irr::core::vector2di(pos2d.X, pos2d.Y - pos));
+				break;
+			}
 		}
 	}
 	for (auto &aClient : _clients)

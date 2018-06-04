@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <map>
+#include <ik_ISoundEngine.h>
 #include "Window.hpp"
 #include "SplashScreen.hpp"
 #include "Menu.hpp"
@@ -55,8 +56,8 @@ namespace Indie {
 		void readServerInformations(std::vector<std::string>);
 		void moveEvent(irr::core::vector3df &pos);
 		void dropBombEvent(irr::core::vector3df &pos);
-		void comPlayer(int, std::vector<std::string> &);
-		void comBomb(int, std::vector<std::string> &);
+		void comPlayer(const ObjectsEvents &event, std::vector<std::string> &);
+		void comBomb(const ObjectsEvents &event, std::vector<std::string> &);
 		void addPlayer(int, const irr::core::vector2di &);
 		void removePlayer(int);
 		void movePlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
@@ -66,8 +67,8 @@ namespace Indie {
 		void takeBonus(const irr::core::vector2di &pos, const PowerUpType &bonus);
 		void destroyBlock(const irr::core::vector2di &target);
 		void destroyBomb(const irr::core::vector2di &target);
-		void comGameInfos(int, std::vector<std::string> &);
-		void comMap(int, std::vector<std::string> &);
+		void comGameInfos(const ObjectsEvents &event, std::vector<std::string> &);
+		void comMap(const ObjectsEvents &event, std::vector<std::string> &);
 		void serverMessage(const std::vector<std::string> &);
 		void checkAppContext();
 		void handleMenu();
@@ -170,7 +171,7 @@ namespace Indie {
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
 		std::unique_ptr<Socket> _socket;
-		std::vector<void (Indie::Core::*)(int, std::vector<std::string> &)> _objectsFct;
+		std::vector<void (Indie::Core::*)(const ObjectsEvents &event, std::vector<std::string> &)> _objectsFct;
 		SplashScreen m_splash;
 		Menu m_menu;
 		AppState m_state;
@@ -182,5 +183,6 @@ namespace Indie {
 		editorState _editState;
 		std::pair<std::size_t, std::size_t> _counter;
 		bool m_bappe;
+		irrklang::ISoundEngine* _engine;
 	};
 }
