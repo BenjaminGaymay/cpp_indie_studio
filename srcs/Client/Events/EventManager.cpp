@@ -27,8 +27,18 @@ void Indie::EventManager::init(Core *core)
 void Indie::EventManager::updateIpInput(irr::s32 id)
 {
 	irr::gui::IGUIButton *btn = static_cast<irr::gui::IGUIButton *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(id, true));
+	irr::gui::IGUIEditBox *edit = static_cast<irr::gui::IGUIEditBox *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_IP , true));
+	std::string entered = ManageStrings::convertWchart(btn->getText());
+	std::string current = ManageStrings::convertWchart(edit->getText());
 
-	std::cout << ManageStrings::convertWchart(btn->getText()) << std::endl;
+	if (entered == "DEL") {
+		if (current.size() > 0)
+			current.pop_back();
+	} else {
+		if (current.size() < 15)
+		current = std::string(current + entered);
+	}
+	edit->setText(std::wstring(current.begin(), current.end()).c_str());
 }
 
 void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
