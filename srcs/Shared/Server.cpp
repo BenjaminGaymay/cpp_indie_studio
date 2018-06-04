@@ -163,7 +163,7 @@ void Indie::Server::comPlayer(const ObjectsEvents &event, std::vector<std::strin
 	switch (event) {
 		case MOVE: {
 			irr::core::vector2di position2d(std::stoi(infos[1]), std::stoi(infos[2]));
-			irr::core::vector3df position3d(std::stoi(infos[3]), std::stoi(infos[4]), std::stoi(infos[5]));
+			irr::core::vector3df position3d(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5]));
 			irr::f32 rotation = std::stof(infos[6]);
 			auto wallUp = static_cast<bool>(std::stoi(infos[7]));
 			if (_map[position2d.Y][position2d.X] == 8 && wallUp) {
