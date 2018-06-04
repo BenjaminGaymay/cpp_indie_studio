@@ -24,12 +24,19 @@ void Indie::EventManager::init(Core *core)
 	m_core = core;
 }
 
+void Indie::EventManager::updateIpInput(irr::s32 id)
+{
+	irr::gui::IGUIButton *btn = static_cast<irr::gui::IGUIButton *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(id, true));
+
+	std::cout << ManageStrings::convertWchart(btn->getText()) << std::endl;
+}
+
 void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 {
 	bool sound = true;
 
-	for (std::size_t id = 0; id < BTN_COUNT; id++) {
-		if (m_core->m_event.isButtonClicked(static_cast<IdGui>(id))) {
+	for (std::size_t id = 101; id < 101 + BTN_COUNT; id++) {
+		if (m_core->m_event.isButtonClicked(static_cast<IdGui>(id - 101))) {
 			switch (id) {
 				case GUI_ID_QUIT_BUTTON:
 					m_core->m_core.m_device->closeDevice();
@@ -132,6 +139,20 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 					m_core->m_menu.m_gameOptions->setVisible(false);
 					m_core->m_core.getCamera().change(m_core->m_core.getSceneManager(), Camera::FPS);
 					m_core->m_core.m_device->getCursorControl()->setVisible(false);
+					break;
+				case GUI_ID_NUMPAD_0:
+				case GUI_ID_NUMPAD_1:
+				case GUI_ID_NUMPAD_2:
+				case GUI_ID_NUMPAD_3:
+				case GUI_ID_NUMPAD_4:
+				case GUI_ID_NUMPAD_5:
+				case GUI_ID_NUMPAD_6:
+				case GUI_ID_NUMPAD_7:
+				case GUI_ID_NUMPAD_8:
+				case GUI_ID_NUMPAD_9:
+				case GUI_ID_NUMPAD_DOT:
+				case GUI_ID_NUMPAD_DEL:
+					updateIpInput(id);
 					break;
 				default:
 					sound = false;
