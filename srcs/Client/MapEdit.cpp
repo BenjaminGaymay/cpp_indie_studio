@@ -25,9 +25,10 @@ int Indie::Core::createRandMap(std::string name, std::size_t x, std::size_t y)
 		std::vector<int> line;
 		for (std::size_t j = 0; j < x; ++j) {
 			int rand = distribution(generator);
-			if (rand == 2)
-				rand = 8;
-			line.push_back(rand);
+			if (i % 2 == 0 && j % 3 == 0)
+				line.push_back(8);
+			else
+				line.push_back(rand);
 		}
 		map.push_back(line);
 	}
