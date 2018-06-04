@@ -62,7 +62,7 @@ void Indie::Core::processEvents()
 			}
 		}
 	}
-	m_evtManager->manage();
+	m_evtManager->manage(_engine);
 }
 
 void Indie::Core::checkAppContext()
@@ -94,10 +94,10 @@ void Indie::Core::checkAppContext()
 				oldMap = map;
 			}
 		}
-		dprintf(_socket->getFd(), "READY\n");
+		dprintf(_socket->getFd(), "%d:%d\n", GAMEINFOS, EV_READY);
 	}
 	if (m_state == UNREADY && _state == WAITING)
-		dprintf(_socket->getFd(), "UNREADY\n");
+		dprintf(_socket->getFd(), "%d:%d\n", GAMEINFOS, EV_UNREADY);
 	if (m_state == CONNECT && _state == NOTCONNECTED) {
 		try {
 			_socket = std::make_unique<Socket>(5567, ManageStrings::convertWchart(m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_IP, true)->getText()), Socket::CLIENT);
@@ -136,10 +136,10 @@ void Indie::Core::exitGame()
 
 void Indie::Core::run()
 {
-	irrklang::ISound* music = _engine->play2D("lib/irrklang/media/getout.ogg", true, false, true);
+	irrklang::ISound* music = _engine->play2D("music/main.wav", true, false, true);
 	irr::core::vector3df pos;
 	Clock playerClock;
-	music->setVolume(0.5f);
+	music->setVolume(0.3);
 
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
