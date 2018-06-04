@@ -28,6 +28,7 @@ namespace Indie {
 		const textureElem *getTexture(const int &nb);
 		std::vector<Indie::Object> &getBombs() { return _bombs; };
 		std::vector<Indie::Object> &getBonus() { return _bonus; };
+		void clearNode();
 	private:
 		void generateTextureMap();
 		/* FIRST object, SECOND texture */
