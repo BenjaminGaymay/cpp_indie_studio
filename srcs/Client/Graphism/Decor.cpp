@@ -23,7 +23,7 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	auto object = m_core->m_sceneManager->addAnimatedMeshSceneNode(m_core->m_sceneManager->getMesh(textures.first));
 	object->setName(textures.first);
 	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false); // remove fog
-	object->setMaterialFlag(irr::video::EMF_LIGHTING, false); // remove default black texture
+	object->setMaterialFlag(irr::video::EMF_LIGHTING, true); // maybe map will be black
 	if (!textures.second.empty() && textures.second != ".") {
 		object->setMaterialTexture(0, m_core->m_driver->getTexture(textures.second));
 	} else if (textures.second.empty()){
