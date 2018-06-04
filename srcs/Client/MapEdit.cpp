@@ -231,8 +231,8 @@ void Indie::Core::editMap()
 	auto textbox = m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME, true);
 	auto mapName = ManageStrings::convertWchart(textbox->getText());
 
-	m_core.editMapView();
 	createZeroMap(mapName, 25, 25);
+	m_core.editMapView();
 	_mapper = std::make_unique<Map>();
 	_mapper->newMap("assets/maps/" + mapName, 20.0f, 100.0f, _graphism);
 
@@ -252,6 +252,7 @@ void Indie::Core::editMap()
 			block2->remove();
 			perso->remove();
 			_mapper->clear3dMap();
+			_mapper->clear2dMap();
 			break;
 		}
 		m_core.m_driver->beginScene(true, true, _color);
@@ -269,8 +270,4 @@ void Indie::Core::editMap()
 		m_core.m_driver->endScene();
 	}
 	m_run = true;
-	_mapper->clear3dMap();
-	_mapper->clear2dMap();
-	block->remove();
-	perso->remove();
 }
