@@ -8,6 +8,7 @@
 #pragma once
 
 #include <iostream>
+#include <ik_ISoundEngine.h>
 #include "Macro.hpp"
 
 namespace Indie {
@@ -19,7 +20,7 @@ namespace Indie {
 		EventManager(Core *);
 		~EventManager();
 
-		void manage();
+		void manage(irrklang::ISoundEngine* engine);
 		void init(Core *);
 
 	private:

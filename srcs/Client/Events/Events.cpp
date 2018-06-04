@@ -5,6 +5,7 @@
 // Events
 //
 
+#include <ik_ISound.h>
 #include "Events.hpp"
 
 Indie::Events::Events() :

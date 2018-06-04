@@ -111,96 +111,116 @@ bool Indie::Server::wallMove(std::unique_ptr<Client> &client, irr::core::vector3
 	return true;
 }
 
+void Indie::Server::comGameInfos(const ObjectsEvents &event, std::vector<std::string> &infos, std::unique_ptr<Client> &client)
+{
+	(void)infos;
+	std::cout << "Game - Event: " << event << " - \"" << _lastCmd << "\"\n";
+	switch (event) {
+		case EV_READY:
+			client->_state = PLAYING; break;
+		case EV_UNREADY:
+			client->_state = WAITING; break;
+		case MESSAGE:
+			for (auto &i : _clients)
+				dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &_lastCmd[4]);
+			break;
+		default: break;
+	}
+}
+
+void Indie::Server::comBomb(const ObjectsEvents &event, std::vector<std::string> &infos, std::unique_ptr<Client> &client)
+{
+	/*(void)event;
+	(void)infos;
+	(void)client;
+	std::cout << "Bomb - Event: " << event << " - \"" << _lastCmd << "\"\n";*/
+
+	switch (event) {
+		case CREATEBOMB: {
+			irr::core::vector2di position2d(std::stoi(infos[1]), std::stoi(infos[2]));
+			std::size_t power = std::stoul(infos[6]);
+			std::size_t limit = std::stoul(infos[7]);
+			std::size_t elem = 0;
+			for (auto bomb = _bombs.begin() ; elem < limit && bomb != _bombs.end() ; ++bomb)
+				if ((*bomb)->getId() == client->_id)
+					++elem;
+			if (elem < limit && getBlock(position2d) == 0) {
+				_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, position2d, client->_id));
+				setBlock(position2d, 3);
+				for (auto &i : _clients)
+					dprintf(i->_fd, _lastCmd.c_str());
+			}
+			break;
+		}
+		default: break;
+	}
+}
+
+void Indie::Server::comPlayer(const ObjectsEvents &event, std::vector<std::string> &infos, std::unique_ptr<Client> &client)
+{
+/*	std::cout << "Player - Event: " << event << " - \"" << _lastCmd << "\"\n";*/
+
+	switch (event) {
+		case MOVE: {
+			irr::core::vector2di position2d(std::stoi(infos[1]), std::stoi(infos[2]));
+			irr::core::vector3df position3d(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5]));
+			irr::f32 rotation = std::stof(infos[6]);
+			auto wallUp = static_cast<bool>(std::stoi(infos[7]));
+			if (_map[position2d.Y][position2d.X] == 8 && wallUp) {
+				if (wallMove(client, position3d, position2d, rotation))
+					for (auto &i : _clients)
+						dprintf(i->_fd, "%d:%d:%d:%d:%d:%f:%f:%f:%f:%i\n", PLAYER, event, client->_id, position2d.X, position2d.Y, position3d.X, position3d.Y, position3d.Z, rotation, wallUp);
+			} else if ((getBlock(client->pos2d) == 1 && getBlock(position2d) == 3) /* sinon on reste bloqué contre le mur*/
+				|| (getBlock(client->pos2d) == 3)
+				|| (getBlock(position2d) == 0)) /*normal*/{
+				client->pos2d = position2d;
+				for (auto &i : _clients)
+					dprintf(i->_fd, "%d:%d:%d:%d:%d:%f:%f:%f:%f:%i\n", PLAYER, event, client->_id, position2d.X, position2d.Y, position3d.X, position3d.Y, position3d.Z, rotation, wallUp);
+			} else if (getBlock(position2d) > FIRST_UP && getBlock(position2d) < LAST_UP) {
+				client->pos2d = position2d;
+				for (auto &i : _clients)
+					dprintf(i->_fd, "%d:%d:%d:%d:%d\n", MAP, TAKEBONUS, position2d.X, position2d.Y, getBlock(position2d));
+				setBlock(position2d, 0);
+			}
+			break;
+		}
+		default: break;
+	}
+}
+
+void Indie::Server::comMap(const ObjectsEvents &event, std::vector<std::string> &infos, std::unique_ptr<Client> &client)
+{
+	(void)infos;
+	(void)client;
+	std::cout << "Map - Event: " << event << " - \"" << _lastCmd << "\"\n";
+	switch (event) {
+		case APPEAR:
+			_map = buildMap(&_lastCmd[4]);
+			_mapMsg = std::string(ManageStrings::replaceStr("10", "00", _lastCmd));
+		default: break;
+	}
+}
+
 int Indie::Server::readClient(std::unique_ptr<Client> &client)
 {
 	static char buffer[8192];
 	char *tmp = nullptr;
 	ssize_t size;
+	std::vector<std::string> infos;
+	ObjectsType type;
+	ObjectsEvents event;
 
 	size = read(client->_fd, buffer, 8192);
 	if (size > 0) {
 		buffer[size] = '\0';
 		tmp = strtok(buffer, "\n");
 		while (tmp) {
-			if (std::string(tmp) == "READY")
-				client->_state = PLAYING;
-			else if (std::string(tmp) == "UNREADY")
-				client->_state = WAITING;
-			// >> reception map
-			if (std::string(tmp).compare(0, 4, "2:0:") == 0) {
-				_map = buildMap(&tmp[4]);
-				_mapMsg = std::string(ManageStrings::replaceStr("10", "00", tmp));
-			}
-			// <<
-			if (_state == WAITING)
-				return 0;
-			std::string cmd = tmp;
-			auto enumType = std::stoi(strsep(&tmp, ":")); //PLAYER
-			auto enumEvent = std::stoi(strsep(&tmp, ":")); //MOVE
-			if (enumType == BOMB && enumEvent == CREATEBOMB) {
-				auto enumId = std::stoi(strsep(&tmp, ":"));
-				irr::core::vector2di position2d;
-				position2d.X = std::stoi(strsep(&tmp, ":"));
-				position2d.Y = std::stoi(strsep(&tmp, ":"));
-				irr::core::vector3df position3d;
-				position3d.X = std::stof(strsep(&tmp, ":"));
-				position3d.Y = std::stof(strsep(&tmp, ":"));
-				position3d.Z = std::stof(strsep(&tmp, ":"));
-				std::size_t power = std::stoul(strsep(&tmp, ":"));
-				std::size_t limit = std::stoul(strsep(&tmp, ":"));
-				(void) position3d;
-				(void) enumId;
-				std::size_t elem = 0;
-				for (auto bomb = _bombs.begin() ; elem < limit && bomb != _bombs.end() ; ++bomb)
-					if ((*bomb)->getId() == client->_id)
-						++elem;
-				if (elem < limit && _map[position2d.Y][position2d.X] == 0) {
-					_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, position2d, client->_id));
-					_map[position2d.Y][position2d.X] = 3;
-					for (auto &i : _clients)
-						dprintf(i->_fd, cmd.c_str());
-				}
-			} else if (enumType == PLAYER && enumEvent == MOVE) {
-				auto enumId = std::stoi(strsep(&tmp, ":"));
-				irr::core::vector2di position2d;
-				position2d.X = std::stoi(strsep(&tmp, ":"));
-				position2d.Y = std::stoi(strsep(&tmp, ":"));
-				irr::core::vector3df position3d;
-				position3d.X = std::stof(strsep(&tmp, ":"));
-				position3d.Y = std::stof(strsep(&tmp, ":"));
-				position3d.Z = std::stof(strsep(&tmp, ":"));
-				irr::f32 rotation = std::stof(strsep(&tmp, ":"));
-				bool wallUp = static_cast<bool>(std::stoi(strsep(&tmp, ":")));
-				(void) position3d;
-				(void) enumId;
-				if (_map[position2d.Y][position2d.X] == 8 && wallUp) {
-					if (wallMove(client, position3d, position2d, rotation))
-						for (auto &i : _clients)
-							dprintf(i->_fd, "%d:%d:%d:%d:%d:%f:%f:%f:%f:%i\n", enumType, enumEvent, client->_id, position2d.X, position2d.Y, position3d.X, position3d.Y, position3d.Z, rotation, wallUp);
-				} else if ((_map[client->pos2d.Y][client->pos2d.X] == 1 && _map[position2d.Y][position2d.X] == 3) /* sinon on reste bloqué contre le mur*/
-					|| (_map[client->pos2d.Y][client->pos2d.X] == 3)
-					|| (_map[position2d.Y][position2d.X] == 0)) /*normal*/{
-					client->pos2d.Y = position2d.Y;
-					client->pos2d.X = position2d.X;
-					for (auto &i : _clients)
-						dprintf(i->_fd, "%d:%d:%d:%d:%d:%f:%f:%f:%f:%i\n", enumType, enumEvent, client->_id, position2d.X, position2d.Y, position3d.X, position3d.Y, position3d.Z, rotation, wallUp);
-				} else if (_map[position2d.Y][position2d.X] > FIRST_UP && _map[position2d.Y][position2d.X] < LAST_UP) {
-					client->pos2d.Y = position2d.Y;
-					client->pos2d.X = position2d.X;
-					for (auto &i : _clients)
-						dprintf(i->_fd, "%d:%d:%d:%d:%d\n", MAP, TAKEBONUS, position2d.X, position2d.Y, _map[position2d.Y][position2d.X]);
-					_map[position2d.Y][position2d.X] = 0;
-					}
-			} else {
-				for (auto &i : _clients) {
-					if (std::string(cmd).compare(0, 4, "1:4:") == 0)
-						// Renvoyer les msg dans le menu d'attente
-						dprintf(i->_fd, "1:4:%s: %s",
-								client->_name.c_str(), &cmd[4]);
-				}
-			}
-
-
+			_lastCmd = std::string(tmp);
+			infos = ManageStrings::splitString(_lastCmd, ':');
+			type = static_cast<ObjectsType>(std::stoi(infos[0]));
+			event = static_cast<ObjectsEvents>(std::stoi(infos[1]));
+			infos.erase(infos.begin(), infos.begin() + 2);
+			(this->*_objectsFct[type])(event, infos, client);
 			tmp = strtok(nullptr, "\n");
 		}
 		return 0;
@@ -258,13 +278,16 @@ Indie::GameState Indie::Server::checkIfStartGame()
 	return PLAYING;
 }
 
-bool Indie::Server::hitPlayer(const irr::core::vector2di &target)
+bool Indie::Server::hitPlayer(const irr::core::vector2di &target, const int &id)
 {
 	for (auto &aClient : _clients) {
 		if (aClient->_alive && aClient->pos2d.X == target.X && aClient->pos2d.Y == target.Y) {
 			std::cerr << "player hit" << std::endl;
 			aClient->_alive = false;
-			dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, DEAD, aClient->_id);
+			if (aClient->_id == id)
+				dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, SUICIDE, aClient->_id);
+			else
+				dprintf(aClient->_fd, "%d:%d:%d\n", PLAYER, DEAD, aClient->_id);
 			return true;
 		}
 	}
@@ -293,9 +316,9 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 	auto pos2d = bomb->getPosition();
 	auto power = static_cast<int>(bomb->getPower());
 
-	if (!hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y))) {
+	if (!hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y), bomb->getId())) {
 		for (int pos = 1; pos <= power; ++pos) {
-			if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y))) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X + pos, pos2d.Y), bomb->getId())) {
 				break;
 			} else if (_map[pos2d.Y][pos2d.X + pos] == 8) {
 				break;
@@ -308,7 +331,7 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 		}
 
 		for (int pos = 1; pos <= power && pos2d.X - pos > 0; ++pos) {
-			if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y))) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X - pos, pos2d.Y), bomb->getId())) {
 				break;
 			} else if (_map[pos2d.Y][pos2d.X - pos] == 8) {
 				break;
@@ -319,7 +342,7 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 		}
 
 		for (int pos = 1; pos <= power; ++pos) {
-			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos))) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y + pos), bomb->getId())) {
 				break;
 			} else if (_map[pos2d.Y + pos][pos2d.X] == 8) {
 				break;
@@ -331,7 +354,7 @@ void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 		}
 
 		for (int pos = 1; pos <= power && pos2d.Y - pos > 0; ++pos) {
-			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos))) {
+			if (hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y - pos), bomb->getId())) {
 				break;
 			} else if (_map[pos2d.Y - pos][pos2d.X] == 8) {
 				break;
@@ -366,6 +389,10 @@ void Indie::Server::manageBomb()
 void Indie::Server::start()
 {
 	// GERER LA DESTRUCTION DU SALON (tlm quitte / partie terminée etc..)
+	_objectsFct.push_back(&Indie::Server::comPlayer);
+	_objectsFct.push_back(&Indie::Server::comGameInfos);
+	_objectsFct.push_back(&Indie::Server::comMap);
+	_objectsFct.push_back(&Indie::Server::comBomb);
 	while (1) {
 		manageBomb();
 		if (_state == WAITING)

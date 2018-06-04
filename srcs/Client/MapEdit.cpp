@@ -269,4 +269,8 @@ void Indie::Core::editMap()
 		m_core.m_driver->endScene();
 	}
 	m_run = true;
+	_mapper->clear3dMap();
+	_mapper->clear2dMap();
+	block->remove();
+	perso->remove();
 }
