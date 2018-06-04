@@ -115,7 +115,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 
 void Indie::Menu::loadMainMenu()
 {
-	irr::video::ITexture *image = m_driver->getTexture ("assets/models/menu/background.png");
+	auto image = m_driver->getTexture ("assets/models/menu/background.png");
 
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft,200,m_xRight,200 + m_height), m_main, GUI_ID_PLAY_BUTTON,
             L"Play", L"Launches the game"));
@@ -142,7 +142,7 @@ void Indie::Menu::loadOptionsMenu()
 
 void Indie::Menu::loadJoinMenu()
 {
-	irr::gui::IGUIEditBox *edit = m_gui->addEditBox(L"127.0.0.1", irr::core::rect<irr::s32>(m_xLeft,90,m_xRight,90 + m_height - 10), true, m_join, GUI_ID_IP);
+	auto edit = m_gui->addEditBox(L"127.0.0.1", irr::core::rect<irr::s32>(m_xLeft,90,m_xRight,90 + m_height - 10), true, m_join, GUI_ID_IP);
 	edit->setMax(15);
 	edit->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 215, m_xRight, 215 + m_height), m_join, GUI_ID_JOIN_BUTTON,
@@ -162,7 +162,6 @@ void Indie::Menu::loadJoinMenu()
 			}
 			m_square_btns.emplace_back(m_gui->addButton(irr::core::recti(x * 100, y * 100, (x+1) * 100, (y+1) * 100),
 						m_join, id, std::to_wstring(counter).c_str()));
-			std::cout << id << std::endl;
 			id++;
 			x++;
 		}
@@ -180,7 +179,7 @@ void Indie::Menu::loadDownMenu()
 
 void Indie::Menu::loadMapMenu()
 {
-	irr::gui::IGUIEditBox *edit = m_gui->addEditBox(L"Map's name", irr::core::rect<irr::s32>(m_xLeft,90,m_xRight,90 + m_height - 10), true, m_mapMenu, GUI_ID_MAP_NAME);
+	auto edit = m_gui->addEditBox(L"Map's name", irr::core::rect<irr::s32>(m_xLeft,90,m_xRight,90 + m_height - 10), true, m_mapMenu, GUI_ID_MAP_NAME);
 	edit->setMax(10);
 	edit->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 215, m_xRight, 215 + m_height), m_mapMenu, GUI_ID_MAP_EDITOR_BUTTON,
@@ -189,7 +188,6 @@ void Indie::Menu::loadMapMenu()
 		L"Random map"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 435, m_xRight, 435 + m_height), m_mapMenu, GUI_ID_MAP_BACK_BUTTON,
 		L"Back"));
-	// m_gui->addStaticText(L"S to save", irr::core::recti(10, 10, 10 + m_width, 10 + m_height), true, true, m_mapEdit);
 	m_small_btns.emplace_back(m_gui->addButton(irr::core::recti(10, m_opt.getHeight() / 2 - m_small_height / 2 , m_small_width, m_opt.getHeight() / 2 + m_small_height / 2 ), m_mapEdit, GUI_ID_MAP_SAVE_BUTTON,
 		L"Save"));
 }
@@ -205,7 +203,7 @@ void Indie::Menu::loadPlayMenu()
 
 void Indie::Menu::chooseMap(irr::s32 id)
 {
-	DIR* dirp = opendir("./assets/maps/");
+	auto dirp = opendir("./assets/maps/");
     	struct dirent *dp;
 
 	m_map.clear();
@@ -227,7 +225,7 @@ void Indie::Menu::loadRoomSMenu()
 		L"Back"));
 
 	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 20, 800, 20 + m_height), false, true, m_roomS)->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
-	irr::gui::IGUIListBox *list = m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_roomS, GUI_ID_LIST_MAP);
+	m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_roomS, GUI_ID_LIST_MAP);
 	chooseMap(GUI_ID_LIST_MAP);
 }
 
@@ -246,18 +244,9 @@ void Indie::Menu::loadGameOptionsMenu()
 
 }
 
-void Indie::Menu::setSkinTransparency(irr::s32 alpha , irr::gui::IGUISkin *skin)
-{
-	for (irr::s32 i=0; i<irr::gui::EGDC_COUNT ; ++i) {
-		irr::video::SColor col = skin->getColor((irr::gui::EGUI_DEFAULT_COLOR)i);
-		col.setAlpha(alpha);
-		skin->setColor((irr::gui::EGUI_DEFAULT_COLOR)i, col);
-	}
-}
-
 void Indie::Menu::loadSoundBtn()
 {
-	irr::gui::IGUIButton *btn = m_gui->addButton(irr::core::recti(10, m_opt.getHeight() - 85, 85, m_opt.getHeight() - 10), m_root, GUI_ID_SOUND, L"", L"Mute/Unmute");
+	auto *btn = m_gui->addButton(irr::core::recti(10, m_opt.getHeight() - 85, 85, m_opt.getHeight() - 10), m_root, GUI_ID_SOUND, L"", L"Mute/Unmute");
 
 	btn->setImage(m_driver->getTexture("assets/models/menu/volume.png"));
 	btn->setUseAlphaChannel(true);
@@ -268,15 +257,18 @@ void Indie::Menu::loadLocalGame()
 {
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 215, m_xRight, 215 + m_height), m_local, GUI_ID_READY, L"Play"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 325, m_xRight, 325 + m_height), m_local, GUI_ID_LOCAL_BACK, L"Back"));
-	irr::gui::IGUIListBox *list = m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_local, GUI_ID_LIST_MAP);
-
-	for (auto &c : m_map)
-		list->addItem(irr::core::stringw(c.c_str()).c_str());
-	list->setSelected(0);
-}
-
-Indie::AppState Indie::Menu::display()
-{
-	m_gui->drawAll();
-	return NONE;
+	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 20, 800, 20 + m_height), false, true, m_local)
+			->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
+	m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_local, GUI_ID_LOCAL_MAPS);
+	chooseMap(GUI_ID_LOCAL_MAPS);
+	m_gui->addStaticText(L"Number of player:", irr::core::recti(m_xRight + 50, 150, m_xRight + 500, 120 + m_height), false, true, m_local)
+			->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
+	auto nbPlayer = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 200, m_xRight + 400, 250), m_local, -1);
+	nbPlayer->addItem(L"1");
+	nbPlayer->addItem(L"2");
+	m_gui->addStaticText(L"Number of AI:", irr::core::recti(m_xRight + 50, 300, m_xRight + 500, 300 + m_height), false, true, m_local)
+			->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
+	auto nbAi = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 350, m_xRight + 400, 400), m_local, -1);
+	nbAi->addItem(L"1");
+	nbAi->addItem(L"2");
 }

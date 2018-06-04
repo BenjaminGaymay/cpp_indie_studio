@@ -68,7 +68,8 @@ namespace Indie {
 		GUI_ID_NUMPAD_DEL,
 		GUI_ID_SOUND,
 		GUI_ID_LOCAL,
-		GUI_ID_LOCAL_BACK
+		GUI_ID_LOCAL_BACK,
+		GUI_ID_LOCAL_MAPS
 	};
 
 
@@ -102,7 +103,6 @@ namespace Indie {
 		Menu();
 		~Menu();
 		void loadMenu(irr::IrrlichtDevice *, const Options &);
-		AppState display();
 		void initSpriteMenu(std::vector<SpriteMenu> &);
 
 		void loadMainMenu();

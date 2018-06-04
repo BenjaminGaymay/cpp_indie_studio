@@ -67,6 +67,7 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 					m_core->m_menu.m_main->setVisible(false);
 					m_core->m_menu.m_play->setVisible(true);
 					m_core->m_menu.chooseMap(GUI_ID_LIST_MAP);
+					m_core->m_menu.chooseMap(GUI_ID_LOCAL_MAPS);
 					break;
 				case GUI_ID_OPTIONS_BUTTON:
 					m_core->m_menu.m_main->setVisible(false);
