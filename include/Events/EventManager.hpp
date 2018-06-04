@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <ik_ISoundEngine.h>
+#include <irrlicht.h>
 #include "Macro.hpp"
 
 namespace Indie {
@@ -22,7 +23,7 @@ namespace Indie {
 
 		void manage(irrklang::ISoundEngine* engine);
 		void init(Core *);
-
+		void updateIpInput(irr::s32);
 	private:
 		Core *m_core;
 	};
