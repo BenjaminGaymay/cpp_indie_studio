@@ -395,12 +395,16 @@ void Indie::Server::start()
 	_objectsFct.push_back(&Indie::Server::comGameInfos);
 	_objectsFct.push_back(&Indie::Server::comMap);
 	_objectsFct.push_back(&Indie::Server::comBomb);
-	while (1) {
+	while (true) {
 		manageBomb();
 		if (_state == WAITING)
 			_state = checkIfStartGame();
 		setClientsFds();
 		readOnFds();
+		for (auto &_client : _clients) {
+			if (!FD_ISSET(_client->_fd, &_fdRead))
+				dprintf(_client->_fd, "%i:%i:%i\n", PLAYER, STAND, _client->_id);
+		}
 	}
 }
 

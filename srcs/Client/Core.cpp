@@ -141,6 +141,7 @@ void Indie::Core::run()
 	Clock playerClock;
 	music->setVolume(0.3);
 
+
 	m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
 	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 1020, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
@@ -164,13 +165,11 @@ void Indie::Core::run()
 		}
 		if (m_state == PLAY) {
 			pos = _playerObjects[0]->getPosition();
-			if (playerClock.getElapsedTime() > 10) {
-				m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition({pos.X, pos.Y + 200, pos.Z});
-				m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});
-				moveEvent(pos);
-				dropBombEvent(pos);
-				playerClock.reset();
-			}
+			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition({pos.X, pos.Y + 200, pos.Z});
+			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});
+			moveEvent(pos);
+			dropBombEvent(pos);
+			playerClock.reset();
 			m_core.m_sceneManager->drawAll();
 		} else if (m_state == SPEC) {
 			m_core.m_sceneManager->drawAll();

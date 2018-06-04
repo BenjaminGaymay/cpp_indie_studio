@@ -107,9 +107,18 @@ void Indie::Core::comPlayer(const ObjectsEvents &event, std::vector<std::string>
 			case SUICIDE: removePlayer(id, SUICIDE); break;
 			case APPEAR: addPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2]))); break;
 			case MOVE: movePlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
+			case STAND: standPlayer(id);
 			default: break;
 		}
 	} catch (const std::exception &e) {}
+}
+
+void Indie::Core::standPlayer(int id)
+{
+	if (m_state != PLAY)
+		return  ;
+	if (id != 0 && !_playerObjects.empty() && _playerObjects[id] != nullptr)
+		_playerObjects[id]->setStanding(true);
 }
 
 void Indie::Core::comBomb(const ObjectsEvents &event, std::vector<std::string> &infos)
@@ -153,7 +162,7 @@ void Indie::Core::removePlayer(int id, const ObjectsEvents &event)
 {
 	if (id == _playerObjects[0]->getId()) { //joueur principale meurt, bha faut gérer
 		if (event == SUICIDE) {
-			auto sound = _engine->play2D("music/suicide_1.wav", false, false, true);
+			auto sound = _engine->play2D("music/suicide.wav", false, false, true);
 			sound->setVolume(2);
 		}
 		_playerObjects[0]->getPlayer()->remove();
