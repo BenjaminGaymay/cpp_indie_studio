@@ -69,7 +69,8 @@ namespace Indie {
 		GUI_ID_SOUND,
 		GUI_ID_LOCAL,
 		GUI_ID_LOCAL_BACK,
-		GUI_ID_LOCAL_MAPS
+		GUI_ID_LOCAL_MAPS,
+		GUI_ID_PLAY_LOCAL
 	};
 
 
@@ -86,6 +87,7 @@ namespace Indie {
 		PLAY,
 		SERVER_DOWN,
 		SPEC,
+		LOCAL,
 		NONE
 	};
 

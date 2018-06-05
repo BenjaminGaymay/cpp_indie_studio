@@ -19,4 +19,4 @@ namespace Indie
 	private:
 		std::vector<int> a;
 	};
-} // Indie
+}
