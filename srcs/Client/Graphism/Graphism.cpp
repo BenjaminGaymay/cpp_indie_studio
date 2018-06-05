@@ -37,11 +37,9 @@ const Indie::Graphism::textureElem *Indie::Graphism::getTexture(const int &nb)
 
 void Indie::Graphism::clearNode()
 {
-	std::cerr << "size:" <<_nodesList.size() << std::endl;
-	if (_nodesList.empty())
+	if (_decors.empty())
 		return ;
-	/*for (auto &node : _nodesList)
-		node->remove();*/
-	_nodesList.clear();
-	std::cerr << "size:" <<_nodesList.size() << std::endl;
+	for (auto &node : _decors)
+		node->remove();
+	_decors.clear();
 }

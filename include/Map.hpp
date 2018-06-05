@@ -28,6 +28,7 @@ namespace Indie {
 		std::vector<std::vector<int>> &getMap2d();
 		const float &getSize() const;
 		const float &getHeight() const;
+		static irr::core::vector3df position2dTo3d(const irr::core::vector2di &pos);
 		irr::scene::ISceneNode *get3dBlock(const irr::core::vector2di &);
 		irr::scene::ISceneNode *get3dBlock(const irr::core::vector3df &pos);
 		irr::core::vector2di get2dBlock(const irr::core::vector3df &pos);

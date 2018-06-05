@@ -23,7 +23,6 @@ namespace Indie {
 		void addCollision(irr::scene::ISceneNode *object);
 		irr::f32 resizeNode(irr::scene::ISceneNode *node, const float &size);
 		irr::scene::ISceneNode *createTexture(const textureElem &textures, const irr::core::vector3df &position, const irr::core::vector3df &rotation, const irr::core::vector3df &scale, bool collision);
-		irr::scene::ISceneNode *createIsland(irr::core::vector3df position, irr::core::vector3df rotation);
 		void setCollision(irr::scene::ISceneNode *wall, irr::scene::ISceneNode *target);
 		const textureElem *getTexture(const int &nb);
 		std::vector<Indie::Object> &getBombs() { return _bombs; };
@@ -33,7 +32,7 @@ namespace Indie {
 		void generateTextureMap();
 		/* FIRST object, SECOND texture */
 		std::map<int, textureElem> _texturesMap;
-		std::vector<irr::scene::ISceneNode *> _nodesList;
+		std::vector<irr::scene::ISceneNode *> _decors;
 		std::vector<Indie::Object> _bombs;
 		std::vector<Indie::Object> _bonus;
 		Window *m_core;

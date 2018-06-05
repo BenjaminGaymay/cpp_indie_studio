@@ -37,10 +37,14 @@ Indie::Map::~Map()
 
 void Indie::Map::clear3dMap()
 {
-	for (auto &block : _3dmap)
-		block.first->remove();
-	for (auto &block : _3dundermap)
-		block.first->remove();
+	for (auto &block : _3dmap) {
+		if (block.first)
+			block.first->remove();
+	}
+	for (auto &block : _3dundermap) {
+		if (block.first)
+			block.first->remove();
+	}
 	_3dmap.clear();
 	_3dundermap.clear();
 }
@@ -153,6 +157,16 @@ bool supequal(irr::core::vector3df one, irr::core::vector3df two)
 }
 
 // <<<<<
+
+irr::core::vector3df Indie::Map::position2dTo3d(const irr::core::vector2di &pos)
+{
+	irr::core::vector3df result;
+
+	result.X = pos.Y * 20.00f;
+	result.Y = 100.00f;
+	result.Z = pos.X * 20.00f;
+	return result;
+}
 
 irr::core::vector2di Indie::Map::get2dBlock(const irr::core::vector3df &target)
 {

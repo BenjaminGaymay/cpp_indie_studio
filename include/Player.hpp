@@ -17,6 +17,7 @@ namespace Indie {
 		~Player();
 		irr::core::vector3df move(Events &event, std::unique_ptr<Socket> &_socket);
 		irr::scene::IAnimatedMeshSceneNode *getPlayer() { return _player; };
+		void setPlayer(irr::scene::IAnimatedMeshSceneNode *player) { _player = player; };
 		void rotationWithMove(irr::scene::ISceneNode *node, const irr::core::vector3df &newPosition);
 		const bool &isStanding() { return _stand; };
 		void setStanding(const bool &state) { _stand = state; };
