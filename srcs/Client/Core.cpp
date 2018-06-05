@@ -46,7 +46,7 @@ void Indie::Core::processEvents()
 	else {
 		if (m_event.isKeyDown(irr::KEY_ESCAPE)) {
 			m_event.setKeyUp(irr::KEY_ESCAPE);
-			if (m_state == PLAY) {
+			if (m_state == PLAY or m_state == SPEC) {
 				m_core.m_device->getCursorControl()->setVisible(true);
 				m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
 				m_menu.m_gameOptions->setVisible(true);
@@ -68,6 +68,7 @@ void Indie::Core::processEvents()
 void Indie::Core::checkAppContext()
 {
 	static AppState old = AppState::NONE;
+	static std::string oldMap;
 
 	if (m_state == old)
 		return;
@@ -75,6 +76,7 @@ void Indie::Core::checkAppContext()
 	if (m_state == LAUNCH_SERVER && _state == NOTCONNECTED) {
 		std::thread(&Indie::Server::runServer).detach();
 		_state = WAITING;
+		oldMap = "";
 		while (1) {
 			try {
 				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Socket::CLIENT);
@@ -87,7 +89,6 @@ void Indie::Core::checkAppContext()
 		if (_playerId == 0) {
 			irr::gui::IGUIListBox *list = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_LIST_MAP, true));
 			auto map = ManageStrings::convertWchart(list->getListItem(list->getSelected()));
-			static std::string oldMap;
 
 			if (map != oldMap) {
 				sendMapToServer(std::string("assets/maps/" + map));
@@ -110,6 +111,7 @@ void Indie::Core::checkAppContext()
 		}
 	}
 	if (m_state == SERVER_DOWN) {
+		_state = NOTCONNECTED;
 		if (m_menu.m_roomS->isVisible())
 			m_menu.m_roomS->setVisible(false);
 		else if (m_menu.m_roomC->isVisible())
@@ -121,6 +123,10 @@ void Indie::Core::checkAppContext()
 void Indie::Core::exitGame()
 {
 	// Y A DES TRUCS QUI SE DELETE PAS (lancer deux joueurs / quitter le serveur / lancer un serveur sur le second et jouer)
+	if (_state != NOTCONNECTED) {
+		dprintf(_socket->getFd(), "%d:%d:%d\n", PLAYER, LEAVE, _playerObjects[0]->getId());
+	}
+	_mapper->clear3dMap();
 	_mapper.release();
 	_playerObjects.clear();
 	_socket->closeSocket();
@@ -129,6 +135,9 @@ void Indie::Core::exitGame()
 	if (_tchat._textBox->isVisible())
 		_tchat._textBox->setVisible(false);
 	_playerId = -1;
+	_socket = nullptr;
+	m_bappe = true;
+	_tchat._getch = false;
 	_state = NOTCONNECTED;
 	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
 	m_core.m_device->getCursorControl()->setVisible(true);
@@ -149,7 +158,7 @@ void Indie::Core::run()
 	_tchat._textBox->setMax(40);
 	_tchat._textBox->setVisible(false);
 
-	m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
+	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
 	m_core.m_device->getCursorControl()->setVisible(true);
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
@@ -182,7 +191,6 @@ void Indie::Core::checkAppState()
 			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});
 			moveEvent(pos);
 			dropBombEvent(pos);
-			playerClock.reset();
 			m_core.m_sceneManager->drawAll();
 			break;
 		case SPEC:

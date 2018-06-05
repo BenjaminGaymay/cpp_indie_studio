@@ -38,14 +38,13 @@ int Indie::Server::maxFd() const
 
 void Indie::Server::addClient()
 {
-	static int id = 0;
 	struct sockaddr_in client_sin{};
 	socklen_t client_sin_len = sizeof(client_sin);
-	std::unique_ptr<Client> newClient = std::make_unique<Client>(id, accept(_hostFd, (struct sockaddr *) &client_sin, &client_sin_len), "Anonymous-" + std::to_string(id + 1));
+	std::unique_ptr<Client> newClient = std::make_unique<Client>(_lastId, accept(_hostFd, (struct sockaddr *) &client_sin, &client_sin_len), "Anonymous-" + std::to_string(_lastId + 1));
 
-	dprintf(newClient->_fd, "%d\n", id);
+	dprintf(newClient->_fd, "%d\n", _lastId);
 	_clients.push_back(std::move(newClient));
-	id += 1;
+	_lastId += 1;
 }
 
 std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
@@ -190,6 +189,14 @@ void Indie::Server::comPlayer(const ObjectsEvents &event, std::vector<std::strin
 				setBlock(position2d, 0);
 			}
 			break;
+		}
+		case LEAVE: {
+			auto pos = std::find(_clients.begin(), _clients.end(), client);
+
+			if (pos != _clients.end()) {
+				pos->reset();
+				_clients.erase(pos);
+			}
 		}
 		default: break;
 	}
@@ -402,13 +409,17 @@ void Indie::Server::start()
 	_objectsFct.push_back(&Indie::Server::comGameInfos);
 	_objectsFct.push_back(&Indie::Server::comMap);
 	_objectsFct.push_back(&Indie::Server::comBomb);
+	_lastId = 0;
 	while (true) {
 		manageBomb();
 		if (_state == WAITING)
 			_state = checkIfStartGame();
 		setClientsFds();
 		readOnFds();
+		if (_state == PLAYING and _clients.empty())
+			break;
 	}
+	_socket.closeSocket();
 }
 
 void Indie::Server::runServer()

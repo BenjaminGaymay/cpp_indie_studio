@@ -35,9 +35,6 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	object->setScale(scale);
 	//object->setDebugDataVisible(irr::scene::E_DEBUG_SCENE_TYPE::EDS_BBOX);
 	(void) collision;
-	/*if (collision)
-		addCollision(object);*/
-	_nodesList.push_back(object);
 	return object;
 }
 
@@ -69,7 +66,7 @@ void Indie::Graphism::buildDecor()
 	/*createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	createTexture(_texturesMap[52], {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);*/
 	//createTexture(_texturesMap[51], {300, 0, 0}, {0, 0, 0}, {0.1f, 0.1f, 0.1f}, false);
-	createTexture(_texturesMap[52], {2000, -200, -600}, {270, 0, 0}, {50, 50, 50}, false);
+	_decors.push_back(createTexture(_texturesMap[52], {2000, -200, -600}, {270, 0, 0}, {50, 50, 50}, false));
 }
 
 //

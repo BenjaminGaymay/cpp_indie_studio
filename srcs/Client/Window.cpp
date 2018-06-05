@@ -12,7 +12,7 @@ Indie::Window::Window()
 
 Indie::Window::~Window()
 {
-	m_device->drop();
+	//m_device->drop(); ca segv
 }
 
 void Indie::Window::editMapView()

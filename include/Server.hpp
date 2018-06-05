@@ -70,6 +70,7 @@ namespace Indie {
 			std::string _mapMsg;
 			std::string _lastCmd;
 			std::vector<void (Indie::Server::*)(const ObjectsEvents &event, std::vector<std::string> &, std::unique_ptr<Client> &)> _objectsFct;
+			int _lastId;
 	};
 
 }
