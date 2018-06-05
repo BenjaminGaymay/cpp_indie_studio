@@ -103,11 +103,11 @@ void Indie::Core::comPlayer(const ObjectsEvents &event, std::vector<std::string>
 		auto id = std::stoi(infos[0]);
 
 		switch (event) {
+			case STAND: standPlayer(id); break;
 			case DEAD: removePlayer(id, DEAD); break;
 			case SUICIDE: removePlayer(id, SUICIDE); break;
 			case APPEAR: addPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2]))); break;
 			case MOVE: movePlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
-			case STAND: standPlayer(id);
 			default: break;
 		}
 	} catch (const std::exception &e) {}
@@ -115,10 +115,14 @@ void Indie::Core::comPlayer(const ObjectsEvents &event, std::vector<std::string>
 
 void Indie::Core::standPlayer(int id)
 {
-	if (m_state != PLAY)
-		return  ;
-	if (id != 0 && !_playerObjects.empty() && _playerObjects[id] != nullptr)
-		_playerObjects[id]->setStanding(true);
+	for (auto &p : _playerObjects)
+		if (p->getId() == id && p->isAlive()) {
+			if (!p->isStanding())
+				p->getPlayer()->setMD2Animation(irr::scene::EMAT_STAND);
+			p->setStanding(true);
+			return;
+		}
+	std::cerr << "player[" << id << "] ne doit plus bouger" << std::endl;
 }
 
 void Indie::Core::comBomb(const ObjectsEvents &event, std::vector<std::string> &infos)

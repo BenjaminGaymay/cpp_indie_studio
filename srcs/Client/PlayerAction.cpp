@@ -20,7 +20,7 @@ std::string floatToInt(float nb)
 void Indie::Core::moveEvent(irr::core::vector3df &pos)
 {
 	irr::core::vector2di pos2d;
-	irr::core::vector3df newPos = _playerObjects[0]->move(m_event);
+	irr::core::vector3df newPos = _playerObjects[0]->move(m_event, _socket);
 
 	if (pos.X != newPos.X || pos.Y != newPos.Y || pos.Z != newPos.Z) {
 		try {
