@@ -8,7 +8,9 @@ include_directories(SYSTEM lib/irrlicht/include)
 include_directories(include
                     include/GUI
                     include/Events
-                    include/AI)
+                    include/AI
+                    include/Utility
+                    include/Local)
 
 add_definitions(
         -g3

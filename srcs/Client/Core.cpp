@@ -137,7 +137,10 @@ void Indie::Core::exitGame()
 void Indie::Core::run()
 {
 	irrklang::ISound* music = _engine->play2D("music/main.wav", true, false, true);
-	music->setVolume(0.3);
+	if (m_opts.getMusic())
+		music->setVolume(0.3);
+	else
+		music->setVolume(0);
 
 	if (m_opts.getSplashScreen())
 		m_splash.display(m_core.m_device, m_event);
