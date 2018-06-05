@@ -37,10 +37,14 @@ Indie::Map::~Map()
 
 void Indie::Map::clear3dMap()
 {
-	for (auto &block : _3dmap)
-		block.first->remove();
-	for (auto &block : _3dundermap)
-		block.first->remove();
+	for (auto &block : _3dmap) {
+		if (block.first)
+			block.first->remove();
+	}
+	for (auto &block : _3dundermap) {
+		if (block.first)
+			block.first->remove();
+	}
 	_3dmap.clear();
 	_3dundermap.clear();
 }

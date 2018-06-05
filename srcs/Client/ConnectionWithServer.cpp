@@ -38,7 +38,6 @@ void Indie::Core::comMap(const ObjectsEvents &event, std::vector<std::string> &i
 void Indie::Core::takeBonus(const irr::core::vector2di &pos, const PowerUpType &bonus)
 {
 	_engine->play2D("music/bonus.wav", false, false, false);
-	std::cerr << "J'ai pris un bonus:" << bonus << std::endl;
 	switch (bonus) {
 		case SPEED_UP : _playerObjects[0]->setSpeed(_playerObjects[0]->getSpeed() + 0.1f); std::cerr << "SPEEDUP" << std::endl; break ;
 		case BOMB_UP : _playerObjects[0]->setBombNumber(_playerObjects[0]->getBombNumber() + 1); std::cerr << "BOMBUP" << std::endl; break;
@@ -122,7 +121,6 @@ void Indie::Core::standPlayer(int id)
 			p->setStanding(true);
 			return;
 		}
-	std::cerr << "player[" << id << "] ne doit plus bouger" << std::endl;
 }
 
 void Indie::Core::comBomb(const ObjectsEvents &event, std::vector<std::string> &infos)
@@ -170,6 +168,7 @@ void Indie::Core::removePlayer(int id, const ObjectsEvents &event)
 			sound->setVolume(2);
 		}
 		_playerObjects[0]->getPlayer()->remove();
+		_playerObjects[0]->setPlayer(nullptr);
 		_playerObjects[0]->setAlive(false); //#BENOIT tu dois quitter proprement
 		m_state = SPEC;
 		return;
@@ -177,6 +176,7 @@ void Indie::Core::removePlayer(int id, const ObjectsEvents &event)
 	for (auto &p : _playerObjects) {
 		if (p->getId() == id) {
 			p->getPlayer()->remove();
+			p->setPlayer(nullptr);
 			auto pPos = std::find(_playerObjects.begin(), _playerObjects.end(), p);
 			pPos->reset();
 			_playerObjects.erase(pPos);

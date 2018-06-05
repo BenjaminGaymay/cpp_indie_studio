@@ -21,7 +21,11 @@ Indie::Player::Player(const int &id, irr::scene::IAnimatedMeshSceneNode *node, s
 //
 // @brief destroy
 //
-Indie::Player::~Player() = default;
+Indie::Player::~Player()
+{
+	if (_player)
+		_player->remove();
+}
 
 //
 // @brief set the futur position of player

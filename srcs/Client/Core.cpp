@@ -123,8 +123,10 @@ void Indie::Core::checkAppContext()
 void Indie::Core::exitGame()
 {
 	// Y A DES TRUCS QUI SE DELETE PAS (lancer deux joueurs / quitter le serveur / lancer un serveur sur le second et jouer)
-	if (_state != NOTCONNECTED)
+	if (_state != NOTCONNECTED) {
 		dprintf(_socket->getFd(), "%d:%d:%d\n", PLAYER, LEAVE, _playerObjects[0]->getId());
+	}
+	_mapper->clear3dMap();
 	_mapper.release();
 	_playerObjects.clear();
 	_socket->closeSocket();
