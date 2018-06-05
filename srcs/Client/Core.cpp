@@ -148,7 +148,7 @@ void Indie::Core::run()
 	_tchat._textBox->setMax(40);
 	_tchat._textBox->setVisible(false);
 
-	m_core.getCamera().change(m_core.getSceneManager(), Camera::FPS);
+	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
 	m_core.m_device->getCursorControl()->setVisible(true);
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
@@ -169,7 +169,6 @@ void Indie::Core::run()
 			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});
 			moveEvent(pos);
 			dropBombEvent(pos);
-			playerClock.reset();
 			m_core.m_sceneManager->drawAll();
 		} else if (m_state == SPEC) {
 			m_core.m_sceneManager->drawAll();
