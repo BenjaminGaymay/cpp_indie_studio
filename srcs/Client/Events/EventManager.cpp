@@ -156,6 +156,10 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 					m_core->m_menu.m_local->setVisible(true);
 					m_core->m_menu.m_play->setVisible(false);
 					break;
+				case GUI_ID_PLAY_LOCAL:
+					m_core->m_state = LOCAL;
+					m_core->m_menu.m_local->setVisible(false);
+					break;
 				case GUI_ID_LOCAL_BACK:
 					m_core->m_menu.m_local->setVisible(false);
 					m_core->m_menu.m_play->setVisible(true);

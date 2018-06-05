@@ -79,6 +79,7 @@ namespace Indie {
 		void changeMapWithEvent(std::size_t x, std::size_t y);
 		void exitGame();
 		void standPlayer(int id);
+		void checkAppState();
 
 	public:
 		int _lastFps;
@@ -102,7 +103,8 @@ namespace Indie {
 		int _playerId;
 		editorState _editState;
 		std::pair<std::size_t, std::size_t> _counter;
-		bool m_bappe;
 		irrklang::ISoundEngine* _engine;
+		irr::core::vector3df pos;
+		Clock playerClock;
 	};
 }

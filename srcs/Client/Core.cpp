@@ -136,7 +136,6 @@ void Indie::Core::exitGame()
 		_tchat._textBox->setVisible(false);
 	_playerId = -1;
 	_socket = nullptr;
-	m_bappe = true;
 	_tchat._getch = false;
 	_state = NOTCONNECTED;
 	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
@@ -146,9 +145,10 @@ void Indie::Core::exitGame()
 void Indie::Core::run()
 {
 	irrklang::ISound* music = _engine->play2D("music/main.wav", true, false, true);
-	irr::core::vector3df pos;
-	Clock playerClock;
-	music->setVolume(0.3);
+	if (m_opts.getMusic())
+		music->setVolume(0.3);
+	else
+		music->setVolume(0);
 
 	if (m_opts.getSplashScreen())
 		m_splash.display(m_core.m_device, m_event);
@@ -163,25 +163,41 @@ void Indie::Core::run()
 		processEvents();
 		m_core.m_driver->beginScene(true, true, _color);
 		checkAppContext();
+		checkAppState();
+		m_core.m_gui->drawAll();
+		printTchat();
+		m_core.m_driver->endScene();
+		drawCaption();
+	}
 
-		if (_state != NOTCONNECTED && _socket) {
-			try {
-				readServerInformations(_socket->readSocket());
-			} catch (const std::exception &e) {
-				exitGame();
-				m_state = SERVER_DOWN;
-			}
+	music->drop(); // release music stream.
+}
+
+void Indie::Core::checkAppState()
+{
+	if (_state != NOTCONNECTED && _socket) {
+		try {
+			readServerInformations(_socket->readSocket());
+		} catch (const std::exception &e) {
+			exitGame();
+			m_state = SERVER_DOWN;
 		}
-		if (m_state == PLAY) {
+	}
+	switch (m_state) {
+		case PLAY:
 			pos = _playerObjects[0]->getPosition();
-			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition({pos.X, pos.Y + 200, pos.Z});
-			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});
+			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition(
+					{pos.X, pos.Y + 200, pos.Z});
+			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation(
+					{90, 90, 0});
 			moveEvent(pos);
 			dropBombEvent(pos);
 			m_core.m_sceneManager->drawAll();
-		} else if (m_state == SPEC) {
+			break;
+		case SPEC:
 			m_core.m_sceneManager->drawAll();
-		} else if (m_state == MAPPING) {
+			break;
+		case MAPPING:
 			_graphism->clearNode();
 			if (_mapper) {
 				_mapper->clear3dMap();
@@ -189,7 +205,7 @@ void Indie::Core::run()
 			}
 			editMap();
 			m_state = MENU;
-		} else if (_state == WAITING) {
+		case READY:
 			for (auto &aPlayer : _playerObjects) {
 				if (aPlayer->getState() == EV_READY) {
 					std::cerr << "READY" << std::endl;
@@ -205,14 +221,30 @@ void Indie::Core::run()
 							irr::video::SColor(255, 255, 255, 255));
 				}
 			}
-		}
-		m_core.m_gui->drawAll();
-		printTchat();
-		m_core.m_driver->endScene();
-		drawCaption();
+			break;
+		case UNREADY:
+			for (auto &aPlayer : _playerObjects) {
+				if (aPlayer->getState() == EV_READY) {
+					std::cerr << "READY" << std::endl;
+					m_core.m_font->draw(
+							irr::core::stringw(aPlayer->getId() + ":READY"),
+							irr::core::rect<irr::s32>(50, 0, 0, 0),
+							irr::video::SColor(255, 255, 255, 255));
+				} else if (aPlayer->getState() == EV_UNREADY) {
+					std::cerr << "UNREADY" << std::endl;
+					m_core.m_font->draw(
+							irr::core::stringw(aPlayer->getId() + ":UNREADY"),
+							irr::core::rect<irr::s32>(50, 0, 0, 0),
+							irr::video::SColor(255, 255, 255, 255));
+				}
+			}
+			break;
+		case LOCAL:
+			m_core.m_sceneManager->drawAll();
+			break;
+		default:
+			break;
 	}
-
-	music->drop(); // release music stream.
 }
 
 void Indie::Core::init(Options &opt)
@@ -232,6 +264,5 @@ void Indie::Core::init(Options &opt)
 	_state = NOTCONNECTED;
 	_playerId = -1;
 	_socket = nullptr;
-	m_bappe = true;
 	_tchat._getch = false;
 }

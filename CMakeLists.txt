@@ -7,7 +7,10 @@ include_directories(SYSTEM lib/irrklang/include)
 include_directories(SYSTEM lib/irrlicht/include)
 include_directories(include
                     include/GUI
-                    include/Events)
+                    include/Events
+                    include/AI
+                    include/Utility
+                    include/Local)
 
 add_definitions(
         -g3

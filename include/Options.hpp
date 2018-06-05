@@ -12,9 +12,9 @@
 class Options {
 public:
 	Options() :
-	m_width(0), m_height(0), m_fullscreen(false), m_splashscreen(true), m_launch(true) {}
-	Options(const std::size_t width, const std::size_t height, const bool fullscreen, const bool splash) :
-		m_width(width), m_height(height), m_fullscreen(fullscreen), m_splashscreen(splash), m_launch(true) {};
+	m_width(0), m_height(0), m_fullscreen(false), m_splashscreen(true), m_launch(true), m_music(true) {}
+	Options(const std::size_t width, const std::size_t height, const bool fullscreen, const bool splash, const bool music) :
+		m_width(width), m_height(height), m_fullscreen(fullscreen), m_splashscreen(splash), m_launch(true), m_music(music) {};
 	~Options() {};
 
 	std::size_t getWidth() const {
@@ -37,6 +37,10 @@ public:
 		return m_launch;
 	}
 
+	bool getMusic() const {
+		return m_music;
+	}
+
 	void setWidth(std::size_t width) {
 		m_width = width;
 	}
@@ -57,10 +61,15 @@ public:
 		m_launch = launch;
 	}
 
+	void setMusic(bool music) {
+		m_music = music;
+	}
+
 private:
 	std::size_t m_width;
 	std::size_t m_height;
 	bool m_fullscreen;
 	bool m_splashscreen;
 	bool m_launch;
+	bool m_music;
 };
