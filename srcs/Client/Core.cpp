@@ -136,7 +136,6 @@ void Indie::Core::exitGame()
 		_tchat._textBox->setVisible(false);
 	_playerId = -1;
 	_socket = nullptr;
-	m_bappe = true;
 	_tchat._getch = false;
 	_state = NOTCONNECTED;
 	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
