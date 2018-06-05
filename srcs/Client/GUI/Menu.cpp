@@ -255,7 +255,7 @@ void Indie::Menu::loadSoundBtn()
 
 void Indie::Menu::loadLocalGame()
 {
-	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 215, m_xRight, 215 + m_height), m_local, GUI_ID_READY, L"Play"));
+	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 215, m_xRight, 215 + m_height), m_local, GUI_ID_PLAY_LOCAL, L"Play"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 325, m_xRight, 325 + m_height), m_local, GUI_ID_LOCAL_BACK, L"Back"));
 	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 20, 800, 20 + m_height), false, true, m_local)
 			->setOverrideColor(irr::video::SColor(150, 255, 0, 255));

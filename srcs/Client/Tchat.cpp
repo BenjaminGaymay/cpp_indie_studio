@@ -18,6 +18,7 @@ void Indie::Core::manageTchat()
 		m_event.setKeyUp(irr::KEY_ESCAPE);
 	}
 	if (m_event.isKeyDown(irr::KEY_RETURN)) {
+		_tchat._getch = true;
 		m_event.setKeyUp(irr::KEY_RETURN);
 		if (wcslen(tmp) != 0)
 			dprintf(_socket->getFd(), "1:4:%ls", tmp);
