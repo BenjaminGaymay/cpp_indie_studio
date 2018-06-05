@@ -87,14 +87,14 @@ bool Indie::Socket::isSocketWritten()
 
 std::vector<std::string> Indie::Socket::readSocket()
 {
-	static char buffer[4096];
+	static char buffer[8192];
 	char *tmp = nullptr;
 	std::vector<std::string> socketContents;
 	ssize_t size;
 
 	if (!isSocketWritten())
 		return socketContents;
-	size = read(_fd, buffer, 4096);
+	size = read(_fd, buffer, 8192);
 	if (size > 0) {
 		buffer[size] = '\0';
 		tmp = strtok(buffer, "\n");

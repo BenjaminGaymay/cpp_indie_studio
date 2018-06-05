@@ -126,6 +126,7 @@ void Indie::Core::exitGame()
 	if (_state != NOTCONNECTED) {
 		dprintf(_socket->getFd(), "%d:%d:%d\n", PLAYER, LEAVE, _playerObjects[0]->getId());
 	}
+	_readyPlayers.clear();
 	_mapper->clear3dMap();
 	_mapper.release();
 	_playerObjects.clear();
@@ -173,6 +174,20 @@ void Indie::Core::run()
 	music->drop(); // release music stream.
 }
 
+void Indie::Core::infoReadyPlayerOne()
+{
+	std::string msg;
+	int y = 0;
+	for (auto &aReadyPlayer : _readyPlayers) {
+		msg = (aReadyPlayer.second == EV_READY ? ":READY" : ":UNREADY");
+		m_core.m_font->draw(
+				irr::core::stringw((std::to_string(aReadyPlayer.first) + msg).c_str()),
+				irr::core::rect<irr::s32>(m_opts.getWidth() - 250, y, 0, 0),
+				irr::video::SColor(255, 255, 255, 255));
+		y += 30;
+	}
+}
+
 void Indie::Core::checkAppState()
 {
 	if (_state != NOTCONNECTED && _socket) {
@@ -186,10 +201,8 @@ void Indie::Core::checkAppState()
 	switch (m_state) {
 		case PLAY:
 			pos = _playerObjects[0]->getPosition();
-			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition(
-					{pos.X, pos.Y + 200, pos.Z});
-			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation(
-					{90, 90, 0});
+			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition({pos.X, pos.Y + 200, pos.Z});
+			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});
 			moveEvent(pos);
 			dropBombEvent(pos);
 			m_core.m_sceneManager->drawAll();
@@ -205,45 +218,14 @@ void Indie::Core::checkAppState()
 			}
 			editMap();
 			m_state = MENU;
-		case READY:
-			for (auto &aPlayer : _playerObjects) {
-				if (aPlayer->getState() == EV_READY) {
-					std::cerr << "READY" << std::endl;
-					m_core.m_font->draw(
-							irr::core::stringw(aPlayer->getId() + ":READY"),
-							irr::core::rect<irr::s32>(50, 0, 0, 0),
-							irr::video::SColor(255, 255, 255, 255));
-				} else if (aPlayer->getState() == EV_UNREADY) {
-					std::cerr << "UNREADY" << std::endl;
-					m_core.m_font->draw(
-							irr::core::stringw(aPlayer->getId() + ":UNREADY"),
-							irr::core::rect<irr::s32>(50, 0, 0, 0),
-							irr::video::SColor(255, 255, 255, 255));
-				}
-			}
-			break;
-		case UNREADY:
-			for (auto &aPlayer : _playerObjects) {
-				if (aPlayer->getState() == EV_READY) {
-					std::cerr << "READY" << std::endl;
-					m_core.m_font->draw(
-							irr::core::stringw(aPlayer->getId() + ":READY"),
-							irr::core::rect<irr::s32>(50, 0, 0, 0),
-							irr::video::SColor(255, 255, 255, 255));
-				} else if (aPlayer->getState() == EV_UNREADY) {
-					std::cerr << "UNREADY" << std::endl;
-					m_core.m_font->draw(
-							irr::core::stringw(aPlayer->getId() + ":UNREADY"),
-							irr::core::rect<irr::s32>(50, 0, 0, 0),
-							irr::video::SColor(255, 255, 255, 255));
-				}
-			}
-			break;
 		case LOCAL:
 			m_core.m_sceneManager->drawAll();
 			break;
 		default:
 			break;
+	}
+	if (_state == WAITING) {
+		infoReadyPlayerOne();
 	}
 }
 

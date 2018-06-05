@@ -80,6 +80,7 @@ namespace Indie {
 		void exitGame();
 		void standPlayer(int id);
 		void checkAppState();
+		void infoReadyPlayerOne();
 
 	public:
 		int _lastFps;
@@ -106,5 +107,6 @@ namespace Indie {
 		irrklang::ISoundEngine* _engine;
 		irr::core::vector3df pos;
 		Clock playerClock;
+		std::map<int, ObjectsEvents> _readyPlayers;
 	};
 }

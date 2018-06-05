@@ -13,7 +13,7 @@
 //
 Indie::Player::Player(const int &id, irr::scene::IAnimatedMeshSceneNode *node, s_tchat &tchat)
 : _id(id), _stand(true), _player(node),
-  _speed(1.5f), _tchat(tchat), _power(1), _bombNumber(1), _wallUp(false), _alive(true)
+  _speed(1.5f), _tchat(tchat), _power(1), _bombNumber(1), _wallUp(false), _alive(true), _state(EV_UNREADY)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }

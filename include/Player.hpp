@@ -37,6 +37,8 @@ namespace Indie {
 		const bool &getWallUp() const { return _wallUp; };
 		void setAlive(const bool &alive) { _alive = alive; };
 		const bool &isAlive() { return _alive; };
+		void setState(const ObjectsEvents &state) { _state = state; };
+		const ObjectsEvents &getState() { return _state; };
 	private:
 		int _id;
 		bool _stand;
@@ -48,6 +50,7 @@ namespace Indie {
 		std::size_t _bombNumber;
 		bool _wallUp;
 		bool _alive;
+		ObjectsEvents _state;
 	protected:
 	};
 }

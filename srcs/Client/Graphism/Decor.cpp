@@ -66,7 +66,7 @@ void Indie::Graphism::buildDecor()
 	/*createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
 	createTexture(_texturesMap[52], {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);*/
 	//createTexture(_texturesMap[51], {300, 0, 0}, {0, 0, 0}, {0.1f, 0.1f, 0.1f}, false);
-	_decors.push_back(createTexture(_texturesMap[52], {2000, -200, -600}, {270, 0, 0}, {50, 50, 50}, false));
+	/*_decors.push_back(createTexture(_texturesMap[52], {2000, -200, -600}, {270, 0, 0}, {50, 50, 50}, false));*/
 }
 
 //
@@ -84,7 +84,5 @@ void Indie::Graphism::generateTextureMap()
 	_texturesMap[7] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/ghost.jpg"); //WALLPASSUP
 	_texturesMap[8] = textureElem("assets/models/cube/Crate1.3ds", "assets/models/2D/wall.png"); //wall block
 	_texturesMap[10] = textureElem("assets/models/sydney.md2", "assets/models/sydney.bmp");
-	_texturesMap[50] = textureElem("assets/models/palmier/palmier.obj", "assets/models/palmier/palmier.bmp");
-	//_texturesMap[51] = textureElem("lol/city/3DS/Camellia City.3ds", ".");
 	_texturesMap[52] = textureElem("assets/models/Circuit/Luigi Circuit.obj", ".");
 }

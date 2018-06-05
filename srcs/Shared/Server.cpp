@@ -45,6 +45,8 @@ void Indie::Server::addClient()
 	dprintf(newClient->_fd, "%d\n", _lastId);
 	_clients.push_back(std::move(newClient));
 	_lastId += 1;
+	for (auto &i : _clients)
+		dprintf(i->_fd, "%d:%d:%d\n", GAMEINFOS, EV_UNREADY, _lastId);
 }
 
 std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
@@ -73,7 +75,6 @@ std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
 		line = strtok(nullptr, ":");_map.clear();
 		lineNumberOptimization += 1;
 	}
-	free(copy);
 	return map;
 }
 
@@ -116,9 +117,15 @@ void Indie::Server::comGameInfos(const ObjectsEvents &event, std::vector<std::st
 	std::cout << "Game - Event: " << event << " - \"" << _lastCmd << "\"\n";
 	switch (event) {
 		case EV_READY:
-			client->_state = PLAYING; break;
+			client->_state = PLAYING;
+			for (auto &i : _clients)
+				dprintf(i->_fd, "%d:%d:%d\n", GAMEINFOS, event, client->_id);
+			break;
 		case EV_UNREADY:
-			client->_state = WAITING; break;
+			client->_state = WAITING;
+			for (auto &i : _clients)
+				dprintf(i->_fd, "%d:%d:%d\n", GAMEINFOS, event, client->_id);
+			break;
 		case MESSAGE:
 			for (auto &i : _clients)
 				dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &_lastCmd[4]);
@@ -147,7 +154,7 @@ void Indie::Server::comBomb(const ObjectsEvents &event, std::vector<std::string>
 				_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, position2d, client->_id));
 				setBlock(position2d, 3);
 				for (auto &i : _clients)
-					dprintf(i->_fd, _lastCmd.c_str());
+					dprintf(i->_fd, "%s\n", _lastCmd.c_str());
 			}
 			break;
 		}
@@ -311,8 +318,8 @@ void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
 {
 	auto bonus = LAST_UP;
 	static std::default_random_engine generator;
-	static std::uniform_int_distribution<int> random(0, 4);
-	static std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP - 1);
+	std::uniform_int_distribution<int> random(0, 4);
+	std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP - 1);
 	if (random(generator) > 0)
 		bonus = static_cast<PowerUpType>(distribution(generator));
 

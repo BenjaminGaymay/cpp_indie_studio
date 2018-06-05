@@ -20,6 +20,16 @@ void Indie::Core::comGameInfos(const ObjectsEvents &event, std::vector<std::stri
 			_graphism->buildDecor();
 			break;
 		case MESSAGE: serverMessage(infos); break;
+		case EV_READY: {
+			const auto &id = std::stoi(infos[0]);
+			_readyPlayers[id] = EV_READY;
+			break;
+		}
+		case EV_UNREADY : {
+			const auto &id = std::stoi(infos[0]);
+			_readyPlayers[id] = EV_UNREADY;
+			break;
+		}
 		default: break;
 	}
 }
