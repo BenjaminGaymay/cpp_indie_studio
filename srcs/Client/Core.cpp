@@ -189,6 +189,22 @@ void Indie::Core::run()
 			}
 			editMap();
 			m_state = MENU;
+		} else if (_state == WAITING) {
+			for (auto &aPlayer : _playerObjects) {
+				if (aPlayer->getState() == EV_READY) {
+					std::cerr << "READY" << std::endl;
+					m_core.m_font->draw(
+							irr::core::stringw(aPlayer->getId() + ":READY"),
+							irr::core::rect<irr::s32>(50, 0, 0, 0),
+							irr::video::SColor(255, 255, 255, 255));
+				} else if (aPlayer->getState() == EV_UNREADY) {
+					std::cerr << "UNREADY" << std::endl;
+					m_core.m_font->draw(
+							irr::core::stringw(aPlayer->getId() + ":UNREADY"),
+							irr::core::rect<irr::s32>(50, 0, 0, 0),
+							irr::video::SColor(255, 255, 255, 255));
+				}
+			}
 		}
 		m_core.m_gui->drawAll();
 		printTchat();
