@@ -161,6 +161,13 @@ void Indie::Server::comPlayer(const ObjectsEvents &event, std::vector<std::strin
 /*	std::cout << "Player - Event: " << event << " - \"" << _lastCmd << "\"\n";*/
 
 	switch (event) {
+		case STAND : {
+			auto id = std::stoi(infos[0]);
+			for (auto &i : _clients)
+				if (id != i->_id)
+					dprintf(i->_fd, "%d:%d:%d\n", PLAYER, event, id);
+			break ;
+		}
 		case MOVE: {
 			irr::core::vector2di position2d(std::stoi(infos[1]), std::stoi(infos[2]));
 			irr::core::vector3df position3d(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5]));
@@ -395,7 +402,7 @@ void Indie::Server::start()
 	_objectsFct.push_back(&Indie::Server::comGameInfos);
 	_objectsFct.push_back(&Indie::Server::comMap);
 	_objectsFct.push_back(&Indie::Server::comBomb);
-	while (1) {
+	while (true) {
 		manageBomb();
 		if (_state == WAITING)
 			_state = checkIfStartGame();

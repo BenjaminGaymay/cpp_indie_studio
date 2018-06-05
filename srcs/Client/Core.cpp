@@ -165,13 +165,11 @@ void Indie::Core::run()
 		}
 		if (m_state == PLAY) {
 			pos = _playerObjects[0]->getPosition();
-			if (playerClock.getElapsedTime() > 10) {
-				m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition({pos.X, pos.Y + 200, pos.Z});
-				m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});
-				moveEvent(pos);
-				dropBombEvent(pos);
-				playerClock.reset();
-			}
+			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition({pos.X, pos.Y + 200, pos.Z});
+			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});
+			moveEvent(pos);
+			dropBombEvent(pos);
+			playerClock.reset();
 			m_core.m_sceneManager->drawAll();
 		} else if (m_state == SPEC) {
 			m_core.m_sceneManager->drawAll();

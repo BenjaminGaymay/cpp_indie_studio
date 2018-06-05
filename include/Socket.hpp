@@ -43,7 +43,8 @@ namespace Indie {
 		TAKEBONUS,
 		EV_READY,
 		EV_UNREADY,
-		SUICIDE
+		SUICIDE,
+		STAND
 	};
 
 	class Socket {

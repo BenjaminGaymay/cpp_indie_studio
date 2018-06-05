@@ -78,6 +78,7 @@ namespace Indie {
 		void printTchat() const;
 		void changeMapWithEvent(std::size_t x, std::size_t y);
 		void exitGame();
+		void standPlayer(int id);
 
 	public:
 		int _lastFps;

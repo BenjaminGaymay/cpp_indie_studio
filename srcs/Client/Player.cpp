@@ -28,7 +28,7 @@ Indie::Player::~Player() = default;
 // @param event
 // @return
 //
-irr::core::vector3df Indie::Player::move(Events &event)
+irr::core::vector3df Indie::Player::move(Events &event, std::unique_ptr<Socket> &_socket)
 {
 	irr::core::vector3df nodePosition = _player->getPosition();
 
@@ -51,7 +51,10 @@ irr::core::vector3df Indie::Player::move(Events &event)
 		setStanding(false);
 		nodePosition.X += _speed;
 	} else {
-		if (!isStanding()) _player->setMD2Animation(irr::scene::EMAT_STAND);
+		if (!isStanding())  {
+			_player->setMD2Animation(irr::scene::EMAT_STAND);
+			_socket->sendInfos(Indie::PLAYER, Indie::STAND, std::to_string(_id));
+		}
 		setStanding(true);
 		return nodePosition;
 	}
