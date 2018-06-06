@@ -1,44 +1,33 @@
 cmake_minimum_required(VERSION 3.7.2)
 project(bomberman)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_C_STANDARD 11)
+
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+include(library)
+
 if (APPLE)
     message("Apple not yet supported")
 elseif (UNIX)
     message("Linux supported")
-    include_directories(SYSTEM lib/irrklang/include)
-    include_directories(SYSTEM lib/irrlicht/include)
-    include_directories(include
-            include/GUI
-            include/Events
-            include/AI
-            include/Utility
-            include/Local)
+    set(STANDARD_UNIX_CXX_FLAGS "-Wall -Wextra")
+    set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g3 ${STANDARD_UNIX_CXX_FLAGS}")
 
-    add_definitions(
-            -g3
-            -Wall
-            -Wextra)
-
-    file(GLOB_RECURSE INCLUDES include/*.hpp)
-    file(GLOB_RECURSE SRCS_C srcs/Client/*.cpp)
-    file(GLOB_RECURSE SRCS_SHARED srcs/Shared/*.cpp)
-    file(GLOB_RECURSE SRCS_S srcs/Server/*.cpp)
+    file(GLOB_RECURSE INCLUDES ${CMAKE_SOURCE_DIR}/include/*.hpp)
+    file(GLOB_RECURSE SRCS_C ${CMAKE_SOURCE_DIR}/srcs/Client/*.cpp)
+    file(GLOB_RECURSE SRCS_SHARED ${CMAKE_SOURCE_DIR}/srcs/Shared/*.cpp)
+    file(GLOB_RECURSE SRCS_S ${CMAKE_SOURCE_DIR}/srcs/Server/*.cpp)
 
     add_executable(${PROJECT_NAME}
             ${INCLUDES}
             ${SRCS_SHARED}
             ${SRCS_C})
 
-    add_executable(server
-            ${INCLUDES}
+#[[    add_executable(server
             ${SRCS_S}
-            ${SRCS_SHARED})
-
-    #[[find_path(IRRLICHT_INCLUDE_DIR irrlicht.h)
-    include_directories(${IRRLICHT_PATH_INCLUDE})
-    link_directories(${IRRLICHT_PATH_LIB})
-    target_link_libraries(${PROJECT_NAME} Irrlicht GL pthread)]]
+            ${SRCS_SHARED})]]
 
 
     add_library(irrlicht STATIC IMPORTED)
@@ -48,7 +37,20 @@ elseif (UNIX)
 
     #[[target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpFlac.so)
     target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpMP3.so)]]
-    target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIrrKlang.so) #MUSIC IRRKLANG
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/lib/libIrrKlang.so) #MUSIC IRRKLANG
+
+
+    target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE
+            lib/irrklang/include)
+    target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE
+            lib/irrlicht/include)
+    target_include_directories(${PROJECT_NAME} PUBLIC
+            ${CMAKE_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/include/GUI
+            ${CMAKE_SOURCE_DIR}/include/Events
+            ${CMAKE_SOURCE_DIR}/include/AI
+            ${CMAKE_SOURCE_DIR}/include/Utility
+            ${CMAKE_SOURCE_DIR}/include/Local)
 elseif (WIN32)
     message("Window not yet supported")
 endif ()
