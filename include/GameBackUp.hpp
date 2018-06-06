@@ -59,13 +59,14 @@ namespace Indie {
 			auto pos3d = player->getPosition();
 			auto pos2d = _mapper->get2dBlock(pos3d + _mapper->getSize() / 2);
 			_file << "PLAYER:"
-				  << pos2d.X << ":" << pos2d.Y << ":"
-				  << pos3d.X << ":" << pos3d.Y << ":" << pos3d.Z << ":"
-				  << player->getRotation().Y << ":"
-				  << player->getSpeed() << ":"
-				  << player->getPower() << ":"
-				  << player->getBombNumber() << ":"
-				  << player->getWallUp() << std::endl;
+				<< player->getId() << ":"
+				<< pos2d.X << ":" << pos2d.Y << ":"
+				<< pos3d.X << ":" << pos3d.Y << ":" << pos3d.Z << ":"
+				<< player->getRotation().Y << ":"
+				<< player->getSpeed() << ":"
+				<< player->getPower() << ":"
+				<< player->getBombNumber() << ":"
+				<< player->getWallUp() << std::endl;
 		}
 	private:
 		std::fstream _file;
