@@ -224,8 +224,9 @@ void Indie::Core::checkAppState()
 		default:
 			break;
 	}
-	if (_state == WAITING) {
-		infoReadyPlayerOne();
+	switch (_state) {
+		case WAITING : infoReadyPlayerOne(); break;
+		default: _readyPlayers.clear(); break;
 	}
 }
 

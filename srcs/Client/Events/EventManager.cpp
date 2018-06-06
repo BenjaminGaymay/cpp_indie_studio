@@ -31,7 +31,7 @@ void Indie::EventManager::checkMapNameValid()
 
 	if (name.empty())
 		return;
-	m_core->m_state = MAPPING;//m_state = MAPPING;
+	m_core->m_state = MAPPING;
 	m_core->m_menu.m_mapMenu->setVisible(false);
 	m_core->m_menu.m_mapEdit->setVisible(true);
 }
