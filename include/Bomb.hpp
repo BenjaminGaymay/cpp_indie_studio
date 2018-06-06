@@ -31,6 +31,7 @@ namespace Indie {
 		const std::size_t &getPower() const { return _power; };
 		const int &getId() const { return _id; };
 		void setPower(const std::size_t &power) { _power = power; };
+		const std::time_t &getTimeMax() const { return _timeMax; };
 	private:
 		std::time_t _timeMax;
 		std::size_t _power;

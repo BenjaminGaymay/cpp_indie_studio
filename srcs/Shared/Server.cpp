@@ -5,6 +5,7 @@
 // server
 //
 
+#include <sstream>
 #include <sys/time.h>
 #include <vector3d.h>
 #include <vector2d.h>
@@ -111,6 +112,30 @@ bool Indie::Server::wallMove(std::unique_ptr<Client> &client, irr::core::vector3
 	return true;
 }
 
+void Indie::Server::sendInfoToClient()
+{
+	bool sep = false;
+	if (_clients.size() > 1)
+		return ;
+	std::stringstream ss;
+	auto &aClient = _clients[0];
+
+	/*for (auto &aBot : _bots) {
+		if (sep)
+			ss << '|';
+		ss << "BOT" << ":" <<
+		sep = true;
+	}*/
+	sep = false;
+	for (auto &aBomb : _bombs) {
+		if (sep)
+			ss << '|';
+		ss << "BOMB" << ":" << aBomb->getId() << ":" << aBomb->getState() << ":" << aBomb->getTimeMax() << aBomb->getPower() << ":" << aBomb->getPosition().X << aBomb->getPosition().Y;
+		sep = true;
+	}
+	dprintf(aClient->_fd, "%d:%d:%s\n", GAMEINFOS, INFO, ss.str().c_str());
+}
+
 void Indie::Server::comGameInfos(const ObjectsEvents &event, std::vector<std::string> &infos, std::unique_ptr<Client> &client)
 {
 	(void)infos;
@@ -130,6 +155,7 @@ void Indie::Server::comGameInfos(const ObjectsEvents &event, std::vector<std::st
 			for (auto &i : _clients)
 				dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &_lastCmd[4]);
 			break;
+		case INFO: sendInfoToClient(); break;
 		default: break;
 	}
 }

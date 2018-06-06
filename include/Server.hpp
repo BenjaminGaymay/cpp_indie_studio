@@ -58,6 +58,7 @@ namespace Indie {
 			std::vector<std::vector<int>> buildMap(const std::string &msg);
 			int getBlock(irr::core::vector2di &pos) const { return _map[pos.Y][pos.X]; }
 			void setBlock(irr::core::vector2di &pos, int value) { _map[pos.Y][pos.X] = value; }
+			void sendInfoToClient();
 		private:
 			fd_set _fdRead;
 			Socket _socket;
