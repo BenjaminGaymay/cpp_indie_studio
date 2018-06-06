@@ -225,6 +225,7 @@ void Indie::Core::checkAppState()
 			break;
 	}
 	switch (_state) {
+		case NOTCONNECTED : _readyPlayers.clear(); break;
 		case WAITING : infoReadyPlayerOne(); break;
 		default: _readyPlayers.clear(); break;
 	}
