@@ -6,10 +6,15 @@
 */
 #pragma once
 
+#include <fstream>
+
 namespace Indie {
 	class GameBackUp {
 	public:
-		GameBackUp() = default;
+		GameBackUp()
+		{
+			createFile();
+		}
 		~GameBackUp() {
 			if (_file.is_open())
 				_file.close();
@@ -26,9 +31,16 @@ namespace Indie {
 			_file.open(fileName + str, std::fstream::out);
 			return _file.is_open();
 		}
+
+		/**
+		 * @brief must be the last function call of the backup
+		 * @param aMap
+		 */
 		void map(std::vector<std::vector<int>> &aMap)
 		{
 			bool sep = false;
+
+			_file << "MAP:" << std::endl;
 			for (auto &line : aMap) {
 				if (sep)
 					_file << std::endl;
@@ -40,6 +52,7 @@ namespace Indie {
 					sep = true;
 				}
 			}
+			_file.close();
 		}
 		void player(const std::unique_ptr<Player> &player, const std::unique_ptr<Map> &_mapper)
 		{
