@@ -52,7 +52,7 @@ elseif (UNIX)
             ${CMAKE_SOURCE_DIR}/include/Utility
             ${CMAKE_SOURCE_DIR}/include/Local)
 elseif (WIN32)
-    message("Window not yet supported")
+    message("Windows not yet supported")
 endif ()
 
 
