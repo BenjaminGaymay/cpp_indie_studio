@@ -26,12 +26,17 @@ void Indie::Core::manageTchat()
 	}
 }
 
-void Indie::Core::printTchat() const
+void Indie::Core::printTchat()
 {
 	int y = m_opts.getHeight() - 80;
 
 	for (int i = static_cast<int>(_tchat._messages.size()) - 1 ; i >= 0 ; i--) {
-		m_core.m_font->draw(irr::core::stringw(_tchat._messages[i].c_str()), irr::core::rect<irr::s32>(50, y, 0, 0), irr::video::SColor(255,255,255,255));
+		if (_tchat._messages[i]._clock.getElapsedTime() > 7500)
+			_tchat._messages.erase(_tchat._messages.begin() + i);
+	}
+
+	for (int i = static_cast<int>(_tchat._messages.size()) - 1 ; i >= 0 ; i--) {
+		m_core.m_font->draw(irr::core::stringw(_tchat._messages[i]._string.c_str()), irr::core::rect<irr::s32>(50, y, 0, 0), irr::video::SColor(255,255,255,255));
 		y -= 30;
 	}
 }

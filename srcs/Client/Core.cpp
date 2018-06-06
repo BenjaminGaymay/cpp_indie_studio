@@ -138,6 +138,7 @@ void Indie::Core::exitGame()
 	_playerId = -1;
 	_socket = nullptr;
 	_tchat._getch = false;
+	_tchat._messages.empty();
 	_state = NOTCONNECTED;
 	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
 	m_core.m_device->getCursorControl()->setVisible(true);
