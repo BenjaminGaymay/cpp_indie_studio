@@ -115,11 +115,14 @@ bool Indie::Server::wallMove(std::unique_ptr<Client> &client, irr::core::vector3
 void Indie::Server::sendInfoToClient()
 {
 	bool sep = false;
-	if (_clients.size() > 1)
-		return ;
+	if (_clients.size() > 1) {
+		std::cerr << "To many clients:" << _clients.size() << "cannot save a multiplayer game" << std::endl;
+		return;
+	}
 	std::stringstream ss;
 	auto &aClient = _clients[0];
 
+	ss << "";
 	/*for (auto &aBot : _bots) {
 		if (sep)
 			ss << '|';
@@ -127,11 +130,15 @@ void Indie::Server::sendInfoToClient()
 		sep = true;
 	}*/
 	sep = false;
-	for (auto &aBomb : _bombs) {
-		if (sep)
-			ss << '|';
-		ss << "BOMB" << ":" << aBomb->getId() << ":" << aBomb->getState() << ":" << aBomb->getTimeMax() << aBomb->getPower() << ":" << aBomb->getPosition().X << aBomb->getPosition().Y;
-		sep = true;
+	if (!_bombs.empty()) {
+		for (auto &aBomb : _bombs) {
+			if (sep)
+				ss << '|';
+			ss << "BOMB" << ">" << aBomb->getId() << ">" << aBomb->getState()
+			   << ">" << aBomb->getTimeMax() << aBomb->getPower() << ">"
+			   << aBomb->getPosition().X << aBomb->getPosition().Y;
+			sep = true;
+		}
 	}
 	dprintf(aClient->_fd, "%d:%d:%s\n", GAMEINFOS, INFO, ss.str().c_str());
 }

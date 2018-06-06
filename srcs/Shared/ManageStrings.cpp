@@ -65,7 +65,7 @@ std::vector<std::string> ManageStrings::splitString(std::string &str, char separ
 			tmp += c;
 		else if (c == separator && !tmp.empty()) {
 			splited.push_back(tmp);
-			tmp = "";
+			tmp.clear();
 		}
 	}
 	if (!tmp.empty())

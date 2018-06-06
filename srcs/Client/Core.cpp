@@ -201,8 +201,10 @@ void Indie::Core::checkAppState()
 	}
 	switch (m_state) {
 		case PLAY:
-			if (!m_event.isKeyDown(irr::KEY_KEY_H))
+			if (m_event.isKeyDown(irr::KEY_KEY_H)) {
 				_socket->sendInfos(Indie::GAMEINFOS, Indie::INFO, "");
+				m_event.setKeyUp(irr::KEY_KEY_H);
+			}
 			pos = _playerObjects[0]->getPosition();
 			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setPosition({pos.X, pos.Y + 200, pos.Z});
 			m_core.getCamera().m_cameras[Indie::Camera::FPS]->setRotation({90, 90, 0});

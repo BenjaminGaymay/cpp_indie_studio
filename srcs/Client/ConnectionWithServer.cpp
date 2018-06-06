@@ -10,7 +10,25 @@
 #include <Player.hpp>
 #include <sstream>
 #include <iomanip>
+#include <GameBackUp.hpp>
 #include "ManageStrings.hpp"
+
+
+void Indie::Core::saveLocalGame(std::vector<std::string> &infos)
+{
+	std::string gameInfo = infos[0];
+	GameBackUp backup;
+	auto &afile = backup.getFileEditor();
+
+	backup.createFile();
+	if (!infos.empty()) {
+		std::replace(gameInfo.begin(), gameInfo.end(), '>', ':');
+		std::replace(gameInfo.begin(), gameInfo.end(), '|', '\n');
+		afile << gameInfo << std::endl;
+	}
+	backup.player(_playerObjects[0], _mapper);
+	backup.map(_mapper->getMap2d());
+}
 
 void Indie::Core::comGameInfos(const ObjectsEvents &event, std::vector<std::string> &infos)
 {
@@ -34,27 +52,7 @@ void Indie::Core::comGameInfos(const ObjectsEvents &event, std::vector<std::stri
 			_readyPlayers[id] = EV_UNREADY;
 			break;
 		}
-		case INFO: {
-			std::string fileName = "games/game-";
-			std::string gameInfo = infos[0];
-			auto t = std::time(nullptr);
-			auto tm = *std::localtime(&t);
-			std::ostringstream oss;
-			oss << std::put_time(&tm, "%d-%m-%Y_%H-%M-%S");
-			auto str = oss.str();
-			std::fstream afile(fileName + str);
-			afile << gameInfo;
-			bool sep = false;
-			for (auto &line : _mapper->getMap2d()) {
-				sep = false;
-				for (auto &block : line) {
-					if (sep)
-						afile << " ";
-					afile << std::setfill('0') << std::setw(2) << block;
-					sep = true;
-				}
-			}
-		}
+		case INFO: saveLocalGame(infos); break;
 		default: break;
 	}
 }
