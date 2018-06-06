@@ -45,7 +45,8 @@ namespace Indie {
 		EV_UNREADY,
 		SUICIDE,
 		STAND,
-		LEAVE
+		LEAVE,
+		INFO
 	};
 
 	class Socket {

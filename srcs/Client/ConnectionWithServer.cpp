@@ -5,7 +5,11 @@
 // Multiplayer
 //
 
+#include <fstream>
+#include <sys/stat.h>
 #include <Player.hpp>
+#include <sstream>
+#include <iomanip>
 #include "ManageStrings.hpp"
 
 void Indie::Core::comGameInfos(const ObjectsEvents &event, std::vector<std::string> &infos)
@@ -29,6 +33,27 @@ void Indie::Core::comGameInfos(const ObjectsEvents &event, std::vector<std::stri
 			const auto &id = std::stoi(infos[0]);
 			_readyPlayers[id] = EV_UNREADY;
 			break;
+		}
+		case INFO: {
+			std::string fileName = "games/game-";
+			std::string gameInfo = infos[0];
+			auto t = std::time(nullptr);
+			auto tm = *std::localtime(&t);
+			std::ostringstream oss;
+			oss << std::put_time(&tm, "%d-%m-%Y_%H-%M-%S");
+			auto str = oss.str();
+			std::fstream afile(fileName + str);
+			afile << gameInfo;
+			bool sep = false;
+			for (auto &line : _mapper->getMap2d()) {
+				sep = false;
+				for (auto &block : line) {
+					if (sep)
+						afile << " ";
+					afile << std::setfill('0') << std::setw(2) << block;
+					sep = true;
+				}
+			}
 		}
 		default: break;
 	}
