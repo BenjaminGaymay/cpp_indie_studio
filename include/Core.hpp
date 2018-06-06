@@ -30,9 +30,14 @@ namespace Indie {
 		PERSO
 	};
 
+	struct s_message {
+		std::string _string;
+		Clock _clock;
+	};
+
 	struct s_tchat {
 		bool _getch;
-		std::vector<std::string> _messages;
+		std::vector<s_message> _messages;
 		irr::gui::IGUIEditBox *_textBox;
 	};
 
@@ -75,7 +80,7 @@ namespace Indie {
 		void menuEvents();
 		void sendMapToServer(const std::string &);
 		void manageTchat();
-		void printTchat() const;
+		void printTchat();
 		void changeMapWithEvent(std::size_t x, std::size_t y);
 		void exitGame();
 		void standPlayer(int id);

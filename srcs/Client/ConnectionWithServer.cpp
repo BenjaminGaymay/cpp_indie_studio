@@ -216,10 +216,10 @@ void Indie::Core::serverMessage(const std::vector<std::string> &message)
 	for (auto &line : message)
 		msg += line + ":";
 	msg[msg.size() - 1] = '\0';
-	_tchat._messages.push_back(msg);
+	_tchat._messages.push_back({msg, Clock()});
 
-	if (_tchat._messages.size() > 5)
-		_tchat._messages.erase(_tchat._messages.begin(), _tchat._messages.end() - 5);
+	if (_tchat._messages.size() > 20)
+	 	_tchat._messages.erase(_tchat._messages.begin(), _tchat._messages.end() - 20);
 }
 
 void Indie::Core::readServerInformations(std::vector<std::string> servSend)
