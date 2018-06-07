@@ -5,8 +5,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_C_STANDARD 11)
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-include(library)
 
 if (APPLE)
     message("Apple not yet supported")
@@ -36,8 +34,8 @@ elseif (UNIX)
     target_link_libraries(${PROJECT_NAME} /usr/lib/x86_64-linux-gnu/libX11.so /usr/lib/x86_64-linux-gnu/libXxf86vm.so.1)
     target_link_libraries(${PROJECT_NAME} irrlicht GL pthread) #IRRLICHT 3D
 
-    #[[target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpFlac.so)
-    target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpMP3.so)]]
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpFlac.so)
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpMP3.so)
     target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/lib/libIrrKlang.so) #MUSIC IRRKLANG
 
 

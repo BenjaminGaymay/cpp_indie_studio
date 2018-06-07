@@ -197,7 +197,7 @@ void Indie::Core::changeMapWithEvent(std::size_t x, std::size_t y)
 		_counter.second += 1;
 		_mapper->getMap2d()[y][x] = 0;
 	}
-	_mapper->clear3dMap();
+	_mapper->clear3dMap(_graphism);
 	_mapper->load(_graphism);
 
 }
@@ -248,10 +248,7 @@ void Indie::Core::editMap()
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		if (editMapEvents() == -1) {
-			block->remove();
-			block2->remove();
-			perso->remove();
-			_mapper->clear3dMap();
+			_mapper->clear3dMap(_graphism);
 			break;
 		}
 		m_core.m_driver->beginScene(true, true, _color);
@@ -269,8 +266,9 @@ void Indie::Core::editMap()
 		m_core.m_driver->endScene();
 	}
 	m_run = true;
-	_mapper->clear3dMap();
+	_mapper->clear3dMap(_graphism);
 	_mapper->clear2dMap();
+	block2->remove();
 	block->remove();
 	perso->remove();
 }
