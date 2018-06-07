@@ -25,9 +25,10 @@ elseif (UNIX)
             ${SRCS_SHARED}
             ${SRCS_C})
 
-#[[    add_executable(server
+    add_executable(server
+            ${INCLUDES}
             ${SRCS_S}
-            ${SRCS_SHARED})]]
+            ${SRCS_SHARED})
 
 
     add_library(irrlicht STATIC IMPORTED)
@@ -40,11 +41,11 @@ elseif (UNIX)
     target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/lib/libIrrKlang.so) #MUSIC IRRKLANG
 
 
-    target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE
+    include_directories(SYSTEM PRIVATE
             lib/irrklang/include)
-    target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE
+    include_directories(SYSTEM PRIVATE
             lib/irrlicht/include)
-    target_include_directories(${PROJECT_NAME} PUBLIC
+    include_directories(PUBLIC
             ${CMAKE_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/include/GUI
             ${CMAKE_SOURCE_DIR}/include/Events
