@@ -6,9 +6,11 @@
 */
 #pragma once
 
+#include <vector>
 #include <fstream>
 #include <ctime>
 #include <iomanip>
+#include "Player.hpp"
 
 namespace Indie {
 	class GameBackUp {
@@ -77,7 +79,7 @@ namespace Indie {
 			_file << "PLAYER:"
 				<< player->getId() << ":"
 				<< pos2d.X << ":" << pos2d.Y << ":"
-				<< pos3d.X << ":" << pos3d.Y << ":" << pos3d.Z << ":"
+				//<< pos3d.X << ":" << pos3d.Y << ":" << pos3d.Z << ":"
 				<< player->getRotation().Y << ":"
 				<< player->getSpeed() << ":"
 				<< player->getPower() << ":"

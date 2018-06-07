@@ -10,24 +10,7 @@
 #include <Player.hpp>
 #include <sstream>
 #include <iomanip>
-#include <GameBackUp.hpp>
 #include "ManageStrings.hpp"
-
-
-void Indie::Core::saveLocalGame(std::vector<std::string> &infos)
-{
-	std::string gameInfo = infos[0];
-	GameBackUp backup;
-	auto &afile = backup.getFileEditor();
-
-	if (!infos.empty()) {
-		std::replace(gameInfo.begin(), gameInfo.end(), '>', ':');
-		std::replace(gameInfo.begin(), gameInfo.end(), '|', '\n');
-		afile << gameInfo << std::endl;
-	}
-	backup.player(_playerObjects[0], _mapper);
-	backup.map(_mapper->getMap2d()); // must be every time last call
-}
 
 void Indie::Core::comGameInfos(const ObjectsEvents &event, std::vector<std::string> &infos)
 {
@@ -137,7 +120,7 @@ void Indie::Core::comPlayer(const ObjectsEvents &event, std::vector<std::string>
 			case STAND: standPlayer(id); break;
 			case DEAD: removePlayer(id, DEAD); break;
 			case SUICIDE: removePlayer(id, SUICIDE); break;
-			case APPEAR: addPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2]))); break;
+			case APPEAR: addPlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), std::stof(infos[3]), std::stof(infos[4]), std::stoul(infos[5]), std::stoul(infos[6]), std::stoi(infos[7])); break;
 			case MOVE: movePlayer(id, irr::core::vector2di(stoi(infos[1]), std::stoi(infos[2])), irr::core::vector3df(std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])), std::stof(infos[6])); break;
 			default: break;
 		}
@@ -180,14 +163,18 @@ void Indie::Core::dropBomb(int id, const irr::core::vector2di &pos2d, const irr:
 
 }
 
-void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d)
+void Indie::Core::addPlayer(const int &id, const irr::core::vector2di &pos2d, const float &rotation, const float &speed, const std::size_t &power, const std::size_t &bombNumber, const bool &wallUp)
 {
 	auto pos3d = _mapper->get3dBlock(pos2d)->getPosition();
 
 	std::cout << pos3d.X << ":" << pos3d.Y << ":" << pos3d.Z << std::endl;
 	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, static_cast<irr::scene::IAnimatedMeshSceneNode *>(_graphism->createTexture(*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true)), _tchat);
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
-	newPlayer->setSpeed(1);
+	newPlayer->getPlayer()->setRotation({0, rotation, 0});
+	newPlayer->setBombNumber(bombNumber);
+	newPlayer->setPower(power);
+	newPlayer->setWallUp(wallUp);
+	newPlayer->setSpeed(speed);
 	newPlayer->setPos2d(pos2d);
 	_playerObjects.push_back(std::move(newPlayer));
 }

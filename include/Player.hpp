@@ -25,7 +25,7 @@ namespace Indie {
 		void setPower(const std::size_t &power) { _power = power; };
 		const std::size_t &getPower() const { return _power; };
 		const std::size_t &getBombNumber() const { return _bombNumber; };
-		void setBombNumber(const std::size_t bombNumber) { _bombNumber = bombNumber; };
+		void setBombNumber(const std::size_t bombNumber) { if (_bombNumber < 10) _bombNumber = bombNumber; };
 		void setPos2d(const irr::core::vector2di &pos) { _pos2d = pos;}
 		const float &getSpeed() const { return _speed; };
 		const irr::core::vector3df &getPosition() const  { return _player->getPosition(); };

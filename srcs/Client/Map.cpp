@@ -29,7 +29,8 @@ Indie::Map::Map(std::vector<std::string> &map, const float &size,
 		_max_width = (tmp.size() > _max_width ? tmp.size() : _max_width);
 	}
 	_max_height = _2dmap.size();
-	load(graphism);
+	if (graphism)
+		load(graphism);
 }
 
 Indie::Map::~Map()
