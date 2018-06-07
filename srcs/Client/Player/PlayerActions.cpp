@@ -61,8 +61,10 @@ void Indie::Core::removePlayer(int id, const ObjectsEvents &event)
 			auto sound = _engine->play2D("music/suicide.wav", false, false, true);
 			sound->setVolume(2);
 		}
-		_playerObjects[0]->getPlayer()->remove();
-		_playerObjects[0]->setPlayer(nullptr);
+		if (_playerObjects[0]->getPlayer()) {
+			_playerObjects[0]->getPlayer()->remove();
+			_playerObjects[0]->setPlayer(nullptr);
+		}
 		_playerObjects[0]->setAlive(false);
 		m_state = SPEC;
 		return;
