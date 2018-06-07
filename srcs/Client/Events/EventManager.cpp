@@ -29,8 +29,10 @@ void Indie::EventManager::checkMapNameValid()
 	irr::gui::IGUIEditBox *edit = static_cast<irr::gui::IGUIEditBox *>(m_core->m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME , true));
 	std::string name = ManageStrings::convertWchart(edit->getText());
 
-	if (name.empty())
+	if (name.empty()) {
+		m_core->m_menu.errorMessage(std::string("Invalid map's name"), m_core->m_menu.m_mapMenu);
 		return;
+	}
 	m_core->m_state = MAPPING;
 	m_core->m_menu.m_mapMenu->setVisible(false);
 	m_core->m_menu.m_mapEdit->setVisible(true);
@@ -103,6 +105,8 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 						std::string name = ManageStrings::convertWchart(edit->getText());
 						if (!name.empty())
 							m_core->createRandMap(name, 25, 25);
+						else
+							m_core->m_menu.errorMessage(std::string("Invalid map's name"), m_core->m_menu.m_mapMenu);
 					}
 					break;
 				case GUI_ID_MAP_EDITOR_BUTTON:

@@ -126,7 +126,6 @@ void Indie::Menu::loadBackground()
 	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_option);
 	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_play);
 	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_join);
-
 }
 
 void Indie::Menu::loadMainMenu()
@@ -140,6 +139,17 @@ void Indie::Menu::loadMainMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft,550,m_xRight,550 + m_height), m_main, GUI_ID_QUIT_BUTTON,
             L"Quit", L"Exits the program"));
 }
+
+void Indie::Menu::errorMessage(const std::string &msg, irr::gui::IGUIElement *el)
+{
+	auto win = m_gui->addWindow(irr::core::recti(m_xLeft - 50, 100, m_xRight + 50, 300), true, L"", el);
+	// auto bg = m_driver->getTexture("assets/models/menu/popup_bg.png");
+
+	// m_gui->addImage(bg, irr::core::vector2di(0, 18), true, win);
+	m_gui->addStaticText(L"Error !", irr::core::recti(150, 10, 300, 100), false, true, win)->setOverrideColor(irr::video::SColor(255, 255, 0, 0));
+	m_gui->addStaticText(std::wstring(msg.begin(), msg.end()).c_str(), irr::core::recti(25, 100, 400, 200), false, true, win)->setOverrideColor(irr::video::SColor(255, 0, 0, 0));
+}
+
 
 void Indie::Menu::loadReadyMenu()
 {

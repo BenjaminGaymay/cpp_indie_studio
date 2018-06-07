@@ -122,7 +122,7 @@ namespace Indie {
 		void loadSoundBtn();
 		void loadLocalGame();
 
-		void setSkinTransparency(irr::s32 , irr::gui::IGUISkin *);
+		void errorMessage(const std::string &, irr::gui::IGUIElement *);
 
 	public:
 		irr::gui::IGUIElement *m_root;
