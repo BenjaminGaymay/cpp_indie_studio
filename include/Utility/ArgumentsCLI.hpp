@@ -1,9 +1,9 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** ArgumentsCLI
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// ArgumentsCLI
+//
 
 #pragma once
 

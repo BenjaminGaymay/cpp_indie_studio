@@ -55,7 +55,7 @@ std::string ManageStrings::lstrip(std::string &str)
 	return str;
 }
 
-std::vector<std::string> ManageStrings::splitString(std::string &str, char separator)
+std::vector<std::string> ManageStrings::splitString(const std::string &str, char separator)
 {
 	std::string tmp;
 	std::vector<std::string> splited;
@@ -65,7 +65,7 @@ std::vector<std::string> ManageStrings::splitString(std::string &str, char separ
 			tmp += c;
 		else if (c == separator && !tmp.empty()) {
 			splited.push_back(tmp);
-			tmp = "";
+			tmp.clear();
 		}
 	}
 	if (!tmp.empty())

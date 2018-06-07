@@ -5,6 +5,7 @@
 // server
 //
 
+#include <sstream>
 #include <sys/time.h>
 #include <vector3d.h>
 #include <vector2d.h>
@@ -45,6 +46,8 @@ void Indie::Server::addClient()
 	dprintf(newClient->_fd, "%d\n", _lastId);
 	_clients.push_back(std::move(newClient));
 	_lastId += 1;
+	for (auto &i : _clients)
+		dprintf(i->_fd, "%d:%d:%d\n", GAMEINFOS, EV_UNREADY, _lastId);
 }
 
 std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
@@ -73,7 +76,6 @@ std::vector<std::vector<int>> Indie::Server::buildMap(const std::string &msg)
 		line = strtok(nullptr, ":");_map.clear();
 		lineNumberOptimization += 1;
 	}
-	free(copy);
 	return map;
 }
 
@@ -110,45 +112,88 @@ bool Indie::Server::wallMove(std::unique_ptr<Client> &client, irr::core::vector3
 	return true;
 }
 
+void Indie::Server::sendInfoToClient()
+{
+	bool sep = false;
+	if (_clients.size() > 1) {
+		std::cerr << "To many clients:" << _clients.size() << "cannot save a multiplayer game" << std::endl;
+		return;
+	}
+	std::stringstream ss;
+	auto &aClient = _clients[0];
+
+	ss << "";
+	/*for (auto &aBot : _bots) {
+		if (sep)
+			ss << '|';
+		ss << "BOT" << ":" <<
+		sep = true;
+	}*/
+	sep = false;
+	if (!_bombs.empty()) {
+		for (auto &aBomb : _bombs) {
+			if (sep)
+				ss << '|'; //will be replace by \n in client
+			//all ">" will be replace by ":" in client
+			ss << "BOMB" << ">"
+				<< aBomb->getId() << ">"
+				<< aBomb->getPos2d().X << ">"
+				<< aBomb->getPos2d().Y << ">"
+				<< aBomb->getPos3d().X << ">"
+				<< aBomb->getPos3d().Y << ">"
+				<< aBomb->getPos3d().Z << ">"
+				<< aBomb->getPower() << ">10";
+			sep = true;
+		}
+	}
+	dprintf(aClient->_fd, "%d:%d:%s\n", GAMEINFOS, INFO, ss.str().c_str());
+}
+
 void Indie::Server::comGameInfos(const ObjectsEvents &event, std::vector<std::string> &infos, std::unique_ptr<Client> &client)
 {
 	(void)infos;
 	std::cout << "Game - Event: " << event << " - \"" << _lastCmd << "\"\n";
 	switch (event) {
 		case EV_READY:
-			client->_state = PLAYING; break;
+			client->_state = PLAYING;
+			for (auto &i : _clients)
+				dprintf(i->_fd, "%d:%d:%d\n", GAMEINFOS, event, client->_id);
+			break;
 		case EV_UNREADY:
-			client->_state = WAITING; break;
+			client->_state = WAITING;
+			for (auto &i : _clients)
+				dprintf(i->_fd, "%d:%d:%d\n", GAMEINFOS, event, client->_id);
+			break;
 		case MESSAGE:
 			for (auto &i : _clients)
 				dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &_lastCmd[4]);
 			break;
+		case INFO: sendInfoToClient(); break;
 		default: break;
+	}
+}
+
+void Indie::Server::createBomb(std::unique_ptr<Client> &client, irr::core::vector2di pos2d, irr::core::vector3df pos3d, std::size_t power, std::size_t limit)
+{
+	std::size_t elem = 0;
+	for (auto bomb = _bombs.begin() ; elem < limit && bomb != _bombs.end() ; ++bomb)
+		if ((*bomb)->getId() == client->_id)
+			++elem;
+	if (elem < limit && getBlock(pos2d) == 0) {
+		_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, pos2d, pos3d, client->_id));
+		setBlock(pos2d, 3);
+		for (auto &i : _clients)
+			dprintf(i->_fd, "%s\n", _lastCmd.c_str());
 	}
 }
 
 void Indie::Server::comBomb(const ObjectsEvents &event, std::vector<std::string> &infos, std::unique_ptr<Client> &client)
 {
-	/*(void)event;
-	(void)infos;
-	(void)client;
-	std::cout << "Bomb - Event: " << event << " - \"" << _lastCmd << "\"\n";*/
+	/*std::cout << "Bomb - Event: " << event << " - \"" << _lastCmd << "\"\n";*/
 
 	switch (event) {
 		case CREATEBOMB: {
-			irr::core::vector2di position2d(std::stoi(infos[1]), std::stoi(infos[2]));
-			std::size_t power = std::stoul(infos[6]);
-			std::size_t limit = std::stoul(infos[7]);
-			std::size_t elem = 0;
-			for (auto bomb = _bombs.begin() ; elem < limit && bomb != _bombs.end() ; ++bomb)
-				if ((*bomb)->getId() == client->_id)
-					++elem;
-			if (elem < limit && getBlock(position2d) == 0) {
-				_bombs.push_back(std::make_unique<Indie::Bomb>(2, power, position2d, client->_id));
-				setBlock(position2d, 3);
-				for (auto &i : _clients)
-					dprintf(i->_fd, _lastCmd.c_str());
-			}
+			createBomb(client, {std::stoi(infos[1]), std::stoi(infos[2])}, {std::stof(infos[3]), std::stof(infos[4]), std::stof(infos[5])}, std::stoul(infos[6]), std::stoul(infos[7]));
 			break;
 		}
 		default: break;
@@ -283,10 +328,10 @@ Indie::GameState Indie::Server::checkIfStartGame()
 
 	// On donne la pos de chaque joueur
 	for (auto &client : _clients) {
-		dprintf(client->_fd, "0:0:%d:%d:%d\n", client->_id, client->pos2d.X, client->pos2d.Y);
+		dprintf(client->_fd, "%d:%d:%d:%d:%d:%f:%f:%d:%d:%d\n", PLAYER, APPEAR, client->_id, client->pos2d.X, client->pos2d.Y, 0.00f, 1.0f, 1, 1, false);
 		for (auto &pop : _clients) {
 			if (pop != client)
-				dprintf(client->_fd, "0:0:%d:%d:%d\n", pop->_id, pop->pos2d.X, pop->pos2d.Y);
+				dprintf(client->_fd, "%d:%d:%d:%d:%d:%d:%f:%f:%d:%d:%d\n", PLAYER, APPEAR, pop->_id, pop->pos2d.X, pop->pos2d.Y, client->pos2d.Y, 0.00f, 1.0f, 1, 1, false);
 		}
 	}
 	return PLAYING;
@@ -311,8 +356,8 @@ void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
 {
 	auto bonus = LAST_UP;
 	static std::default_random_engine generator;
-	static std::uniform_int_distribution<int> random(0, 4);
-	static std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP - 1);
+	std::uniform_int_distribution<int> random(0, 4);
+	std::uniform_int_distribution<int> distribution(FIRST_UP + 1, LAST_UP - 1);
 	if (random(generator) > 0)
 		bonus = static_cast<PowerUpType>(distribution(generator));
 
@@ -329,7 +374,7 @@ void Indie::Server::replaceByBonus(const irr::core::vector2di &pos)
 
 void Indie::Server::destroyEntities(std::unique_ptr<Indie::Bomb> &bomb)
 {
-	auto pos2d = bomb->getPosition();
+	auto pos2d = bomb->getPos2d();
 	auto power = static_cast<int>(bomb->getPower());
 
 	if (!hitPlayer(irr::core::vector2di(pos2d.X, pos2d.Y), bomb->getId())) {
@@ -394,7 +439,7 @@ void Indie::Server::manageBomb()
 		bomb->tictac();
 		if (bomb->getState() == Indie::Bomb::BOOM) {
 			destroyEntities(bomb);
-			_map[bomb->getPosition().Y][bomb->getPosition().X] = 0;
+			_map[bomb->getPos2d().Y][bomb->getPos2d().X] = 0;
 			_bombs.erase(elem);
 			elem = _bombs.begin();
 		} else

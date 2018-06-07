@@ -29,7 +29,8 @@ Indie::Map::Map(std::vector<std::string> &map, const float &size,
 		_max_width = (tmp.size() > _max_width ? tmp.size() : _max_width);
 	}
 	_max_height = _2dmap.size();
-	load(graphism);
+	if (graphism)
+		load(graphism);
 }
 
 Indie::Map::~Map()
@@ -118,26 +119,6 @@ void Indie::Map::load(std::unique_ptr<Indie::Graphism> &graphism)
 				        (putBlock(graphism, _2dmap[i][j], (_max_height - 1) - i, 0, (_max_width - 1) - j), irr::core::vector2di(j, i)));
 		}
 	}
-}
-
-std::map<irr::scene::ISceneNode *, irr::core::vector2di> &Indie::Map::getMap3d()
-{
-	return _3dmap;
-}
-
-std::vector<std::vector<int>> &Indie::Map::getMap2d()
-{
-	return _2dmap;
-}
-
-const float &Indie::Map::getSize() const
-{
-	return _size;
-}
-
-const float &Indie::Map::getHeight() const
-{
-	return _height;
 }
 
 // >>>> DANS UN OBJET ?

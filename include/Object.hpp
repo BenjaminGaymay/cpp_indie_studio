@@ -1,11 +1,11 @@
-/*
-** EPITECH PROJECT, 2018
-** student
-** File description:
-** 29/05/18
-*/
-#ifndef BOMBERMAN_OBJECT_HPP
-#define BOMBERMAN_OBJECT_HPP
+//
+// EPITECH PROJECT, 2018
+// student
+// File description:
+// 29/05/18
+//
+
+#pragma once
 
 #include <ISceneNode.h>
 
@@ -22,5 +22,3 @@ namespace Indie {
 		irr::scene::ISceneNode *_texture;
 	};
 }
-
-#endif //BOMBERMAN_OBJECT_HPP
