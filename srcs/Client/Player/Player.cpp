@@ -11,9 +11,9 @@
 // @brief texture of the player
 // @param node
 //
-Indie::Player::Player(const int &id, irr::scene::IAnimatedMeshSceneNode *node, s_tchat &tchat)
+Indie::Player::Player(const int &id, irr::scene::IAnimatedMeshSceneNode *node, Chat &chat)
 : _id(id), _stand(true), _player(node),
-  _speed(1.5f), _tchat(tchat), _power(1), _bombNumber(1), _wallUp(false), _alive(true), _state(EV_UNREADY)
+  _speed(1.5f), _chat(chat), _power(1), _bombNumber(1), _wallUp(false), _alive(true), _state(EV_UNREADY)
 {
 	_player->setMD2Animation(irr::scene::EMAT_STAND);
 }
@@ -36,7 +36,7 @@ irr::core::vector3df Indie::Player::move(Events &event, std::unique_ptr<Socket> 
 {
 	irr::core::vector3df nodePosition = _player->getPosition();
 
-	if (_tchat._getch)
+	if (_chat._getch)
 		return nodePosition;
 	if (event.isKeyDown(irr::KEY_KEY_Q)) {
 		if (isStanding()) _player->setMD2Animation(irr::scene::EMAT_RUN);

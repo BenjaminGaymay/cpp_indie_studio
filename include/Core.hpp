@@ -19,6 +19,8 @@
 #include "Options.hpp"
 #include "Events.hpp"
 #include "Macro.hpp"
+#include "Chat.hpp"
+#include <functional>
 
 namespace Indie {
 	class Player;
@@ -28,17 +30,6 @@ namespace Indie {
 		BLOCK,
 		INDESTRUCTIBLE_BLOCK,
 		PERSO
-	};
-
-	struct s_message {
-		std::string _string;
-		Clock _clock;
-	};
-
-	struct s_tchat {
-		bool _getch;
-		std::vector<s_message> _messages;
-		irr::gui::IGUIEditBox *_textBox;
 	};
 
 	class Core {
@@ -79,12 +70,11 @@ namespace Indie {
 		void handleMenu();
 		void menuEvents();
 		void sendMapToServer(const std::string &);
-		void manageTchat();
-		void printTchat();
 		void changeMapWithEvent(std::size_t x, std::size_t y);
 		void exitGame();
 		void standPlayer(int id);
 		void checkAppState();
+		void inWindowfoReadyPlayerOne();
 		void infoReadyPlayerOne();
 		void saveLocalGame(std::vector<std::string> &infos);
 		void loadLocalGame(const std::string &fileName);
@@ -107,7 +97,7 @@ namespace Indie {
 		Events m_event;
 		irr::video::SColor _color;
 		GameState _state;
-		s_tchat _tchat;
+		Chat _chat;
 		int _playerId;
 		editorState _editState;
 		std::pair<std::size_t, std::size_t> _counter;

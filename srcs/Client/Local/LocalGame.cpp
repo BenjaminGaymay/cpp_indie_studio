@@ -5,6 +5,8 @@
 ** LocalGame
 */
 
+#include "Core.hpp"
+#include "GameBackUp.hpp"
 #include "LocalGame.hpp"
 
 Indie::LocalGame::LocalGame()
