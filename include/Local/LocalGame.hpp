@@ -13,8 +13,16 @@ namespace Indie
 	public:
 		LocalGame();
 		~LocalGame();
+		void init(irr::IrrlichtDevice *);
+		void storeInformations();
 
-	protected:
 	private:
+		std::size_t m_nbAi;
+		std::size_t m_nbPlayers;
+		std::string m_mapName;
+
+		irr::IrrlichtDevice *m_device;
+		irr::gui::IGUIEnvironment *m_gui;
+		irr::scene::ISceneManager *m_sceneManager;
 	};
 }
