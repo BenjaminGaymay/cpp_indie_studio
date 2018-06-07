@@ -14,6 +14,7 @@ void Indie::Core::loadLocalGame(const std::string &fileName)
 
 	auto content = backup.openFile(fileName);
 	std::vector<std::string> object;
+
 	for (auto elem = content.begin() ; elem != content.end() ; ++elem) {
 		auto line = *elem;
 		if (line.substr(0, 3) == "MAP") {
@@ -25,10 +26,8 @@ void Indie::Core::loadLocalGame(const std::string &fileName)
 		}
 
 	}
-	if (content.empty() || object.empty()) { //if map is empty or if any player on map...
+	if (content.empty() || object.empty()) //if map is empty or if any player on map...
 		throw std::logic_error("Corrupted BackUp");
-	}
-
 	std::string map;
 	bool sep = false;
 	for (auto &row : content) {
@@ -38,7 +37,6 @@ void Indie::Core::loadLocalGame(const std::string &fileName)
 		sep = true;
 	}
 	_socket->sendInfos(MAP, APPEAR, map); // normalement le serv va sauvegarder puis remplacer les 10 par des 00;
-
 	for (const auto &line : object) {
 		std::string part = line.substr(0, line.find(':'));
 		if (part == "BOMB") {
