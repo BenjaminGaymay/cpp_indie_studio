@@ -163,7 +163,7 @@ void Indie::Core::addPlayer(int id, const irr::core::vector2di &pos2d)
 	auto pos3d = _mapper->get3dBlock(pos2d)->getPosition();
 
 	std::cout << pos3d.X << ":" << pos3d.Y << ":" << pos3d.Z << std::endl;
-	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, static_cast<irr::scene::IAnimatedMeshSceneNode *>(_graphism->createTexture(*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true)), _tchat);
+	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, static_cast<irr::scene::IAnimatedMeshSceneNode *>(_graphism->createTexture(*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true)), _chat);
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
 	newPlayer->setSpeed(1);
 	newPlayer->setPos2d(pos2d);
@@ -216,10 +216,10 @@ void Indie::Core::serverMessage(const std::vector<std::string> &message)
 	for (auto &line : message)
 		msg += line + ":";
 	msg[msg.size() - 1] = '\0';
-	_tchat._messages.push_back({msg, Clock()});
+	_chat._messages.push_back({msg, Clock()});
 
-	if (_tchat._messages.size() > 20)
-	 	_tchat._messages.erase(_tchat._messages.begin(), _tchat._messages.end() - 20);
+	if (_chat._messages.size() > 20)
+	 	_chat._messages.erase(_chat._messages.begin(), _chat._messages.end() - 20);
 }
 
 void Indie::Core::readServerInformations(std::vector<std::string> servSend)

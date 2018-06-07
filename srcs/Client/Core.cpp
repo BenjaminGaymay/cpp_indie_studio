@@ -41,8 +41,8 @@ void Indie::Core::drawCaption()
 
 void Indie::Core::processEvents()
 {
-	if (_tchat._getch)
-		manageTchat();
+	if (_chat._getch)
+		_chat.manageTchat(m_event, _socket);
 	else {
 		if (m_event.isKeyDown(irr::KEY_ESCAPE)) {
 			m_event.setKeyUp(irr::KEY_ESCAPE);
@@ -55,10 +55,10 @@ void Indie::Core::processEvents()
 		if (m_event.isKeyDown(irr::KEY_RETURN)) {
 			m_event.setKeyUp(irr::KEY_RETURN);
 			if (_socket) {
-				_tchat._getch = true;
-				_tchat._textBox->setVisible(true);
-				m_core.m_gui->setFocus(_tchat._textBox);
-				_tchat._textBox->setText(L"");
+				_chat._getch = true;
+				_chat._textBox->setVisible(true);
+				m_core.m_gui->setFocus(_chat._textBox);
+				_chat._textBox->setText(L"");
 			}
 		}
 	}
@@ -132,13 +132,11 @@ void Indie::Core::exitGame()
 	_playerObjects.clear();
 	_socket->closeSocket();
 	_socket.release();
-	_tchat._messages.clear();
-	if (_tchat._textBox->isVisible())
-		_tchat._textBox->setVisible(false);
+	_chat._messages.clear();
+	if (_chat._textBox->isVisible())
+		_chat._textBox->setVisible(false);
 	_playerId = -1;
 	_socket = nullptr;
-	_tchat._getch = false;
-	_tchat._messages.empty();
 	_state = NOTCONNECTED;
 	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
 	m_core.m_device->getCursorControl()->setVisible(true);
@@ -155,9 +153,9 @@ void Indie::Core::run()
 	if (m_opts.getSplashScreen())
 		m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
-	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 1020, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
-	_tchat._textBox->setMax(40);
-	_tchat._textBox->setVisible(false);
+	_chat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 1020, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
+	_chat._textBox->setMax(40);
+	_chat._textBox->setVisible(false);
 
 	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
 	m_core.m_device->getCursorControl()->setVisible(true);
@@ -167,7 +165,7 @@ void Indie::Core::run()
 		checkAppContext();
 		checkAppState();
 		m_core.m_gui->drawAll();
-		printTchat();
+		_chat.printTchat(m_core, m_opts);
 		m_core.m_driver->endScene();
 		drawCaption();
 	}
@@ -249,5 +247,5 @@ void Indie::Core::init(Options &opt)
 	_state = NOTCONNECTED;
 	_playerId = -1;
 	_socket = nullptr;
-	_tchat._getch = false;
+	_chat._getch = false;
 }
