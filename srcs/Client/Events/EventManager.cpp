@@ -1,10 +1,9 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** EventManager
-*/
-
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// EventManager
+//
 
 #include "EventManager.hpp"
 #include "Core.hpp"
@@ -125,7 +124,6 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 						m_core->m_menu.m_roomC->setVisible(true);
 					break;
 				case GUI_ID_PLAY_CLIENT:
-					//m_core->m_state = CONNECT;
 					m_core->m_menu.m_join->setVisible(true);
 					m_core->m_menu.m_play->setVisible(false);
 					break;
