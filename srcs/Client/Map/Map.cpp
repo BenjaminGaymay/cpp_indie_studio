@@ -18,7 +18,7 @@ Indie::Map::Map(std::vector<std::string> &map, const float &size,
  	_max_width = 0;
  	_size = size;
  	_height = y;
- 	clear3dMap();
+ 	clear3dMap(graphism);
  	clear2dMap();
 	for (auto &line : map) {
 		std::vector<int> tmp;
@@ -36,8 +36,18 @@ Indie::Map::Map(std::vector<std::string> &map, const float &size,
 Indie::Map::~Map()
 {}
 
-void Indie::Map::clear3dMap()
+void Indie::Map::clear3dMap(std::unique_ptr<Graphism> &graphism)
 {
+	if (graphism) {
+		for (auto block : graphism->getBonus())
+			if (block.getTexture())
+				block.getTexture()->remove();
+		graphism->getBonus().clear();
+		for (auto block : graphism->getBombs())
+			if (block.getTexture())
+				block.getTexture()->remove();
+		graphism->getBombs().clear();
+	}
 	for (auto &block : _3dmap) {
 		if (block.first)
 			block.first->remove();
@@ -63,7 +73,7 @@ void Indie::Map::newMap(const std::string &mapPath, const float &size,
  	_max_width = 0;
  	_size = size;
  	_height = y;
- 	clear3dMap();
+ 	clear3dMap(graphism);
  	clear2dMap();
 	initMap(mapPath);
 	load(graphism);

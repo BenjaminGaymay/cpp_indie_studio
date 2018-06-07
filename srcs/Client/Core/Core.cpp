@@ -127,7 +127,7 @@ void Indie::Core::exitGame()
 		dprintf(_socket->getFd(), "%d:%d:%d\n", PLAYER, LEAVE, _playerObjects[0]->getId());
 	}
 	_readyPlayers.clear();
-	_mapper->clear3dMap();
+	_mapper->clear3dMap(_graphism);
 	_mapper.release();
 	_playerObjects.clear();
 	_socket->closeSocket();
@@ -216,7 +216,7 @@ void Indie::Core::checkAppState()
 		case MAPPING:
 			_graphism->clearNode();
 			if (_mapper) {
-				_mapper->clear3dMap();
+				_mapper->clear3dMap(_graphism);
 				_mapper->clear2dMap();
 			}
 			editMap();
