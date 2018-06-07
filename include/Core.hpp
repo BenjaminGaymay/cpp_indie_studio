@@ -20,6 +20,7 @@
 #include "Events.hpp"
 #include "Macro.hpp"
 #include "Chat.hpp"
+#include <functional>
 
 namespace Indie {
 	class Player;

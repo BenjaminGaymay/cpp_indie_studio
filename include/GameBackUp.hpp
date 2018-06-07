@@ -9,6 +9,7 @@
 #include <fstream>
 #include <ctime>
 #include <iomanip>
+#include "Player.hpp"
 
 namespace Indie {
 	class GameBackUp {

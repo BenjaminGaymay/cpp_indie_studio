@@ -41,3 +41,15 @@ void Indie::Chat::printTchat(Window &m_core, Options &m_opts)
 	}
 }
 
+void Indie::Core::serverMessage(const std::vector<std::string> &message)
+{
+	std::string msg;
+
+	for (auto &line : message)
+		msg += line + ":";
+	msg[msg.size() - 1] = '\0';
+	_chat._messages.push_back({msg, Clock()});
+
+	if (_chat._messages.size() > 20)
+	 	_chat._messages.erase(_chat._messages.begin(), _chat._messages.end() - 20);
+}
