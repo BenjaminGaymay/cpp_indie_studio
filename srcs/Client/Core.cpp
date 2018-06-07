@@ -150,7 +150,7 @@ void Indie::Core::run()
 	if (m_opts.getMusic())
 		music->setVolume(0.3);
 	else
-		music->setVolume(0);
+		_engine->setSoundVolume(0);
 
 	if (m_opts.getSplashScreen())
 		m_splash.display(m_core.m_device, m_event);
