@@ -54,7 +54,7 @@ namespace Indie {
 		void dropBombEvent(irr::core::vector3df &pos);
 		void comPlayer(const ObjectsEvents &event, std::vector<std::string> &);
 		void comBomb(const ObjectsEvents &event, std::vector<std::string> &);
-		void addPlayer(int, const irr::core::vector2di &);
+		void addPlayer(const int &id, const irr::core::vector2di &pos2d, const float &rotation, const float &speed, const std::size_t &power, const std::size_t &bombNumber, const bool &wallUp);
 		void removePlayer(int, const ObjectsEvents &event);
 		void movePlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
 		void dropBomb(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power);
@@ -77,6 +77,7 @@ namespace Indie {
 		void inWindowfoReadyPlayerOne();
 		void infoReadyPlayerOne();
 		void saveLocalGame(std::vector<std::string> &infos);
+		void loadLocalGame(const std::string &fileName);
 
 	public:
 		int _lastFps;
