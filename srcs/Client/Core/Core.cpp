@@ -144,7 +144,8 @@ void Indie::Core::exitGame()
 void Indie::Core::run()
 {
 	irrklang::ISound* music = _engine->play2D("music/main.wav", true, false, true);
-	music->setVolume(m_opts.getMusic() ? 0.3 : 0);
+	m_opts.getMusic() ? music->setVolume(0.3) : _engine->setSoundVolume(0);
+
 	if (m_opts.getSplashScreen())
 		m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
@@ -170,14 +171,14 @@ void Indie::Core::run()
 void Indie::Core::infoReadyPlayerOne()
 {
 	std::string msg;
-	int y = 0;
+	int y = m_opts.getHeight() / 2 - _readyPlayers.size() * 20;
+
 	for (auto &aReadyPlayer : _readyPlayers) {
 		msg = (aReadyPlayer.second == EV_READY ? ":READY" : ":UNREADY");
-		m_core.m_font->draw(
-				irr::core::stringw((std::to_string(aReadyPlayer.first) + msg).c_str()),
-				irr::core::rect<irr::s32>(m_opts.getWidth() - 250, y, 0, 0),
-				irr::video::SColor(255, 255, 255, 255));
-		y += 30;
+		m_core.m_gui->addStaticText(irr::core::stringw((std::to_string(aReadyPlayer.first) + msg).c_str()).c_str(),
+			irr::core::recti(m_opts.getWidth() - 250, y, m_opts.getWidth(), y + 50), false, true, m_menu.m_roomS, -1, true)
+			->setOverrideColor(irr::video::SColor(255, 200, 100, 150));
+		y += 40;
 	}
 }
 
