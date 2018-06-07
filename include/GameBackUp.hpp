@@ -1,9 +1,10 @@
-/*
-** EPITECH PROJECT, 2018
-** student
-** File description:
-** 06/06/18
-*/
+//
+// EPITECH PROJECT, 2018
+// student
+// File description:
+// 06/06/18
+//
+
 #pragma once
 
 #include <vector>

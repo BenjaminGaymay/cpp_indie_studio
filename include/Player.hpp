@@ -5,8 +5,7 @@
 // 13/05/18
 //
 
-#ifndef BOMBERMAN_PLAYER_HPP
-#define BOMBERMAN_PLAYER_HPP
+#pragma once
 
 #include "Core.hpp"
 
@@ -54,5 +53,3 @@ namespace Indie {
 	protected:
 	};
 }
-
-#endif //BOMBERMAN_PLAYER_HPP
