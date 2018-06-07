@@ -7,6 +7,8 @@
 #pragma once
 
 #include <fstream>
+#include <ctime>
+#include <iomanip>
 
 namespace Indie {
 	class GameBackUp {
@@ -19,10 +21,24 @@ namespace Indie {
 			if (_file.is_open())
 				_file.close();
 		}
+		std::vector<std::string> openFile(const std::string &fileName)
+		{
+			std::string str;
+			std::vector<std::string> content;
+			std::fstream file(_gamePath + fileName);
+
+			if (!file.is_open())
+				throw std::logic_error("GameBackUp: File not found.");
+			while (std::getline(file, str)) {
+				file >> str;
+				content.emplace_back(str);
+			}
+			return content;
+		}
 		std::fstream &getFileEditor() { return _file; };
 		bool createFile()
 		{
-			std::string fileName = "games/game-";
+			std::string fileName = _gamePath + "game-";
 			auto t = std::time(nullptr);
 			auto tm = *std::localtime(&t);
 			std::ostringstream oss;
@@ -70,5 +86,6 @@ namespace Indie {
 		}
 	private:
 		std::fstream _file;
+		const std::string _gamePath = "games/";
 	};
 }
