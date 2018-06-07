@@ -11,7 +11,11 @@
 void Indie::Core::comMap(const ObjectsEvents &event, std::vector<std::string> &infos)
 {
 	switch (event) {
-		case APPEAR: _mapper = std::make_unique<Map>(infos, 20.0f, 100.0f, _graphism); break;
+		case APPEAR: {
+			std::unique_ptr<Map> map(std::make_unique<Map>(infos, 20.0f, 100.0f, _graphism));
+			_game->setMapper(std::move(map));
+			break;
+		}
 		case DESTROYBLOCK: destroyBlock(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1]))); break;
 		case CREATEBLOCK: createBlock(static_cast<PowerUpType>(std::stoi(infos[0])), irr::core::vector2di(std::stoi(infos[1]), std::stoi(infos[2]))); break;
 		case TAKEBONUS: takeBonus(irr::core::vector2di(std::stoi(infos[0]), std::stoi(infos[1])), static_cast<PowerUpType >(std::stoi(infos[2]))); break;
@@ -29,38 +33,29 @@ void Indie::Core::takeBonus(const irr::core::vector2di &pos, const PowerUpType &
 		case WALLPASS_UP : _playerObjects[0]->setWallUp(true) ; std::cerr << "WALLUP" << std::endl; break ;
 		default: std::cerr << "DEFAULT:" << bonus << std::endl; break ;
 	}
-	findAndDestroyEntity(pos);
+	_game->findAndDestroyEntity(pos);
 }
 
 void Indie::Core::createBlock(const Indie::PowerUpType &bonus, const irr::core::vector2di &pos)
 {
+	auto &mapper = _game->getMapperEdit();
+	
 	destroyBlock(pos);
-	auto block = _mapper->get3dBlock(pos);
+	auto block = mapper->get3dBlock(pos);
 	auto bonusBlock = _graphism->createTexture(*_graphism->getTexture(bonus), block->getPosition(), {0, 0, 0}, {2, 2 , 2}, true);
-	_graphism->resizeNode(bonusBlock, _mapper->getSize());
-	_graphism->getBonus().emplace_back(pos, bonusBlock);
-}
-
-bool Indie::Core::findAndDestroyEntity(const irr::core::vector2di &target)
-{
-	for (auto elem = _graphism->getBonus().begin() ; elem != _graphism->getBonus().end() ; ++elem) {
-		auto &bonus = *elem;
-		if (bonus.getPosition2d() == target) {
-			bonus.getTexture()->remove();
-			_graphism->getBonus().erase(elem);
-			return true;
-		}
-	};
-	return false;
+	_graphism->resizeNode(bonusBlock, mapper->getSize());
+	_game->getBonus().emplace_back(pos, bonusBlock);
 }
 
 void Indie::Core::destroyBlock(const irr::core::vector2di &target)
 {
-	auto &map = _mapper->getMap2d();
+	auto &mapper = _game->getMapperEdit();
+	auto &map = mapper->getMap2d();
+
 	map[target.Y][target.X] = 0;
-	if (findAndDestroyEntity(target))
+	if (_game->findAndDestroyEntity(target))
 		return;
-	auto block = _mapper->get3dBlock(target);
+	auto block = mapper->get3dBlock(target);
 	block->setVisible(false);
 	block->setName("");
 }

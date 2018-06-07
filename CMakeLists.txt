@@ -5,15 +5,13 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_C_STANDARD 11)
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-include(library)
 
 if (APPLE)
     message("Apple not yet supported")
 elseif (UNIX)
     message("Linux supported")
     set(STANDARD_UNIX_CXX_FLAGS "-Wall -Wextra")
-    set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g3 ${STANDARD_UNIX_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g3 ${STANDARD_UNIX_CXX_FLAGS}")
 
     file(GLOB_RECURSE INCLUDES ${CMAKE_SOURCE_DIR}/include/*.hpp)
     file(GLOB_RECURSE SRCS_C ${CMAKE_SOURCE_DIR}/srcs/Client/*.cpp)
@@ -25,9 +23,10 @@ elseif (UNIX)
             ${SRCS_SHARED}
             ${SRCS_C})
 
-#[[    add_executable(server
+    add_executable(server
+            ${INCLUDES}
             ${SRCS_S}
-            ${SRCS_SHARED})]]
+            ${SRCS_SHARED})
 
 
     add_library(irrlicht STATIC IMPORTED)
@@ -35,16 +34,16 @@ elseif (UNIX)
     target_link_libraries(${PROJECT_NAME} /usr/lib/x86_64-linux-gnu/libX11.so /usr/lib/x86_64-linux-gnu/libXxf86vm.so.1)
     target_link_libraries(${PROJECT_NAME} irrlicht GL pthread) #IRRLICHT 3D
 
-    #[[target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpFlac.so)
-    target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpMP3.so)]]
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpFlac.so)
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_HOME_DIRECTORY}/lib/libIkpMP3.so)
     target_link_libraries(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/lib/libIrrKlang.so) #MUSIC IRRKLANG
 
 
-    target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE
+    include_directories(SYSTEM PRIVATE
             lib/irrklang/include)
-    target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE
+    include_directories(SYSTEM PRIVATE
             lib/irrlicht/include)
-    target_include_directories(${PROJECT_NAME} PUBLIC
+    include_directories(PUBLIC
             ${CMAKE_SOURCE_DIR}/include
             ${CMAKE_SOURCE_DIR}/include/GUI
             ${CMAKE_SOURCE_DIR}/include/Events

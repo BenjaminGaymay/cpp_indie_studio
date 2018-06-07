@@ -113,36 +113,40 @@ void Indie::Core::writeInFile(std::string file, std::vector<std::vector<int>> ma
 
 void Indie::Core::eraseTopandBot()
 {
-	bool a = (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]));
+	auto &mapper = _game->getMapperEdit();
+	
+	bool a = (std::find(std::begin(mapper->getMap2d()[0]), std::end(mapper->getMap2d()[0]), 1) != std::end(mapper->getMap2d()[0]));
 	while (a == 0) {
-		_mapper->getMap2d().erase(_mapper->getMap2d().begin());
-		a = (std::find(std::begin(_mapper->getMap2d()[0]), std::end(_mapper->getMap2d()[0]), 1) != std::end(_mapper->getMap2d()[0]));
+		mapper->getMap2d().erase(mapper->getMap2d().begin());
+		a = (std::find(std::begin(mapper->getMap2d()[0]), std::end(mapper->getMap2d()[0]), 1) != std::end(mapper->getMap2d()[0]));
 	}
-	int i = _mapper->getMap2d().size() - 1;
-	a = (std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i]));
+	int i = mapper->getMap2d().size() - 1;
+	a = (std::find(std::begin(mapper->getMap2d()[i]), std::end(mapper->getMap2d()[i]), 1) != std::end(mapper->getMap2d()[i]));
 	while (a == 0) {
-		_mapper->getMap2d().erase(_mapper->getMap2d().end());
-		a = std::find(std::begin(_mapper->getMap2d()[i]), std::end(_mapper->getMap2d()[i]), 1) != std::end(_mapper->getMap2d()[i]);
+		mapper->getMap2d().erase(mapper->getMap2d().end());
+		a = std::find(std::begin(mapper->getMap2d()[i]), std::end(mapper->getMap2d()[i]), 1) != std::end(mapper->getMap2d()[i]);
 		--i;
 	}
 }
 
 void Indie::Core::eraseLeftandRight()
 {
-	std::size_t min = _mapper->getMap2d()[0].size();
+	auto &mapper = _game->getMapperEdit();
+	
+	std::size_t min = mapper->getMap2d()[0].size();
 	std::size_t max = 0;
 
-	for (std::size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
+	for (std::size_t i = 0; i < mapper->getMap2d().size(); ++i) {
 		// calc min lenght
-		for (std::size_t j = 0; j < _mapper->getMap2d()[i].size(); ++j) {
-			if (_mapper->getMap2d()[i][j] == 1 && min > j) {
+		for (std::size_t j = 0; j < mapper->getMap2d()[i].size(); ++j) {
+			if (mapper->getMap2d()[i][j] == 1 && min > j) {
 				min = j;
 				break;
 			}
 		}
 		// calc max lenght
-		for (std::size_t j = _mapper->getMap2d()[i].size() - 1; j > 0; --j) {
-			if (_mapper->getMap2d()[i][j] == 1 && max < j) {
+		for (std::size_t j = mapper->getMap2d()[i].size() - 1; j > 0; --j) {
+			if (mapper->getMap2d()[i][j] == 1 && max < j) {
 				max = j + 1;
 				break;
 			}
@@ -150,18 +154,20 @@ void Indie::Core::eraseLeftandRight()
 	}
 	if (min == 25 || max == 25)
 		return ;
-	for (std::size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
-		_mapper->getMap2d()[i].erase(_mapper->getMap2d()[i].begin() + max, _mapper->getMap2d()[i].end());
-		_mapper->getMap2d()[i].erase(_mapper->getMap2d()[i].begin(), _mapper->getMap2d()[i].begin() + min);
+	for (std::size_t i = 0; i < mapper->getMap2d().size(); ++i) {
+		mapper->getMap2d()[i].erase(mapper->getMap2d()[i].begin() + max, mapper->getMap2d()[i].end());
+		mapper->getMap2d()[i].erase(mapper->getMap2d()[i].begin(), mapper->getMap2d()[i].begin() + min);
 	}
 }
 
 void Indie::Core::cleanMap()
 {
+	auto &mapper = _game->getMapperEdit();
+	
 	int is_empty = 0;
-	for (std::size_t i = 0; i < _mapper->getMap2d().size(); ++i) {
-		for (std::size_t j = 0; j < _mapper->getMap2d()[i].size(); ++j)
-			if (_mapper->getMap2d()[i][j] != 0)
+	for (std::size_t i = 0; i < mapper->getMap2d().size(); ++i) {
+		for (std::size_t j = 0; j < mapper->getMap2d()[i].size(); ++j)
+			if (mapper->getMap2d()[i][j] != 0)
 				is_empty += 1;
 		if (is_empty > 0)
 			break;
@@ -174,42 +180,46 @@ void Indie::Core::cleanMap()
 
 void Indie::Core::changeMapWithEvent(std::size_t x, std::size_t y)
 {
+	auto &mapper = _game->getMapperEdit();
+
 	//BLOCKS
-	if (_editState == BLOCK && _counter.first > 0 && _mapper->getMap2d()[y][x] != 10 && _mapper->getMap2d()[y][x] != 8) {
+	if (_editState == BLOCK && _counter.first > 0 && mapper->getMap2d()[y][x] != 10 && mapper->getMap2d()[y][x] != 8) {
 		(_editState == BLOCK ? (_counter.first -= (_counter.first == 0 ? 0 : 1)) : (_counter.second -= (_counter.second == 0 ? 0 : 1)));
-		_counter.first += (_mapper->getMap2d()[y][x] == 1 ? 2 : 0);
-		_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 1 ? 0 : 1);
+		_counter.first += (mapper->getMap2d()[y][x] == 1 ? 2 : 0);
+		mapper->getMap2d()[y][x] = (mapper->getMap2d()[y][x] == 1 ? 0 : 1);
 	}
 	//INDESTRUCTIBLE_BLOCK
-	else if (_editState == INDESTRUCTIBLE_BLOCK && _counter.first > 0 && _mapper->getMap2d()[y][x] != 10 && _mapper->getMap2d()[y][x] != 1) {
+	else if (_editState == INDESTRUCTIBLE_BLOCK && _counter.first > 0 && mapper->getMap2d()[y][x] != 10 && mapper->getMap2d()[y][x] != 1) {
 		(_editState == INDESTRUCTIBLE_BLOCK ? (_counter.first -= (_counter.first == 0 ? 0 : 1)) : (_counter.second -= (_counter.second == 0 ? 0 : 1)));
-		_counter.first += (_mapper->getMap2d()[y][x] == 8 ? 2 : 0);
-		_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 8 ? 0 : 8);
+		_counter.first += (mapper->getMap2d()[y][x] == 8 ? 2 : 0);
+		mapper->getMap2d()[y][x] = (mapper->getMap2d()[y][x] == 8 ? 0 : 8);
 	}
 	//PERSO
-	else if (_editState == PERSO && _counter.second > 0 && _mapper->getMap2d()[y][x] != 1) {
+	else if (_editState == PERSO && _counter.second > 0 && mapper->getMap2d()[y][x] != 1) {
 		(_editState == BLOCK ? (_counter.first -= (_counter.first == 0 ? 0 : 1)) : (_counter.second -= (_counter.second == 0 ? 0 : 1)));
-		_counter.second += (_mapper->getMap2d()[y][x] == 10 ? 2 : 0);
-		_mapper->getMap2d()[y][x] = (_mapper->getMap2d()[y][x] == 10 ? 0 : 10);
+		_counter.second += (mapper->getMap2d()[y][x] == 10 ? 2 : 0);
+		mapper->getMap2d()[y][x] = (mapper->getMap2d()[y][x] == 10 ? 0 : 10);
 	}
 	//SUPPR PERSO
-	else if (_editState == PERSO && _counter.second == 0 && _mapper->getMap2d()[y][x] == 10) {
+	else if (_editState == PERSO && _counter.second == 0 && mapper->getMap2d()[y][x] == 10) {
 		_counter.second += 1;
-		_mapper->getMap2d()[y][x] = 0;
+		mapper->getMap2d()[y][x] = 0;
 	}
-	_mapper->clear3dMap();
-	_mapper->load(_graphism);
+	_game->clear3dMap();
+	mapper->load(_graphism);
 
 }
 
 int Indie::Core::editMapEvents()
 {
+	auto &mapper = _game->getMapperEdit();
+	
 	if (m_event.isKeyDown(irr::KEY_ESCAPE))
 		m_run = false;
 	if (_counter.second < 4 && m_run == false) {
 		auto textbox = m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_MAP_NAME, true);
 		auto mapName = ManageStrings::convertWchart(textbox->getText());
-		writeInFile(std::string("assets/maps/" + mapName), _mapper->getMap2d());
+		writeInFile(std::string("assets/maps/" + mapName), mapper->getMap2d());
 		return -1;
 	} else if (m_event.MouseState.LeftButtonDown) {
 		auto x = int((m_event.MouseState.Position.X - 435) / BLOCK_SIZE);
@@ -233,25 +243,24 @@ void Indie::Core::editMap()
 
 	m_core.editMapView();
 	createZeroMap(mapName, 25, 25);
-	_mapper = std::make_unique<Map>();
-	_mapper->newMap("assets/maps/" + mapName, 20.0f, 100.0f, _graphism);
+	std::unique_ptr<Map> map(std::make_unique<Map>());
+	_game->setMapper(std::move(map));
+	auto &mapper = _game->getMapperEdit();
+	mapper->newMap("assets/maps/" + mapName, 20.0f, 100.0f, _graphism);
 
 	//SELECTION SIDE
 	_editState = BLOCK;
 	_counter = {529, 4};
 	auto block =_graphism->createTexture(*_graphism->getTexture(1), {95, 300, 270}, {0, 0, 0}, {3, 3, 3}, false);
-	_graphism->resizeNode(block, _mapper->getSize());
+	_graphism->resizeNode(block, mapper->getSize());
 	auto block2 =_graphism->createTexture(*_graphism->getTexture(8), {65, 300, 270}, {0, 0, 0}, {3, 3, 3}, false);
-	_graphism->resizeNode(block2, _mapper->getSize());
+	_graphism->resizeNode(block2, mapper->getSize());
 	auto perso =_graphism->createTexture(*_graphism->getTexture(10), {35, 300, 270}, {0, 0, 0}, {3, 3, 3}, false);
-	_graphism->resizeNode(perso, _mapper->getSize());
+	_graphism->resizeNode(perso, mapper->getSize());
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		if (editMapEvents() == -1) {
-			block->remove();
-			block2->remove();
-			perso->remove();
-			_mapper->clear3dMap();
+			_game->clear3dMap();
 			break;
 		}
 		m_core.m_driver->beginScene(true, true, _color);
@@ -269,8 +278,9 @@ void Indie::Core::editMap()
 		m_core.m_driver->endScene();
 	}
 	m_run = true;
-	_mapper->clear3dMap();
-	_mapper->clear2dMap();
+	_game->clear3dMap();
+	_game->clear2dMap();
+	block2->remove();
 	block->remove();
 	perso->remove();
 }

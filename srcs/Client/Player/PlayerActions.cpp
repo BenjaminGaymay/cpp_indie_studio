@@ -39,12 +39,17 @@ void Indie::Core::standPlayer(int id)
 
 void Indie::Core::addPlayer(const int &id, const irr::core::vector2di &pos2d, const float &rotation, const float &speed, const std::size_t &power, const std::size_t &bombNumber, const bool &wallUp)
 {
-	auto pos3d = _mapper->get3dBlock(pos2d)->getPosition();
+	auto &mapper = _game->getMapperEdit();
+	auto pos3d = mapper->get3dBlock(pos2d)->getPosition();
 
 	std::cout << pos3d.X << ":" << pos3d.Y << ":" << pos3d.Z << std::endl;
 	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, static_cast<irr::scene::IAnimatedMeshSceneNode *>(_graphism->createTexture(*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true)), _chat);
-	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
-	newPlayer->setSpeed(1);
+	_graphism->resizeNode(newPlayer->getPlayer(), mapper->getSize());
+	newPlayer->setPower(power);
+	newPlayer->setBombNumber(bombNumber);
+	newPlayer->getPlayer()->setRotation({0, rotation, 0});
+	newPlayer->setWallUp(wallUp);
+	newPlayer->setSpeed(speed);
 	newPlayer->setPos2d(pos2d);
 	_playerObjects.push_back(std::move(newPlayer));
 }
@@ -56,8 +61,10 @@ void Indie::Core::removePlayer(int id, const ObjectsEvents &event)
 			auto sound = _engine->play2D("music/suicide.wav", false, false, true);
 			sound->setVolume(2);
 		}
-		_playerObjects[0]->getPlayer()->remove();
-		_playerObjects[0]->setPlayer(nullptr);
+		if (_playerObjects[0]->getPlayer()) {
+			_playerObjects[0]->getPlayer()->remove();
+			_playerObjects[0]->setPlayer(nullptr);
+		}
 		_playerObjects[0]->setAlive(false);
 		m_state = SPEC;
 		return;
@@ -99,12 +106,13 @@ std::string floatToInt(float nb)
 
 void Indie::Core::moveEvent(irr::core::vector3df &pos)
 {
+	auto &mapper = _game->getMapperEdit();
 	irr::core::vector2di pos2d;
 	irr::core::vector3df newPos = _playerObjects[0]->move(m_event, _socket);
 
 	if (pos.X != newPos.X || pos.Y != newPos.Y || pos.Z != newPos.Z) {
 		try {
-			pos2d = _mapper->get2dBlock(newPos + _mapper->getSize() / 2);
+			pos2d = mapper->get2dBlock(newPos + mapper->getSize() / 2);
 		} catch (std::logic_error &e) {
 			return ;
 		}
@@ -122,10 +130,12 @@ void Indie::Core::moveEvent(irr::core::vector3df &pos)
 
 void Indie::Core::dropBombEvent(irr::core::vector3df &pos)
 {
+	auto &mapper = _game->getMapperEdit();
+
 	if (!m_event.isKeyDown(irr::KEY_KEY_B))
 		return ;
 	m_event.setKeyUp(irr::KEY_KEY_B);
-	irr::core::vector2di pos2d = _mapper->get2dBlock(pos + _mapper->getSize() / 2);
+	irr::core::vector2di pos2d = mapper->get2dBlock(pos + mapper->getSize() / 2);
 	_socket->sendInfos(Indie::BOMB, Indie::CREATEBOMB,
 					   std::to_string(_playerObjects[0]->getId()) + ':' +
 					   std::to_string(pos2d.X) + ':' +

@@ -20,6 +20,7 @@
 #include "Events.hpp"
 #include "Macro.hpp"
 #include "Chat.hpp"
+#include "Game.hpp"
 #include <functional>
 
 namespace Indie {
@@ -54,38 +55,35 @@ namespace Indie {
 		void dropBombEvent(irr::core::vector3df &pos);
 		void comPlayer(const ObjectsEvents &event, std::vector<std::string> &);
 		void comBomb(const ObjectsEvents &event, std::vector<std::string> &);
+		void comGameInfos(const ObjectsEvents &event, std::vector<std::string> &);
+		void comMap(const ObjectsEvents &event, std::vector<std::string> &);
 		void addPlayer(const int &id, const irr::core::vector2di &pos2d, const float &rotation, const float &speed, const std::size_t &power, const std::size_t &bombNumber, const bool &wallUp);
 		void removePlayer(int, const ObjectsEvents &event);
 		void movePlayer(int, const irr::core::vector2di &, const irr::core::vector3df &, const irr::f32 &);
+		void takeBonus(const irr::core::vector2di &pos, const PowerUpType &bonus);
 		void dropBomb(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power);
 		void createBlock(const Indie::PowerUpType &bonus, const irr::core::vector2di &pos);
-		bool findAndDestroyEntity(const irr::core::vector2di &target);
-		void takeBonus(const irr::core::vector2di &pos, const PowerUpType &bonus);
 		void destroyBlock(const irr::core::vector2di &target);
 		void destroyBomb(const irr::core::vector2di &target);
-		void comGameInfos(const ObjectsEvents &event, std::vector<std::string> &);
-		void comMap(const ObjectsEvents &event, std::vector<std::string> &);
 		void serverMessage(const std::vector<std::string> &);
 		void checkAppContext();
-		void handleMenu();
-		void menuEvents();
 		void sendMapToServer(const std::string &);
 		void changeMapWithEvent(std::size_t x, std::size_t y);
 		void exitGame();
 		void standPlayer(int id);
 		void checkAppState();
-		void inWindowfoReadyPlayerOne();
 		void infoReadyPlayerOne();
 		void saveLocalGame(std::vector<std::string> &infos);
 		void loadLocalGame(const std::string &fileName);
 
 	public:
 		int _lastFps;
+		irrklang::ISoundEngine* _engine;
+		std::unique_ptr<Game> _game;
 		std::unique_ptr<EventManager> m_evtManager;
 		std::unique_ptr<Graphism> _graphism;
 		Options m_opts;
 		Window m_core;
-		std::unique_ptr<Map> _mapper;
 		std::unique_ptr<Map> _editing;
 		bool m_run;
 		std::vector<std::unique_ptr<Player>> _playerObjects;
@@ -101,7 +99,6 @@ namespace Indie {
 		int _playerId;
 		editorState _editState;
 		std::pair<std::size_t, std::size_t> _counter;
-		irrklang::ISoundEngine* _engine;
 		irr::core::vector3df pos;
 		Clock playerClock;
 		std::map<int, ObjectsEvents> _readyPlayers;

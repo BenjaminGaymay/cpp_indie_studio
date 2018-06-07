@@ -14,7 +14,7 @@
 #include "EventManager.hpp"
 
 Indie::Core::Core()
-	:_lastFps(-1), _engine(irrklang::createIrrKlangDevice())
+	:_lastFps(-1), _engine(irrklang::createIrrKlangDevice()), _game(std::make_unique<Game>())
 {
 	if (!_engine)
 		throw std::logic_error("bha la music déconne.");
@@ -120,12 +120,14 @@ void Indie::Core::checkAppContext()
 
 void Indie::Core::exitGame()
 {
+	auto &mapper = _game->getMapperEdit();
+
 	// Y A DES TRUCS QUI SE DELETE PAS (lancer deux joueurs / quitter le serveur / lancer un serveur sur le second et jouer)
 	if (_state != NOTCONNECTED)
 		dprintf(_socket->getFd(), "%d:%d:%d\n", PLAYER, LEAVE, _playerObjects[0]->getId());
 	_readyPlayers.clear();
-	_mapper->clear3dMap();
-	_mapper.release();
+	_game->clear3dMap();
+	mapper.release();
 	_playerObjects.clear();
 	_socket->closeSocket();
 	_socket.release();
@@ -207,9 +209,9 @@ void Indie::Core::checkAppState()
 			break;
 		case MAPPING:
 			_graphism->clearNode();
-			if (_mapper) {
-				_mapper->clear3dMap();
-				_mapper->clear2dMap();
+			if (_game) {
+				_game->clear3dMap();
+				_game->clear2dMap();
 			}
 			editMap();
 			m_state = MENU;

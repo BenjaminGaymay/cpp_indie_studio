@@ -121,26 +121,6 @@ void Indie::Map::load(std::unique_ptr<Indie::Graphism> &graphism)
 	}
 }
 
-std::map<irr::scene::ISceneNode *, irr::core::vector2di> &Indie::Map::getMap3d()
-{
-	return _3dmap;
-}
-
-std::vector<std::vector<int>> &Indie::Map::getMap2d()
-{
-	return _2dmap;
-}
-
-const float &Indie::Map::getSize() const
-{
-	return _size;
-}
-
-const float &Indie::Map::getHeight() const
-{
-	return _height;
-}
-
 // >>>> DANS UN OBJET ?
 bool infequal(irr::core::vector3df one, irr::core::vector3df two)
 {
