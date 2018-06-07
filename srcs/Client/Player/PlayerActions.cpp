@@ -44,7 +44,11 @@ void Indie::Core::addPlayer(const int &id, const irr::core::vector2di &pos2d, co
 	std::cout << pos3d.X << ":" << pos3d.Y << ":" << pos3d.Z << std::endl;
 	std::unique_ptr<Player> newPlayer = std::make_unique<Player>(id, static_cast<irr::scene::IAnimatedMeshSceneNode *>(_graphism->createTexture(*_graphism->getTexture(10), pos3d, {0, 0, 0}, {2, 2, 2}, true)), _chat);
 	_graphism->resizeNode(newPlayer->getPlayer(), _mapper->getSize());
-	newPlayer->setSpeed(1);
+	newPlayer->setPower(power);
+	newPlayer->setBombNumber(bombNumber);
+	newPlayer->getPlayer()->setRotation({0, rotation, 0});
+	newPlayer->setWallUp(wallUp);
+	newPlayer->setSpeed(speed);
 	newPlayer->setPos2d(pos2d);
 	_playerObjects.push_back(std::move(newPlayer));
 }
