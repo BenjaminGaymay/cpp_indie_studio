@@ -80,6 +80,7 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 		throw std::runtime_error("Error: can't load fonts");
 	skin->setFont(m_font);
 
+	loadBackground();
 	loadMainMenu();
 	loadOptionsMenu();
 	loadMapMenu();
@@ -113,10 +114,23 @@ void Indie::Menu::loadMenu(irr::IrrlichtDevice *device, const Options &opt)
 	}
 }
 
+void Indie::Menu::loadBackground()
+{
+	auto bg = m_driver->getTexture("assets/models/menu/background.png");
+
+	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_main);
+	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_mapMenu);
+	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_local);
+	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_roomC);
+	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_roomS);
+	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_option);
+	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_play);
+	m_gui->addImage(bg, irr::core::vector2di(0, 0), true, m_join);
+
+}
+
 void Indie::Menu::loadMainMenu()
 {
-	auto image = m_driver->getTexture ("assets/models/menu/background.png");
-
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft,220,m_xRight,220 + m_height), m_main, GUI_ID_PLAY_BUTTON,
             L"Play", L"Launches the game"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft,330,m_xRight,330 + m_height), m_main, GUI_ID_MAP_BUTTON,
@@ -125,7 +139,6 @@ void Indie::Menu::loadMainMenu()
             L"Option", L"Changes options"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft,550,m_xRight,550 + m_height), m_main, GUI_ID_QUIT_BUTTON,
             L"Quit", L"Exits the program"));
-	m_gui->addImage(image, irr::core::vector2di(0, 0), true, m_main);
 }
 
 void Indie::Menu::loadReadyMenu()
@@ -224,8 +237,9 @@ void Indie::Menu::loadRoomSMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 330, m_xRight, 330 + m_height), m_roomS, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
 
-	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 20, 800, 20 + m_height), false, true, m_roomS)->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
-	m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_roomS, GUI_ID_LIST_MAP);
+	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 220, 800, 220 + m_height), false, true, m_roomS)
+		->setOverrideColor(irr::video::SColor(255, 255, 0, 255));
+	m_gui->addListBox(irr::core::recti(100, 220 + m_height / 2, 400, m_opt.getHeight() - 100), m_roomS, GUI_ID_LIST_MAP);
 	chooseMap(GUI_ID_LIST_MAP);
 }
 
@@ -257,18 +271,18 @@ void Indie::Menu::loadLocalGame()
 {
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 220, m_xRight, 220 + m_height), m_local, GUI_ID_PLAY_LOCAL, L"Play"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 330, m_xRight, 330 + m_height), m_local, GUI_ID_LOCAL_BACK, L"Back"));
-	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 20, 800, 20 + m_height), false, true, m_local)
-			->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
-	m_gui->addListBox(irr::core::recti(100, 100, 400, m_opt.getHeight() - 100), m_local, GUI_ID_LOCAL_MAPS);
+	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 220, 800, 220 + m_height), false, true, m_local)
+			->setOverrideColor(irr::video::SColor(255, 255, 0, 255));
+	m_gui->addListBox(irr::core::recti(100, 220 + m_height / 2, 400, m_opt.getHeight() - 100), m_local, GUI_ID_LOCAL_MAPS);
 	chooseMap(GUI_ID_LOCAL_MAPS);
-	m_gui->addStaticText(L"Number of player:", irr::core::recti(m_xRight + 50, 150, m_xRight + 500, 120 + m_height), false, true, m_local)
-			->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
-	auto nbPlayer = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 200, m_xRight + 400, 250), m_local, -1);
+	m_gui->addStaticText(L"Number of player:", irr::core::recti(m_xRight + 50, 220, m_xRight + 500, 220 + m_height), false, true, m_local)
+			->setOverrideColor(irr::video::SColor(255, 255, 0, 255));
+	auto nbPlayer = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 260, m_xRight + 400, 310), m_local, -1);
 	nbPlayer->addItem(L"1");
 	nbPlayer->addItem(L"2");
-	m_gui->addStaticText(L"Number of AI:", irr::core::recti(m_xRight + 50, 300, m_xRight + 500, 300 + m_height), false, true, m_local)
-			->setOverrideColor(irr::video::SColor(150, 255, 0, 255));
-	auto nbAi = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 350, m_xRight + 400, 400), m_local, -1);
+	m_gui->addStaticText(L"Number of AI:", irr::core::recti(m_xRight + 50, 350, m_xRight + 500, 350 + m_height), false, true, m_local)
+			->setOverrideColor(irr::video::SColor(255, 255, 0, 255));
+	auto nbAi = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 390, m_xRight + 400, 440), m_local, -1);
 	nbAi->addItem(L"1");
 	nbAi->addItem(L"2");
 }

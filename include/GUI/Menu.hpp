@@ -107,6 +107,7 @@ namespace Indie {
 		void loadMenu(irr::IrrlichtDevice *, const Options &);
 		void initSpriteMenu(std::vector<SpriteMenu> &);
 
+		void loadBackground();
 		void loadMainMenu();
 		void loadOptionsMenu();
 		void loadMapMenu();
