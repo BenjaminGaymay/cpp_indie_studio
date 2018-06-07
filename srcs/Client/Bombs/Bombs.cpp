@@ -22,19 +22,20 @@ void Indie::Core::comBomb(const ObjectsEvents &event, std::vector<std::string> &
 
 void Indie::Core::dropBomb(int id, const irr::core::vector2di &pos2d, const irr::core::vector3df &pos3d, const std::size_t &power)
 {
+	auto &mapper = _game->getMapperEdit();
 	(void) id;
 	(void) pos2d;
 	(void) power;
-	auto block = _mapper->get3dBlock(pos3d + _mapper->getSize() / 2);
+	auto block = mapper->get3dBlock(pos3d + mapper->getSize() / 2);
 	auto bomb = _graphism->createTexture(*_graphism->getTexture(3), block->getPosition(), {0, 0, 0}, {2, 2, 2}, true);
-	_graphism->resizeNode(bomb, _mapper->getSize());
-	_graphism->getBombs().emplace_back(pos2d, bomb);
+	_graphism->resizeNode(bomb, mapper->getSize());
+	_game->getBombs().emplace_back(pos2d, bomb);
 
 }
 
 void Indie::Core::destroyBomb(const irr::core::vector2di &target)
 {
-	auto &bombs = _graphism->getBombs();
+	auto &bombs = _game->getBombs();
 
 	for (auto elem = bombs.begin() ; elem != bombs.end() ; ++elem) {
 		auto &bomb = *elem;

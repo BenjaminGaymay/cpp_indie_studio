@@ -11,7 +11,7 @@ if (APPLE)
 elseif (UNIX)
     message("Linux supported")
     set(STANDARD_UNIX_CXX_FLAGS "-Wall -Wextra")
-    set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g3 ${STANDARD_UNIX_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g3 ${STANDARD_UNIX_CXX_FLAGS}")
 
     file(GLOB_RECURSE INCLUDES ${CMAKE_SOURCE_DIR}/include/*.hpp)
     file(GLOB_RECURSE SRCS_C ${CMAKE_SOURCE_DIR}/srcs/Client/*.cpp)
