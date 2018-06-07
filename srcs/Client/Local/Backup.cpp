@@ -51,6 +51,7 @@ void Indie::Core::loadLocalGame(const std::string &fileName)
 
 void Indie::Core::saveLocalGame(std::vector<std::string> &infos)
 {
+	auto &mapper = _game->getMapperEdit();
 	std::string gameInfo = infos[0];
 	GameBackUp backup;
 	auto &afile = backup.getFileEditor();
@@ -60,6 +61,6 @@ void Indie::Core::saveLocalGame(std::vector<std::string> &infos)
 		std::replace(gameInfo.begin(), gameInfo.end(), '|', '\n');
 		afile << gameInfo << std::endl;
 	}
-	backup.player(_playerObjects[0], _mapper);
-	backup.map(_mapper->getMap2d()); // must be every time last call
+	backup.player(_playerObjects[0], mapper);
+	backup.map(mapper->getMap2d()); // must be every time last call
 }
