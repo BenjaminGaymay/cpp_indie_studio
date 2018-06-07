@@ -7,10 +7,10 @@
 
 #include <sstream>
 #include <thread>
-#include <Player.hpp>
 #include <iomanip>
 #include <irrKlang.h>
 #include "Core.hpp"
+#include "Player.hpp"
 #include "EventManager.hpp"
 
 Indie::Core::Core()
@@ -216,7 +216,20 @@ void Indie::Core::checkAppState()
 			editMap();
 			m_state = MENU;
 		case LOCAL:
-			m_core.m_sceneManager->drawAll();
+			// j'arrive ici dès que j'appuie sur LOCAL -> PLAY
+			// faut clear les ressources 							1
+			// faut charger la map									1
+			// Communiquer avec le server							0
+			// lancer												0
+			// m_state = PLAY;										1
+
+			/*
+			1 _game->clearMaps();
+			1 _game->getMapperEdit()->newMap("assets/maps/map.txt", 20.00f, 100.00f, _graphism);
+			0
+			0
+			1 m_state = PLAY; m_core.m_sceneManager->drawAll();
+			 */
 			break;
 		default:
 			break;

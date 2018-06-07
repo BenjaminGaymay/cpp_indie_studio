@@ -39,3 +39,9 @@ void Indie::Game::clear2dMap()
 	if (_mapper)
 		_mapper->clear2dMap();
 }
+
+void Indie::Game::clearMaps()
+{
+	clear3dMap();
+	clear2dMap();
+}

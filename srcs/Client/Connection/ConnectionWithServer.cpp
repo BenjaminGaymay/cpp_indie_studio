@@ -7,9 +7,9 @@
 
 #include <fstream>
 #include <sys/stat.h>
-#include <Player.hpp>
 #include <sstream>
 #include <iomanip>
+#include "Player.hpp"
 #include "ManageStrings.hpp"
 
 void Indie::Core::readServerInformations(std::vector<std::string> servSend)

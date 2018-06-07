@@ -27,6 +27,7 @@ namespace Indie {
 		};
 		void clear2dMap();
 		void clear3dMap();
+		void clearMaps();
 	private:
 		std::unique_ptr<Map> _mapper;
 		std::vector<Indie::Object> _bombs;

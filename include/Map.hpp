@@ -17,7 +17,6 @@ namespace Indie {
 		Map(std::vector<std::string> &, const float &,
 			const float &, std::unique_ptr<Indie::Graphism> &);
 		~Map();
-		void initMap(const std::string &map);
 		void load(std::unique_ptr<Graphism> &graphism);
 		void newMap(const std::string &mapPath, const float &size, const float &y, std::unique_ptr<Graphism> &graphism);
 		irr::scene::ISceneNode *putBlock(std::unique_ptr<Graphism> &graphism, int id, int i, int mulY, int j);
@@ -33,7 +32,6 @@ namespace Indie {
 		irr::scene::ISceneNode *get3dBlock(const irr::core::vector2di &);
 		irr::scene::ISceneNode *get3dBlock(const irr::core::vector3df &pos);
 		irr::core::vector2di get2dBlock(const irr::core::vector3df &pos);
-
 	private:
 		std::size_t _max_height;
 		std::size_t _max_width;
@@ -42,5 +40,6 @@ namespace Indie {
 		std::vector<std::vector<int>> _2dmap;
 		std::map<irr::scene::ISceneNode *, irr::core::vector2di> _3dmap;
 		std::map<irr::scene::ISceneNode *, irr::core::vector2di> _3dundermap;
+		void initMap(const std::string &map);
 	};
 }

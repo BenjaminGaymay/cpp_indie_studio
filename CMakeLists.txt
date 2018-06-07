@@ -45,6 +45,7 @@ elseif (UNIX)
             lib/irrlicht/include)
     include_directories(PUBLIC
             ${CMAKE_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/include/Game
             ${CMAKE_SOURCE_DIR}/include/GUI
             ${CMAKE_SOURCE_DIR}/include/Events
             ${CMAKE_SOURCE_DIR}/include/AI
