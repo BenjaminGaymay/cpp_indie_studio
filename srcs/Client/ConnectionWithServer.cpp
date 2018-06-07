@@ -5,8 +5,29 @@
 // Multiplayer
 //
 
+#include <fstream>
+#include <sys/stat.h>
 #include <Player.hpp>
+#include <sstream>
+#include <iomanip>
+#include <GameBackUp.hpp>
 #include "ManageStrings.hpp"
+
+
+void Indie::Core::saveLocalGame(std::vector<std::string> &infos)
+{
+	std::string gameInfo = infos[0];
+	GameBackUp backup;
+	auto &afile = backup.getFileEditor();
+
+	if (!infos.empty()) {
+		std::replace(gameInfo.begin(), gameInfo.end(), '>', ':');
+		std::replace(gameInfo.begin(), gameInfo.end(), '|', '\n');
+		afile << gameInfo << std::endl;
+	}
+	backup.player(_playerObjects[0], _mapper);
+	backup.map(_mapper->getMap2d()); // must be every time last call
+}
 
 void Indie::Core::comGameInfos(const ObjectsEvents &event, std::vector<std::string> &infos)
 {
@@ -30,6 +51,7 @@ void Indie::Core::comGameInfos(const ObjectsEvents &event, std::vector<std::stri
 			_readyPlayers[id] = EV_UNREADY;
 			break;
 		}
+		case INFO: saveLocalGame(infos); break;
 		default: break;
 	}
 }

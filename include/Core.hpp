@@ -75,6 +75,7 @@ namespace Indie {
 		void checkAppState();
 		void inWindowfoReadyPlayerOne();
 		void infoReadyPlayerOne();
+		void saveLocalGame(std::vector<std::string> &infos);
 
 	public:
 		int _lastFps;
