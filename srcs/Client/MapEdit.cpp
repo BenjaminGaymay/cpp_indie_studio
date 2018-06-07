@@ -248,9 +248,6 @@ void Indie::Core::editMap()
 	while (m_core.m_device->run() && m_run) {
 		processEvents();
 		if (editMapEvents() == -1) {
-			block->remove();
-			block2->remove();
-			perso->remove();
 			_mapper->clear3dMap();
 			break;
 		}
@@ -271,6 +268,7 @@ void Indie::Core::editMap()
 	m_run = true;
 	_mapper->clear3dMap();
 	_mapper->clear2dMap();
+	block2->remove();
 	block->remove();
 	perso->remove();
 }
