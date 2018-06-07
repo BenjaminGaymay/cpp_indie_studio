@@ -1,12 +1,11 @@
-/*
-** EPITECH PROJECT, 2018
-** cpp_indie_studio
-** File description:
-** LocalGame
-*/
+//
+// EPITECH PROJECT, 2018
+// cpp_indie_studio
+// File description:
+// LocalGame
+//
 
 #pragma once
-
 
 namespace Indie
 {

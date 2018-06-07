@@ -247,7 +247,7 @@ void Indie::Menu::loadRoomSMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 330, m_xRight, 330 + m_height), m_roomS, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
 
-	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 220, 800, 220 + m_height), false, true, m_roomS)
+	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 220, 450, 220 + m_height), false, true, m_roomS)
 		->setOverrideColor(irr::video::SColor(255, 255, 0, 255));
 	m_gui->addListBox(irr::core::recti(100, 220 + m_height / 2, 400, m_opt.getHeight() - 100), m_roomS, GUI_ID_LIST_MAP);
 	chooseMap(GUI_ID_LIST_MAP);
@@ -281,7 +281,7 @@ void Indie::Menu::loadLocalGame()
 {
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 220, m_xRight, 220 + m_height), m_local, GUI_ID_PLAY_LOCAL, L"Play"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 330, m_xRight, 330 + m_height), m_local, GUI_ID_LOCAL_BACK, L"Back"));
-	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 220, 800, 220 + m_height), false, true, m_local)
+	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 220, 450, 220 + m_height), false, true, m_local)
 			->setOverrideColor(irr::video::SColor(255, 255, 0, 255));
 	m_gui->addListBox(irr::core::recti(100, 220 + m_height / 2, 400, m_opt.getHeight() - 100), m_local, GUI_ID_LOCAL_MAPS);
 	chooseMap(GUI_ID_LOCAL_MAPS);

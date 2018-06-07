@@ -41,26 +41,24 @@ void Indie::Core::drawCaption()
 
 void Indie::Core::processEvents()
 {
-	if (_tchat._getch)
-		manageTchat();
-	else {
-		if (m_event.isKeyDown(irr::KEY_ESCAPE)) {
-			m_event.setKeyUp(irr::KEY_ESCAPE);
-			if (m_state == PLAY or m_state == SPEC) {
-				m_core.m_device->getCursorControl()->setVisible(true);
-				m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
-				m_menu.m_gameOptions->setVisible(true);
-			}
+	if (_chat._getch)
+		return _chat.manageTchat(m_event, _socket);
+	if (m_event.isKeyDown(irr::KEY_ESCAPE)) {
+		m_event.setKeyUp(irr::KEY_ESCAPE);
+		if (m_state == PLAY or m_state == SPEC) {
+			m_core.m_device->getCursorControl()->setVisible(true);
+			m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
+			m_menu.m_gameOptions->setVisible(true);
 		}
-		if (m_event.isKeyDown(irr::KEY_RETURN)) {
+	}
+	if (m_event.isKeyDown(irr::KEY_RETURN)) {
 			m_event.setKeyUp(irr::KEY_RETURN);
 			if (_socket) {
-				_tchat._getch = true;
-				_tchat._textBox->setVisible(true);
-				m_core.m_gui->setFocus(_tchat._textBox);
-				_tchat._textBox->setText(L"");
+				_chat._getch = true;
+				_chat._textBox->setVisible(true);
+				m_core.m_gui->setFocus(_chat._textBox);
+				_chat._textBox->setText(L"");
 			}
-		}
 	}
 	m_evtManager->manage(_engine);
 }
@@ -75,14 +73,14 @@ void Indie::Core::checkAppContext()
 	old = m_state;
 	if (m_state == LAUNCH_SERVER && _state == NOTCONNECTED) {
 		std::thread(&Indie::Server::runServer).detach();
-		_state = WAITING;
-		oldMap = "";
-		while (1) {
+		while (true) {
 			try {
 				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Socket::CLIENT);
 				break;
 			} catch (const std::exception &e) {}
 		}
+		_state = WAITING;
+		oldMap = "";
 		_playerId = waitForId();
 	}
 	if (m_state == READY && _state == WAITING) {
@@ -123,22 +121,19 @@ void Indie::Core::checkAppContext()
 void Indie::Core::exitGame()
 {
 	// Y A DES TRUCS QUI SE DELETE PAS (lancer deux joueurs / quitter le serveur / lancer un serveur sur le second et jouer)
-	if (_state != NOTCONNECTED) {
+	if (_state != NOTCONNECTED)
 		dprintf(_socket->getFd(), "%d:%d:%d\n", PLAYER, LEAVE, _playerObjects[0]->getId());
-	}
 	_readyPlayers.clear();
 	_mapper->clear3dMap();
 	_mapper.release();
 	_playerObjects.clear();
 	_socket->closeSocket();
 	_socket.release();
-	_tchat._messages.clear();
-	if (_tchat._textBox->isVisible())
-		_tchat._textBox->setVisible(false);
+	_chat._messages.clear();
+	if (_chat._textBox->isVisible())
+		_chat._textBox->setVisible(false);
 	_playerId = -1;
 	_socket = nullptr;
-	_tchat._getch = false;
-	_tchat._messages.empty();
 	_state = NOTCONNECTED;
 	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
 	m_core.m_device->getCursorControl()->setVisible(true);
@@ -147,17 +142,13 @@ void Indie::Core::exitGame()
 void Indie::Core::run()
 {
 	irrklang::ISound* music = _engine->play2D("music/main.wav", true, false, true);
-	if (m_opts.getMusic())
-		music->setVolume(0.3);
-	else
-		_engine->setSoundVolume(0);
-
+	music->setVolume(m_opts.getMusic() ? 0.3 : 0);
 	if (m_opts.getSplashScreen())
 		m_splash.display(m_core.m_device, m_event);
 	m_menu.loadMenu(m_core.m_device, m_opts);
-	_tchat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 1020, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
-	_tchat._textBox->setMax(40);
-	_tchat._textBox->setVisible(false);
+	_chat._textBox = m_core.m_gui->addEditBox(L"", irr::core::rect<irr::s32>(50, m_opts.getHeight() - 40, 1020, m_opts.getHeight() - 10), true, m_menu.m_root, GUI_ID_TCHAT_BUTTON);
+	_chat._textBox->setMax(40);
+	_chat._textBox->setVisible(false);
 
 	m_core.getCamera().change(m_core.getSceneManager(), Camera::BASIC);
 	m_core.m_device->getCursorControl()->setVisible(true);
@@ -167,25 +158,24 @@ void Indie::Core::run()
 		checkAppContext();
 		checkAppState();
 		m_core.m_gui->drawAll();
-		printTchat();
+		_chat.printTchat(m_core, m_opts);
 		m_core.m_driver->endScene();
 		drawCaption();
 	}
-
-	music->drop(); // release music stream.
+	music->drop();
 }
 
 void Indie::Core::infoReadyPlayerOne()
 {
 	std::string msg;
-	int y = 0;
+	int y = m_opts.getHeight() / 2 - _readyPlayers.size() * 20;
+
 	for (auto &aReadyPlayer : _readyPlayers) {
 		msg = (aReadyPlayer.second == EV_READY ? ":READY" : ":UNREADY");
-		m_core.m_font->draw(
-				irr::core::stringw((std::to_string(aReadyPlayer.first) + msg).c_str()),
-				irr::core::rect<irr::s32>(m_opts.getWidth() - 250, y, 0, 0),
-				irr::video::SColor(255, 255, 255, 255));
-		y += 30;
+		m_core.m_gui->addStaticText(irr::core::stringw((std::to_string(aReadyPlayer.first) + msg).c_str()).c_str(),
+			irr::core::recti(m_opts.getWidth() - 250, y, m_opts.getWidth(), y + 50), false, true, m_menu.m_roomS, -1, true)
+			->setOverrideColor(irr::video::SColor(255, 200, 100, 150));
+		y += 40;
 	}
 }
 
@@ -253,5 +243,5 @@ void Indie::Core::init(Options &opt)
 	_state = NOTCONNECTED;
 	_playerId = -1;
 	_socket = nullptr;
-	_tchat._getch = false;
+	_chat._getch = false;
 }

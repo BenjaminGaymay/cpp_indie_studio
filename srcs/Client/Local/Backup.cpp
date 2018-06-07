@@ -1,9 +1,9 @@
-/*
-** EPITECH PROJECT, 2018
-** student
-** File description:
-** 07/06/18
-*/
+//
+// EPITECH PROJECT, 2018
+// student
+// File description:
+// 07/06/18
+//
 
 #include <GameBackUp.hpp>
 #include "Core.hpp"

@@ -5,15 +5,14 @@
 // 13/05/18
 //
 
-#ifndef BOMBERMAN_PLAYER_HPP
-#define BOMBERMAN_PLAYER_HPP
+#pragma once
 
 #include "Core.hpp"
 
 namespace Indie {
 	class Player {
 	public:
-		Player(const int &id, irr::scene::IAnimatedMeshSceneNode *, s_tchat &);
+		Player(const int &id, irr::scene::IAnimatedMeshSceneNode *, Chat &);
 		~Player();
 		irr::core::vector3df move(Events &event, std::unique_ptr<Socket> &_socket);
 		irr::scene::IAnimatedMeshSceneNode *getPlayer() { return _player; };
@@ -44,7 +43,7 @@ namespace Indie {
 		bool _stand;
 		irr::scene::IAnimatedMeshSceneNode *_player;
 		irr::f32 _speed;
-		s_tchat _tchat;
+		Chat _chat;
 		irr::core::vector2di _pos2d;
 		std::size_t _power;
 		std::size_t _bombNumber;
@@ -54,5 +53,3 @@ namespace Indie {
 	protected:
 	};
 }
-
-#endif //BOMBERMAN_PLAYER_HPP

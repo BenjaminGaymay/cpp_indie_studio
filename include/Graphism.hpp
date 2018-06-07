@@ -5,8 +5,7 @@
 // 16/05/18
 //
 
-#ifndef BOMBERMAN_GRAPHISM_HPP
-#define BOMBERMAN_GRAPHISM_HPP
+#pragma once
 
 #include <map>
 #include "Window.hpp"
@@ -18,7 +17,6 @@ namespace Indie {
 		using textureElem = std::pair<irr::io::path, irr::io::path>;
 		explicit Graphism(Window *m_core);
 		~Graphism();
-		void buildDecor();
 		void createWater(irr::core::vector3df position,  irr::core::vector3df rotation);
 		void addCollision(irr::scene::ISceneNode *object);
 		irr::f32 resizeNode(irr::scene::ISceneNode *node, const float &size);
@@ -30,7 +28,7 @@ namespace Indie {
 		void clearNode();
 	private:
 		void generateTextureMap();
-		/* FIRST object, SECOND texture */
+
 		std::map<int, textureElem> _texturesMap;
 		std::vector<irr::scene::ISceneNode *> _decors;
 		std::vector<Indie::Object> _bombs;
@@ -39,4 +37,3 @@ namespace Indie {
 	};
 }
 
-#endif //BOMBERMAN_GRAPHISM_HPP

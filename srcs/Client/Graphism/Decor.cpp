@@ -7,23 +7,13 @@
 
 #include "Graphism.hpp"
 
-//
-// @brief create texture
-// @param textures 1: obj texture 2: material texture
-// @param position
-// @param rotation
-// @param scale 2: size
-// @param collision must me true for dynamic object (player)
-// @return
-//
 irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textures, const irr::core::vector3df &position,
-															   const irr::core::vector3df &rotation, const irr::core::vector3df &scale,
-															   bool collision)
+					const irr::core::vector3df &rotation, const irr::core::vector3df &scale, bool collision)
 {
 	auto object = m_core->m_sceneManager->addAnimatedMeshSceneNode(m_core->m_sceneManager->getMesh(textures.first));
 	object->setName(textures.first);
-	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false); // remove fog
-	object->setMaterialFlag(irr::video::EMF_LIGHTING, true); // maybe map will be black
+	object->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
+	object->setMaterialFlag(irr::video::EMF_LIGHTING, true);
 	if (!textures.second.empty() && textures.second != ".") {
 		object->setMaterialTexture(0, m_core->m_driver->getTexture(textures.second));
 	} else if (textures.second.empty()){
@@ -33,16 +23,10 @@ irr::scene::ISceneNode *Indie::Graphism::createTexture(const textureElem &textur
 	object->setPosition(position);
 	object->setRotation(rotation);
 	object->setScale(scale);
-	//object->setDebugDataVisible(irr::scene::E_DEBUG_SCENE_TYPE::EDS_BBOX);
 	(void) collision;
 	return object;
 }
 
-//
-// @brief create the water under the map
-// @param position
-// @param rotation
-//
 void Indie::Graphism::createWater(irr::core::vector3df position,  irr::core::vector3df rotation)
 {
 	(void) position;
@@ -58,20 +42,6 @@ void Indie::Graphism::createWater(irr::core::vector3df position,  irr::core::vec
 	node->setName("Water");
 }
 
-//
-// @brief build decor
-//
-void Indie::Graphism::buildDecor()
-{
-	/*createWater(irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
-	createTexture(_texturesMap[52], {0, 0, 0}, {0, 0, 0}, {1, 1, 1}, false);*/
-	//createTexture(_texturesMap[51], {300, 0, 0}, {0, 0, 0}, {0.1f, 0.1f, 0.1f}, false);
-	/*_decors.push_back(createTexture(_texturesMap[52], {2000, -200, -600}, {270, 0, 0}, {50, 50, 50}, false));*/
-}
-
-//
-// @brief Database of textures
-//
 void Indie::Graphism::generateTextureMap()
 {
 	_texturesMap[0] = textureElem("assets/models/cube/Crate1.3ds", ""); //invisible block

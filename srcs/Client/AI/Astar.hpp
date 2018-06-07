@@ -1,9 +1,9 @@
-/*
-** EPITECH PROJECT, 2018
-** test
-** File description:
-** Path
-*/
+//
+// EPITECH PROJECT, 2018
+// test
+// File description:
+// Path
+//
 
 #pragma once
 
