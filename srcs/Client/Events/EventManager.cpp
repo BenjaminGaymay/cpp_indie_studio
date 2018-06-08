@@ -89,10 +89,15 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 				case GUI_ID_ROOM_BACK_BUTTON:
 					m_core->_state = NOTCONNECTED;
 					m_core->m_menu.m_play->setVisible(true);
-					if (m_core->_playerId == 0)
+					if (m_core->_playerId == 0) {
 						m_core->m_menu.m_roomS->setVisible(false);
+						dprintf(m_core->_socket->getFd(), "%d:%d\n", GAMEINFOS, EXIT);
+					}
 					else
 						m_core->m_menu.m_roomC->setVisible(false);
+					m_core->_socket->closeSocket();
+					m_core->_state == NOTCONNECTED;
+					m_core->m_state = MENU;
 					break;
 				case GUI_ID_OPTION_BACK_BUTTON:
 					m_core->m_menu.m_main->setVisible(true);

@@ -6,7 +6,6 @@
 //
 
 #include <sstream>
-#include <thread>
 #include <iomanip>
 #include <irrKlang.h>
 #include "Core.hpp"
@@ -93,6 +92,7 @@ void Indie::Core::checkAppContext()
 				oldMap = map;
 			}
 		}
+		sleep(1);
 		dprintf(_socket->getFd(), "%d:%d\n", GAMEINFOS, EV_READY);
 	}
 	if (m_state == UNREADY && _state == WAITING)
