@@ -14,7 +14,7 @@
 #include "ManageStrings.hpp"
 #include "Server.hpp"
 
-Indie::Server::Server() : _socket(Socket(5567, INADDR_ANY, Indie::Socket::SERVER)), _hostFd(_socket.getFd()), _state(WAITING)
+Indie::Server::Server() : _socket(Socket(5567, INADDR_ANY, Indie::Socket::SERVER)), _hostFd(_socket.getFd()), _state(WAITING), _continue(true)
 {
 	if (_hostFd == -1)
 		throw std::runtime_error("Error while creating server socket");
@@ -169,6 +169,7 @@ void Indie::Server::comGameInfos(const ObjectsEvents &event, std::vector<std::st
 				dprintf(i->_fd, "1:4:%s: %s", client->_name.c_str(), &_lastCmd[4]);
 			break;
 		case INFO: sendInfoToClient(); break;
+		case EXIT: _continue = false; break;
 		default: break;
 	}
 }
@@ -455,7 +456,7 @@ void Indie::Server::start()
 	_objectsFct.push_back(&Indie::Server::comMap);
 	_objectsFct.push_back(&Indie::Server::comBomb);
 	_lastId = 0;
-	while (true) {
+	while (_continue) {
 		manageBomb();
 		if (_state == WAITING)
 			_state = checkIfStartGame();

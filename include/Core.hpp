@@ -8,6 +8,7 @@
 #pragma once
 
 #include <vector>
+#include <thread>
 #include <map>
 #include <ik_ISoundEngine.h>
 #include "Window.hpp"
