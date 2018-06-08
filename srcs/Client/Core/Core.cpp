@@ -83,17 +83,21 @@ void Indie::Core::checkAppContext()
 		_playerId = waitForId();
 	}
 	if (m_state == READY && _state == WAITING) {
+		auto name = ManageStrings::convertWchart(m_core.m_gui->getRootGUIElement()->getElementFromId(_playerId == 0 ? GUI_ID_HOST_NAME : GUI_ID_CLIENT_NAME, true)->getText());
+
 		if (_playerId == 0) {
-			irr::gui::IGUIListBox *list = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_LIST_MAP, true));
-			auto map = ManageStrings::convertWchart(list->getListItem(list->getSelected()));
+			irr::gui::IGUIListBox *mapList = static_cast<irr::gui::IGUIListBox*>(m_core.m_gui->getRootGUIElement()->getElementFromId(GUI_ID_LIST_MAP, true));
+			auto map = ManageStrings::convertWchart(mapList->getListItem(mapList->getSelected()));
 
 			if (map != oldMap) {
 				sendMapToServer(std::string("assets/maps/" + map));
 				oldMap = map;
 			}
+
 		}
 		sleep(1);
 		dprintf(_socket->getFd(), "%d:%d\n", GAMEINFOS, EV_READY);
+		dprintf(_socket->getFd(), "%d:%d:%s\n", GAMEINFOS, NICK, name.c_str());
 	}
 	if (m_state == UNREADY && _state == WAITING)
 		dprintf(_socket->getFd(), "%d:%d\n", GAMEINFOS, EV_UNREADY);
@@ -143,7 +147,7 @@ void Indie::Core::checkAppContext()
 		sleep(2);
 		dprintf(_socket->getFd(), "%d:%d\n", GAMEINFOS, EV_READY);
 		/*1*/
-		m_core.m_sceneManager->drawAll();
+		//m_core.m_sceneManager->drawAll();
 	}
 }
 

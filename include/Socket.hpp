@@ -47,7 +47,8 @@ namespace Indie {
 		STAND,
 		LEAVE,
 		INFO,
-		EXIT
+		EXIT,
+		NICK
 	};
 
 	class Socket {

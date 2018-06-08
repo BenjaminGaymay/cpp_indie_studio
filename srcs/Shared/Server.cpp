@@ -170,6 +170,7 @@ void Indie::Server::comGameInfos(const ObjectsEvents &event, std::vector<std::st
 			break;
 		case INFO: sendInfoToClient(); break;
 		case EXIT: _continue = false; break;
+		case NICK: client->_name = infos[0]; break;
 		default: break;
 	}
 }
@@ -320,6 +321,7 @@ Indie::GameState Indie::Server::checkIfStartGame()
 		if (client->_state == WAITING)
 			return WAITING;
 	}
+	std::cerr << "PRET A LANCER\n";
 	for (auto &client : _clients) {
 		dprintf(client->_fd, "%s\n", _mapMsg.c_str()); // ENVOI DE LA CARTE
 		dprintf(client->_fd, "1:3\n"); // CODE POUR GAME START

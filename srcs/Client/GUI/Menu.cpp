@@ -247,6 +247,9 @@ void Indie::Menu::loadRoomSMenu()
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 330, m_xRight, 330 + m_height), m_roomS, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
 
+	auto pseudo = m_gui->addEditBox(L"Chose a name", irr::core::rect<irr::s32>(m_xLeft,90,m_xRight,90 + m_height - 10), true, m_roomS, GUI_ID_HOST_NAME);
+	pseudo->setMax(15);
+	pseudo->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
 	m_gui->addStaticText(L"Select your map:", irr::core::recti(100, 220, 450, 220 + m_height), false, true, m_roomS)
 		->setOverrideColor(irr::video::SColor(255, 255, 0, 255));
 	m_gui->addListBox(irr::core::recti(100, 220 + m_height / 2, 400, m_opt.getHeight() - 100), m_roomS, GUI_ID_LIST_MAP);
@@ -255,6 +258,9 @@ void Indie::Menu::loadRoomSMenu()
 
 void Indie::Menu::loadRoomCMenu()
 {
+	auto pseudo = m_gui->addEditBox(L"Chose a name", irr::core::rect<irr::s32>(m_xLeft,90,m_xRight,90 + m_height - 10), true, m_roomC, GUI_ID_CLIENT_NAME);
+	pseudo->setMax(15);
+	pseudo->setOverrideColor(irr::video::SColor(255, 0, 0, 255));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 220, m_xRight, 220 + m_height), m_roomC, GUI_ID_READY, L"READY"));
 	m_btns.emplace_back(m_gui->addButton(irr::core::recti(m_xLeft, 330, m_xRight, 330 + m_height), m_roomC, GUI_ID_ROOM_BACK_BUTTON,
 		L"Back"));
