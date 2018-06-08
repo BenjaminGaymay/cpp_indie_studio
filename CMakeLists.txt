@@ -58,5 +58,3 @@ elseif (UNIX)
 elseif (WIN32)
     message("Windows not yet supported")
 endif ()
-
-
