@@ -116,6 +116,35 @@ void Indie::Core::checkAppContext()
 			m_menu.m_roomC->setVisible(false);
 		m_menu.m_down->setVisible(true);
 	}
+	if (m_state == LOCAL) {
+		// j'arrive ici dès que j'appuie sur LOCAL -> PLAY
+		// faut récuper la map selectioné						0
+		// faut clear les ressources 							1
+		// faut charger la map									1
+		// Communiquer avec le server							0
+		// lancer												0
+		// m_state = PLAY;										1
+
+
+		/*0*/ std::string mapName = "assets/maps/map.txt";
+		/*1*/ _game->clearMaps();
+		/*1*/ _game->getMapperEdit()->newMap(mapName, 20.00f, 100.00f,
+											 _graphism);
+		std::thread(&Indie::Server::runServer).detach();
+		while (true) {
+			try {
+				_socket = std::make_unique<Socket>(5567, "127.0.0.1", Socket::CLIENT);
+				break;
+			} catch (const std::exception &e) {}
+		}
+		_playerId = waitForId();
+		std::cerr << "MON ID:" << _playerId << std::endl;
+		sendMapToServer(mapName);
+		sleep(2);
+		dprintf(_socket->getFd(), "%d:%d\n", GAMEINFOS, EV_READY);
+		/*1*/
+		m_core.m_sceneManager->drawAll();
+	}
 }
 
 void Indie::Core::exitGame()
@@ -143,7 +172,7 @@ void Indie::Core::exitGame()
 
 void Indie::Core::run()
 {
-	irrklang::ISound* music = _engine->play2D("music/main.wav", true, false, true);
+	irrklang::ISound* music = _engine->play2D("music/main.ogg", true, false, true);
 	m_opts.getMusic() ? music->setVolume(0.3) : _engine->setSoundVolume(0);
 
 	if (m_opts.getSplashScreen())
@@ -216,22 +245,6 @@ void Indie::Core::checkAppState()
 			}
 			editMap();
 			m_state = MENU;
-		case LOCAL:
-			// j'arrive ici dès que j'appuie sur LOCAL -> PLAY
-			// faut clear les ressources 							1
-			// faut charger la map									1
-			// Communiquer avec le server							0
-			// lancer												0
-			// m_state = PLAY;										1
-
-			/*
-			1 _game->clearMaps();
-			1 _game->getMapperEdit()->newMap("assets/maps/map.txt", 20.00f, 100.00f, _graphism);
-			0
-			0
-			1 m_state = PLAY; m_core.m_sceneManager->drawAll();
-			 */
-			break;
 		default:
 			break;
 	}
