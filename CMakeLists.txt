@@ -1,7 +1,3 @@
-if (${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
-    message(FATAL_ERROR "Prevented in-tree built. Please create a build directory outside of the source code and call cmake from there")
-endif ()
-
 cmake_minimum_required(VERSION 3.7.2)
 project(bomberman)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR})
