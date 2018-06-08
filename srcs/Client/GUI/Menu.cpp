@@ -287,12 +287,12 @@ void Indie::Menu::loadLocalGame()
 	chooseMap(GUI_ID_LOCAL_MAPS);
 	m_gui->addStaticText(L"Number of player:", irr::core::recti(m_xRight + 50, 220, m_xRight + 500, 220 + m_height), false, true, m_local)
 			->setOverrideColor(irr::video::SColor(255, 255, 0, 255));
-	auto nbPlayer = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 260, m_xRight + 400, 310), m_local, -1);
+	auto nbPlayer = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 260, m_xRight + 400, 310), m_local, GUI_ID_NB_PLAYER);
 	nbPlayer->addItem(L"1");
 	nbPlayer->addItem(L"2");
 	m_gui->addStaticText(L"Number of AI:", irr::core::recti(m_xRight + 50, 350, m_xRight + 500, 350 + m_height), false, true, m_local)
 			->setOverrideColor(irr::video::SColor(255, 255, 0, 255));
-	auto nbAi = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 390, m_xRight + 400, 440), m_local, -1);
+	auto nbAi = m_gui->addComboBox(irr::core::recti(m_xRight + 50, 390, m_xRight + 400, 440), m_local, GUI_ID_NB_AI);
 	nbAi->addItem(L"1");
 	nbAi->addItem(L"2");
 }
