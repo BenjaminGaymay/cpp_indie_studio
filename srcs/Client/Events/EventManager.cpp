@@ -96,7 +96,6 @@ void Indie::EventManager::manage(irrklang::ISoundEngine *engine)
 					else
 						m_core->m_menu.m_roomC->setVisible(false);
 					m_core->_socket->closeSocket();
-					m_core->_state == NOTCONNECTED;
 					m_core->m_state = MENU;
 					break;
 				case GUI_ID_OPTION_BACK_BUTTON:
